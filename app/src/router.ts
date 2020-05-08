@@ -23,6 +23,11 @@ export default new Router({
             component: () => import('@/views/Privacy.vue')
         },
         {
+            path: '/about',
+            name: 'about',
+            component: () => import('@/views/About.vue')
+        },
+        {
             path: '*',
             name: 'not-found',
             component: () => import('@/views/PageNotFound.vue')
