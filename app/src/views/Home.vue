@@ -1,10 +1,12 @@
 <template>
   <div class="home">
     <v-img
-            dark
-            max-height="30vh"
-            src="https://images.unsplash.com/photo-1581093581417-60b6c94a7945?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1951&q=80"
+      dark
+      max-height="30vh"
+      src="https://images.unsplash.com/photo-1581093581417-60b6c94a7945?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1951&q=80"
     ></v-img>
+
+  <v-container>
     <v-form class="mt-12 mb-12">
       <v-row justify="center">
         <v-col cols="12" md="8">
@@ -34,6 +36,7 @@
         </v-col>
       </template>
     </v-row>
+  </v-container>
   </div>
 </template>
 
