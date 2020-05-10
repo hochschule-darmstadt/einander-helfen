@@ -2,8 +2,8 @@
   <div class="home">
     <v-img
       dark
-      max-height="30vh"
-      src="https://images.unsplash.com/photo-1581093581417-60b6c94a7945?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1951&q=80"
+      max-height="250px"
+      :src="require('../../public/images/senior-mother_crop.jpg')"
     ></v-img>
 
     <v-container>
