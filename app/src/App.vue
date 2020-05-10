@@ -1,7 +1,6 @@
 <template>
   <v-app>
-    <Navigation />
-    <v-content>
+    <v-content >
       <router-view></router-view>
     </v-content>
     <Footer />
@@ -11,13 +10,11 @@
 <script lang="ts">
 import { Vue } from 'vue-property-decorator';
 import Component from 'vue-class-component';
-import Navigation from '@/components/layout/Navigation.vue';
 import Footer from '@/components/layout/Footer.vue';
 
 @Component({
   components: {
-    Footer,
-    Navigation
+    Footer
   }
 })
 export default class Counter extends Vue {}
