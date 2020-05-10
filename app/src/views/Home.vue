@@ -16,7 +16,9 @@
               color="white"
               label="z.B. MacherIn"
               append-icon="search"
+              item-text="title"
               :items="volunteerTags"
+              v-model="selectedTag"
             ></v-autocomplete>
           </v-col>
         </v-row>
@@ -25,24 +27,24 @@
           <v-col cols="12" md="6">
             <v-autocomplete
               label="Standort"
-              :items="cities"
-              v-model="cities[0]"
+              :items="volunteerCities"
+              v-model="selectedCity"
               prepend-inner-icon="place"
             >Mein Standort</v-autocomplete>
           </v-col>
 
           <v-col cols="12" md="2">
-            <v-autocomplete label="Umkreis" :items="kms" v-model="kms[0]">Überall</v-autocomplete>
+            <v-autocomplete label="Umkreis" :items="volunteerRadius" v-model="selectedRadius">Überall</v-autocomplete>
           </v-col>
         </v-row>
       </v-form>
 
       <v-row justify="center">
-        <template v-for="(item, i) in volunteerTags">
-          <v-col cols="12" md="2" :key="i">
+        <template v-for="tag in volunteerTags">
+          <v-col cols="12" md="2" :key="tag.title">
             <v-card height="200px" class="mx-auto">
-              <v-img class="white--text align-end" height="200px" :key="i" :src="item.img">
-                <v-card-title>{{ item.title }}</v-card-title>
+              <v-img class="white--text align-end" height="200px" :key="tag.title" :src="tag.img">
+                <v-card-title v-html="tag.title"></v-card-title>
               </v-img>
             </v-card>
           </v-col>
@@ -55,9 +57,9 @@
 <script lang="ts">
 declare var require: any;
 import Vue from 'vue';
-export default {
+
+export default Vue.extend({
   data: () => ({
-    kms: ['Überall', '5 km', '10 km', '25 km', '50 km'],
     volunteerTags: [
       {
         title: 'MacherIn',
@@ -76,13 +78,23 @@ export default {
         img: require('../../public/images/sozial.jpeg')
       },
     ],
-    cities: [
+    volunteerCities: [
       'Main Standort',
       'Darmstadt',
       'Frankfurt am Main',
       'Wiesbaden',
       'Mainz'
-    ]
+    ],
+    volunteerRadius: [
+      'Überall',
+      '5 km',
+      '10 km',
+      '25 km',
+      '50 km'
+    ],
+    selectedTag: '',
+    selectedCity: '',
+    selectedRadius: ''
   })
-};
+});
 </script>
