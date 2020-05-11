@@ -1,10 +1,6 @@
 <template>
   <div class="home">
-    <v-img
-      dark
-      max-height="250px"
-      :src="require('../../public/images/senior-mother_crop.jpg')"
-    ></v-img>
+    <v-img dark max-height="250px" :src="require('../../public/images/senior-mother_crop.jpg')"></v-img>
 
     <v-container>
       <v-form class="mt-12 mb-12">
@@ -34,7 +30,11 @@
           </v-col>
 
           <v-col cols="12" md="2">
-            <v-autocomplete label="Umkreis" :items="volunteerRadius" v-model="selectedRadius">Überall</v-autocomplete>
+            <v-autocomplete
+              label="Umkreis"
+              :items="volunteerRadius"
+              v-model="selectedRadius"
+            >Überall</v-autocomplete>
           </v-col>
         </v-row>
       </v-form>
@@ -42,11 +42,18 @@
       <v-row justify="center">
         <template v-for="tag in volunteerTags">
           <v-col cols="12" md="2" :key="tag.title">
-            <v-card height="200px" class="mx-auto">
-              <v-img class="white--text align-end" height="200px" :key="tag.title" :src="tag.img">
-                <v-card-title v-html="tag.title"></v-card-title>
-              </v-img>
-            </v-card>
+            <v-hover v-slot:default="{ hover }">
+              <v-card
+                height="200px"
+                class="mx-auto"
+                :elevation="hover ? 12 : 2"
+                :class="{ 'on-hover': hover }"
+              >
+                <v-img class="white--text align-end" height="200px" :key="tag.title" :src="tag.img">
+                  <v-card-title v-html="tag.title"></v-card-title>
+                </v-img>
+              </v-card>
+            </v-hover>
           </v-col>
         </template>
       </v-row>
@@ -62,21 +69,21 @@ export default Vue.extend({
   data: () => ({
     volunteerTags: [
       {
-        title: 'MacherIn',
-        img: require('../../public/images/macherIN.jpg')
+        title: 'Macher/in',
+        img: require('../../public/images/macherIN.jpeg')
       },
-        {
-        title: 'DenkerIN',
+      {
+        title: 'Denker/in',
         img: require('../../public/images/denkerIN.jpeg')
       },
-        {
+      {
         title: 'Jugendarbeit',
         img: require('../../public/images/jugend.jpeg')
       },
-              {
+      {
         title: 'Soziales',
         img: require('../../public/images/sozial.jpeg')
-      },
+      }
     ],
     volunteerCities: [
       'Main Standort',
@@ -85,16 +92,20 @@ export default Vue.extend({
       'Wiesbaden',
       'Mainz'
     ],
-    volunteerRadius: [
-      'Überall',
-      '5 km',
-      '10 km',
-      '25 km',
-      '50 km'
-    ],
+    volunteerRadius: ['Überall', '5 km', '10 km', '25 km', '50 km'],
     selectedTag: '',
     selectedCity: '',
     selectedRadius: ''
   })
 });
 </script>
+
+<style scoped>
+.v-card {
+  transition: opacity 0.4s ease-in-out;
+}
+
+.v-card.on-hover {
+  opacity: 0.7;
+}
+</style>
