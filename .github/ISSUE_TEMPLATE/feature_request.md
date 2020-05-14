@@ -7,19 +7,17 @@ assignees: ''
 
 ---
 
-**Reason**
+**Reason (Why?)**
 Why do you want this feature? What goals should be achieved? Is your issue related to a problem? Please describe.
 
-**Solution**
+**Solution (What?)**
 Describe the solution you'd like
 
-**Alternatives**
-Describe alternatives you've considered
+**Not doing**
+Anything that is out of scope
 
-**Effects**
-What effects does your proposed solution have?
+**Relation to other Issues**
+Provide additional context (link relevant issues)
 
 **Acceptance criteria**
 Describe acceptance criteria for testing
-
-**Additional context**
