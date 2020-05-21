@@ -2,15 +2,15 @@
     <v-row no-gutters>
         <v-col cols="6">
             <div style="height:75vh;overflow:auto">
-                <template v-for="(volunteer, i) in visiblePages">
+                <template v-for="(advertisement, i) in visiblePages">
                     <v-card class="mb-3" tile>
-                        <v-list-item three-line @click="isMap = false; volNum = i">
+                        <v-list-item three-line @click="openAdvertisement(i)">
                             <v-list-item-content>
-                                <v-list-item-title class="headline mb-1">{{volunteer.title}}</v-list-item-title>
-                                <v-list-item-subtitle>{{volunteer.task}}</v-list-item-subtitle>
+                                <v-list-item-title class="headline mb-1">{{advertisement.title}}</v-list-item-title>
+                                <v-list-item-subtitle>{{advertisement.task}}</v-list-item-subtitle>
                             </v-list-item-content>
 
-                            <v-img max-width="80px" height="80px" contain :src="volunteer.image"></v-img>
+                            <v-img max-width="80px" height="80px" contain :src="advertisement.image"></v-img>
                         </v-list-item>
                     </v-card>
                 </template>
@@ -19,76 +19,76 @@
             <div class="text-center" style="margin-top:2%">
                 <v-pagination
                         v-model="page"
-                        :length="Math.ceil(volunteers.length/perPage)"
+                        :length="numberOfPages"
                 ></v-pagination>
             </div>
         </v-col>
 
 
-        <v-col cols="6" v-if="isMap">
+        <v-col cols="6" v-if="!advertisementIsOpen">
             <v-card tile height='75vh' style="position: absolute">
                 <v-img src="https://media.wired.com/photos/59269cd37034dc5f91bec0f1/master/pass/GoogleMapTA.jpg"
                        height="100%" width="100%"></v-img>
             </v-card>
         </v-col>
-        <v-col cols="6" v-if="!isMap">
+        <v-col cols="6" v-if="advertisementIsOpen">
             <v-card tile height='75vh' width="50%" style="position: absolute;overflow:auto">
                 <v-list-item three-line>
-                    <v-btn class="mr-3" text @click="isMap = !isMap">
+                    <v-btn class="mr-3" text @click="closeAdvertisement()">
                         <v-icon>arrow_back</v-icon>
                     </v-btn>
                     <!--display title, subtitle and image on the left side-->
                     <v-list-item-content style="margin-top:2%">
-                        <v-list-item-title class="headline mb-1">{{volunteers[volNum].title}}</v-list-item-title>
-                        <v-list-item-subtitle>{{volunteers[volNum].task}}</v-list-item-subtitle>
+                        <v-list-item-title class="headline mb-1">{{currentAdvertisement.title}}</v-list-item-title>
+                        <v-list-item-subtitle>{{currentAdvertisement.task}}</v-list-item-subtitle>
                     </v-list-item-content>
 
                     <v-img style="margin-top:2%" max-width="80px" height="80px" contain
-                           :src="volunteers[volNum].image"></v-img>
+                           :src="currentAdvertisement.image"></v-img>
                 </v-list-item>
 
                 <!--display content on the right side-->
                 <v-card-text style="padding-left:5%; padding-right:5%">
                     <v-row>
                         <v-col cols="2">Einsatzort</v-col>
-                        <v-col cols="8">{{volunteers[volNum].location}}</v-col>
+                        <v-col cols="8">{{currentAdvertisement.location}}</v-col>
                     </v-row>
                     <v-row>
                         <v-col cols="2">Zielgruppe</v-col>
-                        <v-col cols="8">{{volunteers[volNum].target_group}}</v-col>
+                        <v-col cols="8">{{currentAdvertisement.target_group}}</v-col>
                     </v-row>
                     <v-row>
                         <v-col cols="2">Einstiegsdatum / Beginn</v-col>
-                        <v-col cols="8">{{volunteers[volNum].timing}}</v-col>
+                        <v-col cols="8">{{currentAdvertisement.timing}}</v-col>
                     </v-row>
                     <v-row>
                         <v-col cols="2">Zeitaufwand</v-col>
-                        <v-col cols="8">{{volunteers[volNum].effort}}</v-col>
+                        <v-col cols="8">{{currentAdvertisement.effort}}</v-col>
                     </v-row>
                     <v-row>
                         <v-col cols="2">Möglichkeiten</v-col>
-                        <v-col cols="8">{{volunteers[volNum].opportunities}}</v-col>
+                        <v-col cols="8">{{currentAdvertisement.opportunities}}</v-col>
                     </v-row>
                     <v-row>
                         <v-col cols="2">Organisation</v-col>
-                        <v-col cols="8">{{volunteers[volNum].organization}}</v-col>
+                        <v-col cols="8">{{currentAdvertisement.organization}}</v-col>
                     </v-row>
                     <v-row>
                         <v-col cols="2">Kontakt</v-col>
-                        <v-col cols="8">{{volunteers[volNum].contact}}</v-col>
+                        <v-col cols="8">{{currentAdvertisement.contact}}</v-col>
                     </v-row>
                 </v-card-text>
 
                 <v-card-actions>
                     <v-col>
                         <v-container style="margin-bottom: 10px">
-                            <template v-for="(category, i) in volunteers[0].categories">
+                            <template v-for="(category, i) in currentAdvertisement.categories">
                                 <v-chip :key="i" class="mr-2">{{ category }}</v-chip>
                             </template>
                         </v-container>
                         <v-spacer></v-spacer>
                         <v-container style="display:flex;justify-content:center;">
-                            <v-btn class="my-2" dark large color="#F29472" :href="volunteers[volNum].link"
+                            <v-btn class="my-2" dark large color="#F29472" :href="currentAdvertisement.link"
                                    target="_blank">
                                 Zum Stellenangebot
                                 <!--<v-icon dark>arrow_forward</v-icon>-->
@@ -127,16 +127,16 @@
 
   export default Vue.extend({
     data(): {
-      isMap: boolean,
-      volNum: number,
-      volunteers: Advertisement[],
+      advertisementIsOpen: boolean,
+      currentAdvertisementId: number,
+      advertisements: Advertisement[],
       page: number,
       perPage: number
     } {
       return {
-        isMap: true,
-        volNum: 0,
-        volunteers: [
+        advertisementIsOpen: true,
+        currentAdvertisementId: 0,
+        advertisements: [
           {
             title: 'Einkaufen gehen 1',
             categories: ['MacherIn', 'DenkerIn'],
@@ -414,9 +414,27 @@
     },
     computed: {
       visiblePages(): Advertisement[] {
-        return this.volunteers.slice((this.page - 1) * this.perPage, this.page * this.perPage);
+        return this.advertisements.slice((this.page - 1) * this.perPage, this.page * this.perPage);
+      },
+      currentAdvertisement(): Advertisement|null {
+        return this.advertisementIsOpen
+            ? this.advertisements[this.currentAdvertisementId]
+            : null;
+      },
+      numberOfPages(): number {
+        return Math.ceil(this.advertisements.length / this.perPage);
       }
     },
+    methods: {
+      openAdvertisement(index: number): void {
+        this.advertisementIsOpen = true;
+        this.currentAdvertisementId = index;
+      },
+      closeAdvertisement(): void {
+        this.currentAdvertisementId = 0;
+        this.advertisementIsOpen = false;
+      }
+    }
   });
 
 </script>
