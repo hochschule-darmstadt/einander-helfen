@@ -114,8 +114,8 @@ export default Vue.extend({
 
   methods: {
     performQuery(query: QueryBuilder): void {
-      axios.post('https://openartbrowser.org/api/de/_search', query.build()).then((result) =>
-      this.dummyVariable = result.data.hits.hits);
+      axios.post('https://openartbrowser.org/api/de/_search', query.build())
+              .then((result) => this.dummyVariable = result.data.hits.hits.map((elem: any) => elem._source));
     },
 
     findArtworksByLabel(label: string): void {
