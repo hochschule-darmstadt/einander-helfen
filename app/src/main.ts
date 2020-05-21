@@ -9,6 +9,7 @@ import 'material-design-icons-iconfont/dist/material-design-icons.css';
 import de from 'vuetify/es5/locale/de.js';
 import 'vuetify/dist/vuetify.min.css';
 import '@/styles.scss';
+import 'material-design-icons-iconfont/dist/material-design-icons.css';
 
 Vue.config.productionTip = false;
 

@@ -13,9 +13,9 @@ export default new Router({
             component: () => import('@/views/Home.vue')
         },
         {
-            path: '/offers/:category',
-            name: 'offers',
-            component: () => import('@/views/Offers.vue')
+            path: '/resultPage',
+            name: 'resultPage',
+            component: () => import('@/views/ResultPage.vue')
         },
         {
             path: '/imprint',
