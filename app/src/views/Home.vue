@@ -63,6 +63,7 @@
         </template>
       </v-row>
     </v-container>
+     {{dummyVariable}}
   </div>
 </template>
 
@@ -103,7 +104,8 @@ export default Vue.extend({
     volunteerRadius: ['Überall', '5 km', '10 km', '25 km', '50 km'],
     selectedTag: '',
     selectedCity: '',
-    selectedRadius: ''
+    selectedRadius: '',
+    dummyVariable: null
   }),
 
   created(): void {
@@ -112,7 +114,8 @@ export default Vue.extend({
 
   methods: {
     performQuery(query: QueryBuilder): void {
-      axios.post('https://openartbrowser.org/api/de/_search', query.build()).then((result) => console.log(result));
+      axios.post('https://openartbrowser.org/api/de/_search', query.build()).then((result) =>
+      this.dummyVariable = result.data.hits.hits);
     },
 
     findArtworksByLabel(label: string): void {
