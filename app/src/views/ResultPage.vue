@@ -4,6 +4,9 @@
     <v-row no-gutters>
       <v-col cols="6">
         <div style="height:75vh;overflow:auto">
+          <ul>
+            <li v-for="data in dummyData" v-text="data.description"></li>
+          </ul>
           <template v-for="(advertisement, i) in visiblePages">
             <v-card class="mb-3" tile>
               <v-list-item three-line @click="openAdvertisement(i)">
@@ -114,6 +117,7 @@
   </div>
 </template>
 
+
 <!-- test content -->
 <script lang="ts">
 import Header from '@/components/layout/Header.vue';
@@ -143,6 +147,7 @@ import Vue from 'vue';
 export default Vue.extend({
   components: { Header },
   data(): {
+    dummyData: null;
     advertisementIsOpen: boolean;
     currentAdvertisementId: number;
     advertisements: Advertisement[];
@@ -151,6 +156,7 @@ export default Vue.extend({
   } {
     return {
       advertisementIsOpen: true,
+      dummyData: null,
       currentAdvertisementId: 0,
       advertisements: [
         {
@@ -196,7 +202,8 @@ export default Vue.extend({
     }
   },
   created(): void {
-    this.findAllAdvertisments();
+    // this.findAllAdvertisments();
+    this.findArtworksByLabel('mona');
   },
   methods: {
     openAdvertisement(index: number): void {
@@ -209,8 +216,15 @@ export default Vue.extend({
     },
     performQuery(query: QueryBuilder): void {
       axios
-        .post('https://einander-helfen.de/api/_search', query.build())
-        .then((result) => console.log(result));
+        .post('https://openartbrowser.org/api/de/_search', query.build())
+        .then(
+          (result) =>
+            (this.dummyData = result.data.hits.hits.map(
+              (elem: any) => elem._source
+            ))
+        )
+        .catch((error) => console.log(error))
+        .finally(() => console.log(this.dummyData));
     },
     addAdvertisment(advertisment: Advertisement): void {
       // TODO finish function
@@ -222,6 +236,14 @@ export default Vue.extend({
       // .sort()
       // .mustMatch('type', 'artwork')
       // .shouldMatch('label', `${label}`);
+      this.performQuery(query);
+    },
+    findArtworksByLabel(label: string): void {
+      const query = new QueryBuilder()
+        .size(10)
+        .sort()
+        .mustMatch('type', 'artwork')
+        .shouldMatch('label', `${label}`);
       this.performQuery(query);
     }
   }

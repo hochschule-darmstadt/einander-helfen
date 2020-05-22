@@ -63,7 +63,9 @@
         </template>
       </v-row>
     </v-container>
-     {{dummyVariable}}
+    <ul>
+      <li v-for="data in dummyData" v-text="data.description"></li>
+    </ul>
   </div>
 </template>
 
@@ -105,28 +107,8 @@ export default Vue.extend({
     selectedTag: '',
     selectedCity: '',
     selectedRadius: '',
-    dummyVariable: null
-  }),
-
-  created(): void {
-    this.findArtworksByLabel('mona');
-  },
-
-  methods: {
-    performQuery(query: QueryBuilder): void {
-      axios.post('https://openartbrowser.org/api/de/_search', query.build())
-              .then((result) => this.dummyVariable = result.data.hits.hits.map((elem: any) => elem._source));
-    },
-
-    findArtworksByLabel(label: string): void {
-      const query = new QueryBuilder()
-              .size(20)
-              .sort()
-              .mustMatch('type', 'artwork')
-              .shouldMatch('label', `${label}`);
-      this.performQuery(query);
-    }
-  }
+    dummyData: null
+  })
 });
 </script>
 
