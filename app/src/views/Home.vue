@@ -2,6 +2,7 @@
   <div class="home">
     <v-img dark max-height="250px" :src="require('../../public/images/senior-mother_crop.jpg')"></v-img>
 
+    <!--SearchBar-Container-->
     <v-container>
       <v-form class="mt-12 mb-12">
         <v-row justify="center">
@@ -18,7 +19,7 @@
             ></v-autocomplete>
           </v-col>
         </v-row>
-
+        <!--cities-->
         <v-row justify="center">
           <v-col cols="12" md="6">
             <v-autocomplete
@@ -28,7 +29,7 @@
               prepend-inner-icon="place"
             >Mein Standort</v-autocomplete>
           </v-col>
-
+          <!--Radius-Contaienr-->
           <v-col cols="12" md="2">
             <v-autocomplete
               label="Umkreis"
@@ -50,12 +51,14 @@
                 :class="{ 'on-hover': hover }"
               >
                 <v-img class="white--text align-end" height="200px" :key="tag.title" :src="tag.img">
-                  <router-link
+                  <!-- <router-link
                     style="text-decoration: none; color: inherit;"
                     :to="{name: 'offers', params:{category: tag.title} }"
-                  >
-                    <v-card-title v-html="tag.title"></v-card-title>
+                  >-->
+                  <v-card-title v-html="tag.title"></v-card-title>
+                  <!--
                   </router-link>
+                  >-->
                 </v-img>
               </v-card>
             </v-hover>

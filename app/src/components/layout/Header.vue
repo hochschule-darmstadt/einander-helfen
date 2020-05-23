@@ -63,7 +63,6 @@ export default {
       },
       {
         title: 'Jugendarbeit',
-     
       },
       {
         title: 'Soziales',

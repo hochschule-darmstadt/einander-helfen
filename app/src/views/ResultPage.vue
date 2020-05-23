@@ -216,7 +216,10 @@ export default Vue.extend({
     },
     performQuery(query: QueryBuilder): void {
       axios
-        .post('https://openartbrowser.org/api/de/_search', query.build())
+        .post(
+          'https://cai-einander-helfen.fbi.h-da.de/api/_search',
+          query.build()
+        )
         .then(
           (result) =>
             (this.dummyData = result.data.hits.hits.map(
