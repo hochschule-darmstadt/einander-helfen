@@ -4,9 +4,9 @@
     <v-row no-gutters>
       <v-col cols="6">
         <div style="height:75vh;overflow:auto">
-          <ul>
-            <li v-for="data in dummyData" v-text="data.description"></li>
-          </ul>
+          <h3
+            class="indigo--text"
+          >This is for Debugging Purposes - You searched for: {{$route.params.category}}</h3>
           <template v-for="(advertisement, i) in visiblePages">
             <v-card class="mb-3" tile>
               <v-list-item three-line @click="openAdvertisement(i)">
@@ -60,31 +60,31 @@
           <v-card-text style="padding-left:5%; padding-right:5%">
             <v-row v-if="currentAdvertisement.location">
               <v-col cols="2">Einsatzort</v-col>
-              <v-col cols="8">{{currentAdvertisement.location}}</v-col>
+              <v-col cols="8" v-html="currentAdvertisement.location"></v-col>
             </v-row>
             <v-row v-if="currentAdvertisement.target_group">
               <v-col cols="2">Zielgruppe</v-col>
-              <v-col cols="8">{{currentAdvertisement.target_group}}</v-col>
+              <v-col cols="8" v-html="currentAdvertisement.target_group"></v-col>
             </v-row>
             <v-row v-if="currentAdvertisement.timing">
               <v-col cols="2">Einstiegsdatum / Beginn</v-col>
-              <v-col cols="8">{{currentAdvertisement.timing}}</v-col>
+              <v-col cols="8" v-html="currentAdvertisement.timing"></v-col>
             </v-row>
             <v-row v-if="currentAdvertisement.effort">
               <v-col cols="2">Zeitaufwand</v-col>
-              <v-col cols="8">{{currentAdvertisement.effort}}</v-col>
+              <v-col cols="8" v-html="currentAdvertisement.effort"></v-col>
             </v-row>
             <v-row v-if="currentAdvertisement.opportunities">
               <v-col cols="2">Möglichkeiten</v-col>
-              <v-col cols="8">{{currentAdvertisement.opportunities}}</v-col>
+              <v-col cols="8" v-html="currentAdvertisement.opportunities"></v-col>
             </v-row>
             <v-row v-if="currentAdvertisement.organization">
               <v-col cols="2">Organisation</v-col>
-              <v-col cols="8">{{currentAdvertisement.organization}}</v-col>
+              <v-col cols="8" v-html="currentAdvertisement.organization"></v-col>
             </v-row>
             <v-row v-if="currentAdvertisement.contact">
               <v-col cols="2">Kontakt</v-col>
-              <v-col cols="8">{{currentAdvertisement.contact}}</v-col>
+              <v-col cols="8" v-html="currentAdvertisement.contact"></v-col>
             </v-row>
           </v-card-text>
 
@@ -147,7 +147,6 @@ import Vue from 'vue';
 export default Vue.extend({
   components: { Header },
   data(): {
-    dummyData: null;
     advertisementIsOpen: boolean;
     currentAdvertisementId: number;
     advertisements: Advertisement[];
@@ -156,31 +155,8 @@ export default Vue.extend({
   } {
     return {
       advertisementIsOpen: true,
-      dummyData: null,
       currentAdvertisementId: 0,
-      advertisements: [
-        {
-          title: 'Einkaufen gehen 1',
-          categories: ['MacherIn', 'DenkerIn'],
-          location: 'Hessen, Frankfurt am Main, 65929',
-          task: 'Gehe für abc einkaufen',
-          target_group: 'Jugendliche',
-          timing: '25.05.2020',
-          effort: '1 Tag pro Woche',
-          opportunities: 'Wir bieten Einkaufen zu gehen',
-          organization:
-            'ASB Regionalverband, Frankfurt am Main, 069-314072-13, 65929, -, ' +
-            'breitenausbildung@asb-frankfurt.de',
-          contact:
-            'Heinz Müller, Frankfurt am Main, 069-314072-13, 65929, -, breitenausbildung@asb-frankfurt.de',
-          link: 'https://www.ehrenamtssuche-hessen.de/',
-          image:
-            'https://www.hessen.de/sites/default/themes/hessen_web_omega/logo.svg',
-          map_address: [],
-          lat: 12.3,
-          lon: 12.3
-        }
-      ],
+      advertisements: [],
       page: 1,
       perPage: 7
     };
@@ -202,8 +178,7 @@ export default Vue.extend({
     }
   },
   created(): void {
-    // this.findAllAdvertisments();
-    this.findArtworksByLabel('mona');
+    this.findAllAdvertisments();
   },
   methods: {
     openAdvertisement(index: number): void {
@@ -217,17 +192,17 @@ export default Vue.extend({
     performQuery(query: QueryBuilder): void {
       axios
         .post(
-          'http://localhost:8080/api/_search',
-          query.build()
+          'http://localhost:8080/api/_search'
+          // query.build()
         )
         .then(
           (result) =>
-            (this.dummyData = result.data.hits.hits.map(
+            (this.advertisements = result.data.hits.hits.map(
               (elem: any) => elem._source
             ))
         )
         .catch((error) => console.log(error))
-        .finally(() => console.log(this.dummyData));
+        .finally(() => console.log(this.advertisements));
     },
     addAdvertisment(advertisment: Advertisement): void {
       // TODO finish function
@@ -239,14 +214,6 @@ export default Vue.extend({
       // .sort()
       // .mustMatch('type', 'artwork')
       // .shouldMatch('label', `${label}`);
-      this.performQuery(query);
-    },
-    findArtworksByLabel(label: string): void {
-      const query = new QueryBuilder()
-        .size(10)
-        .sort()
-        .mustMatch('type', 'artwork')
-        .shouldMatch('label', `${label}`);
       this.performQuery(query);
     }
   }

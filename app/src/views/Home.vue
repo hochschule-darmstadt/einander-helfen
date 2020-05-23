@@ -8,6 +8,7 @@
         <v-row justify="center">
           <v-col cols="12" md="8">
             <v-autocomplete
+              @click="abc()"
               filled
               rounded
               color="white"
@@ -51,14 +52,12 @@
                 :class="{ 'on-hover': hover }"
               >
                 <v-img class="white--text align-end" height="200px" :key="tag.title" :src="tag.img">
-                  <!-- <router-link
+                  <router-link
                     style="text-decoration: none; color: inherit;"
-                    :to="{name: 'offers', params:{category: tag.title} }"
-                  >-->
-                  <v-card-title v-html="tag.title"></v-card-title>
-                  <!--
+                    :to="{name: 'resultPage', params:{category: tag.title} }"
+                  >
+                    <v-card-title v-html="tag.title"></v-card-title>
                   </router-link>
-                  >-->
                 </v-img>
               </v-card>
             </v-hover>
@@ -66,9 +65,6 @@
         </template>
       </v-row>
     </v-container>
-    <ul>
-      <li v-for="data in dummyData" v-text="data.description"></li>
-    </ul>
   </div>
 </template>
 
@@ -111,7 +107,7 @@ export default Vue.extend({
     selectedCity: '',
     selectedRadius: '',
     dummyData: null
-  })
+  }),
 });
 </script>
 
