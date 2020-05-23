@@ -58,31 +58,31 @@
 
           <!--display content on the right side-->
           <v-card-text style="padding-left:5%; padding-right:5%">
-            <v-row>
+            <v-row v-if="currentAdvertisement.location">
               <v-col cols="2">Einsatzort</v-col>
               <v-col cols="8">{{currentAdvertisement.location}}</v-col>
             </v-row>
-            <v-row>
+            <v-row v-if="currentAdvertisement.target_group">
               <v-col cols="2">Zielgruppe</v-col>
               <v-col cols="8">{{currentAdvertisement.target_group}}</v-col>
             </v-row>
-            <v-row>
+            <v-row v-if="currentAdvertisement.timing">
               <v-col cols="2">Einstiegsdatum / Beginn</v-col>
               <v-col cols="8">{{currentAdvertisement.timing}}</v-col>
             </v-row>
-            <v-row>
+            <v-row v-if="currentAdvertisement.effort">
               <v-col cols="2">Zeitaufwand</v-col>
               <v-col cols="8">{{currentAdvertisement.effort}}</v-col>
             </v-row>
-            <v-row>
+            <v-row v-if="currentAdvertisement.opportunities">
               <v-col cols="2">Möglichkeiten</v-col>
               <v-col cols="8">{{currentAdvertisement.opportunities}}</v-col>
             </v-row>
-            <v-row>
+            <v-row v-if="currentAdvertisement.organization">
               <v-col cols="2">Organisation</v-col>
               <v-col cols="8">{{currentAdvertisement.organization}}</v-col>
             </v-row>
-            <v-row>
+            <v-row v-if="currentAdvertisement.contact">
               <v-col cols="2">Kontakt</v-col>
               <v-col cols="8">{{currentAdvertisement.contact}}</v-col>
             </v-row>
