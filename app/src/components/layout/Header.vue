@@ -53,7 +53,34 @@ export default {
     links: [
       { text: 'Logo', route: '/' },
 
-    ]
+    ],
+        volunteerTags: [
+      {
+        title: 'Macher/in',
+      },
+      {
+        title: 'Denker/in',
+      },
+      {
+        title: 'Jugendarbeit',
+     
+      },
+      {
+        title: 'Soziales',
+      }
+    ],
+    volunteerCities: [
+      'Main Standort',
+      'Darmstadt',
+      'Frankfurt am Main',
+      'Wiesbaden',
+      'Mainz'
+    ],
+    volunteerRadius: ['Überall', '5 km', '10 km', '25 km', '50 km'],
+    selectedTag: '',
+    selectedCity: '',
+    selectedRadius: '',
+    dummyData: null
   })
 };
 </script>
