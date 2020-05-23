@@ -217,7 +217,7 @@ export default Vue.extend({
     performQuery(query: QueryBuilder): void {
       axios
         .post(
-          'https://cai-einander-helfen.fbi.h-da.de/api/_search',
+          'http://localhost:8080/api/_search',
           query.build()
         )
         .then(
