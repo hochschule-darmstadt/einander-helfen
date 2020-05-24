@@ -1,6 +1,14 @@
 <template>
   <div class="home">
-    <v-img dark max-height="250px" :src="require('../../public/images/senior-mother_crop.jpg')"></v-img>
+
+    <VueSlickCarousel :arrows="true" :dots="true" :infinite="true" :autoplay="true" :autoplaySpeed="3000">
+      <v-img dark max-height="250px" :src="require('../../public/images/header/1.jpg')"></v-img>
+      <v-img dark max-height="250px" :src="require('../../public/images/header/2.jpg')"></v-img>
+      <v-img dark max-height="250px" :src="require('../../public/images/header/3.jpg')"></v-img>
+      <v-img dark max-height="250px" :src="require('../../public/images/header/4.jpg')"></v-img>
+      <v-img dark max-height="250px" :src="require('../../public/images/header/5.png')"></v-img>
+    </VueSlickCarousel>
+    
 
     <v-container>
       <v-form class="mt-12 mb-12">
@@ -72,8 +80,15 @@ import Vue from 'vue';
 
 import QueryBuilder from 'es-query-builder/dist';
 import axios from 'axios';
+import VueSlickCarousel from 'vue-slick-carousel';
+import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css';
+import 'vue-slick-carousel/dist/vue-slick-carousel.css';
 
 export default Vue.extend({
+  components: {
+    VueSlickCarousel
+  },
+
   data: () => ({
     volunteerTags: [
       {
