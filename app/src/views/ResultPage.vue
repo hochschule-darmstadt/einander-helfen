@@ -134,7 +134,7 @@
       perPage: number
     } {
       return {
-        advertisementIsOpen: true,
+        advertisementIsOpen: false,
         currentAdvertisementId: 0,
         advertisements: [
           {
