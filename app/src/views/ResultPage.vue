@@ -115,12 +115,13 @@
       </v-col>
     </v-row>
   </div>
-</template>
+</template>s
 
 
 <!-- test content -->
 <script lang="ts">
 import Header from '@/components/layout/Header.vue';
+import DataService from '../components/services/DataService';
 import QueryBuilder from 'es-query-builder/dist';
 import axios from 'axios';
 
@@ -178,7 +179,9 @@ export default Vue.extend({
     }
   },
   created(): void {
-    this.findAllAdvertisments();
+     this.findAllAdvertisments();
+     const abc = DataService;
+     abc.findById('2');
   },
   methods: {
     openAdvertisement(index: number): void {
@@ -192,8 +195,8 @@ export default Vue.extend({
     performQuery(query: QueryBuilder): void {
       axios
         .post(
-          'http://localhost:8080/api/_search'
-          // query.build()
+          'http://localhost:8080/api/_search',
+           query.build()
         )
         .then(
           (result) =>
