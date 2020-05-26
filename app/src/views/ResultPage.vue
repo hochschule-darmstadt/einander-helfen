@@ -4,9 +4,6 @@
     <v-row no-gutters>
       <v-col cols="6">
         <div style="height:75vh;overflow:auto">
-          <h3
-            class="indigo--text"
-          >This is for Debugging Purposes - You searched for: {{$route.params.category}}</h3>
           <template v-for="(advertisement, i) in visiblePages">
             <v-card class="mb-3" tile>
               <v-list-item three-line @click="openAdvertisement(i)">
@@ -115,7 +112,8 @@
       </v-col>
     </v-row>
   </div>
-</template>s
+</template>
+
 
 
 <!-- test content -->
@@ -179,12 +177,9 @@ export default Vue.extend({
     }
   },
   created(): void {
-    DataService.findById('2').then((result) => {
-      console.log(result);
-    });
-
+    // DataService.findById('2');
     DataService.findAll().then((result) => {
-      console.log(result);
+      this.advertisements = result as Advertisement[];
     });
   },
   methods: {
