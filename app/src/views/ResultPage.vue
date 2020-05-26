@@ -179,9 +179,13 @@ export default Vue.extend({
     }
   },
   created(): void {
-     this.findAllAdvertisments();
-     const abc = DataService;
-     abc.findById('2');
+    DataService.findById('2').then((result) => {
+      console.log(result);
+    });
+
+    DataService.findAll().then((result) => {
+      console.log(result);
+    });
   },
   methods: {
     openAdvertisement(index: number): void {
@@ -191,33 +195,6 @@ export default Vue.extend({
     closeAdvertisement(): void {
       this.currentAdvertisementId = 0;
       this.advertisementIsOpen = false;
-    },
-    performQuery(query: QueryBuilder): void {
-      axios
-        .post(
-          'http://localhost:8080/api/_search',
-           query.build()
-        )
-        .then(
-          (result) =>
-            (this.advertisements = result.data.hits.hits.map(
-              (elem: any) => elem._source
-            ))
-        )
-        .catch((error) => console.log(error))
-        .finally(() => console.log(this.advertisements));
-    },
-    addAdvertisment(advertisment: Advertisement): void {
-      // TODO finish function
-      this.advertisements.push(advertisment);
-    },
-    findAllAdvertisments(): void {
-      const query = new QueryBuilder();
-      // .size(5);
-      // .sort()
-      // .mustMatch('type', 'artwork')
-      // .shouldMatch('label', `${label}`);
-      this.performQuery(query);
     }
   }
 });
