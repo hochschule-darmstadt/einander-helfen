@@ -1,14 +1,19 @@
 <template>
   <div class="home">
-
-    <VueSlickCarousel :arrows="true" :dots="true" :infinite="true" :autoplay="true" :autoplaySpeed="3000">
-      <v-img dark max-height="250px" :src="require('../../public/images/header/1.jpg')"></v-img>
-      <v-img dark max-height="250px" :src="require('../../public/images/header/2.jpg')"></v-img>
-      <v-img dark max-height="250px" :src="require('../../public/images/header/3.jpg')"></v-img>
-      <v-img dark max-height="250px" :src="require('../../public/images/header/4.jpg')"></v-img>
-      <v-img dark max-height="250px" :src="require('../../public/images/header/5.png')"></v-img>
+    <VueSlickCarousel :dots="true" :infinite="true" :autoplay="true" :autoplaySpeed="5000">
+        <picture>
+          <source media="(max-width: 768px)" srcset="/images/header/1_phone.jpg">
+          <img src="/images/header/1.jpg">
+        </picture>
+      <picture>
+        <source media="(max-width: 768px)" srcset="/images/header/2_phone.jpg">
+        <img src="/images/header/2.jpg">
+      </picture>
+      <picture>
+        <source media="(max-width: 768px)" srcset="/images/header/3_phone.jpg">
+        <img src="/images/header/3.jpg">
+      </picture>
     </VueSlickCarousel>
-    
 
     <v-container>
       <v-form class="mt-12 mb-12">
@@ -149,5 +154,11 @@ export default Vue.extend({
 
 .v-card.on-hover {
   opacity: 0.7;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 </style>
