@@ -1,6 +1,19 @@
 <template>
   <div class="home">
-    <v-img dark max-height="250px" :src="require('../../public/images/senior-mother_crop.jpg')"></v-img>
+    <VueSlickCarousel :dots="true" :infinite="true" :autoplay="true" :autoplaySpeed="5000">
+        <picture>
+          <source media="(max-width: 768px)" srcset="/images/header/1_phone.jpg">
+          <img src="/images/header/1.jpg">
+        </picture>
+      <picture>
+        <source media="(max-width: 768px)" srcset="/images/header/2_phone.jpg">
+        <img src="/images/header/2.jpg">
+      </picture>
+      <picture>
+        <source media="(max-width: 768px)" srcset="/images/header/3_phone.jpg">
+        <img src="/images/header/3.jpg">
+      </picture>
+    </VueSlickCarousel>
 
     <v-container>
       <v-form class="mt-12 mb-12">
@@ -72,8 +85,15 @@ import Vue from 'vue';
 
 import QueryBuilder from 'es-query-builder/dist';
 import axios from 'axios';
+import VueSlickCarousel from 'vue-slick-carousel';
+import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css';
+import 'vue-slick-carousel/dist/vue-slick-carousel.css';
 
 export default Vue.extend({
+  components: {
+    VueSlickCarousel
+  },
+
   data: () => ({
     volunteerTags: [
       {
@@ -115,5 +135,11 @@ export default Vue.extend({
 
 .v-card.on-hover {
   opacity: 0.7;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 </style>
