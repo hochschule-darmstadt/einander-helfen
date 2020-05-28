@@ -22,7 +22,7 @@ class DataService {
     public findByTitle<T>(title: string): Promise<T> {
         const queryData = new QueryBuilder()
             // TODO Matching both if string contains the keyword für
-            .mustWildcard('title', `${title}*`);
+            .mustWildcard('title', `${title}`);
         return this.performQuery<T>(queryData);
     }
 
