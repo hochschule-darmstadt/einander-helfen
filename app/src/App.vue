@@ -17,7 +17,7 @@ import Footer from '@/components/layout/Footer.vue';
 @Component({
   components: {
     Footer,
-    Toolbar,
+    Toolbar
   }
 })
 export default class Counter extends Vue {}

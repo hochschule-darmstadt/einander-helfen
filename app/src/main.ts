@@ -12,6 +12,7 @@ import 'vuetify/dist/vuetify.min.css';
 import '@/styles.scss';
 import 'material-design-icons-iconfont/dist/material-design-icons.css';
 
+
 Vue.config.productionTip = false;
 
 Vue.use(Vuetify);
@@ -22,6 +23,9 @@ const vuetify = new Vuetify({
     locales: { de },
     current: 'de',
   },
+  icons: {
+    iconfont: 'mdiSvg'
+  }
 });
 
 new Vue({

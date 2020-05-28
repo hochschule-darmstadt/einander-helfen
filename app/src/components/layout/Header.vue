@@ -1,98 +1,174 @@
 <template>
-  <v-header color="grey lighten-4" padless style="margin:10px 10px">
-   <!--<v-container style="margin:0px;padding:0px">-->
-     <v-row no-gutters>
-        <v-btn justify="left" style="margin:0 10px"
-          v-for="(link, index) in links"
-          :key="index"
-          color="grey"
-          text
-          rounded
-          class="my-2"
-          router
-          :to="link.route"
-         >{{ link.text }}</v-btn>
+    <header>
+        <v-row
+                no-gutters
+                style="padding: 1vh">
+            <v-btn
+                    :key="index"
+                    :to="link.route"
+                    class="my-2"
+                    color="grey"
+                    justify="left"
+                    rounded
+                    router
+                    text
+                    style="margin-top: 1vh"
+                    v-for="(link, index) in links">
+                {{ link.text }}
+            </v-btn>
 
-        <v-col cols="4" md="4" style=" margin-left:10%; margin-top:1%; margin-right:2%">
-          <v-combobox
-            filled
-            rounded
-            color="black"
-            label="z.B. MacherIn"
-            append-icon="search"
-            item-text="title"
-            :items="volunteerTags"
-            v-bind:value="searchValue"
-            v-on:input="(e) => {console.log(e); this.setSearchValue(e.target.value)}"
-          ></v-combobox>
-        </v-col>
+            <v-spacer></v-spacer>
+            <v-col
+                    cols="4"
+                    md="4"
+                    style="background: #eee; border-radius: 20px">
+                <v-combobox
+                        :items="volunteerProposals"
+                        :search-input.sync="searchString"
+                        @change="tagChange"
+                        append-icon="search"
+                        clearable
+                        item-text="tag"
+                        style="margin-left: 10px; margin-right: 10px"
+                        v-bind:value="searchValue"
+                        v-on:input="(e) => {console.log(e); this.setSearchValue(e.target.value)}">
+                </v-combobox>
+                <v-chip-group
+                        active-class="primary-text"
+                        column
+                        style="margin-left: 10px; margin-right: 10px; margin-top: -20px">
+                    <v-chip
+                            :key="tag"
+                            @click:close="remove(tag)"
+                            close
+                            v-for="tag in selectedTags">
+                        {{ tag }}
+                    </v-chip>
+                </v-chip-group>
+            </v-col>
 
-        <v-col cols="2" md="2" style="margin-top:1%; margin-right:1%; margin-left:1%">
-          <v-autocomplete
-            label="Standort"
-            :items="volunteerCities"
-            v-model="selectedCity"
-            prepend-inner-icon="place"
-          >Mein Standort</v-autocomplete>
-        </v-col>
+            <v-col
+                    cols="2"
+                    md="2">
+                <v-autocomplete
+                        :items="volunteerCities"
+                        label="Standort"
+                        prepend-inner-icon="place"
+                        style="margin-left: 10px; margin-right: 10px;"
+                        v-model="selectedCity">
+                    Mein Standort
+                </v-autocomplete>
+            </v-col>
 
-        <v-col  cols="1" md ="1" style="margin-top:1%; margin-right:1%">
-          <v-autocomplete
-            label="Umkreis"
-            :items="volunteerRadius"
-             v-model="selectedRadius"
-          >Überall</v-autocomplete>
-         </v-col>
+            <v-col cols="1" md="1">
+                <v-autocomplete
+                        :items="volunteerRadius"
+                        label="Umkreis"
+                        v-model="selectedRadius">
+                    Überall
+                </v-autocomplete>
+            </v-col>
+            <v-spacer></v-spacer>
+
+            <v-btn
+                    style="margin-top: 1vh"
+                    icon>
+                <v-icon>more_vert</v-icon>
+            </v-btn>
         </v-row>
-   <!--</v-container>-->
-  </v-header>
+    </header>
 </template>
 
-<script>
-import {mapActions, mapState} from 'vuex';
+<script lang="ts">
+    import Vue from 'vue';
+    import {mapActions, mapState} from 'vuex';
 
-export default {
-  data: () => ({
-    links: [
-      { text: 'Logo', route: '/' },
-
-    ],
-        volunteerTags: [
-      {
-        title: 'Macher/in',
-      },
-      {
-        title: 'Denker/in',
-      },
-      {
-        title: 'Jugendarbeit',
-      },
-      {
-        title: 'Soziales',
-      }
-    ],
-    volunteerCities: [
-      'Main Standort',
-      'Darmstadt',
-      'Frankfurt am Main',
-      'Wiesbaden',
-      'Mainz'
-    ],
-    volunteerRadius: ['Überall', '5 km', '10 km', '25 km', '50 km'],
-    selectedTag: '',
-    selectedCity: '',
-    selectedRadius: '',
-    dummyData: null
-  }),
-    computed: {
-      ...mapState([
+    export default Vue.extend({
+        data(): {
+            links: any,
+            volunteerProposals: any,
+            volunteerTags: string[],
+            volunteerCities: string[],
+            volunteerRadius: string[],
+            selectedCity: string,
+            selectedRadius: string,
+            selectedTags: string[],
+            searchResult: null,
+            searchString: string
+        } {
+            return {
+                links: [
+                    {text: 'Logo', route: '/'},
+                ],
+                volunteerProposals: [
+                    {header: 'Vorschläge'},
+                    {divider: true},
+                    {tag: 'Macher/in'},
+                    {tag: 'Denker/in'},
+                    {tag: 'Jugendarbeit'}
+                ],
+                // TODO volunteerTags are currently not in use:
+                // volunteerTags need to be implemented in the search of the main search field.
+                // But they should not be displayed if the main search field is empty.
+                // - volunteerProposals: display if main search field contains 0 characters.
+                // - volunteerTags: display if main search field contains at least 1 character.
+                volunteerTags: [
+                    'Macher/in',
+                    'Denker/in',
+                    'Jugendarbeit',
+                    'Kunst',
+                    'Einkaufen'
+                ],
+                volunteerCities: [
+                    'Main Standort',
+                    'Darmstadt',
+                    'Frankfurt am Main',
+                    'Wiesbaden',
+                    'Mainz'
+                ],
+                volunteerRadius: [
+                    'Überall',
+                    '5 km',
+                    '10 km',
+                    '25 km',
+                    '50 km'
+                ],
+                selectedCity: '',
+                selectedRadius: '',
+                selectedTags: [],
+                searchResult: null,
+                searchString: ''
+            };
+        },
+        methods: {
+          ...mapActions([
+            'setSearchValue'
+          ]),
+            remove(tag: string): void {
+                const index = this.selectedTags.indexOf(tag, 0);
+                if (index >= 0) {
+                    this.selectedTags.splice(index, 1);
+                }
+                if (this.selectedTags.length === 0) {
+                    // TODO should this be implemented?
+                    // if no tags are selected go back to the home page.
+                }
+            },
+            tagChange(tag: string): void {
+                this.selectedTags.push(tag);
+                this.$nextTick(() => {
+                    this.searchString = '';
+                    this.searchResult = null;
+                });
+            }
+        },
+      computed: {
+        ...mapState([
           'searchValue'
-      ])
-    },
-    methods: {
-      ...mapActions([
-          'setSearchValue'
-      ])
-    }
-};
+        ])
+      },
+    });
 </script>
+
+<style scoped>
+</style>
