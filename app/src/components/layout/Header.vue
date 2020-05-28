@@ -151,6 +151,7 @@
             },
             tagChange(tag: string): void {
                 this.selectedTags.push(tag);
+                console.log(tag);
                 this.$nextTick(() => {
                     this.searchString = '';
                     this.searchResult = null;
