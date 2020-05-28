@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import App from '@/App.vue';
 import router from '@/router';
+import store from '@/store/store';
 
 import Vuetify from 'vuetify';
 import 'material-design-icons-iconfont/dist/material-design-icons.css';
@@ -29,6 +30,7 @@ const vuetify = new Vuetify({
 
 new Vue({
   router,
+  store,
   vuetify,
   render: (h) => h(App),
 }).$mount('#app');

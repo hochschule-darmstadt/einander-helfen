@@ -1,5 +1,5 @@
 import axios from 'axios';
-import QueryBuilder, { QueryObject } from 'es-query-builder/dist';
+import QueryBuilder, { QueryObject } from 'es-query-builder';
 
 class DataService {
     private baseUrl = 'https://cai-einander-helfen.fbi.h-da.de/api/_search/';
@@ -22,22 +22,12 @@ class DataService {
     public findByTitle<T>(title: string): Promise<T> {
         const queryData = new QueryBuilder()
             // TODO Matching both if string contains the keyword für
-            .mustMatch('title', `${title}`);
+            .mustWildcard('title', `${title}`);
         return this.performQuery<T>(queryData);
     }
 
     public findAll<T>(): Promise<T> {
         const queryData = new QueryBuilder();
-        return this.performQuery<T>(queryData);
-    }
-
-
-    public findByWildcard<T>(title: string, location: string, task: string): Promise<T> {
-        const queryData = new QueryBuilder()
-            // TODO Matching both if string contains the keyword für
-            .shouldWildcard('title', `${title}`)
-            .shouldWildcard('location', `${location}`)
-            .shouldWildcard('task', `${task}`);
         return this.performQuery<T>(queryData);
     }
 
@@ -57,3 +47,4 @@ export default dataServiceInstance;
 export {
     dataServiceInstance as DataService,
 };
+
