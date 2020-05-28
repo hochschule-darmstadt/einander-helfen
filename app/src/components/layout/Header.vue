@@ -30,8 +30,7 @@
                         clearable
                         item-text="tag"
                         style="margin-left: 10px; margin-right: 10px"
-                        v-bind:value="searchValue"
-                        v-on:input="(e) => {console.log(e); this.setSearchValue(e.target.value)}">
+                        v-bind:value="searchValue">
                 </v-combobox>
                 <v-chip-group
                         active-class="primary-text"
@@ -156,9 +155,9 @@
             },
             tagChange(tag: string): void {
                 this.selectedTags.push(tag);
+                this.setSearchValue(tag);
                 this.$nextTick(() => {
                     this.searchString = '';
-                    this.searchResult = null;
                 });
             }
         },
