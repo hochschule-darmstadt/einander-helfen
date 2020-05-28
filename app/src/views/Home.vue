@@ -1,14 +1,25 @@
 <template>
   <div class="home">
-    <v-img dark max-height="250px" :src="require('../../public/images/senior-mother_crop.jpg')"></v-img>
+    <VueSlickCarousel :dots="true" :infinite="true" :autoplay="true" :autoplaySpeed="5000">
+        <picture>
+          <source media="(max-width: 768px)" srcset="/images/header/1_phone.jpg">
+          <img src="/images/header/1.jpg">
+        </picture>
+      <picture>
+        <source media="(max-width: 768px)" srcset="/images/header/2_phone.jpg">
+        <img src="/images/header/2.jpg">
+      </picture>
+      <picture>
+        <source media="(max-width: 768px)" srcset="/images/header/3_phone.jpg">
+        <img src="/images/header/3.jpg">
+      </picture>
+    </VueSlickCarousel>
 
-    <!--SearchBar-Container-->
     <v-container>
       <v-form class="mt-12 mb-12">
         <v-row justify="center">
           <v-col cols="12" md="8">
             <v-autocomplete
-              @click="abc()"
               filled
               rounded
               color="white"
@@ -20,7 +31,7 @@
             ></v-autocomplete>
           </v-col>
         </v-row>
-        <!--cities-->
+
         <v-row justify="center">
           <v-col cols="12" md="6">
             <v-autocomplete
@@ -30,7 +41,7 @@
               prepend-inner-icon="place"
             >Mein Standort</v-autocomplete>
           </v-col>
-          <!--Radius-Contaienr-->
+
           <v-col cols="12" md="2">
             <v-autocomplete
               label="Umkreis"
@@ -54,7 +65,7 @@
                 <v-img class="white--text align-end" height="200px" :key="tag.title" :src="tag.img">
                   <router-link
                     style="text-decoration: none; color: inherit;"
-                    :to="{name: 'resultPage', params:{category: tag.title} }"
+                    :to="{name: 'offers', params:{category: tag.title} }"
                   >
                     <v-card-title v-html="tag.title"></v-card-title>
                   </router-link>
@@ -74,8 +85,15 @@ import Vue from 'vue';
 
 import QueryBuilder from 'es-query-builder/dist';
 import axios from 'axios';
+import VueSlickCarousel from 'vue-slick-carousel';
+import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css';
+import 'vue-slick-carousel/dist/vue-slick-carousel.css';
 
 export default Vue.extend({
+  components: {
+    VueSlickCarousel
+  },
+
   data: () => ({
     volunteerTags: [
       {
@@ -105,8 +123,7 @@ export default Vue.extend({
     volunteerRadius: ['Überall', '5 km', '10 km', '25 km', '50 km'],
     selectedTag: '',
     selectedCity: '',
-    selectedRadius: '',
-    dummyData: null
+    selectedRadius: ''
   }),
 });
 </script>
@@ -118,5 +135,11 @@ export default Vue.extend({
 
 .v-card.on-hover {
   opacity: 0.7;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 </style>
