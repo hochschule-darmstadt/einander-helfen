@@ -105,25 +105,6 @@ export default Vue.extend({
     selectedCity: '',
     selectedRadius: ''
   }),
-
-  created(): void {
-    this.findArtworksByLabel('mona');
-  },
-
-  methods: {
-    performQuery(query: QueryBuilder): void {
-      axios.post('https://openartbrowser.org/api/de/_search', query.build()).then((result) => console.log(result));
-    },
-
-    findArtworksByLabel(label: string): void {
-      const query = new QueryBuilder()
-              .size(20)
-              .sort()
-              .mustMatch('type', 'artwork')
-              .shouldMatch('label', `${label}`);
-      this.performQuery(query);
-    }
-  }
 });
 </script>
 
