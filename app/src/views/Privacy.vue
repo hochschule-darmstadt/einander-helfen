@@ -97,7 +97,7 @@
       D-64372<br />
       Ober Ramstadt <br />
       <p>
-        <a href="mailto:bernhard.humm@h-da.de">bernhard.humm@h-da.de</a>
+        <a href="mailto:info@einander-helfen.org">info@einander-helfen.org</a>
       </p>
 
       <p>

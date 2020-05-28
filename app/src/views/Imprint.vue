@@ -9,7 +9,8 @@
           <h2>Angaben gemäß § 5 TMG</h2>
           Roland Humm <br />
           Pragelatostr. 113 <br />
-          D-64372 Ober Ramstadt <br />
+          D-64372  <br />
+          Ober Ramstadt <br />
 
           <h2>Kontakt</h2>
           <p>
