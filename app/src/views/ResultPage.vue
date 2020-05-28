@@ -119,43 +119,24 @@
 <!-- test content -->
 <script lang="ts">
 import Header from '@/components/layout/Header.vue';
-import DataService from '../components/services/DataService';
-import QueryBuilder from 'es-query-builder/dist';
-import axios from 'axios';
+import DataService from '../utils/services/DataService';
+import Advertisement from '@/models/advertisement';
 
-interface Advertisement {
-  title: string;
-  categories: string[];
-  location: string;
-  task: string;
-  target_group: string;
-  timing: string;
-  effort: string;
-  opportunities: string;
-  organization: string;
-  contact: string;
-  link: string;
-  image: string;
-  map_address: [];
-  lat: number;
-  lon: number;
-}
 
 import Vue from 'vue';
+import {mapState} from 'vuex';
 
 export default Vue.extend({
   components: { Header },
   data(): {
     advertisementIsOpen: boolean;
     currentAdvertisementId: number;
-    advertisements: Advertisement[];
     page: number;
     perPage: number;
   } {
     return {
       advertisementIsOpen: true,
       currentAdvertisementId: 0,
-      advertisements: [],
       page: 1,
       perPage: 7
     };
@@ -174,13 +155,16 @@ export default Vue.extend({
     },
     numberOfPages(): number {
       return Math.ceil(this.advertisements.length / this.perPage);
-    }
+    },
+    ...mapState([
+       'advertisements'
+    ])
   },
   created(): void {
     // DataService.findById('2');
-    DataService.findAll().then((result) => {
-      this.advertisements = result as Advertisement[];
-    });
+    // DataService.findAll().then((result) => {
+    //   this.advertisements = result as Advertisement[];
+    // });
   },
   methods: {
     openAdvertisement(index: number): void {

@@ -12,9 +12,9 @@
           router
           :to="link.route"
          >{{ link.text }}</v-btn>
-   
+
         <v-col cols="4" md="4" style=" margin-left:10%; margin-top:1%; margin-right:2%">
-          <v-autocomplete
+          <v-combobox
             filled
             rounded
             color="black"
@@ -22,10 +22,11 @@
             append-icon="search"
             item-text="title"
             :items="volunteerTags"
-            v-model="selectedTag"
-          ></v-autocomplete>
+            v-bind:value="searchValue"
+            v-on:input="(e) => {console.log(e); this.setSearchValue(e.target.value)}"
+          ></v-combobox>
         </v-col>
-         
+
         <v-col cols="2" md="2" style="margin-top:1%; margin-right:1%; margin-left:1%">
           <v-autocomplete
             label="Standort"
@@ -41,13 +42,15 @@
             :items="volunteerRadius"
              v-model="selectedRadius"
           >Überall</v-autocomplete>
-         </v-col> 
+         </v-col>
         </v-row>
    <!--</v-container>-->
   </v-header>
 </template>
 
 <script>
+import {mapActions, mapState} from 'vuex';
+
 export default {
   data: () => ({
     links: [
@@ -80,6 +83,16 @@ export default {
     selectedCity: '',
     selectedRadius: '',
     dummyData: null
-  })
+  }),
+    computed: {
+      ...mapState([
+          'searchValue'
+      ])
+    },
+    methods: {
+      ...mapActions([
+          'setSearchValue'
+      ])
+    }
 };
 </script>

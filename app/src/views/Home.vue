@@ -7,8 +7,7 @@
       <v-form class="mt-12 mb-12">
         <v-row justify="center">
           <v-col cols="12" md="8">
-            <v-autocomplete
-              @click="abc()"
+            <v-combobox
               filled
               rounded
               color="white"
@@ -17,7 +16,7 @@
               item-text="title"
               :items="volunteerTags"
               v-model="selectedTag"
-            ></v-autocomplete>
+            ></v-combobox>
           </v-col>
         </v-row>
         <!--cities-->
@@ -69,6 +68,8 @@
 </template>
 
 <script lang="ts">
+import {mapActions} from 'vuex';
+
 declare var require: any;
 import Vue from 'vue';
 
@@ -108,6 +109,18 @@ export default Vue.extend({
     selectedRadius: '',
     dummyData: null
   }),
+  watch: {
+    selectedTag(newValue, oldValue): void {
+      this.setSearchValue(newValue);
+      this.$router.push('/resultPage');
+    }
+  },
+  methods: {
+    ...mapActions([
+      'setSearchValue'
+    ])
+  }
+
 });
 </script>
 

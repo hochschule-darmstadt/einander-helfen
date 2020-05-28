@@ -1,5 +1,5 @@
 import axios from 'axios';
-import QueryBuilder, { QueryObject } from 'es-query-builder/dist';
+import QueryBuilder, { QueryObject } from 'es-query-builder';
 
 class DataService {
     private baseUrl = 'http://localhost:8080/api/_search';
@@ -22,7 +22,7 @@ class DataService {
     public findByTitle<T>(title: string): Promise<T> {
         const queryData = new QueryBuilder()
             // TODO Matching both if string contains the keyword für
-            .mustMatch('title', `${title}`);
+            .mustWildcard('title', `${title}*`);
         return this.performQuery<T>(queryData);
     }
 
