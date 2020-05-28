@@ -1,6 +1,8 @@
 <template>
-  <div class="privacy">
-    <div class="container">
+  <div>
+    <Header />
+    <div class="privacy">
+      <div class="container">
       <h1>Datenschutzerklärung (Data protection declaration, in German)</h1>
 
       <h2>1. Datenschutz auf einen Blick</h2>
@@ -326,11 +328,17 @@
       <p>Quelle: <a href="https://www.e-recht24.de">e-recht24.de</a></p>
     </div>
   </div>
+  </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue } from 'vue-property-decorator';
+import Header from '@/components/layout/Header.vue';
 
-@Component({})
+@Component({
+  components: {
+    Header
+  }
+})
 export default class Privacy extends Vue {}
 </script>
