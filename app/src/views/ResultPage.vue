@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div v-for="tag in volunteerTags">{tag}</div>
     <Header />
     <v-row no-gutters>
       <v-col cols="6">
@@ -120,6 +121,7 @@
 <script lang="ts">
 import Header from '@/components/layout/Header.vue';
 import Advertisement from '../models/advertisement';
+import DataService from '../utils/services/DataService';
 
 import Vue from 'vue';
 import { mapState } from 'vuex';
@@ -157,10 +159,7 @@ export default Vue.extend({
     ...mapState(['advertisements'])
   },
   created(): void {
-    // DataService.findById('2');
-    // DataService.findAll().then((result) => {
-    //   this.advertisements = result as Advertisement[];
-    // });
+    // TODO ?
   },
   methods: {
     openAdvertisement(index: number): void {

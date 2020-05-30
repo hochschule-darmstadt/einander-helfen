@@ -21,11 +21,11 @@ const store = new Vuex.Store({
     }
   },
   actions: {
-    findAdvertisements({commit, state}): void {
-      DataService.findByTitle(state.searchValue)
+    findAdvertisements({ commit, state }): void {
+      DataService.findByCategories(state.searchValue)
         .then((result) => commit('setAdvertisements', result));
     },
-    setSearchValue({commit, dispatch}, searchValue): void {
+    setSearchValue({ commit, dispatch }, searchValue): void {
       commit('setSearchValue', searchValue);
       dispatch('findAdvertisements');
     }

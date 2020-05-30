@@ -10,11 +10,16 @@ class DataService {
         return this.performQuery<T>(queryData);
     }
 
-    public findByCategories<T>(categories: string[]): Promise<T> {
+    public findByCategories<T>(categories: string): Promise<T> {
         const queryData = new QueryBuilder();
-        // TODO
-        categories.forEach((category) => {
-            queryData.shouldWildcard('categories', `${category}`);
+        const categorieArray = categories.split(/(\s+)/).filter( (e) => e.trim().length > 0);
+        console.log(categorieArray);
+        let catCounter = 1;
+        categorieArray.forEach((category) => {
+           queryData.shouldWildcard('categories.Cat' + catCounter, `${category}`);
+           catCounter = catCounter + 1;
+           console.log('categories.Cat' + catCounter);
+           console.log(category);
         });
         return this.performQuery<T>(queryData);
     }
