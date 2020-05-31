@@ -10,7 +10,7 @@ class ElasticClient:
     def __init__(self):
         self.client = Elasticsearch([{'host': os.getenv('DB_HOST') or 'elastic', 'port': os.getenv('DB_PORT') or 9200}])
 
-    def bulkToIndex(self, posts, index):
+    def bulk_to_index(self, posts, index):
 
         if self.client.indices.exists(index=index):
             self.client.indices.delete(index=index, ignore=[400, 404])

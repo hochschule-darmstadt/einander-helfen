@@ -1,7 +1,7 @@
 import os
 from importlib import import_module
 
-from lib.elastic import ElasticClient
+from scripts.data_extraction.lib.elastic import ElasticClient
 
 elasticClient = ElasticClient()
 
@@ -17,4 +17,4 @@ for entry in os.scandir('scraper'):
         scraper_instance = Scraper()
         scraper_instance.run()
 
-        elasticClient.bulkToIndex(scraper_instance.getData(), 'posts')
+        elasticClient.bulk_to_index(scraper_instance.getData(), 'posts')

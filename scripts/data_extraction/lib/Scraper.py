@@ -19,7 +19,7 @@ class Scraper:
 
     def run(self):
         self.start = time.time()
-        self.addUrls()
+        self.add_urls()
 
         for i, url in enumerate(self.urls):
             thread = threading.Thread(target=self.crawl, args=(url, i + 1))
@@ -40,25 +40,27 @@ class Scraper:
         print(f'Thread #{index} created')
 
         res = requests.get(url).text
-        detailPage = BeautifulSoup(res, 'html.parser')
-        self.data.append({'url': url, 'response': self.parse(detailPage, url)})
+        detail_page = BeautifulSoup(res, 'html.parser')
+        self.data.append({'url': url, 'response': self.parse(detail_page, url)})
 
         print(f'Thread #{index} ended')
 
-    def parse(self, response, url):
+    @staticmethod
+    def parse(response, url):
         print(url)
         return response.soup.get_text()
 
-    def addUrls(self):
+    def add_urls(self):
         pass
 
-    def getJSONData(self):
+    def get_json_data(self):
         return json.dumps(self.data)
 
-    def getData(self):
+    def get_data(self):
         return self.data
 
-    def soupify(self, url):
-        searchResultPage = requests.get(url).text
-        searchResultPage = BeautifulSoup(searchResultPage, 'html.parser')
-        return searchResultPage
+    @staticmethod
+    def soupify(url):
+        search_result_page = requests.get(url).text
+        search_result_page = BeautifulSoup(search_result_page, 'html.parser')
+        return search_result_page
