@@ -1,4 +1,4 @@
-from lib.Scraper import Scraper
+from scripts.data_extraction.lib import Scraper
 
 
 class __Scraper__(Scraper):
