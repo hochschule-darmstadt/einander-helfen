@@ -1,6 +1,5 @@
 <template>
   <div>
-    <div v-for="tag in volunteerTags">{tag}</div>
     <Header />
     <v-row no-gutters>
       <v-col cols="6">
@@ -160,6 +159,10 @@ export default Vue.extend({
   },
   created(): void {
     // TODO ?
+  },
+  mounted(): void {
+    console.log(this.$route.params.category);
+    DataService.findByCategories(this.$route.params.category as string);
   },
   methods: {
     openAdvertisement(index: number): void {

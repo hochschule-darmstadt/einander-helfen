@@ -65,7 +65,7 @@
                 <v-img class="white--text align-end" height="200px" :key="tag.title" :src="tag.img">
                   <router-link
                     style="text-decoration: none; color: inherit;"
-                    :to="{name: 'offers', params:{category: tag.title} }"
+                    :to="{name: 'resultPage', params:{category: tag.title} }"
                   >
                     <v-card-title v-html="tag.title"></v-card-title>
                   </router-link>
