@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import DataService from '../utils/services/DataService';
 import Advertisement from '../models/advertisement';
+import router from '@/router';
 
 Vue.use(Vuex);
 
@@ -10,7 +11,7 @@ const store = new Vuex.Store({
     advertisements: [],
     searchValue: '',
     location: '',
-    radius: ''
+    radius: '',
   },
   mutations: {
     setSearchValue(state, value): void {
@@ -21,13 +22,13 @@ const store = new Vuex.Store({
     }
   },
   actions: {
-    findAdvertisements({ commit, state }): void {
-      DataService.findByTitle(state.searchValue)
+    findAdvertisementsByTitle({ commit, state }): void {
+      DataService.findByCategories(state.searchValue)
         .then((result) => commit('setAdvertisements', result));
     },
     setSearchValue({ commit, dispatch }, searchValue): void {
       commit('setSearchValue', searchValue);
-      dispatch('findAdvertisements');
+      dispatch('findAdvertisementsByTitle');
     }
   }
 });

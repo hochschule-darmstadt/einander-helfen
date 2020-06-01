@@ -1,17 +1,17 @@
 <template>
   <div class="home">
     <VueSlickCarousel :dots="true" :infinite="true" :autoplay="true" :autoplaySpeed="5000">
-        <picture>
-          <source media="(max-width: 768px)" srcset="/images/header/1_phone.jpg">
-          <img src="/images/header/1.jpg">
-        </picture>
       <picture>
-        <source media="(max-width: 768px)" srcset="/images/header/2_phone.jpg">
-        <img src="/images/header/2.jpg">
+        <source media="(max-width: 768px)" srcset="/images/header/1_phone.jpg" />
+        <img src="/images/header/1.jpg" />
       </picture>
       <picture>
-        <source media="(max-width: 768px)" srcset="/images/header/3_phone.jpg">
-        <img src="/images/header/3.jpg">
+        <source media="(max-width: 768px)" srcset="/images/header/2_phone.jpg" />
+        <img src="/images/header/2.jpg" />
+      </picture>
+      <picture>
+        <source media="(max-width: 768px)" srcset="/images/header/3_phone.jpg" />
+        <img src="/images/header/3.jpg" />
       </picture>
     </VueSlickCarousel>
 
@@ -23,10 +23,10 @@
               filled
               rounded
               color="white"
-              label="z.B. MacherIn"
+              label="z.B. Macher/in"
               append-icon="search"
               item-text="title"
-              :items="volunteerTags"
+              :items="volunteerTitle"
               v-model="selectedTag"
             ></v-combobox>
           </v-col>
@@ -80,7 +80,7 @@
 </template>
 
 <script lang="ts">
-import {mapActions} from 'vuex';
+import { mapActions } from 'vuex';
 
 declare var require: any;
 import Vue from 'vue';
@@ -97,6 +97,7 @@ export default Vue.extend({
   },
 
   data: () => ({
+    volunteerTitle: [] as string[],
     volunteerTags: [
       {
         title: 'Macher/in',
@@ -130,15 +131,21 @@ export default Vue.extend({
   watch: {
     selectedTag(newValue, oldValue): void {
       this.setSearchValue(newValue);
+      console.log(this.selectedTag);
       this.$router.push('/resultPage');
     }
   },
+  created(): void {
+    this.extractTitle(this.volunteerTags);
+  },
   methods: {
-    ...mapActions([
-      'setSearchValue'
-    ])
+    ...mapActions(['setSearchValue']),
+    extractTitle(volunteerTags): void {
+      volunteerTags.forEach((elem) => {
+        this.volunteerTitle.push(elem.title);
+      });
+    }
   }
-
 });
 </script>
 

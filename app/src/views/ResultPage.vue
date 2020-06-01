@@ -155,18 +155,18 @@ export default Vue.extend({
     numberOfPages(): number {
       return Math.ceil(this.advertisements.length / this.perPage);
     },
-    ...mapState(['advertisements'])
+     ...mapState(['advertisements'])
   },
   created(): void {
     // TODO ?
   },
-  mounted(): void {
-    console.log(this.$route.params.category);
-    DataService.findByCategories(this.$route.params.category as string).then((result) => {
-      this.advertisements = result as Advertisement[];
-      console.log(this.advertisements);
-    });
-  },
+   // mounted(): void {
+   // console.log(this.$route.params.category);
+   // DataService.findByCategories(this.$route.params.category as string).then((result) => {
+   //   this.advertisements = result as Advertisement[];
+   //   console.log(this.advertisements);
+   // });
+  // },
   methods: {
     openAdvertisement(index: number): void {
       this.advertisementIsOpen = true;
