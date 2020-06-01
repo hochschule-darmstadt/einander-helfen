@@ -12,7 +12,7 @@ class DataService {
 
     public findByCategories<T>(category: string): Promise<T> {
         const queryData = new QueryBuilder()
-        .mustMatch('categories', `${category}`);
+            .mustMatch('categories', `${category}`);
         return this.performQuery<T>(queryData);
     }
 
@@ -20,6 +20,16 @@ class DataService {
         const queryData = new QueryBuilder()
             // TODO Matching both if string contains the keyword für
             .mustWildcard('title', `${title}`);
+        return this.performQuery<T>(queryData);
+    }
+
+    public findByWildcard<T>(object: string): Promise<T> {
+        const queryData = new QueryBuilder()
+            // TODO Matching both if string contains the keyword für
+            .size(15)
+            .shouldWildcard('title', `${object}`)
+            .shouldMatch('categories', `${object}`)
+            .shouldWildcard('organization', `${object.toLowerCase()}`);
         return this.performQuery<T>(queryData);
     }
 
