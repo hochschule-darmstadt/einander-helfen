@@ -40,6 +40,19 @@
               v-model="selectedCity"
               prepend-inner-icon="place"
             >Mein Standort</v-autocomplete>
+            <v-combobox
+              filled
+              rounded
+              :items="showLocations"
+              v-model="selectedLocation"
+              >
+              <template slot="selection" slot-scope="data">
+                {{ data.item.plz }}, {{ data.item.name }}
+              </template>
+              <template slot="item" slot-scope="data">
+                {{ data.item.plz }}, {{ data.item.name }}
+              </template>
+            </v-combobox>
           </v-col>
 
           <v-col cols="12" md="2">
@@ -80,6 +93,10 @@
 </template>
 
 <script lang="ts">
+import {mapActions, mapGetters, mapState} from 'vuex';
+
+import Location from '@/models/location';
+
 declare var require: any;
 import Vue from 'vue';
 
@@ -94,37 +111,56 @@ export default Vue.extend({
     VueSlickCarousel
   },
 
-  data: () => ({
-    volunteerTags: [
-      {
-        title: 'Macher/in',
-        img: require('../../public/images/macherIN.jpeg')
-      },
-      {
-        title: 'Denker/in',
-        img: require('../../public/images/denkerIN.jpeg')
-      },
-      {
-        title: 'Jugendarbeit',
-        img: require('../../public/images/jugend.jpeg')
-      },
-      {
-        title: 'Soziales',
-        img: require('../../public/images/sozial.jpeg')
-      }
-    ],
-    volunteerCities: [
-      'Main Standort',
-      'Darmstadt',
-      'Frankfurt am Main',
-      'Wiesbaden',
-      'Mainz'
-    ],
-    volunteerRadius: ['Überall', '5 km', '10 km', '25 km', '50 km'],
-    selectedTag: '',
-    selectedCity: '',
-    selectedRadius: ''
-  }),
+  data(): {
+    volunteerTags: {},
+    volunteerRadius: string[],
+    selectedTag: string,
+    selectedLocation: string,
+    selectedRadius: string,
+    selectedCity: string, // TODO remove
+    volunteerCities: string[] // TODO remove
+  } {
+    return {
+      volunteerTags: [
+        {
+          title: 'Macher/in',
+          img: require('../../public/images/macherIN.jpeg')
+        },
+        {
+          title: 'Denker/in',
+          img: require('../../public/images/denkerIN.jpeg')
+        },
+        {
+          title: 'Jugendarbeit',
+          img: require('../../public/images/jugend.jpeg')
+        },
+        {
+          title: 'Soziales',
+          img: require('../../public/images/sozial.jpeg')
+        }
+      ],
+      volunteerRadius: ['Überall', '5 km', '10 km', '25 km', '50 km'],
+      selectedTag: '',
+      selectedLocation: '',
+      selectedRadius: '',
+      selectedCity: '',
+      volunteerCities: ['a', 'b']
+    };
+  },
+  computed: {
+    showLocations(): Location[] {
+      return this.getLocations();
+    }
+  },
+  watch: {
+    selectedLocation(newValue, oldValue): void {
+      this.setLocationSearchValue(newValue);
+    }
+  },
+  methods: {
+    ...mapActions(['setLocationSearchValue']),
+    ...mapGetters(['getLocations'])
+  }
 });
 </script>
 
