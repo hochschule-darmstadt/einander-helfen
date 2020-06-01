@@ -22,7 +22,7 @@ const store = new Vuex.Store({
   },
   actions: {
     findAdvertisements({ commit, state }): void {
-      DataService.findByCategories(state.searchValue)
+      DataService.findByTitle(state.searchValue)
         .then((result) => commit('setAdvertisements', result));
     },
     setSearchValue({ commit, dispatch }, searchValue): void {
