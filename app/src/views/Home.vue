@@ -26,9 +26,17 @@
               label="z.B. Macher/in"
               append-icon="search"
               item-text="title"
-              :items="volunteerTitle"
+              autocomplete="off"
               v-model="selectedTag"
+              @input="autoComplete($event)"
+              v-on:keyup="autoComplete"
+              return-object
             ></v-combobox>
+            <div class="panel-footer" v-if="objectArray">
+              <ul class="list-group">
+                <li v-for="result in objectArray">{{ result }}</li>
+              </ul>
+            </div>
           </v-col>
         </v-row>
 
@@ -90,6 +98,8 @@ import axios from 'axios';
 import VueSlickCarousel from 'vue-slick-carousel';
 import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css';
 import 'vue-slick-carousel/dist/vue-slick-carousel.css';
+import Advertisement from '../models/advertisement';
+import { DataService } from '../utils/services/DataService';
 
 export default Vue.extend({
   components: {
@@ -98,6 +108,7 @@ export default Vue.extend({
 
   data: () => ({
     volunteerTitle: [] as string[],
+    objectArray: [] as Advertisement[],
     volunteerTags: [
       {
         title: 'Macher/in',
@@ -126,12 +137,11 @@ export default Vue.extend({
     volunteerRadius: ['Überall', '5 km', '10 km', '25 km', '50 km'],
     selectedTag: '',
     selectedCity: '',
-    selectedRadius: ''
+    selectedRadius: '',
   }),
   watch: {
     selectedTag(newValue, oldValue): void {
       this.setSearchValue(newValue);
-      console.log(this.selectedTag);
       this.$router.push('/resultPage');
     }
   },
@@ -143,6 +153,14 @@ export default Vue.extend({
     extractTitle(volunteerTags): void {
       volunteerTags.forEach((elem) => {
         this.volunteerTitle.push(elem.title);
+      });
+    },
+    autoComplete(e): void {
+      console.log(this.selectedTag);
+      this.objectArray = [];
+      DataService.findByWildcard(this.selectedTag).then((result) => {
+        this.objectArray.push(result as Advertisement);
+        console.log(this.objectArray);
       });
     }
   }
