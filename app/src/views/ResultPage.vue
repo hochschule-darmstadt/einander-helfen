@@ -162,7 +162,10 @@ export default Vue.extend({
   },
   mounted(): void {
     console.log(this.$route.params.category);
-    DataService.findByCategories(this.$route.params.category as string);
+    DataService.findByCategories(this.$route.params.category as string).then((result) => {
+      this.advertisements = result as Advertisement[];
+      console.log(this.advertisements);
+    });
   },
   methods: {
     openAdvertisement(index: number): void {
