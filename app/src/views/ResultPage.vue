@@ -20,6 +20,7 @@
                 <!--pageination-->
                 <div class="text-center" style="margin-top:2%">
                     <v-pagination
+                            color="#054C66"
                             v-model="page"
                             :length="numberOfPages"
                     ></v-pagination>
@@ -90,7 +91,7 @@
                             </v-container>
                             <v-spacer></v-spacer>
                             <v-container style="display:flex;justify-content:center;">
-                                <v-btn class="my-2" dark large color="#F29472" :href="currentAdvertisement.link"
+                                <v-btn class="my-2" dark large color="#054C66" :href="currentAdvertisement.link"
                                        target="_blank">
                                     Zum Stellenangebot
                                     <!--<v-icon dark>arrow_forward</v-icon>-->
