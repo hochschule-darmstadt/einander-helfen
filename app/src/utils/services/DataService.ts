@@ -28,7 +28,7 @@ class DataService {
             // TODO Matching both if string contains the keyword für
             .size(15)
             .shouldWildcard('title', `${object}`)
-            .shouldMatch('categories', `${object}`)
+            .shouldWildcard('categories', `${object}`)
             .shouldWildcard('organization', `${object.toLowerCase()}`);
         return this.performQuery<T>(queryData);
     }

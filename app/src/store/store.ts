@@ -29,6 +29,11 @@ const store = new Vuex.Store({
     setSearchValue({ commit, dispatch }, searchValue): void {
       commit('setSearchValue', searchValue);
       dispatch('findAdvertisementsByTitle');
+    },
+    hydrateStateFromURIParams({ dispatch }, queryParams): void {
+      if ('q' in queryParams) {
+        dispatch('setSearchValue', queryParams.q);
+      }
     }
   }
 });

@@ -141,15 +141,20 @@ export default Vue.extend({
   }),
   watch: {
     selectedTag(newValue, oldValue): void {
-      this.setSearchValue(newValue);
-      this.$router.push('/resultPage');
+      this.$router.push({
+        name: 'resultPage',
+        query: {
+          q: newValue,
+          city: this.selectedCity,
+          radius: this.selectedRadius
+        }
+      });
     }
   },
   created(): void {
     this.extractTitle(this.volunteerTags);
   },
   methods: {
-    ...mapActions(['setSearchValue']),
     extractTitle(volunteerTags): void {
       volunteerTags.forEach((elem) => {
         this.volunteerTitle.push(elem.title);
@@ -163,7 +168,7 @@ export default Vue.extend({
         console.log(this.objectArray);
       });
     }
-  }
+  },
 });
 </script>
 

@@ -123,7 +123,7 @@ import Advertisement from '../models/advertisement';
 import DataService from '../utils/services/DataService';
 
 import Vue from 'vue';
-import { mapState } from 'vuex';
+import {mapActions, mapState} from 'vuex';
 
 export default Vue.extend({
   components: { Header },
@@ -158,7 +158,7 @@ export default Vue.extend({
      ...mapState(['advertisements'])
   },
   created(): void {
-    // TODO ?
+    this.hydrateStateFromURIParams(this.$route.query);
   },
    // mounted(): void {
    // console.log(this.$route.params.category);
@@ -168,6 +168,7 @@ export default Vue.extend({
    // });
   // },
   methods: {
+    ...mapActions(['hydrateStateFromURIParams']),
     openAdvertisement(index: number): void {
       this.advertisementIsOpen = true;
       this.currentAdvertisementId = index;
