@@ -161,7 +161,7 @@ export default Vue.extend({
     perPage: number;
   } {
     return {
-      advertisementIsOpen: true,
+      advertisementIsOpen: false,
       currentAdvertisementId: 0,
       page: 1,
       perPage: 7,
