@@ -154,7 +154,7 @@ export default Vue.extend({
   },
   watch: {
     selectedLocation(newValue, oldValue): void {
-      this.setLocationSearchValue(newValue);
+      this.setLocationSearchValue(newValue); // newValue HAS to be a string
     }
   },
   methods: {
