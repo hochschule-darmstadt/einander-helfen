@@ -27,16 +27,11 @@
               append-icon="search"
               item-text="title"
               autocomplete="off"
+              :items="volunteerTitle"
               v-model="selectedTag"
-              @input="autoComplete($event)"
-              v-on:keyup="autoComplete"
               return-object
             ></v-combobox>
-            <div class="panel-footer" v-if="objectArray">
-              <ul class="list-group">
-                <li v-for="result in objectArray">{{ result }}</li>
-              </ul>
-            </div>
+            <div class="panel-footer" v-if="objectArray"></div>
           </v-col>
         </v-row>
 
@@ -108,7 +103,7 @@ export default Vue.extend({
 
   data: () => ({
     volunteerTitle: [] as string[],
-    objectArray: [] as Advertisement[],
+    // objectArray: [] as Advertisement[],
     volunteerTags: [
       {
         title: 'Macher/in',
@@ -159,16 +154,16 @@ export default Vue.extend({
       volunteerTags.forEach((elem) => {
         this.volunteerTitle.push(elem.title);
       });
-    },
-    autoComplete(e): void {
-      console.log(this.selectedTag);
-      this.objectArray = [];
-      DataService.findByWildcard(this.selectedTag).then((result) => {
-        this.objectArray.push(result as Advertisement);
-        console.log(this.objectArray);
-      });
     }
-  },
+    // autoComplete(e): void {
+    //  console.log(this.selectedTag);
+    //  this.objectArray = [];
+    //  DataService.findByWildcard(this.selectedTag).then((result) => {
+    //    this.objectArray.push(result as Advertisement);
+    //    console.log(this.objectArray);
+    //  });
+    // }
+  }
 });
 </script>
 

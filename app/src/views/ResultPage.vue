@@ -158,6 +158,7 @@ export default Vue.extend({
      ...mapState(['advertisements'])
   },
   created(): void {
+    console.log(this.$route.query);
     this.hydrateStateFromURIParams(this.$route.query);
   },
    // mounted(): void {
