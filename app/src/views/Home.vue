@@ -34,24 +34,20 @@
 
         <v-row justify="center">
           <v-col cols="12" md="6">
-            <v-autocomplete
-              label="Standort"
-              :items="volunteerCities"
-              v-model="selectedCity"
-              prepend-inner-icon="place"
-            >Mein Standort</v-autocomplete>
             <v-combobox
-              filled
-              rounded
-              :items="showLocations"
+              label="Standort"
+              :filter="filterLocations"
+              :items="getLocations()"
+              :item-text="getItemText"
               v-model="selectedLocation"
+              prepend-inner-icon="place"
               >
-              <template slot="selection" slot-scope="data">
+             <!-- <template slot="selection" slot-scope="data">
                 {{ data.item.plz }}, {{ data.item.name }}
               </template>
               <template slot="item" slot-scope="data">
                 {{ data.item.plz }}, {{ data.item.name }}
-              </template>
+              </template>-->
             </v-combobox>
           </v-col>
 
@@ -159,7 +155,21 @@ export default Vue.extend({
   },
   methods: {
     ...mapActions(['setLocationSearchValue']),
-    ...mapGetters(['getLocations'])
+    ...mapGetters(['getLocations', 'filterFunction']),
+    filterLocations(item: any, queryText: string, itemText: string): boolean {
+      console.log('.....');
+      if (queryText) {
+        const search = (queryText + '').toLowerCase();
+        const plz = item.plz + '';
+        const name = (item.name + '').toLowerCase();
+        return name.indexOf(search) > -1 || plz.indexOf(search) > -1;
+      } else {
+        return true;
+      }
+    },
+    getItemText(item): string {
+      return item.plz + ' ' + item.name;
+    }
   }
 });
 </script>
