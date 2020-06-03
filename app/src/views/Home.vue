@@ -160,14 +160,6 @@ export default Vue.extend({
         this.volunteerTitle.push(elem.title);
       });
     }
-    // autoComplete(e): void {
-    //  console.log(this.selectedTag);
-    //  this.objectArray = [];
-    //  DataService.findByWildcard(this.selectedTag).then((result) => {
-    //    this.objectArray.push(result as Advertisement);
-    //    console.log(this.objectArray);
-    //  });
-    // }
   }
 });
 </script>
