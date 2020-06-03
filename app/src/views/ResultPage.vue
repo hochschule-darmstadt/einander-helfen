@@ -29,7 +29,7 @@
         <!--pageination-->
         <div class="text-center" style="margin-top:2%">
           <v-pagination v-model="page" :length="numberOfPages" color="#054C66"></v-pagination>
-          
+
         </div>
       </v-col>
 
@@ -146,12 +146,11 @@
 
 <!-- test content -->
 <script lang="ts">
-import Header from "@/components/layout/Header.vue";
-import Advertisement from "../models/advertisement";
-import DataService from "../utils/services/DataService";
+import Header from '@/components/layout/Header.vue';
+import Advertisement from '@/models/advertisement';
 
-import Vue from "vue";
-import { mapActions, mapState } from "vuex";
+import Vue from 'vue';
+import { mapActions, mapState } from 'vuex';
 
 export default Vue.extend({
   components: { Header },
@@ -183,14 +182,13 @@ export default Vue.extend({
     numberOfPages(): number {
       return Math.ceil(this.advertisements.length / this.perPage);
     },
-    ...mapState(["advertisements"]),
+    ...mapState(['advertisements']),
   },
   created(): void {
-    console.log(this.$route.query);
     this.hydrateStateFromURIParams(this.$route.query);
   },
   methods: {
-    ...mapActions(["hydrateStateFromURIParams"]),
+    ...mapActions(['hydrateStateFromURIParams']),
     openAdvertisement(index: number): void {
       this.advertisementIsOpen = true;
       this.currentAdvertisementId = index;
