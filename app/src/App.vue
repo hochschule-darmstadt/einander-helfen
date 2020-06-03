@@ -10,17 +10,15 @@
 
 <script lang="ts">
 import { Vue } from 'vue-property-decorator';
-import Component from 'vue-class-component';
 import Toolbar from '@/components/layout/Toolbar.vue';
 import Footer from '@/components/layout/Footer.vue';
 
-@Component({
+export default Vue.extend({
   components: {
     Footer,
     Toolbar
   }
-})
-export default class Counter extends Vue {}
+});
 </script>
 
 

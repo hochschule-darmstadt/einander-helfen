@@ -16,7 +16,7 @@ export default {
             'MacherIn',
             'DenkerIn',
             'Jugend Arbeit',
-            'Soziales'
+            'Soziales',
         ]
     })
 };

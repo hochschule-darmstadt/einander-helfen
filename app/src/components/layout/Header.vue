@@ -21,7 +21,7 @@
                     cols="4"
                     md="4"
                     style="background: white; border-radius: 20px">
-                <v-autocomplete
+                <v-combobox
                         :items="volunteerProposals"
                         :search-input.sync="searchString"
                         @change="tagChange"
@@ -29,8 +29,8 @@
                         clearable
                         item-text="tag"
                         style="margin-left: 10px; margin-right: 10px"
-                        v-model="searchResult">
-                </v-autocomplete>
+                        v-bind:value="searchValue">
+                </v-combobox>
                 <v-chip-group
                         active-class="primary-text"
                         column
@@ -82,7 +82,7 @@
 
 <script lang="ts">
     import Vue from 'vue';
-
+    import {mapActions, mapState} from 'vuex';
     export default Vue.extend({
         data(): {
             links: any,
@@ -141,6 +141,9 @@
             };
         },
         methods: {
+          ...mapActions([
+            'setSearchValue'
+          ]),
             remove(tag: string): void {
                 const index = this.selectedTags.indexOf(tag, 0);
                 if (index >= 0) {
@@ -153,12 +156,17 @@
             },
             tagChange(tag: string): void {
                 this.selectedTags.push(tag);
+                this.setSearchValue(tag);
                 this.$nextTick(() => {
                     this.searchString = '';
-                    this.searchResult = null;
                 });
             }
-        }
+        },
+      computed: {
+        ...mapState([
+          'searchValue'
+        ])
+      },
     });
 </script>
 
