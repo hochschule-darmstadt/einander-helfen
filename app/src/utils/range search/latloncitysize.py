@@ -71,7 +71,7 @@ for placeNamePostcode in placeNamePostcodeArray:
 
 		if (len(respJson) != 0):
 			placeNamePostcode.lon = respJson[0]['lon']
-			placeNamePostcode.lat = respJson[0]['lon']
+			placeNamePostcode.lat = respJson[0]['lat']
 			print("Found location data!")
 		else:
 			print("Couldn't find location for " + placeNamePostcode.placeName)
