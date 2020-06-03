@@ -1,6 +1,7 @@
 <template>
   <div class="home">
-    <VueSlickCarousel :dots="true" :infinite="true" :autoplay="true" :autoplaySpeed="5000">
+    <Toolbar />
+    <VueSlickCarousel :dots="true" :infinite="true" :autoplay="true" :autoplaySpeed="30000">
       <picture>
         <source media="(max-width: 768px)" srcset="/images/header/1_phone.jpg" />
         <img src="/images/header/1.jpg" />
@@ -20,7 +21,7 @@
         <v-row justify="center">
           <v-col cols="12" md="8">
             <v-combobox
-              filled
+              style="background: white"
               rounded
               color="white"
               label="z.B. Macher/in"
@@ -59,20 +60,21 @@
         <template v-for="tag in volunteerTags">
           <v-col cols="12" md="2" :key="tag.title">
             <v-hover v-slot:default="{ hover }">
-              <v-card
-                height="200px"
+              <v-card 
                 class="mx-auto"
                 :elevation="hover ? 12 : 2"
                 :class="{ 'on-hover': hover }"
               >
-                <v-img class="white--text align-end" height="200px" :key="tag.title" :src="tag.img">
                   <router-link
                     style="text-decoration: none; color: inherit;"
                     :to="{name: 'resultPage', params:{category: tag.title} }"
                   >
-                    <v-card-title v-html="tag.title"></v-card-title>
-                  </router-link>
-                </v-img>
+                    <v-img class="white--text align-end mt-10" height="300px" :key="tag.title" :src="tag.img">
+                      <v-card >
+                    <v-card-title class="justify-center black--text" v-html="tag.title"></v-card-title>
+                      </v-card>                
+                   </v-img>
+                 </router-link>
               </v-card>
             </v-hover>
           </v-col>
@@ -87,6 +89,7 @@ import { mapActions } from 'vuex';
 
 declare var require: any;
 import Vue from 'vue';
+import Toolbar from '@/components/layout/Toolbar.vue';
 
 import QueryBuilder from 'es-query-builder/dist';
 import axios from 'axios';
@@ -98,8 +101,10 @@ import { DataService } from '../utils/services/DataService';
 
 export default Vue.extend({
   components: {
-    VueSlickCarousel
+    VueSlickCarousel,
+    Toolbar
   },
+
 
   data: () => ({
     volunteerTitle: [] as string[],

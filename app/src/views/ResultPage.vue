@@ -20,6 +20,7 @@
         <!--pageination-->
         <div class="text-center" style="margin-top:2%">
           <v-pagination v-model="page" :length="numberOfPages"></v-pagination>
+                            color="#054C66"
         </div>
       </v-col>
 
@@ -94,7 +95,7 @@
               </v-container>
               <v-spacer></v-spacer>
               <v-container style="display:flex;justify-content:center;">
-                <v-btn
+                                <v-btn class="my-2" dark large color="#054C66" :href="currentAdvertisement.link"
                   class="my-2"
                   dark
                   large

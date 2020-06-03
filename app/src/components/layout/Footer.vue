@@ -1,10 +1,10 @@
 <template>
-  <v-footer color="grey lighten-4" padless>
-    <v-row justify="center" no-gutters>
+  <v-footer color="#00254f" padless>
+    <v-row justify="center" no-gutters >
       <v-btn
         v-for="(link, index) in links"
         :key="index"
-        color="grey"
+        color="white"
         text
         rounded
         class="my-2"
