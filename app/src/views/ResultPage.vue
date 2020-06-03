@@ -28,8 +28,8 @@
         </div>
         <!--pageination-->
         <div class="text-center" style="margin-top:2%">
-          <v-pagination v-model="page" :length="numberOfPages"></v-pagination>
-          color="#054C66"
+          <v-pagination v-model="page" :length="numberOfPages" color="#054C66"></v-pagination>
+          
         </div>
       </v-col>
 
