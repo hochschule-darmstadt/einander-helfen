@@ -1,16 +1,30 @@
 <template>
   <div class="home">
-    <VueSlickCarousel :dots="true" :infinite="true" :autoplay="true" :autoplaySpeed="5000">
+    <VueSlickCarousel
+      :dots="true"
+      :infinite="true"
+      :autoplay="true"
+      :autoplaySpeed="5000"
+    >
       <picture>
-        <source media="(max-width: 768px)" srcset="/images/header/1_phone.jpg" />
+        <source
+          media="(max-width: 768px)"
+          srcset="/images/header/1_phone.jpg"
+        />
         <img src="/images/header/1.jpg" />
       </picture>
       <picture>
-        <source media="(max-width: 768px)" srcset="/images/header/2_phone.jpg" />
+        <source
+          media="(max-width: 768px)"
+          srcset="/images/header/2_phone.jpg"
+        />
         <img src="/images/header/2.jpg" />
       </picture>
       <picture>
-        <source media="(max-width: 768px)" srcset="/images/header/3_phone.jpg" />
+        <source
+          media="(max-width: 768px)"
+          srcset="/images/header/3_phone.jpg"
+        />
         <img src="/images/header/3.jpg" />
       </picture>
     </VueSlickCarousel>
@@ -34,7 +48,9 @@
             ></v-combobox>
             <div class="panel-footer" v-if="objectArray">
               <ul class="list-group">
-                <li v-for="result in objectArray">{{ result }}</li>
+                <li v-for="result in objectArray" :key="result.id">
+                  {{ result.title }}
+                </li>
               </ul>
             </div>
           </v-col>
@@ -47,7 +63,8 @@
               :items="volunteerCities"
               v-model="selectedCity"
               prepend-inner-icon="place"
-            >Mein Standort</v-autocomplete>
+              >Mein Standort</v-autocomplete
+            >
           </v-col>
 
           <v-col cols="12" md="2">
@@ -55,7 +72,8 @@
               label="Umkreis"
               :items="volunteerRadius"
               v-model="selectedRadius"
-            >Überall</v-autocomplete>
+              >Überall</v-autocomplete
+            >
           </v-col>
         </v-row>
       </v-form>
@@ -70,10 +88,18 @@
                 :elevation="hover ? 12 : 2"
                 :class="{ 'on-hover': hover }"
               >
-                <v-img class="white--text align-end" height="200px" :key="tag.title" :src="tag.img">
+                <v-img
+                  class="white--text align-end"
+                  height="200px"
+                  :key="tag.title"
+                  :src="tag.img"
+                >
                   <router-link
                     style="text-decoration: none; color: inherit;"
-                    :to="{name: 'resultPage', params:{category: tag.title} }"
+                    :to="{
+                      name: 'resultPage',
+                      params: { category: tag.title },
+                    }"
                   >
                     <v-card-title v-html="tag.title"></v-card-title>
                   </router-link>
@@ -88,22 +114,22 @@
 </template>
 
 <script lang="ts">
-import { mapActions } from 'vuex';
+import { mapActions } from "vuex";
 
 declare var require: any;
-import Vue from 'vue';
+import Vue from "vue";
 
-import QueryBuilder from 'es-query-builder/dist';
-import axios from 'axios';
-import VueSlickCarousel from 'vue-slick-carousel';
-import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css';
-import 'vue-slick-carousel/dist/vue-slick-carousel.css';
-import Advertisement from '../models/advertisement';
-import { DataService } from '../utils/services/DataService';
+import QueryBuilder from "es-query-builder/dist";
+import axios from "axios";
+import VueSlickCarousel from "vue-slick-carousel";
+import "vue-slick-carousel/dist/vue-slick-carousel-theme.css";
+import "vue-slick-carousel/dist/vue-slick-carousel.css";
+import Advertisement from "../models/advertisement";
+import { DataService } from "../utils/services/DataService";
 
 export default Vue.extend({
   components: {
-    VueSlickCarousel
+    VueSlickCarousel,
   },
 
   data: () => ({
@@ -111,45 +137,45 @@ export default Vue.extend({
     objectArray: [] as Advertisement[],
     volunteerTags: [
       {
-        title: 'Macher/in',
-        img: require('../../public/images/macherIN.jpeg')
+        title: "Macher/in",
+        img: require("../../public/images/macherIN.jpeg"),
       },
       {
-        title: 'Denker/in',
-        img: require('../../public/images/denkerIN.jpeg')
+        title: "Denker/in",
+        img: require("../../public/images/denkerIN.jpeg"),
       },
       {
-        title: 'Kommunikative',
-        img: require('../../public/images/jugend.jpeg')
+        title: "Kommunikative",
+        img: require("../../public/images/jugend.jpeg"),
       },
       {
-        title: 'Soziale',
-        img: require('../../public/images/sozial.jpeg')
-      }
+        title: "Soziale",
+        img: require("../../public/images/sozial.jpeg"),
+      },
     ],
     volunteerCities: [
-      'Main Standort',
-      'Darmstadt',
-      'Frankfurt am Main',
-      'Wiesbaden',
-      'Mainz'
+      "Main Standort",
+      "Darmstadt",
+      "Frankfurt am Main",
+      "Wiesbaden",
+      "Mainz",
     ],
-    volunteerRadius: ['Überall', '5 km', '10 km', '25 km', '50 km'],
-    selectedTag: '',
-    selectedCity: '',
-    selectedRadius: '',
+    volunteerRadius: ["Überall", "5 km", "10 km", "25 km", "50 km"],
+    selectedTag: "",
+    selectedCity: "",
+    selectedRadius: "",
   }),
   watch: {
     selectedTag(newValue, oldValue): void {
       this.$router.push({
-        name: 'resultPage',
+        name: "resultPage",
         query: {
           q: newValue,
           city: this.selectedCity,
-          radius: this.selectedRadius
-        }
+          radius: this.selectedRadius,
+        },
       });
-    }
+    },
   },
   created(): void {
     this.extractTitle(this.volunteerTags);
@@ -164,10 +190,12 @@ export default Vue.extend({
       console.log(this.selectedTag);
       this.objectArray = [];
       DataService.findByWildcard(this.selectedTag).then((result) => {
-        this.objectArray.push(result as Advertisement);
-        console.log(this.objectArray);
+        result.forEach((element) => {
+          this.objectArray.push(element as Advertisement);
+        });
       });
-    }
+      console.log(this.objectArray);
+    },
   },
 });
 </script>
