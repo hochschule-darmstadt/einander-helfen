@@ -2,7 +2,8 @@ import csv
 import requests
 
 class PlaceNamePostcode:
-	def __init__(self, placeName, postcode, state):
+	def __init__(self, osmid, placeName, postcode, state):
+		self.osmid = osmid
 		self.placeName = placeName
 		self.postcode = postcode
 		self.state = state
@@ -23,6 +24,15 @@ def searchPostcode(postcodeArray, postcode):
 		if (element.postcode == postcode):
 			return element
 
+def searchAllPlacesForPlaceName(placeArray, placeName, state):
+	allPlaces = []
+
+	for place in placeArray:
+		if (place.placeName == placeName and place.state == state):
+			allPlaces.append(place)
+
+	return allPlaces
+
 # file name of final file
 fileName = 'plz_ort_state_lat_lon_rank.csv'
 
@@ -40,7 +50,7 @@ with open('zuordnung_plz_ort.csv', newline='') as csvfile:
 	placeNamePostcodeState = csv.reader(csvfile, delimiter=',')
 	for row in placeNamePostcodeState:
 		# row[1]: place name, row[2]: postcode, row[3]: state
-		place = PlaceNamePostcode(row[1], row[2], row[3])
+		place = PlaceNamePostcode(row[0], row[1], row[2], row[3])
 		placeNamePostcodeArray.append(place)
 
 # read postcodes, lat and lon from file PLZ.tab.txt
@@ -87,6 +97,44 @@ for placeNamePostcode in placeNamePostcodeArray:
 		print("Couldn't find area for " + placeNamePostcode.placeName)
 	else:
 		placeNamePostcode.area = area.area
+
+# aggregate places
+alreadySearchedPlaces = []
+
+placeNameArray = placeNamePostcodeArray.copy()
+
+for place in placeNameArray:
+
+	if ([place.placeName, place.state] in alreadySearchedPlaces):
+		continue
+
+	places = searchAllPlacesForPlaceName(placeNameArray, place.placeName, place.state)
+
+	if (len(places) > 1):
+		aggregatedPlace = PlaceNamePostcode(place.osmid, place.placeName + " (alle)", place.postcode, place.state)
+
+		# calculate aggregated area
+		area = 0
+		for placeElement in places:
+			area += float(placeElement.area)
+
+		aggregatedPlace.area = area
+
+		# get center location of place
+		resp = requests.get(('https://nominatim.openstreetmap.org/details?osmtype=R&osmid=%s&format=json') % (place.osmid))
+
+		respJson = resp.json()
+
+		lon = respJson["centroid"]["coordinates"][0]
+		lat = respJson["centroid"]["coordinates"][1]
+
+		print(place.placeName + " (alle), area= " + str(area) + ", lat: " + str(lat) + ", lon: " + str(lon))
+		aggregatedPlace.lon = lon
+		aggregatedPlace.lat = lat
+
+		placeNamePostcodeArray.append(aggregatedPlace)
+
+	alreadySearchedPlaces.append([place.placeName, place.state])
 
 # save all places to csv
 with open(fileName, mode='w') as csvfile:
