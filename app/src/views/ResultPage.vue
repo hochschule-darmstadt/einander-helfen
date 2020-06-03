@@ -8,11 +8,20 @@
             <v-card class="mb-3" tile>
               <v-list-item three-line @click="openAdvertisement(i)">
                 <v-list-item-content>
-                  <v-list-item-title class="headline mb-1">{{advertisement.title}}</v-list-item-title>
-                  <v-list-item-subtitle>{{advertisement.task}}</v-list-item-subtitle>
+                  <v-list-item-title class="headline mb-1">{{
+                    advertisement.title
+                  }}</v-list-item-title>
+                  <v-list-item-subtitle>{{
+                    advertisement.task
+                  }}</v-list-item-subtitle>
                 </v-list-item-content>
 
-                <v-img max-width="80px" height="80px" contain :src="advertisement.image"></v-img>
+                <v-img
+                  max-width="80px"
+                  height="80px"
+                  contain
+                  :src="advertisement.image"
+                ></v-img>
               </v-list-item>
             </v-card>
           </template>
@@ -20,7 +29,7 @@
         <!--pageination-->
         <div class="text-center" style="margin-top:2%">
           <v-pagination v-model="page" :length="numberOfPages"></v-pagination>
-                            color="#054C66"
+          color="#054C66"
         </div>
       </v-col>
 
@@ -34,15 +43,24 @@
         </v-card>
       </v-col>
       <v-col cols="6" v-if="advertisementIsOpen">
-        <v-card tile height="75vh" width="50%" style="position: absolute;overflow:auto">
+        <v-card
+          tile
+          height="75vh"
+          width="50%"
+          style="position: absolute;overflow:auto"
+        >
           <v-list-item three-line>
             <v-btn class="mr-3" text @click="closeAdvertisement()">
               <v-icon>arrow_back</v-icon>
             </v-btn>
             <!--display title, subtitle and image on the left side-->
             <v-list-item-content style="margin-top:2%">
-              <v-list-item-title class="headline mb-1">{{currentAdvertisement.title}}</v-list-item-title>
-              <v-list-item-subtitle>{{currentAdvertisement.task}}</v-list-item-subtitle>
+              <v-list-item-title class="headline mb-1">{{
+                currentAdvertisement.title
+              }}</v-list-item-title>
+              <v-list-item-subtitle>{{
+                currentAdvertisement.task
+              }}</v-list-item-subtitle>
             </v-list-item-content>
 
             <v-img
@@ -62,7 +80,10 @@
             </v-row>
             <v-row v-if="currentAdvertisement.target_group">
               <v-col cols="2">Zielgruppe</v-col>
-              <v-col cols="8" v-html="currentAdvertisement.target_group"></v-col>
+              <v-col
+                cols="8"
+                v-html="currentAdvertisement.target_group"
+              ></v-col>
             </v-row>
             <v-row v-if="currentAdvertisement.timing">
               <v-col cols="2">Einstiegsdatum / Beginn</v-col>
@@ -74,11 +95,17 @@
             </v-row>
             <v-row v-if="currentAdvertisement.opportunities">
               <v-col cols="2">Möglichkeiten</v-col>
-              <v-col cols="8" v-html="currentAdvertisement.opportunities"></v-col>
+              <v-col
+                cols="8"
+                v-html="currentAdvertisement.opportunities"
+              ></v-col>
             </v-row>
             <v-row v-if="currentAdvertisement.organization">
               <v-col cols="2">Organisation</v-col>
-              <v-col cols="8" v-html="currentAdvertisement.organization"></v-col>
+              <v-col
+                cols="8"
+                v-html="currentAdvertisement.organization"
+              ></v-col>
             </v-row>
             <v-row v-if="currentAdvertisement.contact">
               <v-col cols="2">Kontakt</v-col>
@@ -89,13 +116,15 @@
           <v-card-actions>
             <v-col>
               <v-container style="margin-bottom: 10px">
-                <template v-for="(category, i) in currentAdvertisement.categories">
+                <template
+                  v-for="(category, i) in currentAdvertisement.categories"
+                >
                   <v-chip :key="i" class="mr-2">{{ category }}</v-chip>
                 </template>
               </v-container>
               <v-spacer></v-spacer>
               <v-container style="display:flex;justify-content:center;">
-                                <v-btn class="my-2" dark large color="#054C66" :href="currentAdvertisement.link"
+                <v-btn
                   class="my-2"
                   dark
                   large
@@ -115,16 +144,14 @@
   </div>
 </template>
 
-
-
 <!-- test content -->
 <script lang="ts">
-import Header from '@/components/layout/Header.vue';
-import Advertisement from '../models/advertisement';
-import DataService from '../utils/services/DataService';
+import Header from "@/components/layout/Header.vue";
+import Advertisement from "../models/advertisement";
+import DataService from "../utils/services/DataService";
 
-import Vue from 'vue';
-import {mapActions, mapState} from 'vuex';
+import Vue from "vue";
+import { mapActions, mapState } from "vuex";
 
 export default Vue.extend({
   components: { Header },
@@ -138,7 +165,7 @@ export default Vue.extend({
       advertisementIsOpen: true,
       currentAdvertisementId: 0,
       page: 1,
-      perPage: 7
+      perPage: 7,
     };
   },
   computed: {
@@ -156,31 +183,23 @@ export default Vue.extend({
     numberOfPages(): number {
       return Math.ceil(this.advertisements.length / this.perPage);
     },
-     ...mapState(['advertisements'])
+    ...mapState(["advertisements"]),
   },
   created(): void {
     console.log(this.$route.query);
     this.hydrateStateFromURIParams(this.$route.query);
   },
-   // mounted(): void {
-   // console.log(this.$route.params.category);
-   // DataService.findByCategories(this.$route.params.category as string).then((result) => {
-   //   this.advertisements = result as Advertisement[];
-   //   console.log(this.advertisements);
-   // });
-  // },
   methods: {
-    ...mapActions(['hydrateStateFromURIParams']),
+    ...mapActions(["hydrateStateFromURIParams"]),
     openAdvertisement(index: number): void {
       this.advertisementIsOpen = true;
       this.currentAdvertisementId = index;
     },
     numberOfPages(): number {
       return Math.ceil(this.advertisements.length / this.perPage);
-    }
-  }
+    },
+  },
 });
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
