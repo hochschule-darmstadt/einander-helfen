@@ -10,7 +10,7 @@ class DataService {
         return this.performQuery<T>(queryData);
     }
 
-    public findByCategories<T>(category: string): Promise<T> {
+    public findByCategory<T>(category: string): Promise<T> {
         const queryData = new QueryBuilder()
             .mustMatch('categories', `${category}`);
         return this.performQuery<T>(queryData);
