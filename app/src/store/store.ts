@@ -8,7 +8,8 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
    state: {
        locations: [] as Location[],
-       locationSearchValue: ''
+       locationSearchValue: '',
+       radiusSearchValue: ''
    },
    mutations: {
        setLocations(state, value): void {
@@ -16,8 +17,10 @@ const store = new Vuex.Store({
        },
        setLocationSearchValue(state, value): void {
            state.locationSearchValue = value;
+       },
+       setRadiusSearchValue(state, value): void {
+           state.radiusSearchValue = value;
        }
-
    },
    actions: {
        findLocationByPlzOrName({ commit, state }): void {
@@ -28,6 +31,9 @@ const store = new Vuex.Store({
        setLocationSearchValue({ commit, dispatch }, locationSearchValue): void {
            commit('setLocationSearchValue', locationSearchValue);
            dispatch('findLocationByPlzOrName');
+       },
+       setRadiusSearchValue({ commit, dispatch }, radiusSearchValue): void {
+           commit('setRadiusSearchValue', radiusSearchValue);
        }
    },
    getters: {
