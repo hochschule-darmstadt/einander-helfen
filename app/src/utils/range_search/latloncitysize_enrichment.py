@@ -34,35 +34,35 @@ def searchAllPlacesForPlaceName(placeArray, placeName, state):
 	return allPlaces
 
 # file name of final file
-fileName = 'plz_ort_state_lat_lon_rank.csv'
+fileName = '../../../public/files/places_postcode_placename_state_lat_lon_rank.csv'
 
-# saves all PlaceNamePostcode objects read from file zurodnung_plz_ort.csv
+# saves all PlaceNamePostcode objects read from file postcode_placename_state.csv
 placeNamePostcodeArray = []
 
-# saves all PostcodeLocation objects read from file PLZ.tab.txt
+# saves all PostcodeLocation objects read from file postcode_lat_lon.csv
 postcodeLocationArray = []
 
-# saves all PostcodeArea objects read from file plz-5stellig-daten.csv
+# saves all PostcodeArea objects read from file postcode_area.csv
 postcodeAreaArray = []
 
-# read place names, postcodes and states from file zuordnung_plz_ort.csv
-with open('zuordnung_plz_ort.csv', newline='') as csvfile:
+# read place names, postcodes and states from file postcode_placename_state.csv
+with open('postcode_placename_state.csv', newline='') as csvfile:
 	placeNamePostcodeState = csv.reader(csvfile, delimiter=',')
 	for row in placeNamePostcodeState:
 		# row[1]: place name, row[2]: postcode, row[3]: state
 		place = PlaceNamePostcode(row[0], row[1], row[2], row[3])
 		placeNamePostcodeArray.append(place)
 
-# read postcodes, lat and lon from file PLZ.tab.txt
-with open('PLZ.tab.txt', newline='') as csvfile:
+# read postcodes, lat and lon from file postcode_lat_lon.csv
+with open('postcode_lat_lon.csv', newline='') as csvfile:
 	postcodeLocation = csv.reader(csvfile, delimiter='\t')
 	for row in postcodeLocation:
 		# row[1]: postcode, row[2]: lon, row[3]: lat
 		location = PostcodeLocation(row[1], row[2], row[3])
 		postcodeLocationArray.append(location)
 
-# read postcode and area from file plz-5stellig-daten.csv
-with open('plz-5stellig-daten.csv', newline='') as csvfile:
+# read postcode and area from file postcode_area.csv
+with open('postcode_area.csv', newline='') as csvfile:
 	postcodeArea = csv.reader(csvfile, delimiter=',')
 	for row in postcodeArea:
 		# row[0]: postcode, row[2]: area in square kilometers
@@ -103,6 +103,8 @@ alreadySearchedPlaces = []
 
 placeNameArray = placeNamePostcodeArray.copy()
 
+print("adding aggregated places")
+
 for place in placeNameArray:
 
 	if ([place.placeName, place.state] in alreadySearchedPlaces):
@@ -125,12 +127,17 @@ for place in placeNameArray:
 
 		respJson = resp.json()
 
-		lon = respJson["centroid"]["coordinates"][0]
-		lat = respJson["centroid"]["coordinates"][1]
+		if 'centroid' in respJson:
+			lon = respJson['centroid']['coordinates'][0]
+			lat = respJson['centroid']['coordinates'][1]
 
-		print(place.placeName + " (alle), area= " + str(area) + ", lat: " + str(lat) + ", lon: " + str(lon))
-		aggregatedPlace.lon = lon
-		aggregatedPlace.lat = lat
+			print(place.placeName + " (alle), area: " + str(area) + ", lat: " + str(lat) + ", lon: " + str(lon))
+			aggregatedPlace.lon = lon
+			aggregatedPlace.lat = lat
+		else:
+			print("No location for " + place.placeName)
+			aggregatedPlace.lon = 0
+			aggregatedPlace.lat = 0
 
 		placeNamePostcodeArray.append(aggregatedPlace)
 
