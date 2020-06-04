@@ -42,8 +42,8 @@ class DataService {
                                {searchValues: string[], location: string, radius: string}): Promise<any> {
         const query = new QueryBuilder();
         searchValues.forEach((value) => {
-            query.shouldWildcard('categories', value)
-                .mustWildcard('title', value);
+            query.shouldMatch('categories', value)
+                .shouldMatch('title', value);
         });
 
         return this.performQuery(query);

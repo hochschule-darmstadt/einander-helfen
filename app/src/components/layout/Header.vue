@@ -140,8 +140,10 @@
                 this.removeSearchValue(tag);
             },
             tagAdded(tag: string): void {
-                this.addSearchValue(tag);
-                this.searchString = '';
+                if (tag.length) {
+                    this.addSearchValue(tag);
+                    this.searchString = '';
+                }
             }
         },
       computed: {
