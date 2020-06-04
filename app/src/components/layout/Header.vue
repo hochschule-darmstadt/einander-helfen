@@ -22,14 +22,13 @@
                     md="4"
                     style="background: white; border-radius: 20px">
                 <v-combobox
-                        :items="volunteerProposals"
+                        :items="searchProposals"
                         :search-input.sync="searchString"
-                        @change="tagChange"
+                        @input="tagAdded"
                         append-icon="search"
                         clearable
                         item-text="tag"
-                        style="margin-left: 10px; margin-right: 10px"
-                        v-bind:value="searchValue">
+                        style="margin-left: 10px; margin-right: 10px">
                 </v-combobox>
                 <v-chip-group
                         active-class="primary-text"
@@ -39,7 +38,7 @@
                             :key="tag"
                             @click:close="remove(tag)"
                             close
-                            v-for="tag in selectedTags">
+                            v-for="tag in searchValues">
                         {{ tag }}
                     </v-chip>
                 </v-chip-group>
@@ -86,7 +85,6 @@
     export default Vue.extend({
         data(): {
             links: any,
-            volunteerProposals: any,
             volunteerTags: string[],
             volunteerCities: string[],
             volunteerRadius: string[],
@@ -99,13 +97,6 @@
             return {
                 links: [
                     {text: '', route: '/'},
-                ],
-                volunteerProposals: [
-                    {header: 'Vorschläge'},
-                    {divider: true},
-                    {tag: 'Macher/in'},
-                    {tag: 'Denker/in'},
-                    {tag: 'Jugendarbeit'}
                 ],
                 // TODO volunteerTags are currently not in use:
                 // volunteerTags need to be implemented in the search of the main search field.
@@ -142,29 +133,21 @@
         },
         methods: {
           ...mapActions([
-            'setSearchValue'
+              'addSearchValue',
+              'removeSearchValue'
           ]),
             remove(tag: string): void {
-                const index = this.selectedTags.indexOf(tag, 0);
-                if (index >= 0) {
-                    this.selectedTags.splice(index, 1);
-                }
-                if (this.selectedTags.length === 0) {
-                    // TODO should this be implemented?
-                    // if no tags are selected go back to the home page.
-                }
+                this.removeSearchValue(tag);
             },
-            tagChange(tag: string): void {
-                this.selectedTags.push(tag);
-                this.setSearchValue(tag);
-                this.$nextTick(() => {
-                    this.searchString = '';
-                });
+            tagAdded(tag: string): void {
+                this.addSearchValue(tag);
+                this.searchString = '';
             }
         },
       computed: {
         ...mapState([
-          'searchValue'
+            'searchValues',
+            'searchProposals'
         ])
       },
     });

@@ -168,6 +168,7 @@ export default Vue.extend({
     };
   },
   computed: {
+    ...mapState(['advertisements']),
     visiblePages(): Advertisement[] {
       return this.advertisements.slice(
         (this.page - 1) * this.perPage,
@@ -182,7 +183,6 @@ export default Vue.extend({
     numberOfPages(): number {
       return Math.ceil(this.advertisements.length / this.perPage);
     },
-    ...mapState(['advertisements']),
   },
   created(): void {
     this.hydrateStateFromURIParams(this.$route.query);

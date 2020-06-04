@@ -38,6 +38,17 @@ class DataService {
         return this.performQuery<T>(queryData);
     }
 
+    public findBySelection({searchValues, location, radius}:
+                               {searchValues: string[], location: string, radius: string}): Promise<any> {
+        const query = new QueryBuilder();
+        searchValues.forEach((value) => {
+            query.shouldWildcard('categories', value)
+                .mustWildcard('title', value);
+        });
+
+        return this.performQuery(query);
+    }
+
     private performQuery<T>(query: QueryBuilder): Promise<T> {
         return new Promise<T>((resolve, reject) => {
             axios.post(this.baseUrl, query.build())
