@@ -33,7 +33,7 @@
         </div>
       </v-col>
 
-      <v-col cols="6" v-if="!advertisementIsOpen">
+      <v-col cols="6" v-if="!postIsOpen">
         <v-card tile height="75vh" style="position: absolute">
           <v-img
             src="https://media.wired.com/photos/59269cd37034dc5f91bec0f1/master/pass/GoogleMapTA.jpg"
@@ -42,7 +42,7 @@
           ></v-img>
         </v-card>
       </v-col>
-      <v-col cols="6" v-if="advertisementIsOpen">
+      <v-col cols="6" v-if="postIsOpen">
         <v-card
           tile
           height="75vh"
@@ -56,10 +56,10 @@
             <!--display title, subtitle and image on the left side-->
             <v-list-item-content style="margin-top:2%">
               <v-list-item-title class="headline mb-1">{{
-                currentAdvertisement.title
+                currentPost.title
               }}</v-list-item-title>
               <v-list-item-subtitle>{{
-                currentAdvertisement.task
+                currentPost.task
               }}</v-list-item-subtitle>
             </v-list-item-content>
 
@@ -68,48 +68,48 @@
               max-width="80px"
               height="80px"
               contain
-              :src="currentAdvertisement.image"
+              :src="currentPost.image"
             ></v-img>
           </v-list-item>
 
           <!--display content on the right side-->
           <v-card-text style="padding-left:5%; padding-right:5%">
-            <v-row v-if="currentAdvertisement.location">
+            <v-row v-if="currentPost.location">
               <v-col cols="2">Einsatzort</v-col>
-              <v-col cols="8" v-html="currentAdvertisement.location"></v-col>
+              <v-col cols="8" v-html="currentPost.location"></v-col>
             </v-row>
-            <v-row v-if="currentAdvertisement.target_group">
+            <v-row v-if="currentPost.target_group">
               <v-col cols="2">Zielgruppe</v-col>
               <v-col
                 cols="8"
-                v-html="currentAdvertisement.target_group"
+                v-html="currentPost.target_group"
               ></v-col>
             </v-row>
-            <v-row v-if="currentAdvertisement.timing">
+            <v-row v-if="currentPost.timing">
               <v-col cols="2">Einstiegsdatum / Beginn</v-col>
-              <v-col cols="8" v-html="currentAdvertisement.timing"></v-col>
+              <v-col cols="8" v-html="currentPost.timing"></v-col>
             </v-row>
-            <v-row v-if="currentAdvertisement.effort">
+            <v-row v-if="currentPost.effort">
               <v-col cols="2">Zeitaufwand</v-col>
-              <v-col cols="8" v-html="currentAdvertisement.effort"></v-col>
+              <v-col cols="8" v-html="currentPost.effort"></v-col>
             </v-row>
-            <v-row v-if="currentAdvertisement.opportunities">
+            <v-row v-if="currentPost.opportunities">
               <v-col cols="2">Möglichkeiten</v-col>
               <v-col
                 cols="8"
-                v-html="currentAdvertisement.opportunities"
+                v-html="currentPost.opportunities"
               ></v-col>
             </v-row>
-            <v-row v-if="currentAdvertisement.organization">
+            <v-row v-if="currentPost.organization">
               <v-col cols="2">Organisation</v-col>
               <v-col
                 cols="8"
-                v-html="currentAdvertisement.organization"
+                v-html="currentPost.organization"
               ></v-col>
             </v-row>
-            <v-row v-if="currentAdvertisement.contact">
+            <v-row v-if="currentPost.contact">
               <v-col cols="2">Kontakt</v-col>
-              <v-col cols="8" v-html="currentAdvertisement.contact"></v-col>
+              <v-col cols="8" v-html="currentPost.contact"></v-col>
             </v-row>
           </v-card-text>
 
@@ -117,7 +117,7 @@
             <v-col>
               <v-container style="margin-bottom: 10px">
                 <template
-                  v-for="(category, i) in currentAdvertisement.categories"
+                  v-for="(category, i) in currentPost.categories"
                 >
                   <v-chip :key="i" class="mr-2">{{ category }}</v-chip>
                 </template>
@@ -129,7 +129,7 @@
                   dark
                   large
                   color="#F29472"
-                  :href="currentAdvertisement.link"
+                  :href="currentPost.link"
                   target="_blank"
                 >
                   Zum Stellenangebot
@@ -155,33 +155,33 @@ import { mapActions, mapState } from 'vuex';
 export default Vue.extend({
   components: { Header },
   data(): {
-    advertisementIsOpen: boolean;
-    currentAdvertisementId: number;
+    postIsOpen: boolean;
+    currentPostId: number;
     page: number;
     perPage: number;
   } {
     return {
-      advertisementIsOpen: false,
-      currentAdvertisementId: 0,
+      postIsOpen: false,
+      currentPostId: 0,
       page: 1,
       perPage: 7,
     };
   },
   computed: {
-    ...mapState(['advertisements']),
+    ...mapState(['posts']),
     visiblePages(): Advertisement[] {
-      return this.advertisements.slice(
+      return this.posts.slice(
         (this.page - 1) * this.perPage,
         this.page * this.perPage
       );
     },
-    currentAdvertisement(): Advertisement | null {
-      return this.advertisementIsOpen
-        ? this.advertisements[this.currentAdvertisementId]
+    currentPost(): Advertisement | null {
+      return this.postIsOpen
+        ? this.posts[this.currentPostId]
         : null;
     },
     numberOfPages(): number {
-      return Math.ceil(this.advertisements.length / this.perPage);
+      return Math.ceil(this.posts.length / this.perPage);
     },
   },
   created(): void {
@@ -190,11 +190,11 @@ export default Vue.extend({
   methods: {
     ...mapActions(['hydrateStateFromURIParams']),
     openAdvertisement(index: number): void {
-      this.advertisementIsOpen = true;
-      this.currentAdvertisementId = index;
+      this.postIsOpen = true;
+      this.currentPostId = index;
     },
     numberOfPages(): number {
-      return Math.ceil(this.advertisements.length / this.perPage);
+      return Math.ceil(this.posts.length / this.perPage);
     },
   },
 });

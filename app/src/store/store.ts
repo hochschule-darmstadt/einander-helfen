@@ -1,8 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import DataService from '../utils/services/DataService';
-import Advertisement from '../models/advertisement';
-import router from '@/router';
 
 Vue.use(Vuex);
 
@@ -15,7 +13,7 @@ const store = new Vuex.Store({
       {tag: 'Denker/in'},
       {tag: 'Jugendarbeit'}
     ],
-    advertisements: [],
+    posts: [],
     searchValues: [] as string[],
     location: '',
     radius: '',
@@ -27,29 +25,29 @@ const store = new Vuex.Store({
     removeSearchValue(state, value): void {
       state.searchValues.splice(state.searchValues.indexOf(value), 1);
     },
-    setAdvertisements(state, value): void {
-      state.advertisements = value;
+    setPosts(state, value): void {
+      state.posts = value;
     }
   },
   actions: {
-    findAdvertisements({ commit, state }): void {
+    findPosts({ commit, state }): void {
       DataService.findBySelection({
         searchValues: state.searchValues,
         location: state.location,
         radius: state.radius
-      }).then((result) => commit('setAdvertisements', result));
+      }).then((result) => commit('setPosts', result));
     },
     addSearchValue({ commit, dispatch }, searchValue): void {
       commit('addSearchValue', searchValue);
-      dispatch('findAdvertisements');
+      dispatch('findPosts');
     },
     addSearchValues({ commit, dispatch }, searchValues: string[]): void {
       searchValues.forEach((tag) => commit('addSearchValue', tag));
-      dispatch('findAdvertisements');
+      dispatch('findPosts');
     },
     removeSearchValue({ commit, dispatch }, value): void {
       commit('removeSearchValue', value);
-      dispatch('findAdvertisements');
+      dispatch('findPosts');
     },
     hydrateStateFromURIParams({ dispatch }, queryParams): void {
       if ('q' in queryParams) {

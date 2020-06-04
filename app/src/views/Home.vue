@@ -65,7 +65,7 @@
               >
                   <router-link
                     style="text-decoration: none; color: inherit;"
-                    :to="{name: 'resultPage', params:{category: tag.title} }"
+                    :to="{name: 'resultPage', query:{q: tag.title} }"
                   >
                     <v-img class="white--text align-end mt-10" height="300px" :key="tag.title" :src="tag.img">
                       <v-card >
