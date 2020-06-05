@@ -1,15 +1,16 @@
 import Location from '@/models/location';
 
 class LocationService {
-    private locations: Location[] = [];
-    private selectedLocationAmount = 10;
-    private diversityValue = 5;
+    public csvFile = '@/public/files/cities_lat_lon.csv';
+    public locations: Location[] = [];
+    public selectedLocationAmount = 10;
+    public diversityValue = 5;
 
     /**
      * The constructor initializes the `Location` list.
      */
     constructor() {
-        this.loadLocationCsv('@/public/files/cities_lat_lon.csv');
+        this.loadLocationCsv(this.csvFile);
     }
 
     /**
@@ -77,13 +78,31 @@ class LocationService {
      * @returns The subset of `Location`s
      */
     private diversitySplice(locations: Location[]): Location[] {
+        if (!locations || locations.length === 0) {
+            return [];
+        }
+        if (locations.length < this.selectedLocationAmount) {
+            return locations;
+        }
+
+        // add locations only if they do not exceed the diversity value
         const diverseLocations = [] as Location[];
         let newSize = this.selectedLocationAmount;
-        for (let i = 0; i < newSize; i++) {
+        const unusedIndices = [] as number [];
+        for (let i = 0; i < newSize && i < locations.length; i++) {
             if (this.diversityNameOccurrence(diverseLocations, locations[i].name) < this.diversityValue) {
                 diverseLocations.push(locations[i]);
             } else {
+                unusedIndices.push(i);
                 newSize++;
+            }
+        }
+
+        // if the diverse locations have free space, add unused diverse locations
+        const fillEmptySpace = this.selectedLocationAmount - diverseLocations.length;
+        if (fillEmptySpace > 0 && unusedIndices.length > 0) {
+            for (let i = 0; i < fillEmptySpace && i < unusedIndices.length; i++) {
+                diverseLocations.push(locations[unusedIndices[i]]);
             }
         }
 
