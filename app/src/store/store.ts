@@ -26,7 +26,6 @@ const store = new Vuex.Store({
        findLocationByPlzOrName({ commit, state }): void {
            const newLocations = LocationService.findLocationByPlzOrName(state.locationSearchValue);
            commit('setLocations', newLocations);
-           console.log(state.locations);
        },
        setLocationSearchValue({ commit, dispatch }, locationSearchValue): void {
            commit('setLocationSearchValue', locationSearchValue);
