@@ -40,9 +40,6 @@
               :items="searchProposals"
               @input="addSearchTag"
             ></v-combobox>
-                <li v-for="result in objectArray" :key="result.id">
-                  {{ result.title }}
-                </li>
           </v-col>
         </v-row>
 
@@ -108,7 +105,7 @@ import axios from 'axios';
 import VueSlickCarousel from "vue-slick-carousel";
 import "vue-slick-carousel/dist/vue-slick-carousel-theme.css";
 import "vue-slick-carousel/dist/vue-slick-carousel.css";
-import Advertisement from "../models/advertisement";
+import Post from "../models/post";
 import { DataService } from "../utils/services/DataService";
 
 export default Vue.extend({
@@ -148,7 +145,7 @@ export default Vue.extend({
     selectedTag: "",
     selectedCity: "",
     selectedRadius: "",
-    objectArray: [] as Advertisement[],
+    objectArray: [] as Post[],
   }),
   computed: {
     ...mapState(['searchProposals'])

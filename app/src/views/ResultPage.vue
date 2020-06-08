@@ -4,15 +4,15 @@
     <v-row no-gutters>
       <v-col cols="6">
         <div style="height:75vh;overflow:auto">
-          <template v-for="(advertisement, i) in visiblePages">
+          <template v-for="(post, i) in visiblePages">
             <v-card class="mb-3" tile>
-              <v-list-item three-line @click="openAdvertisement(i)">
+              <v-list-item three-line @click="openPost(i)">
                 <v-list-item-content>
                   <v-list-item-title class="headline mb-1">{{
-                    advertisement.title
+                    post.title
                   }}</v-list-item-title>
                   <v-list-item-subtitle>{{
-                    advertisement.task
+                    post.task
                   }}</v-list-item-subtitle>
                 </v-list-item-content>
 
@@ -20,7 +20,7 @@
                   max-width="80px"
                   height="80px"
                   contain
-                  :src="advertisement.image"
+                  :src="post.image"
                 ></v-img>
               </v-list-item>
             </v-card>
@@ -50,7 +50,7 @@
           style="position: absolute;overflow:auto"
         >
           <v-list-item three-line>
-            <v-btn class="mr-3" text @click="closeAdvertisement()">
+            <v-btn class="mr-3" text @click="closePost()">
               <v-icon>arrow_back</v-icon>
             </v-btn>
             <!--display title, subtitle and image on the left side-->
@@ -147,7 +147,7 @@
 <!-- test content -->
 <script lang="ts">
 import Header from '@/components/layout/Header.vue';
-import Advertisement from '@/models/advertisement';
+import Post from '@/models/post';
 
 import Vue from 'vue';
 import { mapActions, mapState } from 'vuex';
@@ -169,13 +169,13 @@ export default Vue.extend({
   },
   computed: {
     ...mapState(['posts']),
-    visiblePages(): Advertisement[] {
+    visiblePages(): Post[] {
       return this.posts.slice(
         (this.page - 1) * this.perPage,
         this.page * this.perPage
       );
     },
-    currentPost(): Advertisement | null {
+    currentPost(): Post | null {
       return this.postIsOpen
         ? this.posts[this.currentPostId]
         : null;
@@ -189,7 +189,7 @@ export default Vue.extend({
   },
   methods: {
     ...mapActions(['hydrateStateFromURIParams']),
-    openAdvertisement(index: number): void {
+    openPost(index: number): void {
       this.postIsOpen = true;
       this.currentPostId = index;
     },

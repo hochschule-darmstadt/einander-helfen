@@ -1,4 +1,4 @@
-interface Advertisement {
+interface Post {
   title: string;
   categories: string[];
   location: string;
@@ -16,5 +16,5 @@ interface Advertisement {
   lon: number;
 }
 
-export {Advertisement};
-export default Advertisement;
+export {Post};
+export default Post;
