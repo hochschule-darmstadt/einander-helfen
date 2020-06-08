@@ -10,7 +10,7 @@ class DataService {
         return this.performQuery<T>(queryData);
     }
 
-    public findByCategories<T>(category: string): Promise<T> {
+    public findByCategory<T>(category: string): Promise<T> {
         const queryData = new QueryBuilder()
             .mustMatch('categories', `${category}`);
         return this.performQuery<T>(queryData);
@@ -28,7 +28,7 @@ class DataService {
             // TODO Matching both if string contains the keyword für
             .size(15)
             .shouldWildcard('title', `${object}`)
-            .shouldWildcard('categories', `${object}`)
+            .shouldMatch('categories', `${object}`)
             .shouldWildcard('organization', `${object.toLowerCase()}`);
         return this.performQuery<T>(queryData);
     }
@@ -36,6 +36,17 @@ class DataService {
     public findAll<T>(): Promise<T> {
         const queryData = new QueryBuilder();
         return this.performQuery<T>(queryData);
+    }
+
+    public findBySelection({searchValues, location, radius}:
+                               {searchValues: string[], location: string, radius: string}): Promise<any> {
+        const query = new QueryBuilder();
+        searchValues.forEach((value) => {
+            query.shouldMatch('categories', value)
+                .shouldMatch('title', value);
+        });
+
+        return this.performQuery(query);
     }
 
     private performQuery<T>(query: QueryBuilder): Promise<T> {

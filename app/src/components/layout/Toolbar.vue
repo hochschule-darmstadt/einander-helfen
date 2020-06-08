@@ -1,13 +1,13 @@
 <template>
-    <v-app-bar flat absolute color="transparent" height="120px">
+    <v-app-bar absolute height="45px" color="#00254f">
         <v-layout justify-center>
             <v-container>
                 <v-layout>
-                    <div class="display-1 font-weight-bold">Einander Helfen</div>
+                    <v-toolbar-side-icon>
+                    <v-img class="mt-1" width=40px height=35px src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Heart-hand-shake.svg/256px-Heart-hand-shake.svg.png"></v-img>
+                    </v-toolbar-side-icon> 
+                    <div class="pl-5 headline font-weight-light white--text">einander-helfen.de</div>
                     <v-spacer></v-spacer>
-                    <v-btn icon>
-                        <v-icon>more_vert</v-icon>
-                    </v-btn>
                 </v-layout>
             </v-container>
         </v-layout>

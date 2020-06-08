@@ -2,35 +2,33 @@
     <header>
         <v-row
                 no-gutters
-                style="padding: 1vh">
+                style="padding: 1vh; background: #00254f">
             <v-btn
                     :key="index"
                     :to="link.route"
-                    class="my-2"
-                    color="grey"
+                    height="75px"
+                    width="80px"
                     justify="left"
                     rounded
                     router
-                    text
-                    style="margin-top: 1vh"
-                    v-for="(link, index) in links">
-                {{ link.text }}
-            </v-btn>
-
+                    v-for="(link, index) in links"
+                    depressed
+                    icon
+                >{{ link.text }}  <v-img class="mt-1" width=80px height=75px src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Heart-hand-shake.svg/256px-Heart-hand-shake.svg.png"></v-img>
+         </v-btn>
             <v-spacer></v-spacer>
             <v-col
                     cols="4"
                     md="4"
-                    style="background: #eee; border-radius: 20px">
+                    style="background: white; border-radius: 20px">
                 <v-combobox
-                        :items="volunteerProposals"
+                        :items="searchProposals"
                         :search-input.sync="searchString"
-                        @change="tagChange"
+                        @input="tagAdded"
                         append-icon="search"
                         clearable
                         item-text="tag"
-                        style="margin-left: 10px; margin-right: 10px"
-                        v-bind:value="searchValue">
+                        style="margin-left: 10px; margin-right: 10px">
                 </v-combobox>
                 <v-chip-group
                         active-class="primary-text"
@@ -40,7 +38,7 @@
                             :key="tag"
                             @click:close="remove(tag)"
                             close
-                            v-for="tag in selectedTags">
+                            v-for="tag in searchValues">
                         {{ tag }}
                     </v-chip>
                 </v-chip-group>
@@ -50,6 +48,7 @@
                     cols="2"
                     md="2">
                 <v-autocomplete
+                        dark
                         :items="volunteerCities"
                         label="Standort"
                         prepend-inner-icon="place"
@@ -61,6 +60,7 @@
 
             <v-col cols="1" md="1">
                 <v-autocomplete
+                        dark
                         :items="volunteerRadius"
                         label="Umkreis"
                         v-model="selectedRadius">
@@ -70,6 +70,7 @@
             <v-spacer></v-spacer>
 
             <v-btn
+                    dark
                     style="margin-top: 1vh"
                     icon>
                 <v-icon>more_vert</v-icon>
@@ -84,7 +85,6 @@
     export default Vue.extend({
         data(): {
             links: any,
-            volunteerProposals: any,
             volunteerTags: string[],
             volunteerCities: string[],
             volunteerRadius: string[],
@@ -96,14 +96,7 @@
         } {
             return {
                 links: [
-                    {text: 'Logo', route: '/'},
-                ],
-                volunteerProposals: [
-                    {header: 'Vorschläge'},
-                    {divider: true},
-                    {tag: 'Macher/in'},
-                    {tag: 'Denker/in'},
-                    {tag: 'Jugendarbeit'}
+                    {text: '', route: '/'},
                 ],
                 // TODO volunteerTags are currently not in use:
                 // volunteerTags need to be implemented in the search of the main search field.
@@ -140,29 +133,23 @@
         },
         methods: {
           ...mapActions([
-            'setSearchValue'
+              'addSearchValue',
+              'removeSearchValue'
           ]),
             remove(tag: string): void {
-                const index = this.selectedTags.indexOf(tag, 0);
-                if (index >= 0) {
-                    this.selectedTags.splice(index, 1);
-                }
-                if (this.selectedTags.length === 0) {
-                    // TODO should this be implemented?
-                    // if no tags are selected go back to the home page.
-                }
+                this.removeSearchValue(tag);
             },
-            tagChange(tag: string): void {
-                this.selectedTags.push(tag);
-                this.setSearchValue(tag);
-                this.$nextTick(() => {
+            tagAdded(tag: string): void {
+                if (tag.length) {
+                    this.addSearchValue(tag);
                     this.searchString = '';
-                });
+                }
             }
         },
       computed: {
         ...mapState([
-          'searchValue'
+            'searchValues',
+            'searchProposals'
         ])
       },
     });

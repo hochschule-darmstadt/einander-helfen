@@ -1,38 +1,57 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import DataService from '../utils/services/DataService';
-import Advertisement from '../models/advertisement';
-import router from '@/router';
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
-    advertisements: [],
-    searchValue: '',
+    searchProposals: [
+      {header: 'Vorschläge'},
+      {divider: true},
+      {tag: 'Macher/in'},
+      {tag: 'Denker/in'},
+      {tag: 'Jugendarbeit'}
+    ],
+    posts: [],
+    searchValues: [] as string[],
     location: '',
     radius: '',
   },
   mutations: {
-    setSearchValue(state, value): void {
-      state.searchValue = value;
+    addSearchValue(state, value: string): void {
+      state.searchValues.push(value);
     },
-    setAdvertisements(state, value): void {
-      state.advertisements = value;
+    removeSearchValue(state, value): void {
+      state.searchValues.splice(state.searchValues.indexOf(value), 1);
+    },
+    setPosts(state, value): void {
+      state.posts = value;
     }
   },
   actions: {
-    findAdvertisementsByTitle({ commit, state }): void {
-      DataService.findByWildcard(state.searchValue)
-        .then((result) => commit('setAdvertisements', result));
+    findPosts({ commit, state }): void {
+      DataService.findBySelection({
+        searchValues: state.searchValues,
+        location: state.location,
+        radius: state.radius
+      }).then((result) => commit('setPosts', result));
     },
-    setSearchValue({ commit, dispatch }, searchValue): void {
-      commit('setSearchValue', searchValue);
-      dispatch('findAdvertisementsByTitle');
+    addSearchValue({ commit, dispatch }, searchValue): void {
+      commit('addSearchValue', searchValue);
+      dispatch('findPosts');
+    },
+    addSearchValues({ commit, dispatch }, searchValues: string[]): void {
+      searchValues.forEach((tag) => commit('addSearchValue', tag));
+      dispatch('findPosts');
+    },
+    removeSearchValue({ commit, dispatch }, value): void {
+      commit('removeSearchValue', value);
+      dispatch('findPosts');
     },
     hydrateStateFromURIParams({ dispatch }, queryParams): void {
       if ('q' in queryParams) {
-        dispatch('setSearchValue', queryParams.q);
+        dispatch('addSearchValues', queryParams.q.split(','));
       }
     }
   }

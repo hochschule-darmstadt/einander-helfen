@@ -1,7 +1,7 @@
 <template>
   <div class="home">
-    <VueSlickCarousel
-      :dots="true"
+    <Toolbar />
+    <VueSlickCarousel :dots="true" :infinite="true" :autoplay="true" :autoplaySpeed="30000">
       :infinite="true"
       :autoplay="true"
       :autoplaySpeed="5000"
@@ -34,25 +34,19 @@
         <v-row justify="center">
           <v-col cols="12" md="8">
             <v-combobox
-              filled
+              style="background: white"
               rounded
               color="white"
               label="z.B. Macher/in"
               append-icon="search"
-              item-text="title"
+              item-text="tag"
               autocomplete="off"
-              v-model="selectedTag"
-              @input="autoComplete($event)"
-              v-on:keyup="autoComplete"
-              return-object
+              :items="searchProposals"
+              @input="addSearchTag"
             ></v-combobox>
-            <div class="panel-footer" v-if="objectArray">
-              <ul class="list-group">
                 <li v-for="result in objectArray" :key="result.id">
                   {{ result.title }}
                 </li>
-              </ul>
-            </div>
           </v-col>
         </v-row>
 
@@ -83,12 +77,10 @@
           <v-col cols="12" md="2" :key="tag.title">
             <v-hover v-slot:default="{ hover }">
               <v-card
-                height="200px"
                 class="mx-auto"
                 :elevation="hover ? 12 : 2"
                 :class="{ 'on-hover': hover }"
               >
-                <v-img
                   class="white--text align-end"
                   height="200px"
                   :key="tag.title"
@@ -96,14 +88,17 @@
                 >
                   <router-link
                     style="text-decoration: none; color: inherit;"
-                    :to="{
+                    :to="{name: 'resultPage', query:{q: tag.title} }"
                       name: 'resultPage',
                       params: { category: tag.title },
                     }"
                   >
-                    <v-card-title v-html="tag.title"></v-card-title>
-                  </router-link>
-                </v-img>
+                    <v-img class="white--text align-end mt-10" height="300px" :key="tag.title" :src="tag.img">
+                      <v-card >
+                    <v-card-title class="justify-center black--text" v-html="tag.title"></v-card-title>
+                      </v-card>
+                   </v-img>
+                 </router-link>
               </v-card>
             </v-hover>
           </v-col>
@@ -114,13 +109,14 @@
 </template>
 
 <script lang="ts">
-import { mapActions } from "vuex";
+import { mapState } from 'vuex';
 
 declare var require: any;
 import Vue from "vue";
+import Toolbar from '@/components/layout/Toolbar.vue';
 
-import QueryBuilder from "es-query-builder/dist";
-import axios from "axios";
+import QueryBuilder from 'es-query-builder/dist';
+import axios from 'axios';
 import VueSlickCarousel from "vue-slick-carousel";
 import "vue-slick-carousel/dist/vue-slick-carousel-theme.css";
 import "vue-slick-carousel/dist/vue-slick-carousel.css";
@@ -130,11 +126,11 @@ import { DataService } from "../utils/services/DataService";
 export default Vue.extend({
   components: {
     VueSlickCarousel,
+    Toolbar
   },
 
+
   data: () => ({
-    volunteerTitle: [] as string[],
-    objectArray: [] as Advertisement[],
     volunteerTags: [
       {
         title: "Macher/in",
@@ -165,49 +161,34 @@ export default Vue.extend({
     selectedCity: "",
     selectedRadius: "",
   }),
-  watch: {
-    selectedTag(newValue, oldValue): void {
+  computed: {
+    ...mapState(['searchProposals'])
+  },
+  methods: {
+    addSearchTag(tag: {tag: string}): void {
+      console.log(tag);
       this.$router.push({
         name: "resultPage",
         query: {
-          q: newValue,
+          q: tag.tag,
           city: this.selectedCity,
           radius: this.selectedRadius,
         },
       });
     },
-  },
-  created(): void {
-    this.extractTitle(this.volunteerTags);
-  },
-  methods: {
-    extractTitle(volunteerTags): void {
-      volunteerTags.forEach((elem) => {
-        this.volunteerTitle.push(elem.title);
-      });
-    },
-    autoComplete(e): void {
-      console.log(this.selectedTag);
-      this.objectArray = [];
-      DataService.findByWildcard(this.selectedTag).then((result) => {
         result.forEach((element) => {
           this.objectArray.push(element as Advertisement);
         });
       });
       console.log(this.objectArray);
     },
-  },
 });
 </script>
 
-<style scoped>
-.v-card {
-  transition: opacity 0.4s ease-in-out;
-}
-
-.v-card.on-hover {
-  opacity: 0.7;
-}
+<style>
+  .v-input__slot{
+    margin-bottom: 0;
+  }
 
 img {
   width: 100%;
