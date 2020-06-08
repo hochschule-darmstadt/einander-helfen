@@ -2,10 +2,6 @@
   <div class="home">
     <Toolbar />
     <VueSlickCarousel :dots="true" :infinite="true" :autoplay="true" :autoplaySpeed="30000">
-      :infinite="true"
-      :autoplay="true"
-      :autoplaySpeed="5000"
-    >
       <picture>
         <source
           media="(max-width: 768px)"
@@ -81,17 +77,9 @@
                 :elevation="hover ? 12 : 2"
                 :class="{ 'on-hover': hover }"
               >
-                  class="white--text align-end"
-                  height="200px"
-                  :key="tag.title"
-                  :src="tag.img"
-                >
                   <router-link
                     style="text-decoration: none; color: inherit;"
-                    :to="{name: 'resultPage', query:{q: tag.title} }"
-                      name: 'resultPage',
-                      params: { category: tag.title },
-                    }"
+                    :to="{name: 'ResultPage', query:{q: tag.title} }"
                   >
                     <v-img class="white--text align-end mt-10" height="300px" :key="tag.title" :src="tag.img">
                       <v-card >
@@ -160,6 +148,7 @@ export default Vue.extend({
     selectedTag: "",
     selectedCity: "",
     selectedRadius: "",
+    objectArray: [] as Advertisement[],
   }),
   computed: {
     ...mapState(['searchProposals'])
@@ -176,13 +165,10 @@ export default Vue.extend({
         },
       });
     },
-        result.forEach((element) => {
-          this.objectArray.push(element as Advertisement);
-        });
-      });
-      console.log(this.objectArray);
-    },
-});
+    autoComplete(): void {
+    }
+  }
+})
 </script>
 
 <style>
