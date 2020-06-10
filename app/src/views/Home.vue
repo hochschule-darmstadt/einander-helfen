@@ -93,6 +93,10 @@ import VueSlickCarousel from 'vue-slick-carousel';
 import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css';
 import 'vue-slick-carousel/dist/vue-slick-carousel.css';
 
+import tags from '@/utils/tags';
+
+console.log(tags);
+
 export default Vue.extend({
   components: {
     VueSlickCarousel,
