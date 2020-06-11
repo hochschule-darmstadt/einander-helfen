@@ -34,6 +34,14 @@ class TagService {
                     });
                 });
             }
+            //This might solve the above mentioned issue. Needs testing
+            else
+            {
+                this.tags.push({
+                    label: tag.label,
+                    synonyms: "",
+                });
+            }
         });
     }
     private getTagsAsStringArray(): void {
