@@ -1,6 +1,6 @@
 interface Tag {
     label: string;
-    synonyms: string[];
+    synonyms: string;
 }
 
 export { Tag };

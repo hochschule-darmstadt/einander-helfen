@@ -8,9 +8,8 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     searchProposals: [
-      {header: 'Vorschläge'},
-      {divider: true},
-      {tag: 'a'},
+      { header: 'Vorschläge' },
+      { divider: true },
     ],
     posts: [],
     labels: [] as string[],

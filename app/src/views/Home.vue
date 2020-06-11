@@ -109,7 +109,7 @@ import Post from '../models/post';
 import { DataService } from '../utils/services/DataService';
 import TagService from '../utils/services/TagService';
 
-console.log(TagService.tags);
+console.log(TagService);
 
 export default Vue.extend({
   components: {
