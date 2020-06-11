@@ -97,20 +97,19 @@
 import { mapState } from 'vuex';
 
 declare var require: any;
-import Vue from "vue";
+import Vue from 'vue';
 import Toolbar from '@/components/layout/Toolbar.vue';
 
 import QueryBuilder from 'es-query-builder/dist';
 import axios from 'axios';
-import VueSlickCarousel from "vue-slick-carousel";
-import "vue-slick-carousel/dist/vue-slick-carousel-theme.css";
-import "vue-slick-carousel/dist/vue-slick-carousel.css";
-import Post from "../models/post";
-import { DataService } from "../utils/services/DataService";
+import VueSlickCarousel from 'vue-slick-carousel';
+import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css';
+import 'vue-slick-carousel/dist/vue-slick-carousel.css';
+import Post from '../models/post';
+import { DataService } from '../utils/services/DataService';
+import TagService from '../utils/services/TagService';
 
-import tags from '@/utils/tags';
-
-console.log(tags);
+console.log(TagService.tags);
 
 export default Vue.extend({
   components: {
@@ -122,33 +121,33 @@ export default Vue.extend({
   data: () => ({
     volunteerTags: [
       {
-        title: "Macher/in",
-        img: require("../../public/images/macherIN.jpeg"),
+        title: 'Macher/in',
+        img: require('../../public/images/macherIN.jpeg'),
       },
       {
-        title: "Denker/in",
-        img: require("../../public/images/denkerIN.jpeg"),
+        title: 'Denker/in',
+        img: require('../../public/images/denkerIN.jpeg'),
       },
       {
-        title: "Kommunikative",
-        img: require("../../public/images/jugend.jpeg"),
+        title: 'Kommunikative',
+        img: require('../../public/images/jugend.jpeg'),
       },
       {
-        title: "Soziale",
-        img: require("../../public/images/sozial.jpeg"),
+        title: 'Soziale',
+        img: require('../../public/images/sozial.jpeg'),
       },
     ],
     volunteerCities: [
-      "Main Standort",
-      "Darmstadt",
-      "Frankfurt am Main",
-      "Wiesbaden",
-      "Mainz",
+      'Main Standort',
+      'Darmstadt',
+      'Frankfurt am Main',
+      'Wiesbaden',
+      'Mainz',
     ],
-    volunteerRadius: ["Überall", "5 km", "10 km", "25 km", "50 km"],
-    selectedTag: "",
-    selectedCity: "",
-    selectedRadius: "",
+    volunteerRadius: ['Überall', '5 km', '10 km', '25 km', '50 km'],
+    selectedTag: '',
+    selectedCity: '',
+    selectedRadius: '',
     objectArray: [] as Post[],
   }),
   computed: {
@@ -156,9 +155,8 @@ export default Vue.extend({
   },
   methods: {
     addSearchTag(tag: {tag: string}): void {
-      console.log(tag);
       this.$router.push({
-        name: "resultPage",
+        name: 'resultPage',
         query: {
           q: tag.tag,
           city: this.selectedCity,
@@ -166,10 +164,8 @@ export default Vue.extend({
         },
       });
     },
-    autoComplete(): void {
-    }
   }
-})
+});
 </script>
 
 <style>

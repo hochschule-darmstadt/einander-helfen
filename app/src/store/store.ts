@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import DataService from '../utils/services/DataService';
-
+import TagService from '../utils/services/TagService';
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
@@ -9,11 +9,11 @@ const store = new Vuex.Store({
     searchProposals: [
       {header: 'Vorschläge'},
       {divider: true},
-      {tag: 'Macher/in'},
-      {tag: 'Denker/in'},
-      {tag: 'Jugendarbeit'}
+      {tag: 'aaa'},
     ],
     posts: [],
+    labels: [] as string[],
+    synonyms: [] as string[],
     searchValues: [] as string[],
     location: '',
     radius: '',
