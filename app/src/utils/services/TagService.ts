@@ -22,7 +22,7 @@ class TagService {
     this.splitSynonyms()
     this.getTagsAsStringArray()
   }
-  //TODO: I think this ignores tags without synonym. So we dont have those in our list!!
+
   private splitSynonyms (): void {
     importedTags.forEach(tag => {
       if (tag.synonyms) {
@@ -34,7 +34,7 @@ class TagService {
           })
         })
       }
-      //This might solve the above mentioned issue. Needs testing
+      
       else {
         this.tags.push({
           label: tag.label,
