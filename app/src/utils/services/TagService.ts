@@ -35,13 +35,13 @@ class TagService {
         tags.forEach((tag) => {
             if (tag.synonyms) {
                 var splittedSynonyms = tag.synonyms.split(',');
-                splittedSynonyms = this.removeWhiteSpaceFromArray(splittedSynonyms);
+                //splittedSynonyms = this.removeWhiteSpaceFromArray(splittedSynonyms);
                 // console.log(splittedSynonyms);
                 // if (splittedSynonyms.length > 1) {
                 splittedSynonyms.forEach((element) => {
                     this.tags.push({
                         label: tag.label,
-                        synonyms: element,
+                        synonyms: element.trim(),
                     });
                 });
                 // }
