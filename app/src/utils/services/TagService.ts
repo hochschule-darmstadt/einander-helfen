@@ -3,10 +3,9 @@ import Tag from '@/models/tag';
 import store from '@/store/store';
 
 class TagService {
-    public csvFile = '@/utils/tags/index';
-    public tags: Tag[] = [];
-    public tagsAsStringArr: string[] = [];
-    public filteredTagsAsStringArr: any;
+    private tags: Tag[] = [];
+    private tagsAsStringArr: string[] = [];
+    private filteredTagsAsStringArr: any;
 
     /**
      * The constructor initializes the `Tag` list.
@@ -21,7 +20,7 @@ class TagService {
 
     private generateTags(): void {
         this.splitSynonyms();
-        this.getTagsAsStringArray(this.tags);
+        this.getTagsAsStringArray();
     }
     //TODO: I think this ignores tags without synonym. So we dont have those in our list!!
     private splitSynonyms(): void {
@@ -37,8 +36,8 @@ class TagService {
             }
         });
     }
-    private getTagsAsStringArray(tags): void {
-        tags.forEach((element) => {
+    private getTagsAsStringArray(): void {
+        this.tags.forEach((element) => {
             this.tagsAsStringArr.push(element.label);
             this.tagsAsStringArr.push(element.synonyms);
         });
