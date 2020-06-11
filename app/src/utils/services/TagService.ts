@@ -5,61 +5,47 @@ import store from '@/store/store';
 class TagService {
     public csvFile = '@/utils/tags/index';
     public tags: Tag[] = [];
-    public tagsAndSynonyms: string[] = [];
-    public filteredtagAndSysnonyms: any;
+    public tagsAsStringArr: string[] = [];
+    public filteredTagsAsStringArr: any;
 
     /**
      * The constructor initializes the `Tag` list.
      */
     constructor() {
-        this.loadTagCsv(importedTags);
-        // this.splitSynonyms(importedTags);
-        this.removeDuplicatedEntries(this.tagsAndSynonyms);
-        this.filteredtagAndSysnonyms.forEach((tag) => {
+        this.generateTags();
+        this.removeDuplicateTags(this.tagsAsStringArr);
+        this.filteredTagsAsStringArr.forEach((tag) => {
             store.commit('addTag', tag);
         });
     }
 
-    private loadTagCsv(importedTags): void {
-        this.splitSynonyms(importedTags);
-        this.getLabelAndSynonymAsStringArray(this.tags);
-        // importedTags.forEach((tag) => {
-        //    this.tags.push({
-        //        label: tag.label,
-        //        synonyms: tag.synonyms
-        //    });
-        //    this.getLabelAndSynonymAsStringArray(tag);
-        // });
+    private generateTags(): void {
+        this.splitSynonyms();
+        this.getTagsAsStringArray(this.tags);
     }
-    private splitSynonyms(tags): void {
-        tags.forEach((tag) => {
+    //TODO: I think this ignores tags without synonym. So we dont have those in our list!!
+    private splitSynonyms(): void {
+        importedTags.forEach((tag) => {
             if (tag.synonyms) {
                 var splittedSynonyms = tag.synonyms.split(',');
-                //splittedSynonyms = this.removeWhiteSpaceFromArray(splittedSynonyms);
-                // console.log(splittedSynonyms);
-                // if (splittedSynonyms.length > 1) {
                 splittedSynonyms.forEach((element) => {
                     this.tags.push({
                         label: tag.label,
                         synonyms: element.trim(),
                     });
                 });
-                // }
             }
         });
     }
-    private getLabelAndSynonymAsStringArray(tags): void {
+    private getTagsAsStringArray(tags): void {
         tags.forEach((element) => {
-            this.tagsAndSynonyms.push(element.label);
-            this.tagsAndSynonyms.push(element.synonyms);
+            this.tagsAsStringArr.push(element.label);
+            this.tagsAsStringArr.push(element.synonyms);
         });
     }
-    private removeWhiteSpaceFromArray(array: string[]) {
-        return array.filter((item) => item.charAt(0) !== ' ');
-    }
-    private removeDuplicatedEntries(duplicatedArray): void {
-        this.filteredtagAndSysnonyms = [...new Set(duplicatedArray)];
-        this.removeWhiteSpaceFromArray(this.filteredtagAndSysnonyms);
+
+    private removeDuplicateTags(tagsAsStringArr): void {
+        this.filteredTagsAsStringArr = [...new Set(tagsAsStringArr)];
     }
 }
 
