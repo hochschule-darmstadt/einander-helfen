@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import DataService from '../utils/services/DataService';
 import TagService from '../utils/services/TagService';
+import Tag from '@/models/tag';
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
@@ -9,7 +10,7 @@ const store = new Vuex.Store({
     searchProposals: [
       {header: 'Vorschläge'},
       {divider: true},
-      {tag: 'aaa'},
+      {tag: 'a'},
     ],
     posts: [],
     labels: [] as string[],
@@ -21,6 +22,9 @@ const store = new Vuex.Store({
   mutations: {
     addSearchValue(state, value: string): void {
       state.searchValues.push(value);
+    },
+    addTag(state, tag): void {
+      state.searchProposals.push(tag);
     },
     removeSearchValue(state, value): void {
       state.searchValues.splice(state.searchValues.indexOf(value), 1);
