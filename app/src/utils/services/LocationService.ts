@@ -1,4 +1,5 @@
 import Location from '@/models/location';
+import locationArray from '@/utils/range_search/index';
 
 class LocationService {
     public csvFile = '@/public/files/cities_lat_lon.csv';
@@ -10,7 +11,8 @@ class LocationService {
      * The constructor initializes the `Location` list.
      */
     constructor() {
-        this.loadLocationCsv(this.csvFile);
+        this.loadLocationCsv('s');
+        console.log(this.locations);
     }
 
     /**
@@ -35,7 +37,7 @@ class LocationService {
                 selectedLocations.push(location);
             }
         });
-        selectedLocations.sort(this.dynamicSort('rank'));
+        selectedLocations.sort(this.dynamicSort('-rank'));
 
         return this.diversitySplice(selectedLocations);
     }
@@ -49,7 +51,7 @@ class LocationService {
         this.locations.forEach((location) => {
             selectedLocations.push(location);
         });
-        selectedLocations.sort(this.dynamicSort('rank'));
+        selectedLocations.sort(this.dynamicSort('-rank'));
 
         return this.diversitySplice(selectedLocations);
     }
@@ -58,15 +60,22 @@ class LocationService {
      * This method helps to sort any list of object by a specific property.
      * The method needs to be call inside of a `<T>.sort(dynamicSort('abc'))` method.
      * @param property  The property the object should be sorted by.
+     *                  If the property starts with '-' the result is inversed.
      * @returns A number between -1 - 1:
      *          - -1:   b comes before a.
      *          - 0:    a and b are equal.
      *          - 1:    a comes before b.
      */
     private dynamicSort(property): any {
+        let sortOrder = 1;
+        if (property[0] === '-') {
+            sortOrder = -1;
+            property = property.substr(1);
+        }
         return (a, b) => {
             return (a[property] < b[property] ? -1 :
-                (a[property] > b[property]) ? 1 : 0);
+                (a[property] > b[property]) ? 1 : 0)
+                * sortOrder;
         };
     }
 
@@ -126,31 +135,16 @@ class LocationService {
      * @param csvFile The CSV input file
      */
     private loadLocationCsv(csvFile): void {
-
-
-        // console.log(json);
-
-        // TODO load csv file and save values to locations
-        for (let i = 0; i < 6; i++) {
+        locationArray.forEach((location) => {
             this.locations.push({
-                name: 'Frankfurt',
-                plz: i + '6592',
-                state: 'Hessen',
-                lat: i * 3.0,
-                lon: i * 2.0,
-                rank: 4 + i
+                name: location.name,
+                plz: location.plz,
+                state: location.state,
+                lat: +location.lat,
+                lon: +location.lon,
+                rank: +location.rank
             });
-        }
-        for (let i = 0; i < 15; i++) {
-            this.locations.push({
-                name: 'Darmstadt',
-                plz: i + '6592',
-                state: 'Hessen',
-                lat: i * 3.0,
-                lon: i * 2.0,
-                rank: 5 + i
-            });
-        }
+        });
     }
 }
 
