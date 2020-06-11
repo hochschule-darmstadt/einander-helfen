@@ -34,7 +34,8 @@ class TagService {
     private splitSynonyms(tags): void {
         tags.forEach((tag) => {
             if (tag.synonyms) {
-                const splittedSynonyms = tag.synonyms.split(',');
+                var splittedSynonyms = tag.synonyms.split(',');
+                splittedSynonyms = this.removeWhiteSpaceFromArray(splittedSynonyms);
                 // console.log(splittedSynonyms);
                 // if (splittedSynonyms.length > 1) {
                 splittedSynonyms.forEach((element) => {
