@@ -34,23 +34,9 @@
 
         <v-row justify="center">
           <v-col cols="12" md="6">
-            <v-combobox
-              label="Standort"
-              :filter="filterLocations"
-              :items="getLocations()"
-              :item-text="getItemText"
-              v-model="selectedLocation"
-              prepend-inner-icon="place"
-              >
-             <!-- <template slot="selection" slot-scope="data">
-                {{ data.item.plz }}, {{ data.item.name }}
-              </template>
-              <template slot="item" slot-scope="data">
-                {{ data.item.plz }}, {{ data.item.name }}
-              </template>-->
-            </v-combobox>
+            <location-search-bar></location-search-bar>
           </v-col>
-
+   
           <v-col cols="12" md="2">
             <v-autocomplete
               label="Umkreis"
@@ -89,11 +75,6 @@
 </template>
 
 <script lang="ts">
-import {mapActions, mapGetters, mapState} from 'vuex';
-
-import Location from '@/models/location';
-
-declare var require: any;
 import Vue from 'vue';
 
 import QueryBuilder from 'es-query-builder/dist';
@@ -101,20 +82,17 @@ import axios from 'axios';
 import VueSlickCarousel from 'vue-slick-carousel';
 import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css';
 import 'vue-slick-carousel/dist/vue-slick-carousel.css';
+import LocationSearchBar from '@/components/ui/LocationSearchBar.vue';
 
 export default Vue.extend({
   components: {
-    VueSlickCarousel
+    VueSlickCarousel,
+    LocationSearchBar
   },
-
   data(): {
     volunteerTags: {},
     volunteerRadius: string[],
     selectedTag: string,
-    selectedLocation: string,
-    selectedRadius: string,
-    selectedCity: string, // TODO remove
-    volunteerCities: string[] // TODO remove
   } {
     return {
       volunteerTags: [
@@ -137,40 +115,8 @@ export default Vue.extend({
       ],
       volunteerRadius: ['Überall', '5 km', '10 km', '25 km', '50 km'],
       selectedTag: '',
-      selectedLocation: '',
-      selectedRadius: '',
-      selectedCity: '',
-      volunteerCities: ['a', 'b']
     };
   },
-  computed: {
-    showLocations(): Location[] {
-      return this.getLocations();
-    }
-  },
-  watch: {
-    selectedLocation(newValue, oldValue): void {
-      this.setLocationSearchValue(newValue); // newValue HAS to be a string
-    }
-  },
-  methods: {
-    ...mapActions(['setLocationSearchValue']),
-    ...mapGetters(['getLocations', 'filterFunction']),
-    filterLocations(item: any, queryText: string, itemText: string): boolean {
-      console.log('.....');
-      if (queryText) {
-        const search = (queryText + '').toLowerCase();
-        const plz = item.plz + '';
-        const name = (item.name + '').toLowerCase();
-        return name.indexOf(search) > -1 || plz.indexOf(search) > -1;
-      } else {
-        return true;
-      }
-    },
-    getItemText(item): string {
-      return item.plz + ' ' + item.name;
-    }
-  }
 });
 </script>
 

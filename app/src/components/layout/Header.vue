@@ -46,24 +46,19 @@
                 </v-chip-group>
             </v-col>
 
-            <v-col
-                    cols="2"
-                    md="2">
-                <v-autocomplete
-                        :items="volunteerCities"
-                        label="Standort"
-                        prepend-inner-icon="place"
-                        style="margin-left: 10px; margin-right: 10px;"
-                        v-model="selectedCity">
-                    Mein Standort
-                </v-autocomplete>
+             <v-col
+                cols="2"
+                md="2">
+                    <location-search-bar>
+                    </location-search-bar>
             </v-col>
 
             <v-col cols="1" md="1">
                 <v-autocomplete
                         :items="volunteerRadius"
                         label="Umkreis"
-                        v-model="selectedRadius">
+                        v-model="selectedRadius" 
+                        style="margin-left: 10px; margin-right: 10px">
                     Überall
                 </v-autocomplete>
             </v-col>
@@ -80,15 +75,17 @@
 
 <script lang="ts">
     import Vue from 'vue';
+    import LocationSearchBar from '@/components/ui/LocationSearchBar.vue';
 
     export default Vue.extend({
+        components: {
+            LocationSearchBar
+        },
         data(): {
             links: any,
             volunteerProposals: any,
             volunteerTags: string[],
-            volunteerCities: string[],
             volunteerRadius: string[],
-            selectedCity: string,
             selectedRadius: string,
             selectedTags: string[],
             searchResult: null,
@@ -117,13 +114,7 @@
                     'Kunst',
                     'Einkaufen'
                 ],
-                volunteerCities: [
-                    'Main Standort',
-                    'Darmstadt',
-                    'Frankfurt am Main',
-                    'Wiesbaden',
-                    'Mainz'
-                ],
+
                 volunteerRadius: [
                     'Überall',
                     '5 km',
@@ -131,7 +122,6 @@
                     '25 km',
                     '50 km'
                 ],
-                selectedCity: '',
                 selectedRadius: '',
                 selectedTags: [],
                 searchResult: null,
