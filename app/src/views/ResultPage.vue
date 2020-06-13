@@ -164,15 +164,12 @@ import Vue from 'vue';
 import { mapActions, mapState } from 'vuex';
 
 import L from 'leaflet';
-import {Icon} from 'leaflet';
 import { LMap, LTileLayer, LMarker , LTooltip} from 'vue2-leaflet';
 
-import 'leaflet/dist/leaflet.css';
-
 // this part resolve an issue where the markers would not appear
-delete Icon.Default.prototype._getIconUrl;
+delete L.Icon.Default.prototype._getIconUrl;
 
-Icon.Default.mergeOptions({
+L.Icon.Default.mergeOptions({
     iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
     iconUrl: require('leaflet/dist/images/marker-icon.png'),
     shadowUrl: require('leaflet/dist/images/marker-shadow.png')
@@ -185,19 +182,20 @@ export default Vue.extend({
     currentPostId: number;
     page: number;
     perPage: number;
-    center: number[];
+    firstUpdate: boolean;
+    map: object;
   } {
     return {
       postIsOpen: false,
       currentPostId: 0,
       page: 1,
       perPage: 7,
+      firstUpdate: true,
       map: {
         url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
         center: [51.5000, 10.5000],
-        zoom: 6,
-        marker: [51.5000, 10.5000]
+        zoom: 6
       }
     };
   },
@@ -220,6 +218,12 @@ export default Vue.extend({
   },
   created(): void {
     this.hydrateStateFromURIParams(this.$route.query);
+  },
+  updated(): void {
+    if (this.firstUpdate && this.posts.length > 0 && this.posts.length < 2) {
+      this.postIsOpen = true;
+      this.firstUpdate = false;
+    }
   },
   methods: {
     ...mapActions(['hydrateStateFromURIParams']),
