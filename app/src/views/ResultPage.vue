@@ -37,10 +37,14 @@
       <v-col cols="6" v-if="!postIsOpen">
         <v-card tile height="75vh" style="position: absolute">
           <div id="map" style="height: 700px; width: 700px">
+            <v-btn @click="closeMap()" style="position: absolute; z-index: 9999; margin-left: 50px; margin-top: 20px;">Zur Detailansicht</v-btn>
             <l-map :center="map.center" :zoom="map.zoom">
               <l-tile-layer :url="map.url" :attribution="map.attribution"></l-tile-layer>
               <template v-for="(advertisement, i) in posts">
-                <l-marker :lat-lng="[advertisement.lat, advertisement.lon]" @click="openAdvertisement(i)">
+                <l-marker v-if="i === currentPostId" :icon="map.markerRed" :lat-lng="[advertisement.lat, advertisement.lon]" @click="openAdvertisement(i)">
+                  <l-tooltip>{{ advertisement.title }}</l-tooltip>
+                </l-marker>
+                <l-marker v-else :icon="map.markerBlue" :lat-lng="[advertisement.lat, advertisement.lon]" @click="openAdvertisement(i)">
                   <l-tooltip>{{ advertisement.title }}</l-tooltip>
                 </l-marker>
               </template>
@@ -164,16 +168,7 @@ import Vue from 'vue';
 import { mapActions, mapState } from 'vuex';
 
 import L from 'leaflet';
-import { LMap, LTileLayer, LMarker , LTooltip} from 'vue2-leaflet';
-
-// this part resolve an issue where the markers would not appear
-delete L.Icon.Default.prototype._getIconUrl;
-
-L.Icon.Default.mergeOptions({
-    iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
-    iconUrl: require('leaflet/dist/images/marker-icon.png'),
-    shadowUrl: require('leaflet/dist/images/marker-shadow.png')
-});
+import { LMap, LTileLayer, LMarker , LTooltip, LIcon} from 'vue2-leaflet';
 
 export default Vue.extend({
   components: { Header, LMap, LTileLayer, LMarker, LTooltip },
@@ -195,7 +190,15 @@ export default Vue.extend({
         url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
         center: [51.5000, 10.5000],
-        zoom: 6
+        zoom: 6,
+        markerBlue: L.icon({
+          iconUrl: '/images/marker/marker-icon.png',
+          iconRetinaUrl: '/images/marker/marker-icon-2x.png'
+        }),
+        markerRed: L.icon({
+          iconUrl: '/images/marker/marker-icon-red.png',
+          iconRetinaUrl: '/images/marker/marker-icon-2x-red.png'
+        })
       }
     };
   },
@@ -236,6 +239,9 @@ export default Vue.extend({
     },
     numberOfPages(): number {
       return Math.ceil(this.posts.length / this.perPage);
+    },
+    closeMap(): void {
+      this.postIsOpen = true;
     }
   },
 });
