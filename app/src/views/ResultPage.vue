@@ -428,7 +428,9 @@
     methods: {
       openAdvertisement(index: number): void {
         this.advertisementIsOpen = true;
-        this.currentAdvertisementId = index;
+        if (this.page > 1) {this.currentAdvertisementId = index + ((this.page - 1) * this.perPage); } else {
+        this.currentAdvertisementId = index; }
+		
       },
       closeAdvertisement(): void {
         this.currentAdvertisementId = 0;
