@@ -149,6 +149,7 @@ export default Vue.extend({
       }
       const searchTerm = this.currentSearchValue;
       return this.searchProposals
+        .filter((element) => 'tag' in element)
         .map((element: { tag: string; rank: number }) => {
           console.log(element);
           element.rank = element.tag.startsWith(searchTerm)
