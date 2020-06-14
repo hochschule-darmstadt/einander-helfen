@@ -148,25 +148,25 @@ export default Vue.extend({
         return [];
       }
       const searchTerm = this.currentSearchValue;
-      return this.searchProposals
-        .filter((element) => 'tag' in element)
-        .map((element: { tag: string; rank: number }) => {
-          console.log(element);
-          element.rank = element.tag.startsWith(searchTerm)
-            ? 2
-            : element.tag.endsWith(searchTerm)
-            ? 1
-            : 0.5;
-
-          return element;
-        })
-        .sort((a, b) => Math.sign(a.rank - b.rank));
+      const abc = this.matchSearchInput();
+      console.log(abc);
+      return this.searchProposals;
+      //   .filter((element) => 'tag' in element)
+      //   .map((element: { tag: string; rank: number }) => {
+      //     console.log(element);
+      //     element.rank = element.tag.startsWith(searchTerm)
+      //       ? 2
+      //       : element.tag.endsWith(searchTerm)
+      //       ? 1
+      //       : 0.5;
+      //     return element;
+      //   })
+      //   .sort((a, b) => Math.sign(a.rank - b.rank));
     }
   },
   methods: {
     addSearchTag(tag: { tag: string } | string): void {
       const tagName = typeof tag === 'string' ? tag : tag.tag;
-
       this.$router.push({
         name: 'resultPage',
         query: {
@@ -175,6 +175,21 @@ export default Vue.extend({
           radius: this.selectedRadius
         }
       });
+    },
+    matchSearchInput(): string[] {
+      const stringArray: string[] = [];
+      const filteredProposals = this.searchProposals.filter(
+        (element) => 'tag' in element
+      );
+      filteredProposals.forEach((tag) => {
+        if (tag.tag.label.toUpperCase().match(this.currentSearchValue.toUpperCase())) {
+          stringArray.push(tag.tag.label);
+        } else if (tag.tag.synonyms.
+        find((element) => element.toUpperCase() === this.currentSearchValue.toUpperCase())) {
+          stringArray.push(tag.tag.synonyms);
+        }
+      });
+      return stringArray;
     }
   }
 });

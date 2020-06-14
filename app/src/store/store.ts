@@ -1,8 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import DataService from '../utils/services/DataService';
-import TagService from '../utils/services/TagService';
-import Tag from '@/models/tag';
 import router from '@/router';
 Vue.use(Vuex);
 
