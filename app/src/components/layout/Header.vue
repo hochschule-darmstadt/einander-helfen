@@ -139,11 +139,15 @@
             remove(tag: string): void {
                 this.removeSearchValue(tag);
             },
-            tagAdded(tag: string): void {
-                if (tag.length) {
-                    this.addSearchValue(tag);
-                    this.searchString = '';
-                }
+            tagAdded(tag: {tag: string} | string): void {
+              const tagName = typeof tag === 'string'
+                ? tag
+                : tag.tag;
+
+              if (tagName.length) {
+                  this.addSearchValue(tagName);
+                  this.searchString = '';
+              }
             }
         },
       computed: {

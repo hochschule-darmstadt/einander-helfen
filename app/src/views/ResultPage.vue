@@ -4,9 +4,9 @@
     <v-row no-gutters>
       <v-col cols="6">
         <div style="height:75vh;overflow:auto">
-          <template v-for="(post, i) in visiblePages">
+          <template v-for="(post, index) in visiblePages">
             <v-card class="mb-3" tile>
-              <v-list-item three-line @click="openPost(i)">
+              <v-list-item three-line @click="openPost(index)">
                 <v-list-item-content>
                   <v-list-item-title class="headline mb-1">{{
                     post.title
@@ -28,7 +28,7 @@
         </div>
         <!--pageination-->
         <div class="text-center" style="margin-top:2%">
-          <v-pagination v-model="page" :length="numberOfPages" color="#054C66"></v-pagination>
+          <v-pagination @input="setResultPage($event)" :value="page" :length="numberOfPages" total-visible="7" color="#054C66"></v-pagination>
 
         </div>
       </v-col>
@@ -148,27 +148,25 @@
 <script lang="ts">
 import Header from '@/components/layout/Header.vue';
 import Post from '@/models/post';
-
 import Vue from 'vue';
 import { mapActions, mapState } from 'vuex';
+
 
 export default Vue.extend({
   components: { Header },
   data(): {
     postIsOpen: boolean;
     currentPostId: number;
-    page: number;
     perPage: number;
   } {
     return {
       postIsOpen: false,
       currentPostId: 0,
-      page: 1,
       perPage: 7,
     };
   },
   computed: {
-    ...mapState(['posts']),
+    ...mapState(['posts', 'page']),
     visiblePages(): Post[] {
       return this.posts.slice(
         (this.page - 1) * this.perPage,
@@ -188,15 +186,24 @@ export default Vue.extend({
     this.hydrateStateFromURIParams(this.$route.query);
   },
   methods: {
-    ...mapActions(['hydrateStateFromURIParams']),
+    ...mapActions(['hydrateStateFromURIParams', 'setResultPage']),
     openPost(index: number): void {
       this.postIsOpen = true;
-      this.currentPostId = index;
+      this.currentPostId = index + ((this.page - 1) * this.perPage);
+    },
+    closePost(): void {
+      this.currentPostId = 0;
+      this.postIsOpen = false;
     },
     numberOfPages(): number {
       return Math.ceil(this.posts.length / this.perPage);
     },
   },
+  watch: {
+    page(value): void {
+      this.setResultPage(value);
+    }
+  }
 });
 </script>
 

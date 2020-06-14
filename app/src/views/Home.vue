@@ -154,11 +154,15 @@ export default Vue.extend({
     ...mapState(['searchProposals'])
   },
   methods: {
-    addSearchTag(tag: {tag: string}): void {
+    addSearchTag(tag: {tag: string} | string): void {
+      const tagName = typeof tag === 'string'
+              ? tag
+              : tag.tag;
+
       this.$router.push({
         name: 'resultPage',
         query: {
-          q: tag.tag,
+          q: tagName,
           city: this.selectedCity,
           radius: this.selectedRadius,
         },
