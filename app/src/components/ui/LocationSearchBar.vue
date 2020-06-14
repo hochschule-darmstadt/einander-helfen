@@ -5,10 +5,12 @@
               label="Standort"
               :filter="filterLocations"
               :items="showLocations"
-              :item-text="getItemText"
-              item-value="plz"
+              item-text="title"
+              item-value="title"
               v-model="selectedLocation"
               style="margin-left: 10px; margin-right: 10px;"
+              v-on:keyup.self="locationOnKeyUp"
+              auto-select-first
               >
             </v-autocomplete>
   </v-row>
@@ -16,7 +18,7 @@
 
 <script lang="ts">
 import {mapActions, mapGetters, mapState} from 'vuex';
-import Location from '@/models/location';
+import Location from '../../models/location';
 
 declare var require: any;
 import Vue from 'vue';
@@ -36,15 +38,25 @@ export default Vue.extend({
   },
   computed: {
     showLocations(): Location[] {
-      return this.getLocations();
+      const locations: Location[] = this.getLocations();
+      const filteredLocations: any = locations.map((location) => {
+        const title = location.plz + ' ' + location.name;
+        return Object.assign({}, location, {title});
+      });
+      console.log(filteredLocations);
+      return filteredLocations;
     }
   },
   watch: {
     selectedLocation(newValue, oldValue): void {
       if (newValue !== '' && newValue !== oldValue) {
-        this.isSearching = false;
+        this.isSearching = false; //
       }
-      this.setLocationSearchValue(newValue); // newValue HAS to be a string
+      if (newValue) {
+        this.setLocationSearchValue(newValue.split(' ')[0]);
+      } else {
+        this.setLocationSearchValue(''); // newValue HAS to be a string
+      }
     },
     // Clear LocationSearchValue so that searching is not filtered to the currently selected zip-code
     isSearching(newValue, oldValue): void {
@@ -73,7 +85,23 @@ export default Vue.extend({
     },
     getItemText(item): string {
       return item.plz.toString() + ' ' + item.name.toString();
+    },
+    getItemValue(item): any {
+      return item.plz;
+    },
+    locationOnKeyUp(evt): void {
+      if (evt.code.startsWith('Key') || evt.code.startsWith('Digit') || evt.code === 'Backspace') {
+        // console.log(evt);
+        const curValue = evt.target.value;
+        const plz = curValue.match(/^\d+/);
+        if (plz) {
+          this.setLocationSearchValue(plz[0]);
+        } else {
+          this.setLocationSearchValue(curValue);
+        }
+      }
     }
+
   }
 });
 </script>
