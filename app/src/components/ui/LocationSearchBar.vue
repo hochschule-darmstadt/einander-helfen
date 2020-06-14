@@ -4,7 +4,7 @@
               prepend-inner-icon="place"
               label="Standort"
               :filter="filterLocations"
-              :items="getLocations()"
+              :items="showLocations"
               :item-text="getItemText"
               item-value="plz"
               v-model="selectedLocation"
@@ -27,13 +27,11 @@ import axios from 'axios';
 export default Vue.extend({
     data(): {
     selectedLocation: string,
-    selectedRadius: string,
     isSearching: boolean,
      } {
     return {
       isSearching: false,
       selectedLocation: '',
-      selectedRadius: '',
     };
   },
   computed: {
@@ -43,14 +41,14 @@ export default Vue.extend({
   },
   watch: {
     selectedLocation(newValue, oldValue): void {
-      if (newValue != '' && newValue != oldValue) {
+      if (newValue !== '' && newValue !== oldValue) {
         this.isSearching = false;
       }
       this.setLocationSearchValue(newValue); // newValue HAS to be a string
     },
     // Clear LocationSearchValue so that searching is not filtered to the currently selected zip-code
     isSearching(newValue, oldValue): void {
-      if ((newValue == 'true' || newValue == '1') && newValue != oldValue) {
+      if ((newValue === 'true' || newValue === '1') && newValue !== oldValue) {
         this.setLocationSearchValue();
       }
     }
@@ -65,7 +63,10 @@ export default Vue.extend({
         const plz = item.plz + '';
         const name = (item.name + '').toLowerCase();
         const displayString = plz + ' '  + name;
-        return name.indexOf(search) > -1 || plz.indexOf(search) > -1 || displayString.indexOf(search) > -1 || itemText.toLowerCase().indexOf(search) > -1;
+        return name.indexOf(search) > -1 ||
+            plz.indexOf(search) > -1 ||
+            displayString.indexOf(search) > -1 ||
+            itemText.toLowerCase().indexOf(search) > -1;
       } else {
         return true;
       }
