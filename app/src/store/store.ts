@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import DataService from '../utils/services/DataService';
 import router from '@/router';
+import Tag from '@/models/tag';
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
@@ -22,8 +23,8 @@ const store = new Vuex.Store({
     addSearchValue(state, value: string): void {
       state.searchValues.push(value);
     },
-    addTag(state, tag): void {
-      state.searchProposals.push(tag);
+    initializeSearchProposals(state, tags: []): void {
+      state.searchProposals = state.searchProposals.concat(tags);
     },
     removeSearchValue(state, value): void {
       state.searchValues.splice(state.searchValues.indexOf(value), 1);
@@ -54,6 +55,9 @@ const store = new Vuex.Store({
     }
   },
   actions: {
+    initializeSearchProposals({ commit }, proposals: Tag[]): void {
+      commit('initializeSearchProposals', proposals);
+    },
     findPosts({ commit, state }): void {
       DataService.findBySelection({
         searchValues: state.searchValues,

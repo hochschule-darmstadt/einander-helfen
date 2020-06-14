@@ -85,22 +85,17 @@
 </template>
 
 <script lang="ts">
-import { mapState } from 'vuex';
-
-declare var require: any;
+import {mapActions, mapState} from 'vuex';
 import Vue from 'vue';
 import Toolbar from '@/components/layout/Toolbar.vue';
 
-import QueryBuilder from 'es-query-builder/dist';
-import axios from 'axios';
 import VueSlickCarousel from 'vue-slick-carousel';
 import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css';
 import 'vue-slick-carousel/dist/vue-slick-carousel.css';
 import Post from '../models/post';
-import { DataService } from '../utils/services/DataService';
 import TagService from '../utils/services/TagService';
+import Tag from '@/models/tag';
 
-console.log(TagService);
 
 export default Vue.extend({
   components: {
@@ -141,32 +136,30 @@ export default Vue.extend({
     objectArray: [] as Post[],
     currentSearchValue: ''
   }),
+  created(): void {
+    // Initialize the searchProposals!
+    this.initializeSearchProposals(TagService.getTags());
+  },
   computed: {
     ...mapState(['searchProposals']),
-    mySearchProposals(): [] {
-      if (!this.currentSearchValue || this.currentSearchValue.length < 3) {
+    mySearchProposals(): string[] {
+      if (!this.currentSearchValue || this.currentSearchValue.length < 2) {
         return [];
       }
       const searchTerm = this.currentSearchValue;
-      const abc = this.matchSearchInput();
-      console.log(abc);
-      return this.searchProposals;
-      //   .filter((element) => 'tag' in element)
-      //   .map((element: { tag: string; rank: number }) => {
-      //     console.log(element);
-      //     element.rank = element.tag.startsWith(searchTerm)
-      //       ? 2
-      //       : element.tag.endsWith(searchTerm)
-      //       ? 1
-      //       : 0.5;
-      //     return element;
-      //   })
-      //   .sort((a, b) => Math.sign(a.rank - b.rank));
+      const listOfMatchingTerms = this.matchSearchInput(searchTerm, this.searchProposals
+        .filter((element) => 'label' in element));
+      const rankedListOfOrderedTerms = this.rankTerms(searchTerm, listOfMatchingTerms);
+
+      return rankedListOfOrderedTerms;
     }
   },
   methods: {
-    addSearchTag(tag: { tag: string } | string): void {
-      const tagName = typeof tag === 'string' ? tag : tag.tag;
+    ...mapActions(['initializeSearchProposals']),
+    addSearchTag(tag: string): void {
+      // Synonyme entfernen und nur nach kanonischem Begriff suchen.
+      const tagName = tag.substr(0, tag.indexOf(' ('));
+
       this.$router.push({
         name: 'resultPage',
         query: {
@@ -176,20 +169,38 @@ export default Vue.extend({
         }
       });
     },
-    matchSearchInput(): string[] {
+    matchSearchInput(searchTerm: string, proposals: Tag[]): string[] {
       const stringArray: string[] = [];
-      const filteredProposals = this.searchProposals.filter(
-        (element) => 'tag' in element
-      );
-      filteredProposals.forEach((tag) => {
-        if (tag.tag.label.toUpperCase().match(this.currentSearchValue.toUpperCase())) {
-          stringArray.push(tag.tag.label);
-        } else if (tag.tag.synonyms.
-        find((element) => element.toUpperCase() === this.currentSearchValue.toUpperCase())) {
-          stringArray.push(tag.tag.synonyms);
+      searchTerm = searchTerm.toLowerCase();
+
+      proposals.forEach((tag) => {
+        if (tag.label.toLowerCase().match(searchTerm)) {
+          stringArray.push(tag.label);
+        } else {
+          tag.synonyms.forEach((element) => {
+            if (element.toLowerCase().match(searchTerm)) {
+              stringArray.push(tag.label + ' (' + element + ')');
+            }
+          });
         }
       });
       return stringArray;
+    },
+    rankTerms(searchTerm: string, terms: string[]): string[] {
+      return terms.map((term) => {
+          // 2x on start; 1x on end, 0.5x in the middle
+          const rank = term.toLowerCase().startsWith(searchTerm.toLowerCase())
+            ? 2
+            : term.toLowerCase().endsWith(searchTerm.toLowerCase())
+              ? 1
+              : 0.5;
+          return {
+            label: term,
+            rank
+          };
+        })
+        .sort((a, b) => Math.sign(b.rank - a.rank))
+        .map((obj) => obj.label);
     }
   }
 });

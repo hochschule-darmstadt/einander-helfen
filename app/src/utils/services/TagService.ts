@@ -7,40 +7,25 @@ class TagService {
     // private tagsAsStringArr: string[] = [];
     // private filteredTagsAsStringArr: any;
 
-    /**
-     * The constructor initializes the `Tag` list.
-     */
-    constructor() {
-        this.generateTags();
-
-        // this.removeDuplicateTags(this.tagsAsStringArr);
-        this.tags.forEach((tag) => {
-            store.commit('addTag', { tag });
-        });
-    }
-
-    private generateTags(): void {
-        // this.splitSynonyms();
-        // this.getTagsAsStringArray();
-        this.changeSynonymsToStringArray();
+    public getTags(): Tag[] {
+        if (!this.tags.length) {
+            this.tags = this.changeSynonymsToStringArray();
+        }
+        return this.tags;
     }
 
 
-    private changeSynonymsToStringArray(): void {
-        importedTags.forEach((tag) => {
-            if (tag.synonyms) {
-                const splittedSynonyms = tag.synonyms.split(',');
-                // TODO: Trimming for whitespace element's
-                this.tags.push({
-                    label: tag.label,
-                    synonyms: splittedSynonyms
-                });
-            } else {
-                this.tags.push({
-                    label: tag.label,
-                    synonyms: []
-                });
-            }
+    private changeSynonymsToStringArray(): Tag[] {
+        console.log(importedTags);
+        return importedTags.map((tag) => {
+            const synonyms = tag.synonyms
+                ? tag.synonyms.split(',').map((synonym) => synonym.trim())
+                : [];
+
+            return {
+                label: tag.label,
+                synonyms
+            };
         });
     }
 
