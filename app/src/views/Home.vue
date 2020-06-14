@@ -93,10 +93,6 @@ import VueSlickCarousel from 'vue-slick-carousel';
 import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css';
 import 'vue-slick-carousel/dist/vue-slick-carousel.css';
 
-import tags from '@/utils/tags';
-
-console.log(tags);
-
 export default Vue.extend({
   components: {
     VueSlickCarousel,
@@ -138,12 +134,15 @@ export default Vue.extend({
     ...mapState(['searchProposals'])
   },
   methods: {
-    addSearchTag(tag: {tag: string}): void {
-      console.log(tag);
+    addSearchTag(tag: {tag: string} | string): void {
+      const tagName = typeof tag === 'string'
+              ? tag
+              : tag.tag;
+
       this.$router.push({
         name: 'resultPage',
         query: {
-          q: tag.tag,
+          q: tagName,
           city: this.selectedCity,
           radius: this.selectedRadius
         }

@@ -4,15 +4,15 @@
     <v-row no-gutters>
       <v-col cols="6">
         <div style="height:75vh;overflow:auto">
-          <template v-for="(advertisement, i) in visiblePages">
+          <template v-for="(post, index) in visiblePages">
             <v-card class="mb-3" tile>
-              <v-list-item three-line @click="openAdvertisement(i)">
+              <v-list-item three-line @click="openPost(index)">
                 <v-list-item-content>
                   <v-list-item-title class="headline mb-1">{{
-                    advertisement.title
+                    post.title
                   }}</v-list-item-title>
                   <v-list-item-subtitle>{{
-                    advertisement.task
+                    post.task
                   }}</v-list-item-subtitle>
                 </v-list-item-content>
 
@@ -20,7 +20,7 @@
                   max-width="80px"
                   height="80px"
                   contain
-                  :src="advertisement.image"
+                  :src="post.image"
                 ></v-img>
               </v-list-item>
             </v-card>
@@ -28,7 +28,7 @@
         </div>
         <!--pageination-->
         <div class="text-center" style="margin-top:2%">
-          <v-pagination v-model="page" :length="numberOfPages" color="#054C66"></v-pagination>
+          <v-pagination @input="setResultPage($event)" :value="page" :length="numberOfPages" total-visible="7" color="#054C66"></v-pagination>
 
         </div>
       </v-col>
@@ -50,7 +50,7 @@
           style="position: absolute;overflow:auto"
         >
           <v-list-item three-line>
-            <v-btn class="mr-3" text @click="closeAdvertisement()">
+            <v-btn class="mr-3" text @click="closePost()">
               <v-icon>arrow_back</v-icon>
             </v-btn>
             <!--display title, subtitle and image on the left side-->
@@ -157,18 +157,16 @@ export default Vue.extend({
   data(): {
     postIsOpen: boolean;
     currentPostId: number;
-    page: number;
     perPage: number;
   } {
     return {
       postIsOpen: false,
       currentPostId: 0,
-      page: 1,
       perPage: 7,
     };
   },
   computed: {
-    ...mapState(['posts']),
+    ...mapState(['posts', 'page']),
     visiblePages(): Advertisement[] {
       return this.posts.slice(
         (this.page - 1) * this.perPage,
@@ -188,12 +186,12 @@ export default Vue.extend({
     this.hydrateStateFromURIParams(this.$route.query);
   },
   methods: {
-    ...mapActions(['hydrateStateFromURIParams']),
-    openAdvertisement(index: number): void {
+    ...mapActions(['hydrateStateFromURIParams', 'setResultPage']),
+    openPost(index: number): void {
       this.postIsOpen = true;
       this.currentPostId = index + ((this.page - 1) * this.perPage);
     },
-    closeAdvertisement(): void {
+    closePost(): void {
       this.currentPostId = 0;
       this.postIsOpen = false;
     },
@@ -201,6 +199,11 @@ export default Vue.extend({
       return Math.ceil(this.posts.length / this.perPage);
     },
   },
+  watch: {
+    page(value): void {
+      this.setResultPage(value);
+    }
+  }
 });
 </script>
 

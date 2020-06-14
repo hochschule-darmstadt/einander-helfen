@@ -45,7 +45,7 @@ class DataService {
             query.shouldMatch('categories', value)
                 .shouldMatch('title', value);
         });
-
+        query.size(500);
         return this.performQuery(query);
     }
 
