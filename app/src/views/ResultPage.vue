@@ -1,12 +1,12 @@
 <template>
   <div>
     <Header />
-    <v-row no-gutters>
+    <v-row ref="wrapper" no-gutters>
       <v-col cols="6">
-        <div style="height:75vh;overflow:auto">
+        <div ref="wrapperPosts" style="height:75vh;overflow:auto">
           <template v-for="(advertisement, i) in visiblePages">
             <v-card class="mb-3" tile>
-              <v-list-item three-line @click="openAdvertisement(i)">
+              <v-list-item three-line @click="openAdvertisement(i+(page-1)*perPage)">
                 <v-list-item-content>
                   <v-list-item-title class="headline mb-1">{{
                     advertisement.title
@@ -36,9 +36,9 @@
       <!--map-->
       <v-col cols="6" v-if="!postIsOpen">
         <v-card tile height="75vh" style="position: absolute">
-          <div id="map" style="height: 700px; width: 700px">
-            <v-btn @click="closeMap()" style="position: absolute; z-index: 9999; margin-left: 50px; margin-top: 20px;">Zur Detailansicht</v-btn>
-            <l-map :center="map.center" :zoom="map.zoom">
+          <div id="map" :style="{height: map.height + 'px', width: map.width + 'px'}">
+            <v-btn @click="closeMap()" style="position: absolute; z-index: 9999; margin-left: 50px; margin-top: 20px;">Details</v-btn>
+            <l-map ref="map" :center="map.center" :zoom="map.zoom">
               <l-tile-layer :url="map.url" :attribution="map.attribution"></l-tile-layer>
               <template v-for="(advertisement, i) in posts">
                 <l-marker v-if="i === currentPostId" :icon="map.markerRed" :lat-lng="[advertisement.lat, advertisement.lon]" @click="openAdvertisement(i)">
@@ -169,6 +169,7 @@ import { mapActions, mapState } from 'vuex';
 
 import L from 'leaflet';
 import { LMap, LTileLayer, LMarker , LTooltip, LIcon} from 'vue2-leaflet';
+import 'leaflet/dist/leaflet.css';
 
 export default Vue.extend({
   components: { Header, LMap, LTileLayer, LMarker, LTooltip },
@@ -177,20 +178,20 @@ export default Vue.extend({
     currentPostId: number;
     page: number;
     perPage: number;
-    firstUpdate: boolean;
-    map: object;
+    map: any;
   } {
     return {
       postIsOpen: false,
       currentPostId: 0,
       page: 1,
       perPage: 7,
-      firstUpdate: true,
       map: {
         url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
         center: [51.5000, 10.5000],
         zoom: 6,
+        width: 700,
+        height: 700,
         markerBlue: L.icon({
           iconUrl: '/images/marker/marker-icon.png',
           iconRetinaUrl: '/images/marker/marker-icon-2x.png'
@@ -217,15 +218,26 @@ export default Vue.extend({
     },
     numberOfPages(): number {
       return Math.ceil(this.posts.length / this.perPage);
-    },
+    }
   },
   created(): void {
     this.hydrateStateFromURIParams(this.$route.query);
+    window.addEventListener('resize', this.resize);
   },
-  updated(): void {
-    if (this.firstUpdate && this.posts.length > 0 && this.posts.length < 2) {
-      this.postIsOpen = true;
-      this.firstUpdate = false;
+  mounted(): void {
+    this.map.height = (this.$refs.wrapperPosts as HTMLElement).clientHeight;
+    const wrapperWidth = (this.$refs.wrapper as HTMLElement).clientWidth;
+    const wrapperPostsWidth = (this.$refs.wrapperPosts as HTMLElement).clientWidth;
+    this.map.width = wrapperWidth - wrapperPostsWidth;
+  },
+  destroyed(): void {
+    window.removeEventListener('resize', this.resize);
+  },
+  watch: {
+    posts(val: Advertisement[], oldVal: Advertisement[]): void {
+        if (val.length === 1) {
+          this.openAdvertisement(0);
+        }
     }
   },
   methods: {
@@ -242,8 +254,14 @@ export default Vue.extend({
     },
     closeMap(): void {
       this.postIsOpen = true;
+    },
+    resize(e: UIEvent): void {
+      this.map.height = (this.$refs.wrapperPosts as HTMLElement).clientHeight;
+      const wrapperWidth = (this.$refs.wrapper as HTMLElement).clientWidth;
+      const wrapperPostsWidth = (this.$refs.wrapperPosts as HTMLElement).clientWidth;
+      this.map.width = wrapperWidth - wrapperPostsWidth;
     }
-  },
+  }
 });
 </script>
 
