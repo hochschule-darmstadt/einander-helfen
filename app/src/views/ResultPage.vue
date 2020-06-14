@@ -191,7 +191,11 @@ export default Vue.extend({
     ...mapActions(['hydrateStateFromURIParams']),
     openAdvertisement(index: number): void {
       this.postIsOpen = true;
-      this.currentPostId = index;
+      this.currentPostId = index + ((this.page - 1) * this.perPage);
+    },
+    closeAdvertisement(): void {
+      this.currentPostId = 0;
+      this.postIsOpen = false;
     },
     numberOfPages(): number {
       return Math.ceil(this.posts.length / this.perPage);
