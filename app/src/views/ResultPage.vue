@@ -193,12 +193,12 @@ export default Vue.extend({
         width: 700,
         height: 700,
         markerBlue: L.icon({
-          iconUrl: '/images/marker/marker-icon.png',
-          iconRetinaUrl: '/images/marker/marker-icon-2x.png'
+          iconUrl: require('../../public/images/marker/marker-icon.png'),
+          iconSize: [25, 41]
         }),
         markerRed: L.icon({
-          iconUrl: '/images/marker/marker-icon-red.png',
-          iconRetinaUrl: '/images/marker/marker-icon-2x-red.png'
+          iconUrl: require('../../public/images/marker/marker-icon-red.png'),
+          iconSize: [25, 41]
         })
       }
     };
@@ -225,10 +225,7 @@ export default Vue.extend({
     window.addEventListener('resize', this.resize);
   },
   mounted(): void {
-    this.map.height = (this.$refs.wrapperPosts as HTMLElement).clientHeight;
-    const wrapperWidth = (this.$refs.wrapper as HTMLElement).clientWidth;
-    const wrapperPostsWidth = (this.$refs.wrapperPosts as HTMLElement).clientWidth;
-    this.map.width = wrapperWidth - wrapperPostsWidth;
+    window.dispatchEvent(new Event('resize'));
   },
   destroyed(): void {
     window.removeEventListener('resize', this.resize);
@@ -260,6 +257,10 @@ export default Vue.extend({
       const wrapperWidth = (this.$refs.wrapper as HTMLElement).clientWidth;
       const wrapperPostsWidth = (this.$refs.wrapperPosts as HTMLElement).clientWidth;
       this.map.width = wrapperWidth - wrapperPostsWidth;
+
+      this.$nextTick(() => {
+        (this.$refs.map as LMap).mapObject.invalidateSize();
+      });
     }
   }
 });
