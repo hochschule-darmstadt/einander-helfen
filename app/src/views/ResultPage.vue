@@ -4,7 +4,7 @@
         <div class="grid">
             <div class="map" v-if="!postIsOpen">
                 <v-card tile height="75vh">
-                    <div id="map" :style="{height: map.height + 'px', width: map.width + 'px'}">
+                    <div id="map" :style="{height: map.height, width: map.width}">
                         <v-btn @click="closeMap()"
                                style="position: absolute; z-index: 9999; margin-left: 50px; margin-top: 20px;">Details
                         </v-btn>
@@ -190,9 +190,9 @@
                     url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
                     center: [51.5000, 10.5000],
-                    zoom: 6,
-                    width: 700,
-                    height: 700,
+                    zoom: 12,
+                    width: '100%',
+                    height: '100%',
                     markerBlue: L.icon({
                         iconUrl: require('../../public/images/marker/marker-icon.png'),
                         iconSize: [25, 41]
@@ -223,13 +223,6 @@
         },
         created(): void {
             this.hydrateStateFromURIParams(this.$route.query);
-            window.addEventListener('resize', this.resize);
-        },
-        mounted(): void {
-            window.dispatchEvent(new Event('resize'));
-        },
-        destroyed(): void {
-            window.removeEventListener('resize', this.resize);
         },
         watch: {
             posts(val: Advertisement[], oldVal: Advertisement[]): void {
@@ -247,24 +240,18 @@
                 this.currentPostId = index + ((this.page - 1) * this.perPage);
             },
             closeAdvertisement(): void {
-                this.currentPostId = 0;
                 this.postIsOpen = false;
+                const currentPost = this.posts[this.currentPostId];
+                const location = [currentPost.lat, currentPost.lon] as LatLngTuple;
+                this.$nextTick(() => {
+                    (this.$refs.map as LMap).setCenter(location);
+                })
             },
             numberOfPages(): number {
                 return Math.ceil(this.posts.length / this.perPage);
             },
             closeMap(): void {
                 this.postIsOpen = true;
-            },
-            resize(e: UIEvent): void {
-                this.map.height = (this.$refs.wrapperPosts as HTMLElement).clientHeight;
-                const wrapperWidth = (this.$refs.wrapper as HTMLElement).clientWidth;
-                const wrapperPostsWidth = (this.$refs.wrapperPosts as HTMLElement).clientWidth;
-                this.map.width = wrapperWidth - wrapperPostsWidth;
-
-                this.$nextTick(() => {
-                    (this.$refs.map as LMap).mapObject.invalidateSize();
-                });
             }
         }
     });
