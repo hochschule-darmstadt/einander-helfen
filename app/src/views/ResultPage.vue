@@ -50,11 +50,6 @@
               </template>
             </l-map>
           </div>
-          <!--<v-img
-            src="https://media.wired.com/photos/59269cd37034dc5f91bec0f1/master/pass/GoogleMapTA.jpg"
-            height="100%"
-            width="100%"
-          ></v-img>-->
         </v-card>
       </v-col>
       <v-col cols="6" v-if="postIsOpen">
@@ -148,7 +143,6 @@
                   target="_blank"
                 >
                   Zum Stellenangebot
-                  <!--<v-icon dark>arrow_forward</v-icon>-->
                 </v-btn>
               </v-container>
             </v-col>
