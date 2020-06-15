@@ -6,7 +6,7 @@
         <div ref="wrapperPosts" style="height:75vh;overflow:auto">
           <template v-for="(advertisement, i) in visiblePages">
             <v-card class="mb-3" tile>
-              <v-list-item three-line @click="openAdvertisement(i+(page-1)*perPage)">
+              <v-list-item three-line @click="openAdvertisement(i)">
                 <v-list-item-content>
                   <v-list-item-title class="headline mb-1">{{
                     advertisement.title
