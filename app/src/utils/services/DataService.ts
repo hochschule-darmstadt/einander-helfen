@@ -47,7 +47,19 @@ class DataService {
                 .size(100);
         });
 
-        return this.performQuery(query);
+        const queryObject = query.build();
+        // @ts-ignore
+        // queryObject.query.bool.filter = {
+        //     geo_distance: {
+        //         distance: "50km",
+        //         posts: {
+        //             lat: 49.878708,
+        //             lon: 8.646927
+        //         }
+        //     }
+        // };
+
+        return this.performQuery(new QueryBuilder(queryObject));
     }
 
     private performQuery<T>(query: QueryBuilder): Promise<T> {
