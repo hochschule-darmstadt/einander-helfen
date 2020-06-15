@@ -161,8 +161,8 @@ import Advertisement from '@/models/advertisement';
 import Vue from 'vue';
 import { mapActions, mapState } from 'vuex';
 
-import L from 'leaflet';
-import { LMap, LTileLayer, LMarker , LTooltip, LIcon} from 'vue2-leaflet';
+import L, { LatLngTuple } from 'leaflet';
+import { LMap, LTileLayer, LMarker , LTooltip, LIcon } from 'vue2-leaflet';
 import 'leaflet/dist/leaflet.css';
 
 export default Vue.extend({
@@ -229,6 +229,8 @@ export default Vue.extend({
         if (val.length === 1) {
           this.openAdvertisement(0);
         }
+      const markers = val.map((post) => [post.lat, post.lon] as LatLngTuple);
+      (this.$refs.map as LMap).fitBounds(markers);
     }
   },
   methods: {
@@ -239,9 +241,6 @@ export default Vue.extend({
     },
     closeAdvertisement(): void {
       this.currentPostId = 0;
-      this.postIsOpen = false;
-    },
-    closeAdvertisement(): void {
       this.postIsOpen = false;
     },
     numberOfPages(): number {
