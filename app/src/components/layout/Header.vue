@@ -115,22 +115,36 @@
                             </v-list-item>
                         </v-list>
                     </v-menu>
-           </v-layout>
-        </v-layout>
+    </v-layout>
+             <v-col
+                cols="2"
+                md="2">
+                <location-search-bar />
+            </v-col>
+
+            <v-col
+                cols="1"
+                md="1">
+                <radius />
+            </v-col>
+
     </header>
 </template>
 
 <script lang="ts">
     import Vue from 'vue';
     import {mapActions, mapState} from 'vuex';
+    import LocationSearchBar from '@/components/ui/LocationSearchBar.vue';
+    import Radius from '@/components/ui/Radius.vue';
+
     export default Vue.extend({
+        components: {
+            LocationSearchBar,
+            Radius
+        },
         data(): {
             links: any,
             volunteerTags: string[],
-            volunteerCities: string[],
-            volunteerRadius: string[],
-            selectedCity: string,
-            selectedRadius: string,
             selectedTags: string[],
             searchResult: null,
             searchString: string
@@ -154,22 +168,6 @@
                     'Kunst',
                     'Einkaufen'
                 ],
-                volunteerCities: [
-                    'Main Standort',
-                    'Darmstadt',
-                    'Frankfurt am Main',
-                    'Wiesbaden',
-                    'Mainz'
-                ],
-                volunteerRadius: [
-                    'Überall',
-                    '5 km',
-                    '10 km',
-                    '25 km',
-                    '50 km'
-                ],
-                selectedCity: '',
-                selectedRadius: '',
                 selectedTags: [],
                 searchResult: null,
                 searchString: ''
@@ -188,6 +186,13 @@
                     this.addSearchValue(tag);
                     this.searchString = '';
                 }
+                this.$router.push({
+                    name: 'resultPage',
+                    query: {
+                        ...this.$route.query,
+                        q: this.selectedTags
+                    }
+                });
             }
         },
       computed: {
@@ -199,5 +204,8 @@
     });
 </script>
 
-<style scoped>
+<style>
+  .v-menu__content{
+    z-index:9999 !important;
+  }
 </style>

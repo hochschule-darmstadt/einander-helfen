@@ -30,13 +30,30 @@
         </v-flex>
         
         <v-flex xs12 md6  v-if="!postIsOpen">
-          <v-card tile height="70vh">
-            <v-img
-              src="https://media.wired.com/photos/59269cd37034dc5f91bec0f1/master/pass/GoogleMapTA.jpg"
-              height="100%"
-              width="100%"
-            ></v-img>
-          </v-card>
+           <div class="map" v-if="!postIsOpen">
+                <v-card tile height="70vh">
+                    <div id="map" :style="{height: map.height, width: map.width}">
+                        <v-btn @click="closeMap()"
+                               style="position: absolute; z-index: 9999; margin-left: 50px; margin-top: 20px;">Details
+                        </v-btn>
+                        <l-map ref="map" :center="map.center" :zoom="map.zoom">
+                            <l-tile-layer :url="map.url" :attribution="map.attribution"></l-tile-layer>
+                            <template v-for="(advertisement, i) in posts">
+                                <l-marker v-if="i === currentPostId" :icon="map.markerRed"
+                                          :lat-lng="[advertisement.lat, advertisement.lon]"
+                                          @click="openAdvertisement(i)">
+                                    <l-tooltip>{{ advertisement.title }}</l-tooltip>
+                                </l-marker>
+                                <l-marker v-else :icon="map.markerBlue"
+                                          :lat-lng="[advertisement.lat, advertisement.lon]"
+                                          @click="openAdvertisement(i)">
+                                    <l-tooltip>{{ advertisement.title }}</l-tooltip>
+                                </l-marker>
+                            </template>
+                        </l-map>
+                    </div>
+                </v-card>
+            </div>
         </v-flex>
         
         <v-flex sm12 md6  v-if="postIsOpen">
@@ -145,66 +162,138 @@
       </v-layout>
       </v-layout>
   </div>
+
 </template>
 
 <!-- test content -->
 <script lang="ts">
-import Header from '@/components/layout/Header.vue';
-import Advertisement from '@/models/advertisement';
+    import Header from '@/components/layout/Header.vue';
+    import Advertisement from '@/models/advertisement';
 
-import Vue from 'vue';
-import { mapActions, mapState } from 'vuex';
+    import Vue from 'vue';
+    import {mapActions, mapState} from 'vuex';
 
-export default Vue.extend({
-  components: { Header },
-  data(): {
-    postIsOpen: boolean;
-    currentPostId: number;
-    page: number;
-    perPage: number;
-  } {
-    return {
-      postIsOpen: false,
-      currentPostId: 0,
-      page: 1,
-      perPage: 7,
-    };
-  },
-  computed: {
-    ...mapState(['posts']),
-    visiblePages(): Advertisement[] {
-      return this.posts.slice(
-        (this.page - 1) * this.perPage,
-        this.page * this.perPage
-      );
-    },
-    currentPost(): Advertisement | null {
-      return this.postIsOpen
-        ? this.posts[this.currentPostId]
-        : null;
-    },
-    numberOfPages(): number {
-      return Math.ceil(this.posts.length / this.perPage);
-    },
-  },
-  created(): void {
-    this.hydrateStateFromURIParams(this.$route.query);
-  },
-  methods: {
-    ...mapActions(['hydrateStateFromURIParams']),
-    openAdvertisement(index: number): void {
-      this.postIsOpen = true;
-      this.currentPostId = index + ((this.page - 1) * this.perPage);
-    },
-    closeAdvertisement(): void {
-      this.currentPostId = 0;
-      this.postIsOpen = false;
-    },
-    numberOfPages(): number {
-      return Math.ceil(this.posts.length / this.perPage);
-    },
-  },
-});
+    import L, {LatLngTuple} from 'leaflet';
+    import {LMap, LTileLayer, LMarker, LTooltip, LIcon} from 'vue2-leaflet';
+    import 'leaflet/dist/leaflet.css';
+
+    export default Vue.extend({
+        components: {Header, LMap, LTileLayer, LMarker, LTooltip},
+        data(): {
+            postIsOpen: boolean;
+            currentPostId: number;
+            page: number;
+            perPage: number;
+            map: any;
+        } {
+            return {
+                postIsOpen: false,
+                currentPostId: 0,
+                page: 1,
+                perPage: 7,
+                map: {
+                    url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+                    center: [51.5000, 10.5000],
+                    zoom: 12,
+                    width: '100%',
+                    height: '100%',
+                    markerBlue: L.icon({
+                        iconUrl: require('../../public/images/marker/marker-icon.png'),
+                        iconSize: [25, 41]
+                    }),
+                    markerRed: L.icon({
+                        iconUrl: require('../../public/images/marker/marker-icon-red.png'),
+                        iconSize: [25, 41]
+                    })
+                }
+            };
+        },
+        computed: {
+            ...mapState(['posts', 'selectedLocation', 'radiusSearchValue']),
+            visiblePages(): Advertisement[] {
+                return this.posts.slice(
+                    (this.page - 1) * this.perPage,
+                    this.page * this.perPage
+                );
+            },
+            currentPost(): Advertisement | null {
+                return this.postIsOpen
+                    ? this.posts[this.currentPostId]
+                    : null;
+            },
+            numberOfPages(): number {
+                return Math.ceil(this.posts.length / this.perPage);
+            }
+        },
+        created(): void {
+            this.hydrateStateFromURIParams(this.$route.query);
+        },
+        watch: {
+            posts(val: Advertisement[], oldVal: Advertisement[]): void {
+                if (val.length === 1) {
+                    this.openAdvertisement(0);
+                }
+                const markers = val.map((post) => [post.lat, post.lon] as LatLngTuple);
+                (this.$refs.map as LMap).fitBounds(markers);
+            },
+            radiusSearchValue(): void {
+                this.findPosts();
+            },
+            selectedLocation(): void {
+                this.findPosts();
+            }
+        },
+        methods: {
+            ...mapActions(['hydrateStateFromURIParams', 'findPosts']),
+            openAdvertisement(index: number): void {
+                this.postIsOpen = true;
+                this.currentPostId = index + ((this.page - 1) * this.perPage);
+            },
+            closeAdvertisement(): void {
+                this.postIsOpen = false;
+                const currentPost = this.posts[this.currentPostId];
+                const location = [currentPost.lat, currentPost.lon] as LatLngTuple;
+                this.$nextTick(() => {
+                    (this.$refs.map as LMap).setCenter(location);
+                });
+            },
+            closeMap(): void {
+                this.postIsOpen = true;
+            }
+        }
+    });
 </script>
 
-<style scoped></style>
+<style scoped>
+    .grid {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 50% 50%;
+        grid-template-areas: "posts detail";
+    }
+
+    .map,
+    .detail {
+        grid-area: detail;
+        height: 75vh;
+    }
+
+    .posts {
+        grid-area: posts;
+        height: 75vh;
+        overflow: auto
+    }
+
+    @media (max-width: 500px) {
+        .grid {
+            grid-template-columns: 100%;
+            grid-row-gap: 10px;
+            grid-template-areas: "detail" "posts";
+        }
+
+        .posts {
+            height: auto;
+        }
+    }
+</style>
