@@ -53,10 +53,9 @@ class DataService {
         const query = new QueryBuilder();
         searchValues.forEach((value) => {
             query.shouldMatch('categories', value)
-                .shouldMatch('title', value)
-                .size(100);
+                .shouldMatch('title', value);
         });
-
+        query.size(100);
         const queryObject = query.build();
         // @ts-ignore
         // queryObject.query.bool.filter = {

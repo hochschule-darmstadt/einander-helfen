@@ -7,7 +7,7 @@
           <div style="height:70vh;overflow:auto; margin-bottom:5%">
             <template v-for="(advertisement, i) in visiblePages">
               <v-card class="mb-3">
-                <v-list-item three-line @click="openAdvertisement(i)">
+                <v-list-item three-line @click="openPost(i)">
                   <v-list-item-content>
                     <v-list-item-title class="headline mb-1">{{
                       advertisement.title
@@ -41,12 +41,12 @@
                             <template v-for="(advertisement, i) in posts">
                                 <l-marker v-if="i === currentPostId" :icon="map.markerRed"
                                           :lat-lng="[advertisement.lat, advertisement.lon]"
-                                          @click="openAdvertisement(i)">
+                                          @click="openPost(i)">
                                     <l-tooltip>{{ advertisement.title }}</l-tooltip>
                                 </l-marker>
                                 <l-marker v-else :icon="map.markerBlue"
                                           :lat-lng="[advertisement.lat, advertisement.lon]"
-                                          @click="openAdvertisement(i)">
+                                          @click="openPost(i)">
                                     <l-tooltip>{{ advertisement.title }}</l-tooltip>
                                 </l-marker>
                             </template>
@@ -63,10 +63,10 @@
             width="100%"
           >
           <v-list-item three-line>
-            <v-btn class="mr-3" text @click="closeAdvertisement()">
+            <v-btn class="mr-3" text @click="closePost()">
               <v-icon>arrow_back</v-icon>
             </v-btn>
-
+           
             <!--display title, subtitle and image on the left side-->
             <v-list-item-content style="margin-top:2%" class="headline">{{
                 currentPost.title
@@ -83,6 +83,7 @@
               :src="currentPost.image"
             ></v-img>
           </v-list-item>
+ 
 
           <!--display content on the right side-->
           
@@ -145,7 +146,6 @@
                   target="_blank"
                 >
                   Zum Stellenangebot
-                  <!--<v-icon dark>arrow_forward</v-icon>-->
                 </v-btn>
               </v-container>
             </v-flex>
@@ -157,7 +157,7 @@
       <v-layout row wrap justify-center>
                  <!--pageination-->
           <div class="text-center" style="margin-top:2%; margin-bottom:1%">
-            <v-pagination v-model="page" :length="numberOfPages" color="#054C66"></v-pagination>
+            <v-pagination @input="setResultPage($event)" :value="page" :length="numberOfPages" total-visible="7" color="#054C66"></v-pagination>
           </div>
       </v-layout>
       </v-layout>
@@ -169,8 +169,7 @@
 <!-- test content -->
 <script lang="ts">
     import Header from '@/components/layout/Header.vue';
-    import Advertisement from '@/models/advertisement';
-
+    import Post from '@/models/post';
     import Vue from 'vue';
     import {mapActions, mapState} from 'vuex';
 
@@ -183,14 +182,12 @@
         data(): {
             postIsOpen: boolean;
             currentPostId: number;
-            page: number;
             perPage: number;
             map: any;
         } {
             return {
                 postIsOpen: false,
                 currentPostId: 0,
-                page: 1,
                 perPage: 7,
                 map: {
                     url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -211,14 +208,14 @@
             };
         },
         computed: {
-            ...mapState(['posts', 'selectedLocation', 'radiusSearchValue']),
-            visiblePages(): Advertisement[] {
+            ...mapState(['posts', 'page', 'selectedLocation', 'radiusSearchValue']),
+            visiblePages(): Post[] {
                 return this.posts.slice(
                     (this.page - 1) * this.perPage,
                     this.page * this.perPage
                 );
             },
-            currentPost(): Advertisement | null {
+            currentPost(): Post | null {
                 return this.postIsOpen
                     ? this.posts[this.currentPostId]
                     : null;
@@ -231,9 +228,9 @@
             this.hydrateStateFromURIParams(this.$route.query);
         },
         watch: {
-            posts(val: Advertisement[], oldVal: Advertisement[]): void {
+            posts(val: Post[], oldVal: Post[]): void {
                 if (val.length === 1) {
-                    this.openAdvertisement(0);
+                    this.openPost(0);
                 }
                 const markers = val.map((post) => [post.lat, post.lon] as LatLngTuple);
                 (this.$refs.map as LMap).fitBounds(markers);
@@ -243,15 +240,19 @@
             },
             selectedLocation(): void {
                 this.findPosts();
+            },
+            page(value): void {
+                this.setResultPage(value);
             }
         },
         methods: {
-            ...mapActions(['hydrateStateFromURIParams', 'findPosts']),
-            openAdvertisement(index: number): void {
-                this.postIsOpen = true;
-                this.currentPostId = index + ((this.page - 1) * this.perPage);
-            },
-            closeAdvertisement(): void {
+            ...mapActions(['hydrateStateFromURIParams', 'setResultPage', 'findPosts']),
+            openPost(index: number): void {
+                        this.postIsOpen = true;
+                        this.currentPostId = index + ((this.page - 1) * this.perPage);
+                    },
+            closePost(): void {
+                this.currentPostId = 0;
                 this.postIsOpen = false;
                 const currentPost = this.posts[this.currentPostId];
                 const location = [currentPost.lat, currentPost.lon] as LatLngTuple;
@@ -259,9 +260,6 @@
                     (this.$refs.map as LMap).setCenter(location);
                 });
             },
-            closeMap(): void {
-                this.postIsOpen = true;
-            }
         }
     });
 </script>

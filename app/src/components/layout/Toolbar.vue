@@ -1,10 +1,10 @@
 <template>
-    <v-app-bar flat absolute height="95vh" color="#00254f">
+    <v-app-bar flat absolute height="90vh" color="#00254f">
         <v-layout justify-space-between>
 
                 <v-layout >
                     <v-toolbar-side-icon>
-                    <v-img class="mt-1 ml-2" width=80px height=75px src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Heart-hand-shake.svg/256px-Heart-hand-shake.svg.png"></v-img>
+                    <v-img class="mt-1" width=80px height=75px src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Heart-hand-shake.svg/256px-Heart-hand-shake.svg.png"></v-img>
                     </v-toolbar-side-icon> 
                     <div class="pl-5 mt-5 headline font-weight-light white--text">einander-helfen.de</div>
                     <v-spacer></v-spacer>

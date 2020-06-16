@@ -20,15 +20,10 @@
             <v-flex
                     md6 sm8
                     style="background: white; border-radius: 20px; margin-right:2%">
-                <v-combobox
-                        :items="searchProposals"
-                        :search-input.sync="searchString"
-                        @input="tagAdded"
-                        append-icon="search"
-                        clearable
-                        item-text="tag"
-                        style="margin-left: 10px; margin-right: 10px">
-                </v-combobox>
+                    <search-bar
+                  @input="addSearchValue"
+                />
+            <v-spacer></v-spacer>
                 <v-chip-group
                         active-class="primary-text"
                         column
@@ -109,18 +104,16 @@
     import {mapActions, mapState} from 'vuex';
     import LocationSearchBar from '@/components/ui/LocationSearchBar.vue';
     import Radius from '@/components/ui/Radius.vue';
+    import SearchBar from '@/components/ui/SearchBar.vue';
 
     export default Vue.extend({
         components: {
             LocationSearchBar,
-            Radius
+            Radius,
+            SearchBar
         },
         data(): {
             links: any,
-            volunteerTags: string[],
-            selectedTags: string[],
-            searchResult: null,
-            searchString: string
         } {
             return {
                 links: [
@@ -129,21 +122,6 @@
                     { text: 'Impressum', route: '/imprint' },
                     { text: 'Datenschutzerklärung', route: '/privacy' }
                 ],
-                // TODO volunteerTags are currently not in use:
-                // volunteerTags need to be implemented in the search of the main search field.
-                // But they should not be displayed if the main search field is empty.
-                // - volunteerProposals: display if main search field contains 0 characters.
-                // - volunteerTags: display if main search field contains at least 1 character.
-                volunteerTags: [
-                    'Macher/in',
-                    'Denker/in',
-                    'Jugendarbeit',
-                    'Kunst',
-                    'Einkaufen'
-                ],
-                selectedTags: [],
-                searchResult: null,
-                searchString: ''
             };
         },
         methods: {
@@ -153,19 +131,6 @@
           ]),
             remove(tag: string): void {
                 this.removeSearchValue(tag);
-            },
-            tagAdded(tag: string): void {
-                if (tag.length) {
-                    this.addSearchValue(tag);
-                    this.searchString = '';
-                }
-                this.$router.push({
-                    name: 'resultPage',
-                    query: {
-                        ...this.$route.query,
-                        q: this.selectedTags
-                    }
-                });
             }
         },
       computed: {
