@@ -49,19 +49,17 @@
              <v-col
                 cols="2"
                 md="2">
-                    <location-search-bar>
-                    </location-search-bar>
+                <location-search-bar>
+                </location-search-bar>
             </v-col>
 
-            <v-col cols="1" md="1">
-                <v-autocomplete
-                        :items="volunteerRadius"
-                        label="Umkreis"
-                        v-model="selectedRadius" 
-                        style="margin-left: 10px; margin-right: 10px">
-                    Überall
-                </v-autocomplete>
+            <v-col 
+                cols="1" 
+                md="1">
+                <radius>
+                </radius>
             </v-col>
+           
             <v-spacer></v-spacer>
 
             <v-btn
@@ -76,17 +74,17 @@
 <script lang="ts">
     import Vue from 'vue';
     import LocationSearchBar from '@/components/ui/LocationSearchBar.vue';
+    import Radius from '@/components/ui/Radius.vue';
 
     export default Vue.extend({
         components: {
-            LocationSearchBar
+            LocationSearchBar,
+            Radius
         },
         data(): {
             links: any,
             volunteerProposals: any,
             volunteerTags: string[],
-            volunteerRadius: string[],
-            selectedRadius: string,
             selectedTags: string[],
             searchResult: null,
             searchString: string
@@ -114,15 +112,6 @@
                     'Kunst',
                     'Einkaufen'
                 ],
-
-                volunteerRadius: [
-                    'Überall',
-                    '5 km',
-                    '10 km',
-                    '25 km',
-                    '50 km'
-                ],
-                selectedRadius: '',
                 selectedTags: [],
                 searchResult: null,
                 searchString: ''
@@ -144,6 +133,14 @@
                 this.$nextTick(() => {
                     this.searchString = '';
                     this.searchResult = null;
+                });
+                this.$router.push({
+                    name: 'resultPage',
+                    query: {
+                        q: this.selectedTags,
+                        location: this.$route.query.location,
+                        radius: this.$route.query.radius
+                    }
                 });
             }
         }

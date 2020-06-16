@@ -28,6 +28,7 @@
               item-text="title"
               :items="volunteerTags"
               v-model="selectedTag"
+              v-on:keyup.enter="routeToResultPage"
             ></v-autocomplete>
           </v-col>
         </v-row>
@@ -36,17 +37,13 @@
           <v-col cols="12" md="6">
             <location-search-bar></location-search-bar>
           </v-col>
-   
-          <v-col cols="12" md="2">
-            <v-autocomplete
-              label="Umkreis"
-              :items="volunteerRadius"
-              v-model="selectedRadius"
-            >Überall</v-autocomplete>
+
+      <v-col cols="12" md="2">
+            <radius></radius>
           </v-col>
         </v-row>
       </v-form>
-
+      
       <v-row justify="center">
         <template v-for="tag in volunteerTags">
           <v-col cols="12" md="2" :key="tag.title">
@@ -83,15 +80,18 @@ import VueSlickCarousel from 'vue-slick-carousel';
 import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css';
 import 'vue-slick-carousel/dist/vue-slick-carousel.css';
 import LocationSearchBar from '@/components/ui/LocationSearchBar.vue';
+import Radius from '@/components/ui/Radius.vue';
+import { mapActions } from 'vuex';
 
 export default Vue.extend({
   components: {
     VueSlickCarousel,
-    LocationSearchBar
+    LocationSearchBar,
+    Radius
   },
   data(): {
     volunteerTags: {},
-    volunteerRadius: string[],
+   // volunteerRadius: string[],
     selectedTag: string,
   } {
     return {
@@ -113,10 +113,28 @@ export default Vue.extend({
           img: require('../../public/images/sozial.jpeg')
         }
       ],
-      volunteerRadius: ['Überall', '5 km', '10 km', '25 km', '50 km'],
+     // volunteerRadius: ['Überall', '5 km', '10 km', '25 km', '50 km'],
       selectedTag: '',
     };
   },
+  watch: {
+    selectedTag(newValue, oldValue): void {
+      this.setSelectedTag(newValue);
+    },
+  },
+  methods: {
+    ...mapActions(['setSelectedTag']),
+    routeToResultPage(evt): void {
+          this.$router.push({
+              name: 'resultPage',
+              query: {
+                q: this.selectedTag,
+                location: this.$store.state.selectedLocation,
+                radius: this.$store.state.radiusSearchValue
+              }
+            });
+        },
+  }
 });
 </script>
 

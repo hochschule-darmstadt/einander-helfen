@@ -9,18 +9,27 @@ const store = new Vuex.Store({
    state: {
        locations: [] as Location[],
        locationSearchValue: '',
-       radiusSearchValue: ''
+       radiusSearchValue: 0,
+       selectedLocation: '',
+       selectedTag: '',
    },
    mutations: {
        setLocations(state, value): void {
            state.locations = value;
-       },
+        },
        setLocationSearchValue(state, value): void {
            state.locationSearchValue = value;
-       },
+        },
        setRadiusSearchValue(state, value): void {
            state.radiusSearchValue = value;
-       }
+        },
+       setSelectedTag(state, value): void {
+           state.selectedTag = value;
+        },
+       setSelectedLocation(state, value): void {
+           state.selectedLocation = value;
+        },
+
    },
    actions: {
        findLocationByPlzOrName({ commit, state }): void {
@@ -31,8 +40,14 @@ const store = new Vuex.Store({
            commit('setLocationSearchValue', locationSearchValue);
            dispatch('findLocationByPlzOrName');
        },
+       setSelectedLocation({ commit, dispatch }, selectedLocation): void {
+           commit('setSelectedLocation', selectedLocation);
+       },
        setRadiusSearchValue({ commit, dispatch }, radiusSearchValue): void {
            commit('setRadiusSearchValue', radiusSearchValue);
+       },
+       setSelectedTag({ commit, dispatch }, selectedTag): void {
+           commit('setSelectedTag', selectedTag);
        }
    },
    getters: {
