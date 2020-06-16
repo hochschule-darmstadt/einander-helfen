@@ -116,7 +116,7 @@ export default Vue.extend({
     ...mapState(['selectedLocation', 'radiusSearchValue'])
   },
   methods: {
-    handleSearchEvent(searchValue: string) {
+    handleSearchEvent(searchValue: string): void {
       this.$router.push({
         name: 'resultPage',
         query: {
