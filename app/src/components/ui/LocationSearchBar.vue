@@ -8,7 +8,7 @@
               item-text="title"
               item-value="title"
               v-bind:value="selectedLocation"
-              @input="newSelectedLocation = $event.target.value"
+              @input="newSelectedLocation = $event"
               style="margin-left: 10px; margin-right: 10px;"
               v-on:keyup.self="locationOnKeyUp"
               auto-select-first
@@ -40,11 +40,7 @@
       computed: {
         ...mapState(['selectedLocation']),
         showLocations(): Location[] {
-          const locations: Location[] = this.getLocations();
-          return locations.map((location) => {
-            const title = location.plz + ' ' + location.name;
-            return Object.assign({}, location, {title});
-          });
+          return this.getLocations();
         }
       },
       watch: {

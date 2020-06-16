@@ -135,7 +135,6 @@ export default Vue.extend({
   methods: {
     ...mapActions(['setSelectedTag']),
     addSearchTag(tag: {tag: string}): void {
-      console.log(tag);
       this.$router.push({
         name: 'resultPage',
         query: {

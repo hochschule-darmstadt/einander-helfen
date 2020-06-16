@@ -205,7 +205,7 @@
             };
         },
         computed: {
-            ...mapState(['posts']),
+            ...mapState(['posts', 'selectedLocation', 'radiusSearchValue']),
             visiblePages(): Advertisement[] {
                 return this.posts.slice(
                     (this.page - 1) * this.perPage,
@@ -231,10 +231,16 @@
                 }
                 const markers = val.map((post) => [post.lat, post.lon] as LatLngTuple);
                 (this.$refs.map as LMap).fitBounds(markers);
+            },
+            radiusSearchValue(): void {
+                this.findPosts();
+            },
+            selectedLocation(): void {
+                this.findPosts();
             }
         },
         methods: {
-            ...mapActions(['hydrateStateFromURIParams']),
+            ...mapActions(['hydrateStateFromURIParams', 'findPosts']),
             openAdvertisement(index: number): void {
                 this.postIsOpen = true;
                 this.currentPostId = index + ((this.page - 1) * this.perPage);

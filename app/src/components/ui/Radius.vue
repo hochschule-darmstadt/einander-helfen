@@ -1,7 +1,8 @@
 <template>
     <v-select
             label="Umkreis"
-            :items="radius"
+            :items="radii"
+            item-value="text"
             v-model="selectedRadius"
             style="margin-left: 10px; margin-right: 10px;">
     </v-select>
@@ -17,32 +18,9 @@
     export default Vue.extend(
     {
         data(): {
-            radius: object[],
             selectedRadius: string,
         } {
             return {
-                radius: [
-                    {
-                        text: 'Überall',
-                        value: '',
-                    },
-                    {
-                        text: '5 km',
-                        value: '5km',
-                    },
-                    {
-                        text: '10 km',
-                        value: '10km',
-                    },
-                    {
-                        text: '25 km',
-                        value: '25km',
-                    },
-                    {
-                        text: '50 km',
-                        value: '50km',
-                    },
-                ],
                 selectedRadius: this.$store.state.radiusSearchValue || 0,
             };
         },
@@ -63,6 +41,9 @@
         methods: {
             ...mapActions(['setRadiusSearchValue']),
         },
+        computed: {
+            ...mapState(['radii'])
+        }
     });
 </script>
 

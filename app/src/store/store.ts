@@ -15,6 +15,28 @@ const store = new Vuex.Store({
       {tag: 'Denker/in'},
       {tag: 'Jugendarbeit'}
     ],
+    radii: [
+      {
+        text: 'Überall',
+        value: '',
+      },
+      {
+        text: '5 km',
+        value: '5km',
+      },
+      {
+        text: '10 km',
+        value: '10km',
+      },
+      {
+        text: '25 km',
+        value: '25km',
+      },
+      {
+        text: '50 km',
+        value: '50km',
+      },
+    ],
     posts: [],
     searchValues: [] as string[],
     locations: [] as Location[],
@@ -51,10 +73,13 @@ const store = new Vuex.Store({
   },
   actions: {
     findPosts({ commit, state }): void {
+      const location = LocationService.findByTitle(state.selectedLocation);
+      const searchValues = state.searchValues;
+      const radius = state.radii.find((r) => r.text === state.radiusSearchValue);
       DataService.findBySelection({
-        searchValues: state.searchValues,
-        location: state.selectedLocation,
-        radius: state.radiusSearchValue
+        searchValues,
+        location,
+        radius
       }).then((result) => commit('setPosts', result));
     },
     addSearchValue({ commit, dispatch }, searchValue): void {
@@ -86,7 +111,6 @@ const store = new Vuex.Store({
     },
     setLocationSearchValue({ commit, dispatch }, locationSearchValue): void {
       commit('setLocationSearchValue', locationSearchValue);
-      dispatch('findLocationByPlzOrName');
     },
     setSelectedLocation({ commit, dispatch }, selectedLocation): void {
       commit('setSelectedLocation', selectedLocation);
@@ -94,7 +118,6 @@ const store = new Vuex.Store({
     },
     setRadiusSearchValue({ commit, dispatch }, radiusSearchValue): void {
       commit('setRadiusSearchValue', radiusSearchValue);
-      dispatch('findPosts');
     },
     setSelectedTag({ commit, dispatch }, selectedTag): void {
       commit('setSelectedTag', selectedTag);

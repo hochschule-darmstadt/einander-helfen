@@ -12,7 +12,10 @@ class LocationService {
      */
     constructor() {
         this.loadLocationCsv('s');
-        console.log(this.locations);
+    }
+
+    public findByTitle(title: string): Location|undefined {
+        return this.locations.find((location) => location.title === title);
     }
 
     /**
@@ -142,7 +145,8 @@ class LocationService {
                 state: location.state,
                 lat: +location.lat,
                 lon: +location.lon,
-                rank: +location.rank
+                rank: +location.rank,
+                title: location.plz + ' ' + location.name
             });
         });
     }

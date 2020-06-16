@@ -8,6 +8,7 @@ describe('LocationService.vue', () => {
             {
                 name: 'Frankfurt',
                 plz: '65929',
+                title: '65929 Frankfurt',
                 state: 'Hessen',
                 lat: 1,
                 lon: 2,
@@ -16,6 +17,7 @@ describe('LocationService.vue', () => {
             {
                 name: 'Darmstadt',
                 plz: '64283',
+                title: '64283 Darmstadt',
                 state: 'Hessen',
                 lat: 3,
                 lon: 1,
@@ -24,6 +26,7 @@ describe('LocationService.vue', () => {
             {
                 name: 'Berlin',
                 plz: '10115',
+                title: '10115 Berlin',
                 state: 'Berlin',
                 lat: 2,
                 lon: 3,
@@ -32,6 +35,7 @@ describe('LocationService.vue', () => {
             {
                 name: 'Berlin',
                 plz: '10178',
+                title: '10178 Berlin',
                 state: 'Berlin',
                 lat: 2,
                 lon: 3,
@@ -40,6 +44,7 @@ describe('LocationService.vue', () => {
             {
                 name: 'Berlin',
                 plz: '10247',
+                title: '10247 Berlin',
                 state: 'Berlin',
                 lat: 2,
                 lon: 3,
@@ -48,6 +53,7 @@ describe('LocationService.vue', () => {
             {
                 name: 'Bochum',
                 plz: '44787',
+                title: '44787 Bochum',
                 state: 'Nordrhein-Westfalen',
                 lat: 2,
                 lon: 3,
@@ -62,6 +68,7 @@ describe('LocationService.vue', () => {
             {
                 name: 'Berlin',
                 plz: '10115',
+                title: '10115 Berlin',
                 state: 'Berlin',
                 lat: 2,
                 lon: 3,
@@ -70,6 +77,7 @@ describe('LocationService.vue', () => {
             {
                 name: 'Darmstadt',
                 plz: '64283',
+                title: '64283 Darmstadt',
                 state: 'Hessen',
                 lat: 3,
                 lon: 1,
@@ -83,6 +91,7 @@ describe('LocationService.vue', () => {
             {
                 name: 'Berlin',
                 plz: '10115',
+                title: '10115 Berlin',
                 state: 'Berlin',
                 lat: 2,
                 lon: 3,
@@ -91,6 +100,7 @@ describe('LocationService.vue', () => {
             {
                 name: 'Darmstadt',
                 plz: '64283',
+                title: '64283 Darmstadt',
                 state: 'Hessen',
                 lat: 3,
                 lon: 1,
@@ -104,6 +114,7 @@ describe('LocationService.vue', () => {
             {
                 name: 'Darmstadt',
                 plz: '64283',
+                title: '64283 Darmstadt',
                 state: 'Hessen',
                 lat: 3,
                 lon: 1,
@@ -112,6 +123,7 @@ describe('LocationService.vue', () => {
             {
                 name: 'Frankfurt',
                 plz: '65929',
+                title: '65929 Frankfurt',
                 state: 'Hessen',
                 lat: 1,
                 lon: 2,
@@ -129,6 +141,7 @@ describe('LocationService.vue', () => {
             {
                 name: 'Frankfurt',
                 plz: '65929',
+                title: '65929 Frankfurt',
                 state: 'Hessen',
                 lat: 1,
                 lon: 2,
@@ -142,6 +155,7 @@ describe('LocationService.vue', () => {
             {
                 name: 'Berlin',
                 plz: '10115',
+                title: '10115 Berlin',
                 state: 'Berlin',
                 lat: 2,
                 lon: 3,
@@ -150,6 +164,7 @@ describe('LocationService.vue', () => {
             {
                 name: 'Berlin',
                 plz: '10178',
+                title: '10178 Berlin',
                 state: 'Berlin',
                 lat: 2,
                 lon: 3,
@@ -167,6 +182,7 @@ describe('LocationService.vue', () => {
             {
                 name: 'Darmstadt',
                 plz: '64283',
+                title: '64283 Darmstadt',
                 state: 'Hessen',
                 lat: 3,
                 lon: 1,
@@ -182,6 +198,7 @@ describe('LocationService.vue', () => {
             {
                 name: 'Berlin',
                 plz: '10115',
+                title: '10115 Berlin',
                 state: 'Berlin',
                 lat: 2,
                 lon: 3,
@@ -190,6 +207,7 @@ describe('LocationService.vue', () => {
             {
                 name: 'Bochum',
                 plz: '44787',
+                title: '44787 Bochum',
                 state: 'Nordrhein-Westfalen',
                 lat: 2,
                 lon: 3,
@@ -198,6 +216,7 @@ describe('LocationService.vue', () => {
             {
                 name: 'Berlin',
                 plz: '10178',
+                title: '10178 Berlin',
                 state: 'Berlin',
                 lat: 2,
                 lon: 3,
@@ -213,6 +232,7 @@ describe('LocationService.vue', () => {
             {
                 name: 'Berlin',
                 plz: '10115',
+                title: '10115 Berlin',
                 state: 'Berlin',
                 lat: 2,
                 lon: 3,
@@ -221,6 +241,7 @@ describe('LocationService.vue', () => {
             {
                 name: 'Bochum',
                 plz: '44787',
+                title: '44787 Bochum',
                 state: 'Nordrhein-Westfalen',
                 lat: 2,
                 lon: 3,
@@ -229,6 +250,7 @@ describe('LocationService.vue', () => {
             {
                 name: 'Berlin',
                 plz: '10178',
+                title: '10178 Berlin',
                 state: 'Berlin',
                 lat: 2,
                 lon: 3,
@@ -237,6 +259,7 @@ describe('LocationService.vue', () => {
             {
                 name: 'Berlin',
                 plz: '10247',
+                title: '10247 Berlin',
                 state: 'Berlin',
                 lat: 2,
                 lon: 3,
