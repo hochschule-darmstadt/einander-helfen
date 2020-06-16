@@ -3,17 +3,15 @@ import Vuex from 'vuex';
 import DataService from '../utils/services/DataService';
 import Location from '@/models/location';
 import LocationService from '@/utils/services/LocationService';
-
+import router from '@/router';
+import Tag from '@/models/tag';
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
     searchProposals: [
-      {header: 'Vorschläge'},
-      {divider: true},
-      {tag: 'Macher/in'},
-      {tag: 'Denker/in'},
-      {tag: 'Jugendarbeit'}
+      { header: 'Vorschläge' },
+      { divider: true },
     ],
     radii: [
       {
@@ -38,19 +36,31 @@ const store = new Vuex.Store({
       },
     ],
     posts: [],
+    labels: [] as string[],
+    synonyms: [] as string[],
     searchValues: [] as string[],
     locations: [] as Location[],
     locationSearchValue: '',
     radiusSearchValue: '',
     selectedLocation: '',
     selectedTag: '',
+    page: 1 as number
   },
   mutations: {
     addSearchValue(state, value: string): void {
       state.searchValues.push(value);
     },
+    initializeSearchProposals(state, tags: []): void {
+      state.searchProposals = state.searchProposals.concat(tags);
+    },
     removeSearchValue(state, value): void {
       state.searchValues.splice(state.searchValues.indexOf(value), 1);
+    },
+    setLocation(state, value): void {
+      state.location = value;
+    },
+    setRadius(state, value): void {
+      state.radius = value;
     },
     setPosts(state, value): void {
       state.posts = value;
@@ -70,8 +80,26 @@ const store = new Vuex.Store({
     setSelectedLocation(state, value): void {
       state.selectedLocation = value;
     },
+    clearSearchParams(state): void {
+      state.searchValues = [];
+      state.location = '';
+      state.radius = '';
+    },
+    setPage(state, value: number): void {
+      state.page = value;
+      router.replace({
+        name: 'resultPage',
+        query: {
+          ...router.currentRoute.query,
+          page: value.toString()
+        }
+      });
+    }
   },
   actions: {
+    initializeSearchProposals({ commit }, proposals: Tag[]): void {
+      commit('initializeSearchProposals', proposals);
+    },
     findPosts({ commit, state }): void {
       const location = LocationService.findByTitle(state.selectedLocation);
       const searchValues = state.searchValues;
@@ -84,17 +112,23 @@ const store = new Vuex.Store({
     },
     addSearchValue({ commit, dispatch }, searchValue): void {
       commit('addSearchValue', searchValue);
+      dispatch('updateURIFromState');
       dispatch('findPosts');
     },
     addSearchValues({ commit, dispatch }, searchValues: string[]): void {
       searchValues.forEach((tag) => commit('addSearchValue', tag));
-      dispatch('findPosts');
+    },
+    setResultPage({ commit }, value: number): void {
+      commit('setPage', value);
     },
     removeSearchValue({ commit, dispatch }, value): void {
       commit('removeSearchValue', value);
+      dispatch('updateURIFromState');
       dispatch('findPosts');
     },
-    hydrateStateFromURIParams({ dispatch }, queryParams): void {
+    hydrateStateFromURIParams({ commit, dispatch }, queryParams): void {
+      // Clear previous search parameters. The URI is our single source of truth!
+      commit('clearSearchParams');
       if ('q' in queryParams) {
         dispatch('addSearchValues', queryParams.q.split(','));
       }
@@ -104,7 +138,22 @@ const store = new Vuex.Store({
       if ('radius' in queryParams) {
         dispatch('setRadiusSearchValue', queryParams.radius);
       }
+      if ('page' in queryParams) {
+        commit('setPage', parseInt(queryParams.page, 10));
+      }
     },
+    updateURIFromState({ state }): void {
+      router.replace({
+        name: 'resultPage',
+        query: {
+          ...router.currentRoute.query,
+          q: state.searchValues.join(','),
+          city: state.location,
+          radius: state.radius,
+          page: state.page.toString()
+        }
+      }).catch((err) => err);
+    }
     findLocationByPlzOrName({ commit, state }): void {
       const newLocations = LocationService.findLocationByPlzOrName(state.locationSearchValue);
       commit('setLocations', newLocations);

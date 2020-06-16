@@ -28,8 +28,9 @@
               append-icon="search"
               item-text="tag"
               autocomplete="off"
-              :items="searchProposals"
+              :items="mySearchProposals"
               @input="addSearchTag"
+              :search-input.sync="currentSearchValue"
             ></v-combobox>
           </v-col>
         </v-row>
@@ -49,21 +50,22 @@
         <template v-for="tag in volunteerTags">
           <v-col cols="12" md="2" :key="tag.title">
             <v-hover v-slot:default="{ hover }">
-              <v-card
-                class="mx-auto"
-                :elevation="hover ? 12 : 2"
-                :class="{ 'on-hover': hover }"
-              >
-                  <router-link
-                    style="text-decoration: none; color: inherit;"
-                    :to="{name: 'resultPage', query:{q: tag.title} }"
+              <v-card class="mx-auto" :elevation="hover ? 12 : 2" :class="{ 'on-hover': hover }">
+                <router-link
+                  style="text-decoration: none; color: inherit;"
+                  :to="{name: 'resultPage', query:{q: tag.title} }"
+                >
+                  <v-img
+                    class="white--text align-end mt-10"
+                    height="300px"
+                    :key="tag.title"
+                    :src="tag.img"
                   >
-                    <v-img class="white--text align-end mt-10" height="300px" :key="tag.title" :src="tag.img">
-                      <v-card >
-                    <v-card-title class="justify-center black--text" v-html="tag.title"></v-card-title>
-                      </v-card>
-                   </v-img>
-                 </router-link>
+                    <v-card>
+                      <v-card-title class="justify-center black--text" v-html="tag.title"></v-card-title>
+                    </v-card>
+                  </v-img>
+                </router-link>
               </v-card>
             </v-hover>
           </v-col>
@@ -74,9 +76,7 @@
 </template>
 
 <script lang="ts">
-import { mapState } from 'vuex';
-
-declare var require: any;
+import {mapActions, mapState} from 'vuex';
 import Vue from 'vue';
 import Toolbar from '@/components/layout/Toolbar.vue';
 
@@ -85,11 +85,10 @@ import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css';
 import 'vue-slick-carousel/dist/vue-slick-carousel.css';
 import LocationSearchBar from '@/components/ui/LocationSearchBar.vue';
 import Radius from '@/components/ui/Radius.vue';
-import { mapActions } from 'vuex';
+import Post from '../models/post';
+import TagService from '../utils/services/TagService';
+import Tag from '@/models/tag';
 
-import tags from '@/utils/tags';
-
-console.log(tags);
 
 export default Vue.extend({
   components: {
@@ -125,7 +124,18 @@ export default Vue.extend({
     };
   },
   computed: {
-    ...mapState(['searchProposals', 'selectedLocation', 'radiusSearchValue'])
+    ...mapState(['searchProposals', 'selectedLocation', 'radiusSearchValue']),
+    mySearchProposals(): string[] {
+      if (!this.currentSearchValue || this.currentSearchValue.length < 2) {
+        return [];
+      }
+      const searchTerm = this.currentSearchValue;
+      const listOfMatchingTerms = this.matchSearchInput(searchTerm, this.searchProposals
+        .filter((element) => 'label' in element));
+      const rankedListOfOrderedTerms = this.rankTerms(searchTerm, listOfMatchingTerms);
+
+      return rankedListOfOrderedTerms;
+    }
   },
   watch: {
     selectedTag(newValue, oldValue): void {
@@ -133,25 +143,60 @@ export default Vue.extend({
     },
   },
   methods: {
-    ...mapActions(['setSelectedTag']),
+    ...mapActions(['initializeSearchProposals', 'setSelectedTag']),
     addSearchTag(tag: {tag: string}): void {
+      const tagName = tag.substr(0, tag.indexOf(' ('));
+
       this.$router.push({
         name: 'resultPage',
         query: {
-          q: tag.tag,
-          location: this.selectedLocation,
+          q: tagName,
+          city: this.selectedLocation,
           radius: this.radiusSearchValue
         }
       });
+    },
+    matchSearchInput(searchTerm: string, proposals: Tag[]): string[] {
+      const stringArray: string[] = [];
+      searchTerm = searchTerm.toLowerCase();
+
+      proposals.forEach((tag) => {
+        if (tag.label.toLowerCase().match(searchTerm)) {
+          stringArray.push(tag.label);
+        } else {
+          tag.synonyms.forEach((element) => {
+            if (element.toLowerCase().match(searchTerm)) {
+              stringArray.push(tag.label + ' (' + element + ')');
+            }
+          });
+        }
+      });
+      return stringArray;
+    },
+    rankTerms(searchTerm: string, terms: string[]): string[] {
+      return terms.map((term) => {
+          // 2x on start; 1x on end, 0.5x in the middle
+          const rank = term.toLowerCase().startsWith(searchTerm.toLowerCase())
+            ? 2
+            : term.toLowerCase().endsWith(searchTerm.toLowerCase())
+              ? 1
+              : 0.5;
+          return {
+            label: term,
+            rank
+          };
+        })
+        .sort((a, b) => Math.sign(b.rank - a.rank))
+        .map((obj) => obj.label);
     }
   }
 });
 </script>
 
 <style>
-  .v-input__slot{
-    margin-bottom: 0;
-  }
+.v-input__slot {
+  margin-bottom: 0;
+}
 
 img {
   width: 100%;

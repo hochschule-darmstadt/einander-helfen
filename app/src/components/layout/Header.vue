@@ -115,18 +115,15 @@
             remove(tag: string): void {
                 this.removeSearchValue(tag);
             },
-            tagAdded(tag: string): void {
-                if (tag.length) {
-                    this.addSearchValue(tag);
-                    this.searchString = '';
-                }
-                this.$router.push({
-                    name: 'resultPage',
-                    query: {
-                        ...this.$route.query,
-                        q: this.selectedTags
-                    }
-                });
+            tagAdded(tag: {tag: string} | string): void {
+              const tagName = typeof tag === 'string'
+                ? tag
+                : tag.tag;
+
+              if (tagName.length) {
+                  this.addSearchValue(tagName);
+                  this.searchString = '';
+              }
             }
         },
       computed: {

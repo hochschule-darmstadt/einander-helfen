@@ -32,7 +32,7 @@
                         tile
                 >
                     <v-list-item three-line>
-                        <v-btn class="mr-3" text @click="closeAdvertisement()">
+            <v-btn class="mr-3" text @click="closePost()">
                             <v-icon>arrow_back</v-icon>
                         </v-btn>
                         <!--display title, subtitle and image on the left side-->
@@ -126,16 +126,16 @@
 
             <div class="posts">
                 <div ref="wrapperPosts">
-                    <template v-for="(advertisement, i) in visiblePages">
+                    <template v-for="(post, i) in visiblePages">
                         <v-card class="mb-3" tile>
-                            <v-list-item three-line @click="openAdvertisement(i)">
+                            <v-list-item three-line @click="openPost(i)">
                                 <v-list-item-content>
                                     <v-list-item-title class="headline mb-1">{{
-                                        advertisement.title
+                                      post.title
                                         }}
                                     </v-list-item-title>
                                     <v-list-item-subtitle>{{
-                                        advertisement.task
+                                      post.task
                                         }}
                                     </v-list-item-subtitle>
                                 </v-list-item-content>
@@ -144,7 +144,7 @@
                                         max-width="80px"
                                         height="80px"
                                         contain
-                                        :src="advertisement.image"
+                                        :src="post.image"
                                 ></v-img>
                             </v-list-item>
                         </v-card>
@@ -152,7 +152,8 @@
                 </div>
                 <!--pageination-->
                 <div class="text-center" style="margin-top:2%">
-                    <v-pagination v-model="page" :length="numberOfPages" color="#054C66"></v-pagination>
+                  <v-pagination @input="setResultPage($event)" :value="page" :length="numberOfPages" total-visible="7" color="#054C66"></v-pagination>
+
 
                 </div>
             </div>
@@ -163,8 +164,7 @@
 <!-- test content -->
 <script lang="ts">
     import Header from '@/components/layout/Header.vue';
-    import Advertisement from '@/models/advertisement';
-
+import Post from '@/models/post';
     import Vue from 'vue';
     import {mapActions, mapState} from 'vuex';
 
@@ -177,14 +177,12 @@
         data(): {
             postIsOpen: boolean;
             currentPostId: number;
-            page: number;
             perPage: number;
             map: any;
         } {
             return {
                 postIsOpen: false,
                 currentPostId: 0,
-                page: 1,
                 perPage: 7,
                 map: {
                     url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -205,14 +203,15 @@
             };
         },
         computed: {
-            ...mapState(['posts', 'selectedLocation', 'radiusSearchValue']),
-            visiblePages(): Advertisement[] {
+    ...mapState(['posts', 'page', 'selectedLocation', 'radiusSearchValue']),
+    visiblePages(): Post[] {
+            {
                 return this.posts.slice(
                     (this.page - 1) * this.perPage,
                     this.page * this.perPage
                 );
             },
-            currentPost(): Advertisement | null {
+    currentPost(): Post | null {
                 return this.postIsOpen
                     ? this.posts[this.currentPostId]
                     : null;
@@ -240,12 +239,13 @@
             }
         },
         methods: {
-            ...mapActions(['hydrateStateFromURIParams', 'findPosts']),
-            openAdvertisement(index: number): void {
+    ...mapActions(['hydrateStateFromURIParams', 'setResultPage']),
+    openPost(index: number): void {
                 this.postIsOpen = true;
                 this.currentPostId = index + ((this.page - 1) * this.perPage);
             },
-            closeAdvertisement(): void {
+    closePost(): void {
+      this.currentPostId = 0;
                 this.postIsOpen = false;
                 const currentPost = this.posts[this.currentPostId];
                 const location = [currentPost.lat, currentPost.lon] as LatLngTuple;
@@ -253,10 +253,12 @@
                     (this.$refs.map as LMap).setCenter(location);
                 });
             },
-            closeMap(): void {
-                this.postIsOpen = true;
-            }
-        }
+  },
+  watch: {
+    page(value): void {
+      this.setResultPage(value);
+    }
+  }
     });
 </script>
 
