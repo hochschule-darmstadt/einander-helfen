@@ -19,7 +19,7 @@
 export default {
   data: () => ({
     links: [
-      { text: 'Über', route: '/about' },
+      { text: 'Über uns', route: '/about' },
       { text: 'Impressum', route: '/imprint' },
       { text: 'Datenschutzerklärung', route: '/privacy' }
     ]

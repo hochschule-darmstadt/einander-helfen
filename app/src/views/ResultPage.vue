@@ -1,68 +1,63 @@
 <template>
   <div>
     <Header />
-    <v-row no-gutters>
-      <v-col cols="6">
-        <div style="height:75vh;overflow:auto">
-          <template v-for="(advertisement, i) in visiblePages">
-            <v-card class="mb-3" tile>
-              <v-list-item three-line @click="openAdvertisement(i)">
-                <v-list-item-content>
-                  <v-list-item-title class="headline mb-1">{{
-                    advertisement.title
-                  }}</v-list-item-title>
-                  <v-list-item-subtitle>{{
-                    advertisement.task
-                  }}</v-list-item-subtitle>
-                </v-list-item-content>
+    
+      <v-layout row wrap no-gutters>
+        <v-flex sm12 md6>
+          <div style="height:70vh;overflow:auto; margin-bottom:5%">
+            <template v-for="(advertisement, i) in visiblePages">
+              <v-card class="mb-3">
+                <v-list-item three-line @click="openAdvertisement(i)">
+                  <v-list-item-content>
+                    <v-list-item-title class="headline mb-1">{{
+                      advertisement.title
+                    }}</v-list-item-title>
+                    <v-list-item-subtitle>{{
+                      advertisement.task
+                    }}</v-list-item-subtitle>
+                  </v-list-item-content>
 
-                <v-img
-                  max-width="80px"
-                  height="80px"
-                  contain
-                  :src="advertisement.image"
-                ></v-img>
-              </v-list-item>
-            </v-card>
-          </template>
-        </div>
-        <!--pageination-->
-        <div class="text-center" style="margin-top:2%">
-          <v-pagination v-model="page" :length="numberOfPages" color="#054C66"></v-pagination>
-
-        </div>
-      </v-col>
-
-      <v-col cols="6" v-if="!postIsOpen">
-        <v-card tile height="75vh" style="position: absolute">
-          <v-img
-            src="https://media.wired.com/photos/59269cd37034dc5f91bec0f1/master/pass/GoogleMapTA.jpg"
+                  <v-img
+                    max-width="80px"
+                    height="80px"
+                    contain
+                    :src="advertisement.image"
+                  ></v-img>
+                </v-list-item>
+              </v-card>
+            </template>
+          </div>
+        </v-flex>
+        
+        <v-flex xs12 md6  v-if="!postIsOpen">
+          <v-card tile height="70vh">
+            <v-img
+              src="https://media.wired.com/photos/59269cd37034dc5f91bec0f1/master/pass/GoogleMapTA.jpg"
+              height="100%"
+              width="100%"
+            ></v-img>
+          </v-card>
+        </v-flex>
+        
+        <v-flex sm12 md6  v-if="postIsOpen">
+          <v-card
+            tile
             height="100%"
             width="100%"
-          ></v-img>
-        </v-card>
-      </v-col>
-      <v-col cols="6" v-if="postIsOpen">
-        <v-card
-          tile
-          height="75vh"
-          width="50%"
-          style="position: absolute;overflow:auto"
-        >
+          >
           <v-list-item three-line>
             <v-btn class="mr-3" text @click="closeAdvertisement()">
               <v-icon>arrow_back</v-icon>
             </v-btn>
+
             <!--display title, subtitle and image on the left side-->
-            <v-list-item-content style="margin-top:2%">
-              <v-list-item-title class="headline mb-1">{{
+            <v-list-item-content style="margin-top:2%" class="headline">{{
                 currentPost.title
-              }}</v-list-item-title>
-              <v-list-item-subtitle>{{
+              }}
+              <v-list-item-subtitle class="mt-1">{{
                 currentPost.task
               }}</v-list-item-subtitle>
             </v-list-item-content>
-
             <v-img
               style="margin-top:2%"
               max-width="80px"
@@ -73,53 +68,53 @@
           </v-list-item>
 
           <!--display content on the right side-->
+          
           <v-card-text style="padding-left:5%; padding-right:5%">
+            
             <v-row v-if="currentPost.location">
-              <v-col cols="2">Einsatzort</v-col>
-              <v-col cols="8" v-html="currentPost.location"></v-col>
+             <v-flex md4 xs6>Einsatzort</v-flex>
+             <v-flex md8 xs6 v-html="currentPost.location"></v-flex>
             </v-row>
-            <v-row v-if="currentPost.target_group">
-              <v-col cols="2">Zielgruppe</v-col>
-              <v-col
-                cols="8"
-                v-html="currentPost.target_group"
-              ></v-col>
+            <v-row class="pt-1" v-if="currentPost.title">
+             <v-flex md4 xs6 >Aufgabe</v-flex>
+             <v-flex md8 xs6 v-html="currentPost.task"></v-flex>
             </v-row>
-            <v-row v-if="currentPost.timing">
-              <v-col cols="2">Einstiegsdatum / Beginn</v-col>
-              <v-col cols="8" v-html="currentPost.timing"></v-col>
+            <v-row class="pt-1" v-if="currentPost.contact">
+              <v-flex md4 xs6>Ansprechpartner</v-flex>
+              <v-flex md8 xs6 v-html="currentPost.contact"></v-flex>
             </v-row>
-            <v-row v-if="currentPost.effort">
-              <v-col cols="2">Zeitaufwand</v-col>
-              <v-col cols="8" v-html="currentPost.effort"></v-col>
+            <v-row class="pt-1" v-if="currentPost.organization">
+              <v-flex md4 xs6>Organisation</v-flex>
+              <v-flex md8 xs6 v-html="currentPost.organization"></v-flex>
             </v-row>
-            <v-row v-if="currentPost.opportunities">
-              <v-col cols="2">Möglichkeiten</v-col>
-              <v-col
-                cols="8"
-                v-html="currentPost.opportunities"
-              ></v-col>
+            <v-row class="pt-1" v-if="currentPost.target_group">
+              <v-flex md4 xs6>Zielgruppe</v-flex>
+              <v-flex md8 xs6 v-html="currentPost.target_group"></v-flex>
             </v-row>
-            <v-row v-if="currentPost.organization">
-              <v-col cols="2">Organisation</v-col>
-              <v-col
-                cols="8"
-                v-html="currentPost.organization"
-              ></v-col>
+            <v-row class="pt-1" v-if="currentPost.timing">
+              <v-flex md4 xs6>Einstiegsdatum / Beginn</v-flex>
+              <v-flex md8 xs6 v-html="currentPost.timing"></v-flex>
             </v-row>
-            <v-row v-if="currentPost.contact">
-              <v-col cols="2">Kontakt</v-col>
-              <v-col cols="8" v-html="currentPost.contact"></v-col>
+            <v-row class="pt-1" v-if="currentPost.effort">
+              <v-flex md4 xs6>Zeitaufwand</v-flex>
+              <v-flex md8 xs6 v-html="currentPost.effort"></v-flex>
             </v-row>
+            <v-row class="pt-1" v-if="currentPost.opportunities">
+              <v-flex md4 xs6>Möglichkeiten</v-flex>
+              <v-flex md8 xs6 v-html="currentPost.opportunities"></v-flex>
+            </v-row>
+
+
+           
           </v-card-text>
 
           <v-card-actions>
-            <v-col>
+            <v-flex md12 sm12>
               <v-container style="margin-bottom: 10px">
                 <template
                   v-for="(category, i) in currentPost.categories"
                 >
-                  <v-chip :key="i" class="mr-2">{{ category }}</v-chip>
+                  <v-chip :key="i" class="mr-2 mt-2">{{ category }}</v-chip>
                 </template>
               </v-container>
               <v-spacer></v-spacer>
@@ -128,7 +123,7 @@
                   class="my-2"
                   dark
                   large
-                  color="#F29472"
+                  color="#054C66"
                   :href="currentPost.link"
                   target="_blank"
                 >
@@ -136,11 +131,19 @@
                   <!--<v-icon dark>arrow_forward</v-icon>-->
                 </v-btn>
               </v-container>
-            </v-col>
+            </v-flex>
           </v-card-actions>
         </v-card>
-      </v-col>
-    </v-row>
+
+        
+        </v-flex>
+      <v-layout row wrap justify-center>
+                 <!--pageination-->
+          <div class="text-center" style="margin-top:2%; margin-bottom:1%">
+            <v-pagination v-model="page" :length="numberOfPages" color="#054C66"></v-pagination>
+          </div>
+      </v-layout>
+      </v-layout>
   </div>
 </template>
 
