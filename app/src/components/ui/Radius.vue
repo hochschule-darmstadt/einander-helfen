@@ -3,7 +3,7 @@
             label="Umkreis"
             :items="radius"
             v-model="selectedRadius"
-            style="margin-left: 10px; margin-right: 10px;">       
+            style="margin-left: 10px; margin-right: 10px;">
     </v-select>
 </template>
 
@@ -18,29 +18,29 @@
     {
         data(): {
             radius: object[],
-            selectedRadius: number,
+            selectedRadius: string,
         } {
             return {
                 radius: [
                     {
                         text: 'Überall',
-                        value: 0,
+                        value: '',
                     },
                     {
                         text: '5 km',
-                        value: 5,
+                        value: '5km',
                     },
                     {
                         text: '10 km',
-                        value: 10,
+                        value: '10km',
                     },
                     {
                         text: '25 km',
-                        value: 25,
+                        value: '25km',
                     },
                     {
                         text: '50 km',
-                        value: 50,
+                        value: '50km',
                     },
                 ],
                 selectedRadius: this.$store.state.radiusSearchValue || 0,
@@ -53,9 +53,8 @@
                     this.$router.push({
                     name: 'resultPage',
                     query: {
-                        q: this.$route.query.q,
-                        location: this.$route.query.location,
-                        radius: newValue + '',
+                        ...this.$route.query,
+                        radius: newValue,
                     }
                     });
                 }

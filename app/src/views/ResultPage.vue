@@ -245,10 +245,7 @@
                 const location = [currentPost.lat, currentPost.lon] as LatLngTuple;
                 this.$nextTick(() => {
                     (this.$refs.map as LMap).setCenter(location);
-                })
-            },
-            numberOfPages(): number {
-                return Math.ceil(this.posts.length / this.perPage);
+                });
             },
             closeMap(): void {
                 this.postIsOpen = true;

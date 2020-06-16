@@ -138,5 +138,8 @@
     });
 </script>
 
-<style scoped>
+<style>
+  .v-menu__content{
+    z-index:9999 !important;
+  }
 </style>

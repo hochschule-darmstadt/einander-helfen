@@ -7,7 +7,8 @@
               :items="showLocations"
               item-text="title"
               item-value="title"
-              v-model="selectedLocation"
+              v-bind:value="selectedLocation"
+              @input="newSelectedLocation = $event.target.value"
               style="margin-left: 10px; margin-right: 10px;"
               v-on:keyup.self="locationOnKeyUp"
               auto-select-first
@@ -25,33 +26,29 @@
   declare var require: any;
   import Vue from 'vue';
 
-  import QueryBuilder from 'es-query-builder/dist';
-  import axios from 'axios';
-
   export default Vue.extend(
     {
       data(): {
-        selectedLocation: string,
+        newSelectedLocation: string,
         isSearching: boolean,
       } {
         return {
           isSearching: false,
-          selectedLocation: this.$store.state.selectedLocation || '',
+          newSelectedLocation: '',
         };
       },
       computed: {
+        ...mapState(['selectedLocation']),
         showLocations(): Location[] {
           const locations: Location[] = this.getLocations();
-          const filteredLocations: any = locations.map((location) => {
+          return locations.map((location) => {
             const title = location.plz + ' ' + location.name;
             return Object.assign({}, location, {title});
           });
-          console.log(filteredLocations);
-          return filteredLocations;
         }
       },
       watch: {
-        selectedLocation(newValue, oldValue): void {
+        newSelectedLocation(newValue, oldValue): void {
           if (newValue !== '' && newValue !== oldValue) {
             this.isSearching = false; //
           }
@@ -65,14 +62,11 @@
             this.$router.push({
               name: 'resultPage',
               query: {
-                q: this.$route.query.q,
+                ...this.$route.query,
                 location: newValue,
-                radius: this.$route.query.radius
               }
             });
-          } /*else {
-          }*/
-
+          }
         },
         // Clear LocationSearchValue so that searching is not filtered to the currently selected zip-code
         isSearching(newValue, oldValue): void {
@@ -87,23 +81,17 @@
         filterLocations(item: any, queryText: string, itemText: string): boolean {
           if (queryText) {
             this.isSearching = true;
-            const search = (queryText + '').toLowerCase();
-            const plz = item.plz + '';
-            const name = (item.name + '').toLowerCase();
+            const search = queryText.toLowerCase();
+            const plz = item.plz;
+            const name = item.name.toLowerCase();
             const displayString = plz + ' '  + name;
-            return name.indexOf(search) > -1 ||
-                plz.indexOf(search) > -1 ||
-                displayString.indexOf(search) > -1 ||
-                itemText.toLowerCase().indexOf(search) > -1;
+            return name.includes(search) ||
+                plz.includes(search) ||
+                displayString.includes(search) ||
+                itemText.toLowerCase().includes(search);
           } else {
             return true;
           }
-        },
-        getItemText(item): string {
-          return item.plz.toString() + ' ' + item.name.toString();
-        },
-        getItemValue(item): any {
-          return item.plz;
         },
         locationOnKeyUp(evt): void {
           if (evt.code.startsWith('Key') || evt.code.startsWith('Digit') || evt.code === 'Backspace') {
@@ -130,9 +118,8 @@
     }
   );
 </script>
-  
-  
 
-   
 
-   
+
+
+

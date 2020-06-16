@@ -99,7 +99,7 @@ export default Vue.extend({
     Toolbar
   },
   data(): {
-    volunteerTags: {title:string, img: string}[],
+    volunteerTags: Array<{title: string, img: string}>,
     selectedTag: string,
   } {
     return {
@@ -121,12 +121,11 @@ export default Vue.extend({
           img: require('../../public/images/sozial.jpeg')
         }
       ],
-     // volunteerRadius: ['Überall', '5 km', '10 km', '25 km', '50 km'],
       selectedTag: '',
     };
   },
   computed: {
-    ...mapState(['searchProposals'])
+    ...mapState(['searchProposals', 'selectedLocation', 'radiusSearchValue'])
   },
   watch: {
     selectedTag(newValue, oldValue): void {
@@ -141,8 +140,8 @@ export default Vue.extend({
         name: 'resultPage',
         query: {
           q: tag.tag,
-          city: this.selectedCity,
-          radius: this.selectedRadius
+          location: this.selectedLocation,
+          radius: this.radiusSearchValue
         }
       });
     }

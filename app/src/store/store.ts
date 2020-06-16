@@ -19,7 +19,7 @@ const store = new Vuex.Store({
     searchValues: [] as string[],
     locations: [] as Location[],
     locationSearchValue: '',
-    radiusSearchValue: 0,
+    radiusSearchValue: '',
     selectedLocation: '',
     selectedTag: '',
   },
@@ -73,6 +73,12 @@ const store = new Vuex.Store({
       if ('q' in queryParams) {
         dispatch('addSearchValues', queryParams.q.split(','));
       }
+      if ('location' in queryParams) {
+        dispatch('setSelectedLocation', queryParams.location);
+      }
+      if ('radius' in queryParams) {
+        dispatch('setRadiusSearchValue', queryParams.radius);
+      }
     },
     findLocationByPlzOrName({ commit, state }): void {
       const newLocations = LocationService.findLocationByPlzOrName(state.locationSearchValue);
@@ -84,9 +90,11 @@ const store = new Vuex.Store({
     },
     setSelectedLocation({ commit, dispatch }, selectedLocation): void {
       commit('setSelectedLocation', selectedLocation);
+      dispatch('findPosts');
     },
     setRadiusSearchValue({ commit, dispatch }, radiusSearchValue): void {
       commit('setRadiusSearchValue', radiusSearchValue);
+      dispatch('findPosts');
     },
     setSelectedTag({ commit, dispatch }, selectedTag): void {
       commit('setSelectedTag', selectedTag);
