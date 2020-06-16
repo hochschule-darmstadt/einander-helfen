@@ -69,26 +69,11 @@
                     </v-menu>
 
             <v-flex md3 sm5>
-
-                <v-autocomplete
-                        dark
-                        :items="volunteerCities"
-                        label="Standort"
-                        prepend-inner-icon="place"
-                        style="margin-left: 10px; margin-right: 10px;"
-                        v-model="selectedCity">
-                    Mein Standort
-                </v-autocomplete>
+                 <location-search-bar/>
             </v-flex>
 
             <v-flex md1 sm4>
-                <v-autocomplete
-                        dark
-                        :items="volunteerRadius"
-                        label="Umkreis"
-                        v-model="selectedRadius">
-                    Überall
-                </v-autocomplete>
+                <radius />
             </v-flex>
             
             <v-menu offset-y>
@@ -115,19 +100,7 @@
                             </v-list-item>
                         </v-list>
                     </v-menu>
-    </v-layout>
-             <v-col
-                cols="2"
-                md="2">
-                <location-search-bar />
-            </v-col>
-
-            <v-col
-                cols="1"
-                md="1">
-                <radius />
-            </v-col>
-
+        </v-layout>
     </header>
 </template>
 

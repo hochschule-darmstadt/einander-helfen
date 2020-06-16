@@ -1,5 +1,6 @@
 <template>
     <v-select
+            dark
             label="Umkreis"
             :items="radii"
             item-value="text"

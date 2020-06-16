@@ -1,6 +1,7 @@
 <template>
   <v-row justify="center">
             <v-autocomplete
+              dark
               prepend-inner-icon="place"
               label="Standort"
               :filter="filterLocations"
