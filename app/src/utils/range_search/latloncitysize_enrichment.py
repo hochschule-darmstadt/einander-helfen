@@ -147,6 +147,7 @@ for place in placeNameArray:
 with open(fileName, mode='w') as csvfile:
 		places_writer = csv.writer(csvfile, delimiter=',')
 		for place in placeNamePostcodeArray:
-			places_writer.writerow([place.placeName, place.postcode, place.state, place.lat, place.lon, place.area])
+			compoundPlaceName = place.postcode + " " + place.placeName + " (" + place.state + ")"
+			places_writer.writerow([compoundPlaceName, place.placeName, place.postcode, place.state, place.lat, place.lon, place.area])
 
 print("wrote all places to file " + fileName)
