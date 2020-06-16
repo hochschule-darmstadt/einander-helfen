@@ -46,7 +46,7 @@ class DataService {
                                 location: Location|undefined,
                                 radius: {text: string, value: string}|undefined
                             }): Promise<any> {
-        console.log("I want to search, but are not fully implemented. Fix me!!!");
+        console.log('I want to search, but are not fully implemented. Fix me!!!');
         console.log(searchValues);
         console.log(location);
         console.log(radius);

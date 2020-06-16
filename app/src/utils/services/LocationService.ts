@@ -35,7 +35,8 @@ class LocationService {
         // get locations which start with the searchValue string
         const selectedLocations = [] as Location[];
         this.locations.forEach((location) => {
-            if (location.name.toLowerCase().startsWith(searchValue.toLowerCase()) ||
+            if (location.title === searchValue ||
+                location.name.toLowerCase().startsWith(searchValue.toLowerCase()) ||
                 location.plz.startsWith(searchValue)) {
                 selectedLocations.push(location);
             }

@@ -126,7 +126,7 @@ const store = new Vuex.Store({
   getters: {
     getLocations: (state) => {
       if (state.locations.length === 0) {
-        return LocationService.findLocationByPlzOrName(state.locationSearchValue);
+        return LocationService.findLocationByPlzOrName(state.locationSearchValue || state.selectedLocation);
       }
       return state.locations;
     }
