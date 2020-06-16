@@ -21,15 +21,9 @@
                     cols="4"
                     md="4"
                     style="background: white; border-radius: 20px">
-                <v-combobox
-                        :items="searchProposals"
-                        :search-input.sync="searchString"
-                        @input="tagAdded"
-                        append-icon="search"
-                        clearable
-                        item-text="tag"
-                        style="margin-left: 10px; margin-right: 10px">
-                </v-combobox>
+                <search-bar
+                  @input="addSearchValue"
+                />
                 <v-chip-group
                         active-class="primary-text"
                         column
@@ -73,38 +67,21 @@
     import {mapActions, mapState} from 'vuex';
     import LocationSearchBar from '@/components/ui/LocationSearchBar.vue';
     import Radius from '@/components/ui/Radius.vue';
+    import SearchBar from '@/components/ui/SearchBar.vue';
 
     export default Vue.extend({
         components: {
             LocationSearchBar,
-            Radius
+            Radius,
+            SearchBar
         },
         data(): {
             links: any,
-            volunteerTags: string[],
-            selectedTags: string[],
-            searchResult: null,
-            searchString: string
         } {
             return {
                 links: [
                     {text: '', route: '/'},
                 ],
-                // TODO volunteerTags are currently not in use:
-                // volunteerTags need to be implemented in the search of the main search field.
-                // But they should not be displayed if the main search field is empty.
-                // - volunteerProposals: display if main search field contains 0 characters.
-                // - volunteerTags: display if main search field contains at least 1 character.
-                volunteerTags: [
-                    'Macher/in',
-                    'Denker/in',
-                    'Jugendarbeit',
-                    'Kunst',
-                    'Einkaufen'
-                ],
-                selectedTags: [],
-                searchResult: null,
-                searchString: ''
             };
         },
         methods: {
@@ -114,16 +91,6 @@
           ]),
             remove(tag: string): void {
                 this.removeSearchValue(tag);
-            },
-            tagAdded(tag: {tag: string} | string): void {
-              const tagName = typeof tag === 'string'
-                ? tag
-                : tag.tag;
-
-              if (tagName.length) {
-                  this.addSearchValue(tagName);
-                  this.searchString = '';
-              }
             }
         },
       computed: {

@@ -56,12 +56,6 @@ const store = new Vuex.Store({
     removeSearchValue(state, value): void {
       state.searchValues.splice(state.searchValues.indexOf(value), 1);
     },
-    setLocation(state, value): void {
-      state.location = value;
-    },
-    setRadius(state, value): void {
-      state.radius = value;
-    },
     setPosts(state, value): void {
       state.posts = value;
     },
@@ -82,8 +76,8 @@ const store = new Vuex.Store({
     },
     clearSearchParams(state): void {
       state.searchValues = [];
-      state.location = '';
-      state.radius = '';
+      state.radiusSearchValue = '';
+      state.selectedLocation = '';
     },
     setPage(state, value: number): void {
       state.page = value;
@@ -141,6 +135,7 @@ const store = new Vuex.Store({
       if ('page' in queryParams) {
         commit('setPage', parseInt(queryParams.page, 10));
       }
+      dispatch('findPosts');
     },
     updateURIFromState({ state }): void {
       router.replace({
@@ -148,12 +143,12 @@ const store = new Vuex.Store({
         query: {
           ...router.currentRoute.query,
           q: state.searchValues.join(','),
-          city: state.location,
-          radius: state.radius,
+          city: state.selectedLocation,
+          radius: state.radiusSearchValue,
           page: state.page.toString()
         }
       }).catch((err) => err);
-    }
+    },
     findLocationByPlzOrName({ commit, state }): void {
       const newLocations = LocationService.findLocationByPlzOrName(state.locationSearchValue);
       commit('setLocations', newLocations);

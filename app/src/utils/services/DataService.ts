@@ -53,7 +53,7 @@ class DataService {
         const query = new QueryBuilder();
         searchValues.forEach((value) => {
             query.shouldMatch('categories', value)
-                .shouldMatch('title', value)
+                .shouldMatch('title', value);
         });
         query.size(100);
         const queryObject = query.build();

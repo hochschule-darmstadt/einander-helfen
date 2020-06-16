@@ -164,7 +164,7 @@
 <!-- test content -->
 <script lang="ts">
     import Header from '@/components/layout/Header.vue';
-import Post from '@/models/post';
+    import Post from '@/models/post';
     import Vue from 'vue';
     import {mapActions, mapState} from 'vuex';
 
@@ -203,15 +203,14 @@ import Post from '@/models/post';
             };
         },
         computed: {
-    ...mapState(['posts', 'page', 'selectedLocation', 'radiusSearchValue']),
-    visiblePages(): Post[] {
-            {
+            ...mapState(['posts', 'page', 'selectedLocation', 'radiusSearchValue']),
+            visiblePages(): Post[] {
                 return this.posts.slice(
                     (this.page - 1) * this.perPage,
                     this.page * this.perPage
                 );
             },
-    currentPost(): Post | null {
+            currentPost(): Post | null {
                 return this.postIsOpen
                     ? this.posts[this.currentPostId]
                     : null;
@@ -224,9 +223,9 @@ import Post from '@/models/post';
             this.hydrateStateFromURIParams(this.$route.query);
         },
         watch: {
-            posts(val: Advertisement[], oldVal: Advertisement[]): void {
+            posts(val: Post[], oldVal: Post[]): void {
                 if (val.length === 1) {
-                    this.openAdvertisement(0);
+                    this.openPost(0);
                 }
                 const markers = val.map((post) => [post.lat, post.lon] as LatLngTuple);
                 (this.$refs.map as LMap).fitBounds(markers);
@@ -236,16 +235,19 @@ import Post from '@/models/post';
             },
             selectedLocation(): void {
                 this.findPosts();
+            },
+            page(value): void {
+                this.setResultPage(value);
             }
         },
         methods: {
-    ...mapActions(['hydrateStateFromURIParams', 'setResultPage']),
-    openPost(index: number): void {
-                this.postIsOpen = true;
-                this.currentPostId = index + ((this.page - 1) * this.perPage);
-            },
-    closePost(): void {
-      this.currentPostId = 0;
+            ...mapActions(['hydrateStateFromURIParams', 'setResultPage', 'findPosts']),
+            openPost(index: number): void {
+                        this.postIsOpen = true;
+                        this.currentPostId = index + ((this.page - 1) * this.perPage);
+                    },
+            closePost(): void {
+                this.currentPostId = 0;
                 this.postIsOpen = false;
                 const currentPost = this.posts[this.currentPostId];
                 const location = [currentPost.lat, currentPost.lon] as LatLngTuple;
@@ -253,12 +255,7 @@ import Post from '@/models/post';
                     (this.$refs.map as LMap).setCenter(location);
                 });
             },
-  },
-  watch: {
-    page(value): void {
-      this.setResultPage(value);
-    }
-  }
+        }
     });
 </script>
 
