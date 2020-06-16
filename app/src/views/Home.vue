@@ -36,20 +36,11 @@
 
         <v-row justify="center">
           <v-col cols="12" md="6">
-            <v-autocomplete
-              label="Standort"
-              :items="volunteerCities"
-              v-model="selectedCity"
-              prepend-inner-icon="place"
-            >Mein Standort</v-autocomplete>
+            <location-search-bar />
           </v-col>
 
           <v-col cols="12" md="2">
-            <v-autocomplete
-              label="Umkreis"
-              :items="volunteerRadius"
-              v-model="selectedRadius"
-            >Überall</v-autocomplete>
+            <radius />
           </v-col>
         </v-row>
       </v-form>
@@ -92,6 +83,9 @@ import Toolbar from '@/components/layout/Toolbar.vue';
 import VueSlickCarousel from 'vue-slick-carousel';
 import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css';
 import 'vue-slick-carousel/dist/vue-slick-carousel.css';
+import LocationSearchBar from '@/components/ui/LocationSearchBar.vue';
+import Radius from '@/components/ui/Radius.vue';
+import { mapActions } from 'vuex';
 
 import tags from '@/utils/tags';
 
@@ -100,44 +94,47 @@ console.log(tags);
 export default Vue.extend({
   components: {
     VueSlickCarousel,
+    LocationSearchBar,
+    Radius,
     Toolbar
   },
-
-
-  data: () => ({
-    volunteerTags: [
-      {
-        title: 'Macher/in',
-        img: require('../../public/images/macherIN.jpeg')
-      },
-      {
-        title: 'Denker/in',
-        img: require('../../public/images/denkerIN.jpeg')
-      },
-      {
-        title: 'Kommunikative',
-        img: require('../../public/images/jugend.jpeg')
-      },
-      {
-        title: 'Soziale',
-        img: require('../../public/images/sozial.jpeg')
-      }
-    ],
-    volunteerCities: [
-      'Main Standort',
-      'Darmstadt',
-      'Frankfurt am Main',
-      'Wiesbaden',
-      'Mainz'
-    ],
-    volunteerRadius: ['Überall', '5 km', '10 km', '25 km', '50 km'],
-    selectedCity: '',
-    selectedRadius: '',
-  }),
+  data(): {
+    volunteerTags: {title:string, img: string}[],
+    selectedTag: string,
+  } {
+    return {
+      volunteerTags: [
+        {
+          title: 'Macher/in',
+          img: require('../../public/images/macherIN.jpeg')
+        },
+        {
+          title: 'Denker/in',
+          img: require('../../public/images/denkerIN.jpeg')
+        },
+        {
+          title: 'Jugendarbeit',
+          img: require('../../public/images/jugend.jpeg')
+        },
+        {
+          title: 'Soziales',
+          img: require('../../public/images/sozial.jpeg')
+        }
+      ],
+     // volunteerRadius: ['Überall', '5 km', '10 km', '25 km', '50 km'],
+      selectedTag: '',
+    };
+  },
   computed: {
     ...mapState(['searchProposals'])
   },
+  watch: {
+    selectedTag(newValue, oldValue): void {
+      this.setSelectedTag(newValue);
+    },
+  },
   methods: {
+    ...mapActions(['setSelectedTag']),
     addSearchTag(tag: {tag: string}): void {
       console.log(tag);
       this.$router.push({
