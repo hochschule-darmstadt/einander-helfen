@@ -105,7 +105,7 @@ placeNameArray = placeNamePostcodeArray.copy()
 
 print("adding aggregated places")
 
-"""for place in placeNameArray:
+for place in placeNameArray:
 
 	if ([place.placeName, place.state] in alreadySearchedPlaces):
 		continue
@@ -142,7 +142,7 @@ print("adding aggregated places")
 		placeNamePostcodeArray.append(aggregatedPlace)
 
 	alreadySearchedPlaces.append([place.placeName, place.state])
-"""
+
 # save all places to csv
 with open(fileName, mode='w') as csvfile:
 		places_writer = csv.writer(csvfile, delimiter=',')
