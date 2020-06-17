@@ -106,6 +106,7 @@ import 'vue-slick-carousel/dist/vue-slick-carousel.css';
 import LocationSearchBar from '@/components/ui/LocationSearchBar.vue';
 import Radius from '@/components/ui/Radius.vue';
 import Tag from '@/models/tag';
+import TagService from '../utils/services/TagService';
 import SearchBar from '@/components/ui/SearchBar.vue';
 
 
@@ -117,30 +118,27 @@ export default Vue.extend({
     Radius,
     Toolbar
   },
-  data(): {
-    volunteerTags: Array<{title: string, img: string}>,
-  } {
-    return {
-      volunteerTags: [
-        {
-          title: 'Macher/in',
-          img: require('../../public/images/macherIN.jpeg')
-        },
-        {
-          title: 'Denker/in',
-          img: require('../../public/images/denkerIN.jpeg')
-        },
-        {
-          title: 'Jugendarbeit',
-          img: require('../../public/images/jugend.jpeg')
-        },
-        {
-          title: 'Soziales',
-          img: require('../../public/images/sozial.jpeg')
-        }
-      ],
-    };
-  },
+   data: () => ({
+    volunteerTags: [
+      {
+        title: 'Macher/in',
+        img: require('../../public/images/macherIN.jpeg')
+      },
+      {
+        title: 'Denker/in',
+        img: require('../../public/images/denkerIN.jpeg')
+      },
+      {
+        title: 'Kommunikative',
+        img: require('../../public/images/jugend.jpeg')
+      },
+      {
+        title: 'Soziale',
+        img: require('../../public/images/sozial.jpeg')
+      }
+    ],
+    currentSearchValue: ''
+  }),
    created(): void {
     // Initialize the searchProposals!
     this.initializeSearchProposals(TagService.getTags());
