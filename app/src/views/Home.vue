@@ -1,12 +1,14 @@
 <template>
   <div class="home">
     <Toolbar />
-    <VueSlickCarousel :dots="true" :infinite="true" :autoplay="true" :autoplaySpeed="30000" style="margin-top:4vh">
+    <VueSlickCarousel
       :dots="true"
       :infinite="true"
       :autoplay="true"
       :autoplaySpeed="30000"
+      style="margin-top:4vh"
     >
+      :dots="true" :infinite="true" :autoplay="true" :autoplaySpeed="30000" >
       <picture>
         <source
           media="(max-width: 768px)"
@@ -22,7 +24,10 @@
         <img src="/images/header/2.jpg" />
       </picture>
       <picture>
-        <source media="(max-width: 768px)" srcset="/images/header/3_phone.jpg" />
+        <source
+          media="(max-width: 768px)"
+          srcset="/images/header/3_phone.jpg"
+        />
         <img src="/images/header/3.jpg" />
       </picture>
     </VueSlickCarousel>
@@ -49,12 +54,10 @@
         <v-row justify="center">
           <v-col cols="12" md="6">
             <location-search-bar />
-            >
           </v-col>
 
           <v-col cols="12" md="2">
             <radius />
-            >
           </v-col>
         </v-row>
       </v-form>
@@ -96,19 +99,18 @@
 </template>
 
 <script lang="ts">
-import {mapActions, mapState} from 'vuex';
-import Vue from 'vue';
-import Toolbar from '@/components/layout/Toolbar.vue';
+import { mapActions, mapState } from 'vuex'
+import Vue from 'vue'
+import Toolbar from '@/components/layout/Toolbar.vue'
 
-import VueSlickCarousel from 'vue-slick-carousel';
-import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css';
-import 'vue-slick-carousel/dist/vue-slick-carousel.css';
-import LocationSearchBar from '@/components/ui/LocationSearchBar.vue';
-import Radius from '@/components/ui/Radius.vue';
-import Tag from '@/models/tag';
-import TagService from '../utils/services/TagService';
-import SearchBar from '@/components/ui/SearchBar.vue';
-
+import VueSlickCarousel from 'vue-slick-carousel'
+import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
+import 'vue-slick-carousel/dist/vue-slick-carousel.css'
+import LocationSearchBar from '@/components/ui/LocationSearchBar.vue'
+import Radius from '@/components/ui/Radius.vue'
+import Tag from '@/models/tag'
+import TagService from '../utils/services/TagService'
+import SearchBar from '@/components/ui/SearchBar.vue'
 
 export default Vue.extend({
   components: {
@@ -118,7 +120,7 @@ export default Vue.extend({
     Radius,
     Toolbar
   },
-   data: () => ({
+  data: () => ({
     volunteerTags: [
       {
         title: 'Macher/in',
@@ -139,28 +141,33 @@ export default Vue.extend({
     ],
     currentSearchValue: ''
   }),
-   created(): void {
+  created (): void {
     // Initialize the searchProposals!
-    this.initializeSearchProposals(TagService.getTags());
+    this.initializeSearchProposals(TagService.getTags())
   },
   computed: {
     ...mapState(['searchProposals', 'selectedLocation', 'radiusSearchValue']),
-        mySearchProposals(): string[] {
+    mySearchProposals (): string[] {
       if (!this.currentSearchValue || this.currentSearchValue.length < 2) {
-        return [];
+        return []
       }
-      const searchTerm = this.currentSearchValue;
-      const listOfMatchingTerms = this.matchSearchInput(searchTerm, this.searchProposals
-        .filter((element) => 'label' in element));
-      const rankedListOfOrderedTerms = this.rankTerms(searchTerm, listOfMatchingTerms);
+      const searchTerm = this.currentSearchValue
+      const listOfMatchingTerms = this.matchSearchInput(
+        searchTerm,
+        this.searchProposals.filter(element => 'label' in element)
+      )
+      const rankedListOfOrderedTerms = this.rankTerms(
+        searchTerm,
+        listOfMatchingTerms
+      )
 
-      return rankedListOfOrderedTerms;
+      return rankedListOfOrderedTerms
     }
   },
   methods: {
     ...mapActions(['initializeSearchProposals']),
-    addSearchTag(tag: string): void {
-      const tagName = tag.substr(0, tag.indexOf(' ('));
+    addSearchTag (tag: string): void {
+      const tagName = tag.substr(0, tag.indexOf(' ('))
 
       this.$router.push({
         name: 'resultPage',
@@ -169,56 +176,56 @@ export default Vue.extend({
           city: this.selectedLocation,
           radius: this.radiusSearchValue
         }
-      });
+      })
     },
-    matchSearchInput(searchTerm: string, proposals: Tag[]): string[] {
-      const stringArray: string[] = [];
-      searchTerm = searchTerm.toLowerCase();
+    matchSearchInput (searchTerm: string, proposals: Tag[]): string[] {
+      const stringArray: string[] = []
+      searchTerm = searchTerm.toLowerCase()
 
-      proposals.forEach((tag) => {
+      proposals.forEach(tag => {
         if (tag.label.toLowerCase().match(searchTerm)) {
-          stringArray.push(tag.label);
+          stringArray.push(tag.label)
         } else {
-          tag.synonyms.forEach((element) => {
+          tag.synonyms.forEach(element => {
             if (element.toLowerCase().match(searchTerm)) {
-              stringArray.push(tag.label + ' (' + element + ')');
+              stringArray.push(tag.label + ' (' + element + ')')
             }
-          });
+          })
         }
-      });
-      return stringArray;
+      })
+      return stringArray
     },
-    rankTerms(searchTerm: string, terms: string[]): string[] {
-      return terms.map((term) => {
+    rankTerms (searchTerm: string, terms: string[]): string[] {
+      return terms
+        .map(term => {
           // 2x on start; 1x on end, 0.5x in the middle
           const rank = term.toLowerCase().startsWith(searchTerm.toLowerCase())
             ? 2
-            : this.isSuccessiveMatch(term.toLowerCase(),searchTerm.toLowerCase())
-              ? 1
-              : 0.5;
+            : this.isSuccessiveMatch(
+                term.toLowerCase(),
+                searchTerm.toLowerCase()
+              )
+            ? 1
+            : 0.5
           return {
             label: term,
             rank
-          };
+          }
         })
         .sort((a, b) => Math.sign(b.rank - a.rank))
-        .map((obj) => obj.label);
+        .map(obj => obj.label)
     },
-    isSuccessiveMatch(term: string, searchTerm: string): boolean
-    {
+    isSuccessiveMatch (term: string, searchTerm: string): boolean {
       var isSuccessive: boolean = false;
       var sucArr = term.split(' ');
-      sucArr.forEach((element) => {
-        
-        if(element.startsWith(searchTerm))
-        {
+      sucArr.forEach(element => {
+        if (element.startsWith(searchTerm)) {
           isSuccessive = true;
         }
       });
-      if(sucArr.length < 2)
-      {
-        isSuccessive = false;
-      } 
+      if (sucArr.length < 2) {
+        isSuccessive = false
+      }
       return isSuccessive;
     }
   }
