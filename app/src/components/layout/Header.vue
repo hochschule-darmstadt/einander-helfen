@@ -60,11 +60,11 @@
                     </v-menu>
 
             <v-flex xs12 sm5 md3>
-                 <location-search-bar :is-dark="true"/>
+                 <location-search-bar :dark="true"/>
             </v-flex>
 
             <v-flex xs12 sm4 md1>
-                <radius :is-dark="true" />
+                <radius :dark="true" />
             </v-flex>
 
             <v-menu offset-y>
