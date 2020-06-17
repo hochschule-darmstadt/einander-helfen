@@ -193,7 +193,8 @@ export default Vue.extend({
           })
         }
       })
-      return stringArray
+      stringArray.length = 10;
+      return stringArray;
     },
     rankTerms (searchTerm: string, terms: string[]): string[] {
       return terms
