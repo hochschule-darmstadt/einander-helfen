@@ -2,7 +2,6 @@
   <div class="home">
     <Toolbar />
     <VueSlickCarousel :dots="true" :infinite="true" :autoplay="true" :autoplaySpeed="30000" style="margin-top:4vh">
-    style="margin-top:4vh">
       <picture>
         <source media="(max-width: 768px)" srcset="/images/header/1_phone.jpg" />
         <img src="/images/header/1.jpg" />
