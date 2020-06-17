@@ -1,33 +1,17 @@
 <template>
   <div class="home">
     <Toolbar />
-    <VueSlickCarousel
-      :dots="true"
-      :infinite="true"
-      :autoplay="true"
-      :autoplaySpeed="30000"
-      style="margin-top:4vh"
-    >
-      :dots="true" :infinite="true" :autoplay="true" :autoplaySpeed="30000" >
+    <VueSlickCarousel :dots="true" :infinite="true" :autoplay="true" :autoplaySpeed="30000">
       <picture>
-        <source
-          media="(max-width: 768px)"
-          srcset="/images/header/1_phone.jpg"
-        />
+        <source media="(max-width: 768px)" srcset="/images/header/1_phone.jpg" />
         <img src="/images/header/1.jpg" />
       </picture>
       <picture>
-        <source
-          media="(max-width: 768px)"
-          srcset="/images/header/2_phone.jpg"
-        />
+        <source media="(max-width: 768px)" srcset="/images/header/2_phone.jpg" />
         <img src="/images/header/2.jpg" />
       </picture>
       <picture>
-        <source
-          media="(max-width: 768px)"
-          srcset="/images/header/3_phone.jpg"
-        />
+        <source media="(max-width: 768px)" srcset="/images/header/3_phone.jpg" />
         <img src="/images/header/3.jpg" />
       </picture>
     </VueSlickCarousel>
@@ -36,18 +20,9 @@
       <v-form class="mt-12 mb-12">
         <v-row justify="center">
           <v-col cols="12" md="8">
-            <v-combobox
-              style="background: white"
-              rounded
-              color="white"
-              label="z.B. Macher/in"
-              append-icon="search"
-              item-text="tag"
-              autocomplete="off"
-              :items="mySearchProposals"
-              @input="addSearchTag"
-              :search-input.sync="currentSearchValue"
-            ></v-combobox>
+            <search-bar
+              @input="handleSearchEvent"
+            />
           </v-col>
         </v-row>
 
@@ -66,14 +41,10 @@
         <template v-for="tag in volunteerTags">
           <v-col cols="12" md="2" :key="tag.title">
             <v-hover v-slot:default="{ hover }">
-              <v-card
-                class="mx-auto"
-                :elevation="hover ? 12 : 2"
-                :class="{ 'on-hover': hover }"
-              >
+              <v-card class="mx-auto" :elevation="hover ? 12 : 2" :class="{ 'on-hover': hover }">
                 <router-link
                   style="text-decoration: none; color: inherit;"
-                  :to="{ name: 'resultPage', query: { q: tag.title } }"
+                  :to="{name: 'resultPage', query:{q: tag.title} }"
                 >
                   <v-img
                     class="white--text align-end mt-10"
@@ -82,10 +53,7 @@
                     :src="tag.img"
                   >
                     <v-card>
-                      <v-card-title
-                        class="justify-center black--text"
-                        v-html="tag.title"
-                      ></v-card-title>
+                      <v-card-title class="justify-center black--text" v-html="tag.title"></v-card-title>
                     </v-card>
                   </v-img>
                 </router-link>
@@ -99,18 +67,18 @@
 </template>
 
 <script lang="ts">
-import { mapActions, mapState } from 'vuex'
-import Vue from 'vue'
-import Toolbar from '@/components/layout/Toolbar.vue'
+import {mapActions, mapState} from 'vuex';
+import Vue from 'vue';
+import Toolbar from '@/components/layout/Toolbar.vue';
 
-import VueSlickCarousel from 'vue-slick-carousel'
-import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
-import 'vue-slick-carousel/dist/vue-slick-carousel.css'
-import LocationSearchBar from '@/components/ui/LocationSearchBar.vue'
-import Radius from '@/components/ui/Radius.vue'
-import Tag from '@/models/tag'
-import TagService from '../utils/services/TagService'
-import SearchBar from '@/components/ui/SearchBar.vue'
+import VueSlickCarousel from 'vue-slick-carousel';
+import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css';
+import 'vue-slick-carousel/dist/vue-slick-carousel.css';
+import LocationSearchBar from '@/components/ui/LocationSearchBar.vue';
+import Radius from '@/components/ui/Radius.vue';
+import Tag from '@/models/tag';
+import SearchBar from '@/components/ui/SearchBar.vue';
+
 
 export default Vue.extend({
   components: {
@@ -120,114 +88,43 @@ export default Vue.extend({
     Radius,
     Toolbar
   },
-  data: () => ({
-    volunteerTags: [
-      {
-        title: 'Macher/in',
-        img: require('../../public/images/macherIN.jpeg')
-      },
-      {
-        title: 'Denker/in',
-        img: require('../../public/images/denkerIN.jpeg')
-      },
-      {
-        title: 'Kommunikative',
-        img: require('../../public/images/jugend.jpeg')
-      },
-      {
-        title: 'Soziale',
-        img: require('../../public/images/sozial.jpeg')
-      }
-    ],
-    currentSearchValue: ''
-  }),
-  created (): void {
-    // Initialize the searchProposals!
-    this.initializeSearchProposals(TagService.getTags())
+  data(): {
+    volunteerTags: Array<{title: string, img: string}>,
+  } {
+    return {
+      volunteerTags: [
+        {
+          title: 'Macher/in',
+          img: require('../../public/images/macherIN.jpeg')
+        },
+        {
+          title: 'Denker/in',
+          img: require('../../public/images/denkerIN.jpeg')
+        },
+        {
+          title: 'Jugendarbeit',
+          img: require('../../public/images/jugend.jpeg')
+        },
+        {
+          title: 'Soziales',
+          img: require('../../public/images/sozial.jpeg')
+        }
+      ],
+    };
   },
   computed: {
-    ...mapState(['searchProposals', 'selectedLocation', 'radiusSearchValue']),
-    mySearchProposals (): string[] {
-      if (!this.currentSearchValue || this.currentSearchValue.length < 1) {
-        return []
-      }
-      const searchTerm = this.currentSearchValue
-      const listOfMatchingTerms = this.matchSearchInput(
-        searchTerm,
-        this.searchProposals.filter(element => 'label' in element)
-      )
-      const rankedListOfOrderedTerms = this.rankTerms(
-        searchTerm,
-        listOfMatchingTerms
-      )
-
-      return rankedListOfOrderedTerms
-    }
+    ...mapState(['selectedLocation', 'radiusSearchValue'])
   },
   methods: {
-    ...mapActions(['initializeSearchProposals']),
-    addSearchTag (tag: string): void {
-      const tagName = tag.substr(0, tag.indexOf(' ('))
-
+    handleSearchEvent(searchValue: string) {
       this.$router.push({
         name: 'resultPage',
         query: {
-          q: tagName,
+          q: searchValue,
           city: this.selectedLocation,
           radius: this.radiusSearchValue
         }
-      })
-    },
-    matchSearchInput (searchTerm: string, proposals: Tag[]): string[] {
-      const stringArray: string[] = []
-      searchTerm = searchTerm.toLowerCase()
-
-      proposals.forEach(tag => {
-        if (tag.label.toLowerCase().match(searchTerm)) {
-          stringArray.push(tag.label)
-        } else {
-          tag.synonyms.forEach(element => {
-            if (element.toLowerCase().match(searchTerm)) {
-              stringArray.push(tag.label + ' (' + element + ')')
-            }
-          })
-        }
-      })
-      stringArray.length = 10;
-      return stringArray;
-    },
-    rankTerms (searchTerm: string, terms: string[]): string[] {
-      return terms
-        .map(term => {
-          // 2x on start; 1x on end, 0.5x in the middle
-          const rank = term.toLowerCase().startsWith(searchTerm.toLowerCase())
-            ? 2
-            : this.isSuccessiveMatch(
-                term.toLowerCase(),
-                searchTerm.toLowerCase()
-              )
-            ? 1
-            : 0.5
-          return {
-            label: term,
-            rank
-          }
-        })
-        .sort((a, b) => Math.sign(b.rank - a.rank))
-        .map(obj => obj.label)
-    },
-    isSuccessiveMatch (term: string, searchTerm: string): boolean {
-      var isSuccessive: boolean = false;
-      var sucArr = term.split(' ');
-      sucArr.forEach(element => {
-        if (element.startsWith(searchTerm)) {
-          isSuccessive = true;
-        }
       });
-      if (sucArr.length < 2) {
-        isSuccessive = false
-      }
-      return isSuccessive;
     }
   }
 });
