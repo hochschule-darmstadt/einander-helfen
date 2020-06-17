@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import DataService from '../utils/services/DataService';
-import Location from '@/models/location';
 import LocationService from '@/utils/services/LocationService';
 import router from '@/router';
 import Tag from '@/models/tag';
@@ -39,7 +38,6 @@ const store = new Vuex.Store({
     labels: [] as string[],
     synonyms: [] as string[],
     searchValues: [] as string[],
-    locations: [] as Location[],
     locationSearchValue: '',
     radiusSearchValue: '',
     selectedLocation: '',
@@ -58,9 +56,6 @@ const store = new Vuex.Store({
     },
     setPosts(state, value): void {
       state.posts = value;
-    },
-    setLocations(state, value): void {
-      state.locations = value;
     },
     setLocationSearchValue(state, value): void {
       state.locationSearchValue = value;
@@ -149,10 +144,6 @@ const store = new Vuex.Store({
         }
       }).catch((err) => err);
     },
-    findLocationByPlzOrName({ commit, state }): void {
-      const newLocations = LocationService.findLocationByPlzOrName(state.locationSearchValue);
-      commit('setLocations', newLocations);
-    },
     setLocationSearchValue({ commit, dispatch }, locationSearchValue): void {
       commit('setLocationSearchValue', locationSearchValue);
     },
@@ -169,10 +160,7 @@ const store = new Vuex.Store({
   },
   getters: {
     getLocations: (state) => {
-      if (state.locations.length === 0) {
-        return LocationService.findLocationByPlzOrName(state.locationSearchValue || state.selectedLocation);
-      }
-      return state.locations;
+      return LocationService.findLocationByPlzOrName(state.locationSearchValue || state.selectedLocation);
     }
   }
 });

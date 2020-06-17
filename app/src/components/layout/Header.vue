@@ -1,29 +1,29 @@
 <template>
     <header>
-        <v-row
+        <v-layout row wrap justify-space-around
                 no-gutters
                 style="padding: 1vh; background: #00254f">
-            <v-btn
-                    :key="index"
-                    :to="link.route"
+            <v-btn class="d-none d-sm-flex justify-center mr-5"
+                    
                     height="75px"
                     width="80px"
                     justify="left"
                     rounded
                     router
-                    v-for="(link, index) in links"
+                    
                     depressed
                     icon
-                >{{ link.text }}  <v-img class="mt-1" width=80px height=75px src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Heart-hand-shake.svg/256px-Heart-hand-shake.svg.png"></v-img>
+                > <router-link to="/" exact><v-img class="mt-1" width=80px height=75px src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Heart-hand-shake.svg/256px-Heart-hand-shake.svg.png"></v-img>
+        </router-link>
          </v-btn>
-            <v-spacer></v-spacer>
-            <v-col
-                    cols="4"
-                    md="4"
-                    style="background: white; border-radius: 20px">
-                <search-bar
+           
+            <v-flex
+                    md6 sm8
+                    style="background: white; border-radius: 20px; margin-right:2%">
+                    <search-bar
                   @input="addSearchValue"
                 />
+            <v-spacer></v-spacer>
                 <v-chip-group
                         active-class="primary-text"
                         column
@@ -36,29 +36,66 @@
                         {{ tag }}
                     </v-chip>
                 </v-chip-group>
-            </v-col>
+            </v-flex>
 
-             <v-col
-                cols="2"
-                md="2">
-                <location-search-bar />
-            </v-col>
+             <v-menu offset-y>
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn
+                            class="hidden-md-and-up"
+                            v-bind="attrs"
+                            v-on="on"
+                            dark
+                            style="margin-top: 1vh"
+                            icon
+                            >
+                            <v-icon>more_vert</v-icon>
+                            </v-btn>
+                        </template>
+                        <v-list>
+                            <v-list-item
+                            v-for="(link, index) in links"
+                            :key="index"
+                            router
+                            :to="link.route"
+                            >
+                            <v-list-item-title>{{ link.text }}</v-list-item-title>
+                            </v-list-item>
+                        </v-list>
+                    </v-menu>
 
-            <v-col
-                cols="1"
-                md="1">
+            <v-flex md3 sm5>
+                 <location-search-bar/>
+            </v-flex>
+
+            <v-flex md1 sm4>
                 <radius />
-            </v-col>
-
-            <v-spacer></v-spacer>
-
-            <v-btn
-                    dark
-                    style="margin-top: 1vh"
-                    icon>
-                <v-icon>more_vert</v-icon>
-            </v-btn>
-        </v-row>
+            </v-flex>
+            
+            <v-menu offset-y>
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn
+                            class="hidden-sm-and-down"
+                            v-bind="attrs"
+                            v-on="on"
+                            dark
+                            style="margin-top: 1vh"
+                            icon
+                            >
+                            <v-icon>more_vert</v-icon>
+                            </v-btn>
+                        </template>
+                        <v-list>
+                            <v-list-item
+                            v-for="(link, index) in links"
+                            :key="index"
+                            router
+                            :to="link.route"
+                            >
+                            <v-list-item-title>{{ link.text }}</v-list-item-title>
+                            </v-list-item>
+                        </v-list>
+                    </v-menu>
+        </v-layout>
     </header>
 </template>
 
@@ -80,7 +117,10 @@
         } {
             return {
                 links: [
-                    {text: '', route: '/'},
+                    {text: 'Home', route: '/'},
+                    { text: 'Über uns', route: '/about' },
+                    { text: 'Impressum', route: '/imprint' },
+                    { text: 'Datenschutzerklärung', route: '/privacy' }
                 ],
             };
         },

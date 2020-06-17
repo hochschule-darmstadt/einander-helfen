@@ -2,7 +2,6 @@ import Location from '@/models/location';
 import locationArray from '@/utils/range_search/index';
 
 class LocationService {
-    public csvFile = '@/public/files/cities_lat_lon.csv';
     public locations: Location[] = [];
     public selectedLocationAmount = 10;
     public diversityValue = 5;
@@ -11,7 +10,7 @@ class LocationService {
      * The constructor initializes the `Location` list.
      */
     constructor() {
-        this.loadLocationCsv('s');
+        this.loadLocationCsv();
     }
 
     public findByTitle(title: string): Location|undefined {
@@ -136,9 +135,8 @@ class LocationService {
 
     /**
      * This method loads a CSV file and stores the content as `Location` in locations.
-     * @param csvFile The CSV input file
      */
-    private loadLocationCsv(csvFile): void {
+    private loadLocationCsv(): void {
         locationArray.forEach((location) => {
             this.locations.push({
                 name: location.name,
