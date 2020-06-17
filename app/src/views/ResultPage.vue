@@ -3,33 +3,8 @@
     <Header />
     
       <v-layout row wrap no-gutters>
-        <v-flex sm12 md6>
-          <div style="height:70vh;overflow:auto; margin-bottom:5%">
-            <template v-for="(advertisement, i) in visiblePages">
-              <v-card class="mb-3">
-                <v-list-item three-line @click="openPost(i)">
-                  <v-list-item-content>
-                    <v-list-item-title class="headline mb-1">{{
-                      advertisement.title
-                    }}</v-list-item-title>
-                    <v-list-item-subtitle>{{
-                      advertisement.task
-                    }}</v-list-item-subtitle>
-                  </v-list-item-content>
-
-                  <v-img
-                    max-width="80px"
-                    height="80px"
-                    contain
-                    :src="advertisement.image"
-                  ></v-img>
-                </v-list-item>
-              </v-card>
-            </template>
-          </div>
-        </v-flex>
-        
-        <v-flex xs12 md6  v-if="!postIsOpen">
+        <!-- Map -->
+        <v-flex xs12 md6 order-md2 v-if="!postIsOpen">
            <div class="map" v-if="!postIsOpen">
                 <v-card tile height="70vh">
                     <div id="map" :style="{height: map.height, width: map.width}">
@@ -56,7 +31,8 @@
             </div>
         </v-flex>
         
-        <v-flex sm12 md6  v-if="postIsOpen">
+        <!-- right side content-->
+        <v-flex sm12 md6 order-md2 v-if="postIsOpen" mb-5>
           <v-card
             tile
             height="100%"
@@ -67,7 +43,7 @@
               <v-icon>arrow_back</v-icon>
             </v-btn>
            
-            <!--display title, subtitle and image on the left side-->
+            <!--display title, subtitle and image on the right side-->
             <v-list-item-content style="margin-top:2%" class="headline">{{
                 currentPost.title
               }}
@@ -83,12 +59,9 @@
               :src="currentPost.image"
             ></v-img>
           </v-list-item>
- 
 
           <!--display content on the right side-->
-          
-          <v-card-text style="padding-left:5%; padding-right:5%">
-            
+          <v-card-text style="padding-left:5%; padding-right:5%">   
             <v-row v-if="currentPost.location">
              <v-flex md4 xs6>Einsatzort</v-flex>
              <v-flex md8 xs6 v-html="currentPost.location"></v-flex>
@@ -121,9 +94,6 @@
               <v-flex md4 xs6>Möglichkeiten</v-flex>
               <v-flex md8 xs6 v-html="currentPost.opportunities"></v-flex>
             </v-row>
-
-
-           
           </v-card-text>
 
           <v-card-actions>
@@ -151,16 +121,41 @@
             </v-flex>
           </v-card-actions>
         </v-card>
-
-        
         </v-flex>
-      <v-layout row wrap justify-center>
-                 <!--pageination-->
+        
+        <!--left side content-->
+        <v-flex sm12 md6 order-md1 >
+          <div style="height:100% ;overflow:auto; margin-bottom:5%">
+            <template v-for="(advertisement, i) in visiblePages">
+              <v-card class="mb-3">
+                <v-list-item three-line @click="openPost(i)">
+                  <v-list-item-content>
+                    <v-list-item-title class="headline mb-1">{{
+                      advertisement.title
+                    }}</v-list-item-title>
+                    <v-list-item-subtitle>{{
+                      advertisement.task
+                    }}</v-list-item-subtitle>
+                  </v-list-item-content>
+
+                  <v-img
+                    max-width="80px"
+                    height="80px"
+                    contain
+                    :src="advertisement.image"
+                  ></v-img>
+                </v-list-item>
+              </v-card>
+            </template>
+          </div>
+        </v-flex>
+
+      </v-layout>
+                       <!--pageination-->
           <div class="text-center" style="margin-top:2%; margin-bottom:1%">
             <v-pagination @input="setResultPage($event)" :value="page" :length="numberOfPages" total-visible="7" color="#054C66"></v-pagination>
           </div>
-      </v-layout>
-      </v-layout>
+   
   </div>
 
 
