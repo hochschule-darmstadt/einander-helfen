@@ -33,10 +33,10 @@
         
         <!-- right side content-->
         <v-flex sm12 md6 order-md2 v-if="postIsOpen" mb-5>
+          <div>
           <v-card
             tile
-            height="100%"
-            width="100%"
+            style="height:70vh ;overflow:auto"
           >
           <v-list-item three-line>
             <v-btn class="mr-3" text @click="closePost()">
@@ -122,11 +122,12 @@
             </v-flex>
           </v-card-actions>
         </v-card>
+          </div>
         </v-flex>
         
         <!--left side content-->
         <v-flex sm12 md6 order-md1 >
-          <div style="height:100% ;overflow:auto; margin-bottom:5%">
+          <div style="height:70vh ;overflow:auto">
             <template v-for="(advertisement, i) in visiblePages">
               <v-card class="mb-3">
                 <v-list-item three-line @click="openPost(i)">
@@ -184,7 +185,7 @@
             return {
                 postIsOpen: false,
                 currentPostId: 0,
-                perPage: 7,
+                perPage: 15,
                 map: {
                     url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
