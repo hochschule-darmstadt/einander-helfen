@@ -148,7 +148,7 @@ export default Vue.extend({
   computed: {
     ...mapState(['searchProposals', 'selectedLocation', 'radiusSearchValue']),
     mySearchProposals (): string[] {
-      if (!this.currentSearchValue || this.currentSearchValue.length < 2) {
+      if (!this.currentSearchValue || this.currentSearchValue.length < 1) {
         return []
       }
       const searchTerm = this.currentSearchValue
