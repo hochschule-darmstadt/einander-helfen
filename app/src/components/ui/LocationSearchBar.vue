@@ -1,7 +1,6 @@
 <template>
   <v-row justify="center">
             <v-autocomplete
-              :dark="isDark"
               prepend-inner-icon="place"
               label="Standort"
               :filter="filterLocations"
@@ -43,9 +42,6 @@
           isSearching: false,
           newSelectedLocation: ''
         };
-      },
-      props: {
-          isDark: Boolean
       },
       computed: {
         ...mapState(['selectedLocation']),
