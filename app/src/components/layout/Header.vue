@@ -4,26 +4,22 @@
                 no-gutters
                 style="padding: 1vh; background: #00254f">
             <v-btn class="d-none d-sm-flex justify-center mr-5"
-                    
+
                     height="75px"
                     width="80px"
                     justify="left"
                     rounded
                     router
-                    
+
                     depressed
                     icon
                 > <router-link to="/" exact><v-img class="mt-1" width=80px height=75px src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Heart-hand-shake.svg/256px-Heart-hand-shake.svg.png"></v-img>
         </router-link>
          </v-btn>
-           
-            <v-flex
-                    md6 sm8
-                    style="background: white; border-radius: 20px; margin-right:2%">
-                    <search-bar
-                  @input="addSearchValue"
-                />
-            <v-spacer></v-spacer>
+
+            <v-flex xs10 sm8 md6 style="background: white; border-radius: 20px; margin-right:2%">
+                <search-bar @input="addSearchValue"/>
+                <v-spacer></v-spacer>
                 <v-chip-group
                         active-class="primary-text"
                         column
@@ -63,14 +59,14 @@
                         </v-list>
                     </v-menu>
 
-            <v-flex md3 sm5>
-                 <location-search-bar/>
+            <v-flex xs12 sm5 md3>
+                 <location-search-bar :dark="true"/>
             </v-flex>
 
-            <v-flex md1 sm4>
-                <radius />
+            <v-flex xs12 sm4 md1>
+                <radius :dark="true" />
             </v-flex>
-            
+
             <v-menu offset-y>
                         <template v-slot:activator="{ on, attrs }">
                             <v-btn

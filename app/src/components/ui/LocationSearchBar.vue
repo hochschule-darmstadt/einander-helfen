@@ -13,6 +13,7 @@
               v-on:keyup.self="locationOnKeyUp"
               auto-select-first
               v-on:keyup.enter="routeToResultPage"
+              :dark="dark"
               >
             </v-autocomplete>
   </v-row>
@@ -26,8 +27,13 @@
   declare var require: any;
   import Vue from 'vue';
 
-  export default Vue.extend(
-    {
+  export default Vue.extend({
+    props: {
+      dark: {
+        type: Boolean,
+        default: false
+      },
+    },
       data(): {
         newSelectedLocation: string,
         isSearching: boolean,

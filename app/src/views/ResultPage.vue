@@ -1,7 +1,7 @@
 <template>
   <div>
     <Header />
-    
+
       <v-layout row wrap no-gutters>
         <!-- Map -->
         <v-flex xs12 md6 order-md2 v-if="!postIsOpen">
@@ -30,7 +30,7 @@
                 </v-card>
             </div>
         </v-flex>
-        
+
         <!-- right side content-->
         <v-flex sm12 md6 order-md2 v-if="postIsOpen" mb-5>
           <v-card
@@ -42,7 +42,7 @@
             <v-btn class="mr-3" text @click="closePost()">
               <v-icon>arrow_back</v-icon>
             </v-btn>
-           
+
             <!--display title, subtitle and image on the right side-->
             <v-list-item-content style="margin-top:2%" class="headline">{{
                 currentPost.title
@@ -58,7 +58,7 @@
           </v-list-item>
 
           <!--display content on the right side-->
-          <v-card-text style="padding-left:5%; padding-right:5%">   
+          <v-card-text style="padding-left:5%; padding-right:5%">
             <v-row v-if="currentPost.location">
              <v-flex md4 xs6>Einsatzort</v-flex>
              <v-flex md8 xs6 v-html="currentPost.location"></v-flex>
@@ -123,7 +123,7 @@
           </v-card-actions>
         </v-card>
         </v-flex>
-        
+
         <!--left side content-->
         <v-flex sm12 md6 order-md1 >
           <div style="height:100% ;overflow:auto; margin-bottom:5%">
@@ -156,7 +156,7 @@
           <div class="text-center" style="margin-top:2%; margin-bottom:1%">
             <v-pagination @input="setResultPage($event)" :value="page" :length="numberOfPages" total-visible="7" color="#054C66"></v-pagination>
           </div>
-   
+
   </div>
 
 

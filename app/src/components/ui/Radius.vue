@@ -4,6 +4,7 @@
             :items="radii"
             item-value="value"
             v-model="selectedRadius"
+            :dark="dark"
             style="margin-left: 10px; margin-right: 10px;">
     </v-select>
 </template>
@@ -15,8 +16,13 @@
     import QueryBuilder from 'es-query-builder/dist';
     import axios from 'axios';
 
-    export default Vue.extend(
-    {
+    export default Vue.extend({
+        props: {
+            dark: {
+                type: Boolean,
+                default: false
+            },
+        },
         data(): {
             selectedRadius: string,
         } {
