@@ -2,7 +2,7 @@
     <v-select
             label="Umkreis"
             :items="radii"
-            item-value="text"
+            item-value="value"
             v-model="selectedRadius"
             style="margin-left: 10px; margin-right: 10px;">
     </v-select>
@@ -21,7 +21,7 @@
             selectedRadius: string,
         } {
             return {
-                selectedRadius: this.$store.state.radiusSearchValue || 0,
+                selectedRadius: this.$store.state.radiusSearchValue || '',
             };
         },
         watch: {
