@@ -121,7 +121,7 @@ export default Vue.extend({
         name: 'resultPage',
         query: {
           q: searchValue,
-          city: this.selectedLocation,
+          location: this.selectedLocation,
           radius: this.radiusSearchValue
         }
       });

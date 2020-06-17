@@ -138,7 +138,7 @@ const store = new Vuex.Store({
         query: {
           ...router.currentRoute.query,
           q: state.searchValues.join(','),
-          city: state.selectedLocation,
+          location: state.selectedLocation,
           radius: state.radiusSearchValue,
           page: state.page.toString()
         }
