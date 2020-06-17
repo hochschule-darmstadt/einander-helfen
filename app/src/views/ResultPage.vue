@@ -47,9 +47,6 @@
             <v-list-item-content style="margin-top:2%" class="headline">{{
                 currentPost.title
               }}
-              <v-list-item-subtitle class="mt-1">{{
-                currentPost.task
-              }}</v-list-item-subtitle>
             </v-list-item-content>
             <v-img
               style="margin-top:2%"
@@ -93,6 +90,10 @@
             <v-row class="pt-1" v-if="currentPost.opportunities">
               <v-flex md4 xs6>Möglichkeiten</v-flex>
               <v-flex md8 xs6 v-html="currentPost.opportunities"></v-flex>
+            </v-row>
+            <v-row class="pt-1" v-if="currentPost.link">
+              <v-flex md4 xs6>Quelle</v-flex>
+              <v-flex md8 xs6><a>{{ currentPost.link }}</a></v-flex>
             </v-row>
           </v-card-text>
 
