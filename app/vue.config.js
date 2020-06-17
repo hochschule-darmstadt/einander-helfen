@@ -6,7 +6,7 @@ module.exports = {
                     test: /\.csv$/,
                     loader: 'csv-loader',
                     options: {
-                        dynamicTyping: true,
+                        dynamicTyping: false,
                         header: true,
                         skipEmptyLines: true
                     }

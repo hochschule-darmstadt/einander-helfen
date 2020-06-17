@@ -1,5 +1,6 @@
 import axios from 'axios';
 import QueryBuilder, { QueryObject } from 'es-query-builder';
+import Location from '@/models/location';
 
 class DataService {
     private baseUrl = 'https://cai-einander-helfen.fbi.h-da.de/api/_search/';
@@ -38,15 +39,36 @@ class DataService {
         return this.performQuery<T>(queryData);
     }
 
-    public findBySelection({searchValues, location, radius}:
-                               {searchValues: string[], location: string, radius: string}): Promise<any> {
+    public findBySelection({searchValues,
+                               location,
+                               radius
+                            }: {searchValues: string[],
+                                location: Location|undefined,
+                                radius: {text: string, value: string}|undefined
+                            }): Promise<any> {
+        console.log('I want to search, but are not fully implemented. Fix me!!!');
+        console.log(searchValues);
+        console.log(location);
+        console.log(radius);
         const query = new QueryBuilder();
         searchValues.forEach((value) => {
             query.shouldMatch('categories', value)
                 .shouldMatch('title', value);
         });
-        query.size(500);
-        return this.performQuery(query);
+        query.size(100);
+        const queryObject = query.build();
+        // @ts-ignore
+        // queryObject.query.bool.filter = {
+        //     geo_distance: {
+        //         distance: "50km",
+        //         posts: {
+        //             lat: 49.878708,
+        //             lon: 8.646927
+        //         }
+        //     }
+        // };
+
+        return this.performQuery(new QueryBuilder(queryObject));
     }
 
     private performQuery<T>(query: QueryBuilder): Promise<T> {

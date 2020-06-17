@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <Toolbar />
-    <VueSlickCarousel
+    <VueSlickCarousel :dots="true" :infinite="true" :autoplay="true" :autoplaySpeed="30000" style="margin-top:4vh">
       :dots="true"
       :infinite="true"
       :autoplay="true"
@@ -22,10 +22,7 @@
         <img src="/images/header/2.jpg" />
       </picture>
       <picture>
-        <source
-          media="(max-width: 768px)"
-          srcset="/images/header/3_phone.jpg"
-        />
+        <source media="(max-width: 768px)" srcset="/images/header/3_phone.jpg" />
         <img src="/images/header/3.jpg" />
       </picture>
     </VueSlickCarousel>
@@ -51,21 +48,12 @@
 
         <v-row justify="center">
           <v-col cols="12" md="6">
-            <v-autocomplete
-              label="Standort"
-              :items="volunteerCities"
-              v-model="selectedCity"
-              prepend-inner-icon="place"
-              >Mein Standort</v-autocomplete
+            <location-search-bar />
             >
           </v-col>
 
           <v-col cols="12" md="2">
-            <v-autocomplete
-              label="Umkreis"
-              :items="volunteerRadius"
-              v-model="selectedRadius"
-              >Überall</v-autocomplete
+            <radius />
             >
           </v-col>
         </v-row>
@@ -115,57 +103,51 @@ import Toolbar from '@/components/layout/Toolbar.vue';
 import VueSlickCarousel from 'vue-slick-carousel';
 import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css';
 import 'vue-slick-carousel/dist/vue-slick-carousel.css';
-import Post from '../models/post';
-import TagService from '../utils/services/TagService';
+import LocationSearchBar from '@/components/ui/LocationSearchBar.vue';
+import Radius from '@/components/ui/Radius.vue';
 import Tag from '@/models/tag';
+import SearchBar from '@/components/ui/SearchBar.vue';
 
 
 export default Vue.extend({
   components: {
+    SearchBar,
     VueSlickCarousel,
+    LocationSearchBar,
+    Radius,
     Toolbar
   },
-
-  data: () => ({
-    volunteerTags: [
-      {
-        title: 'Macher/in',
-        img: require('../../public/images/macherIN.jpeg')
-      },
-      {
-        title: 'Denker/in',
-        img: require('../../public/images/denkerIN.jpeg')
-      },
-      {
-        title: 'Kommunikative',
-        img: require('../../public/images/jugend.jpeg')
-      },
-      {
-        title: 'Soziale',
-        img: require('../../public/images/sozial.jpeg')
-      }
-    ],
-    volunteerCities: [
-      'Main Standort',
-      'Darmstadt',
-      'Frankfurt am Main',
-      'Wiesbaden',
-      'Mainz'
-    ],
-    volunteerRadius: ['Überall', '5 km', '10 km', '25 km', '50 km'],
-    selectedTag: '',
-    selectedCity: '',
-    selectedRadius: '',
-    objectArray: [] as Post[],
-    currentSearchValue: ''
-  }),
-  created(): void {
+  data(): {
+    volunteerTags: Array<{title: string, img: string}>,
+  } {
+    return {
+      volunteerTags: [
+        {
+          title: 'Macher/in',
+          img: require('../../public/images/macherIN.jpeg')
+        },
+        {
+          title: 'Denker/in',
+          img: require('../../public/images/denkerIN.jpeg')
+        },
+        {
+          title: 'Jugendarbeit',
+          img: require('../../public/images/jugend.jpeg')
+        },
+        {
+          title: 'Soziales',
+          img: require('../../public/images/sozial.jpeg')
+        }
+      ],
+    };
+  },
+   created(): void {
     // Initialize the searchProposals!
     this.initializeSearchProposals(TagService.getTags());
   },
   computed: {
-    ...mapState(['searchProposals']),
-    mySearchProposals(): string[] {
+    ...mapState(['searchProposals', 'selectedLocation', 'radiusSearchValue']),
+        mySearchProposals(): string[] {
       if (!this.currentSearchValue || this.currentSearchValue.length < 2) {
         return [];
       }
@@ -180,15 +162,14 @@ export default Vue.extend({
   methods: {
     ...mapActions(['initializeSearchProposals']),
     addSearchTag(tag: string): void {
-      // Synonyme entfernen und nur nach kanonischem Begriff suchen.
       const tagName = tag.substr(0, tag.indexOf(' ('));
 
       this.$router.push({
         name: 'resultPage',
         query: {
           q: tagName,
-          city: this.selectedCity,
-          radius: this.selectedRadius
+          city: this.selectedLocation,
+          radius: this.radiusSearchValue
         }
       });
     },

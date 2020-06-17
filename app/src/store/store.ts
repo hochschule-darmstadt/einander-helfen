@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import DataService from '../utils/services/DataService';
+import LocationService from '@/utils/services/LocationService';
 import router from '@/router';
 import Tag from '@/models/tag';
 Vue.use(Vuex);
@@ -11,12 +12,36 @@ const store = new Vuex.Store({
       { header: 'Vorschläge' },
       { divider: true },
     ],
+    radii: [
+      {
+        text: 'Überall',
+        value: '',
+      },
+      {
+        text: '5 km',
+        value: '5km',
+      },
+      {
+        text: '10 km',
+        value: '10km',
+      },
+      {
+        text: '25 km',
+        value: '25km',
+      },
+      {
+        text: '50 km',
+        value: '50km',
+      },
+    ],
     posts: [],
     labels: [] as string[],
     synonyms: [] as string[],
     searchValues: [] as string[],
-    location: '',
-    radius: '',
+    locationSearchValue: '',
+    radiusSearchValue: '',
+    selectedLocation: '',
+    selectedTag: '',
     page: 1 as number
   },
   mutations: {
@@ -29,19 +54,25 @@ const store = new Vuex.Store({
     removeSearchValue(state, value): void {
       state.searchValues.splice(state.searchValues.indexOf(value), 1);
     },
-    setLocation(state, value): void {
-      state.location = value;
-    },
-    setRadius(state, value): void {
-      state.radius = value;
-    },
     setPosts(state, value): void {
       state.posts = value;
     },
+    setLocationSearchValue(state, value): void {
+      state.locationSearchValue = value;
+    },
+    setRadiusSearchValue(state, value): void {
+      state.radiusSearchValue = value;
+    },
+    setSelectedTag(state, value): void {
+      state.selectedTag = value;
+    },
+    setSelectedLocation(state, value): void {
+      state.selectedLocation = value;
+    },
     clearSearchParams(state): void {
       state.searchValues = [];
-      state.location = '';
-      state.radius = '';
+      state.radiusSearchValue = '';
+      state.selectedLocation = '';
     },
     setPage(state, value: number): void {
       state.page = value;
@@ -59,10 +90,13 @@ const store = new Vuex.Store({
       commit('initializeSearchProposals', proposals);
     },
     findPosts({ commit, state }): void {
+      const location = LocationService.findByTitle(state.selectedLocation);
+      const searchValues = state.searchValues;
+      const radius = state.radii.find((r) => r.text === state.radiusSearchValue);
       DataService.findBySelection({
-        searchValues: state.searchValues,
-        location: state.location,
-        radius: state.radius
+        searchValues,
+        location,
+        radius
       }).then((result) => commit('setPosts', result));
     },
     addSearchValue({ commit, dispatch }, searchValue): void {
@@ -87,11 +121,11 @@ const store = new Vuex.Store({
       if ('q' in queryParams) {
         dispatch('addSearchValues', queryParams.q.split(','));
       }
-      if ('city' in queryParams) {
-        commit('setLocation', queryParams.city);
+      if ('location' in queryParams) {
+        dispatch('setSelectedLocation', queryParams.location);
       }
       if ('radius' in queryParams) {
-        commit('setRadius', queryParams.radius);
+        dispatch('setRadiusSearchValue', queryParams.radius);
       }
       if ('page' in queryParams) {
         commit('setPage', parseInt(queryParams.page, 10));
@@ -104,11 +138,29 @@ const store = new Vuex.Store({
         query: {
           ...router.currentRoute.query,
           q: state.searchValues.join(','),
-          city: state.location,
-          radius: state.radius,
+          city: state.selectedLocation,
+          radius: state.radiusSearchValue,
           page: state.page.toString()
         }
       }).catch((err) => err);
+    },
+    setLocationSearchValue({ commit, dispatch }, locationSearchValue): void {
+      commit('setLocationSearchValue', locationSearchValue);
+    },
+    setSelectedLocation({ commit, dispatch }, selectedLocation): void {
+      commit('setSelectedLocation', selectedLocation);
+      dispatch('findPosts');
+    },
+    setRadiusSearchValue({ commit, dispatch }, radiusSearchValue): void {
+      commit('setRadiusSearchValue', radiusSearchValue);
+    },
+    setSelectedTag({ commit, dispatch }, selectedTag): void {
+      commit('setSelectedTag', selectedTag);
+    }
+  },
+  getters: {
+    getLocations: (state) => {
+      return LocationService.findLocationByPlzOrName(state.locationSearchValue || state.selectedLocation);
     }
   }
 });
