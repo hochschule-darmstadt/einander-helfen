@@ -151,4 +151,13 @@
   .text-white svg {color: white} /** color for arrows*/
   .text-white i.v-icon.v-icon{color: white} /* color for icon*/ 
   .text-white.theme--light.v-select .v-select__selection--comma{color: white !important }  /**color for selected Radius */
+
+  .text-white.theme--light.v-text-field>.v-input__control>.v-input__slot:before {/**color for line of location */
+    border-color: white;
+    border-top-color: white;
+    border-right-color: white;
+    border-bottom-color: white;
+    border-left-color: white;
+} 
+
 </style>
