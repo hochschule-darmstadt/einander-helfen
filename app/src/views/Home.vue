@@ -1,17 +1,31 @@
 <template>
   <div class="home">
     <Toolbar />
-    <VueSlickCarousel :dots="true" :infinite="true" :autoplay="true" :autoplaySpeed="30000">
+    <VueSlickCarousel
+      :dots="true"
+      :infinite="true"
+      :autoplay="true"
+      :autoplaySpeed="30000"
+    >
       <picture>
-        <source media="(max-width: 768px)" srcset="/images/header/1_phone.jpg" />
+        <source
+          media="(max-width: 768px)"
+          srcset="/images/header/1_phone.jpg"
+        />
         <img src="/images/header/1.jpg" />
       </picture>
       <picture>
-        <source media="(max-width: 768px)" srcset="/images/header/2_phone.jpg" />
+        <source
+          media="(max-width: 768px)"
+          srcset="/images/header/2_phone.jpg"
+        />
         <img src="/images/header/2.jpg" />
       </picture>
       <picture>
-        <source media="(max-width: 768px)" srcset="/images/header/3_phone.jpg" />
+        <source
+          media="(max-width: 768px)"
+          srcset="/images/header/3_phone.jpg"
+        />
         <img src="/images/header/3.jpg" />
       </picture>
     </VueSlickCarousel>
@@ -42,7 +56,8 @@
               :items="volunteerCities"
               v-model="selectedCity"
               prepend-inner-icon="place"
-            >Mein Standort</v-autocomplete>
+              >Mein Standort</v-autocomplete
+            >
           </v-col>
 
           <v-col cols="12" md="2">
@@ -50,7 +65,8 @@
               label="Umkreis"
               :items="volunteerRadius"
               v-model="selectedRadius"
-            >Überall</v-autocomplete>
+              >Überall</v-autocomplete
+            >
           </v-col>
         </v-row>
       </v-form>
@@ -59,10 +75,14 @@
         <template v-for="tag in volunteerTags">
           <v-col cols="12" md="2" :key="tag.title">
             <v-hover v-slot:default="{ hover }">
-              <v-card class="mx-auto" :elevation="hover ? 12 : 2" :class="{ 'on-hover': hover }">
+              <v-card
+                class="mx-auto"
+                :elevation="hover ? 12 : 2"
+                :class="{ 'on-hover': hover }"
+              >
                 <router-link
                   style="text-decoration: none; color: inherit;"
-                  :to="{name: 'resultPage', query:{q: tag.title} }"
+                  :to="{ name: 'resultPage', query: { q: tag.title } }"
                 >
                   <v-img
                     class="white--text align-end mt-10"
@@ -71,7 +91,10 @@
                     :src="tag.img"
                   >
                     <v-card>
-                      <v-card-title class="justify-center black--text" v-html="tag.title"></v-card-title>
+                      <v-card-title
+                        class="justify-center black--text"
+                        v-html="tag.title"
+                      ></v-card-title>
                     </v-card>
                   </v-img>
                 </router-link>
@@ -191,7 +214,7 @@ export default Vue.extend({
           // 2x on start; 1x on end, 0.5x in the middle
           const rank = term.toLowerCase().startsWith(searchTerm.toLowerCase())
             ? 2
-            : term.toLowerCase().endsWith(searchTerm.toLowerCase())
+            : this.isSuccessiveMatch(term.toLowerCase(),searchTerm.toLowerCase())
               ? 1
               : 0.5;
           return {
@@ -201,6 +224,23 @@ export default Vue.extend({
         })
         .sort((a, b) => Math.sign(b.rank - a.rank))
         .map((obj) => obj.label);
+    },
+    isSuccessiveMatch(term: string, searchTerm: string): boolean
+    {
+      var isSuccessive: boolean = false;
+      var sucArr = term.split(' ');
+      sucArr.forEach((element) => {
+        
+        if(element.startsWith(searchTerm))
+        {
+          isSuccessive = true;
+        }
+      });
+      if(sucArr.length < 2)
+      {
+        isSuccessive = false;
+      } 
+      return isSuccessive;
     }
   }
 });
