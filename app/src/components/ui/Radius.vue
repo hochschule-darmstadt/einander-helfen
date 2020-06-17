@@ -1,5 +1,6 @@
 <template>
     <v-select
+            :dark="isDark"
             label="Umkreis"
             :items="radii"
             item-value="value"
@@ -29,6 +30,9 @@
             return {
                 selectedRadius: this.$store.state.radiusSearchValue || '',
             };
+        },
+        props: {
+            isDark: Boolean
         },
         watch: {
             selectedRadius(newValue, oldValue): void {
