@@ -92,7 +92,7 @@ const store = new Vuex.Store({
     findPosts({ commit, state }): void {
       const location = LocationService.findByTitle(state.selectedLocation);
       const searchValues = state.searchValues;
-      const radius = state.radii.find((r) => r.text === state.radiusSearchValue);
+      const radius = state.radiusSearchValue;
       DataService.findBySelection({
         searchValues,
         location,
@@ -138,7 +138,7 @@ const store = new Vuex.Store({
         query: {
           ...router.currentRoute.query,
           q: state.searchValues.join(','),
-          city: state.selectedLocation,
+          location: state.selectedLocation,
           radius: state.radiusSearchValue,
           page: state.page.toString()
         }

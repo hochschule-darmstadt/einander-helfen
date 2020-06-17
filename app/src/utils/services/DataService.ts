@@ -44,12 +44,8 @@ class DataService {
                                radius
                             }: {searchValues: string[],
                                 location: Location|undefined,
-                                radius: {text: string, value: string}|undefined
+                                radius: string
                             }): Promise<any> {
-        console.log('I want to search, but are not fully implemented. Fix me!!!');
-        console.log(searchValues);
-        console.log(location);
-        console.log(radius);
         const query = new QueryBuilder();
         searchValues.forEach((value) => {
             query.shouldMatch('categories', value)
@@ -57,16 +53,19 @@ class DataService {
         });
         query.size(100);
         const queryObject = query.build();
-        // @ts-ignore
-        // queryObject.query.bool.filter = {
-        //     geo_distance: {
-        //         distance: "50km",
-        //         posts: {
-        //             lat: 49.878708,
-        //             lon: 8.646927
-        //         }
-        //     }
-        // };
+
+        if (location && radius) {
+            // @ts-ignore
+            queryObject.query.bool.filter = {
+                geo_distance: {
+                    distance: radius,
+                    geo_location: {
+                        lat: location.lat,
+                        lon: location.lon
+                    }
+                }
+            };
+        }
 
         return this.performQuery(new QueryBuilder(queryObject));
     }
