@@ -38,7 +38,7 @@ export default Vue.extend({
     computed: {
         ...mapState(['searchProposals', 'selectedLocation', 'radiusSearchValue']),
         mySearchProposals(): string[] {
-            if (!this.currentSearchValue || this.currentSearchValue.length < 2) {
+            if (!this.currentSearchValue || this.currentSearchValue.length < 1) {
                 return [];
             }
             const searchTerm = this.currentSearchValue;
@@ -66,6 +66,7 @@ export default Vue.extend({
                     });
                 }
             });
+            stringArray.length = 10;
             return stringArray;
         },
         rankTerms(searchTerm: string, terms: string[]): string[] {
@@ -73,7 +74,7 @@ export default Vue.extend({
                 // 2x on start; 1x on end, 0.5x in the middle
                 const rank = term.toLowerCase().startsWith(searchTerm.toLowerCase())
                         ? 2
-                        : term.toLowerCase().endsWith(searchTerm.toLowerCase())
+                        : this.isSuccessiveMatch(term.toLowerCase(), searchTerm.toLowerCase())
                                 ? 1
                                 : 0.5;
                 return {
@@ -92,6 +93,19 @@ export default Vue.extend({
 
             this.$emit('input', tagName);
         },
+        isSuccessiveMatch(term: string, searchTerm: string): boolean {
+            var isSuccessive: boolean = false;
+            const sucArr = term.split(" ");
+            if (sucArr.length < 2) {
+                return false;
+            }
+            sucArr.forEach(element => {
+                if (element.startsWith(searchTerm)) {
+                    isSuccessive = true;
+                }
+            });
+            return isSuccessive;
+        }
     }
 });
 </script>
