@@ -64,11 +64,11 @@
                     </v-menu>
 
             <v-flex md3 sm5>
-                 <location-search-bar/>
+                 <location-search-bar class="text-white"></location-search-bar>
             </v-flex>
 
             <v-flex md1 sm4>
-                <radius />
+                <radius class="text-white"></radius>
             </v-flex>
             
             <v-menu offset-y>
@@ -146,4 +146,9 @@
   .v-menu__content{
     z-index:9999 !important;
   }
+  .text-white input{color:   white !important;}/**color for input of location */
+  .text-white label{color: white !important;}/**color for labels */
+  .text-white svg {color: white} /** color for arrows*/
+  .text-white i.v-icon.v-icon{color: white} /* color for icon*/ 
+  .text-white.theme--light.v-select .v-select__selection--comma{color: white !important }  /**color for selected Radius */
 </style>
