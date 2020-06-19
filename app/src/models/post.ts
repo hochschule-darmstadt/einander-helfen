@@ -1,4 +1,5 @@
 interface Post {
+  id: string;
   title: string;
   categories: string[];
   location: string;

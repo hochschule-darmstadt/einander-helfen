@@ -13,16 +13,16 @@
                         </v-btn>
                         <l-map ref="map" :center="map.center" :zoom="map.zoom">
                             <l-tile-layer :url="map.url" :attribution="map.attribution"></l-tile-layer>
-                            <template v-for="(advertisement, i) in posts">
-                                <l-marker v-if="i === currentPostId" :icon="map.markerRed"
-                                          :lat-lng="[advertisement.geo_location.lat, advertisement.geo_location.lon]"
+                            <template v-for="post in posts">
+                                <l-marker v-if="post.id === currentPostId" :icon="map.markerRed"
+                                          :lat-lng="[post.geo_location.lat, post.geo_location.lon]"
                                           @click="openPost(i)">
-                                    <l-tooltip>{{ advertisement.title }}</l-tooltip>
+                                    <l-tooltip>{{ post.title }}</l-tooltip>
                                 </l-marker>
                                 <l-marker v-else :icon="map.markerBlue"
-                                          :lat-lng="[advertisement.geo_location.lat, advertisement.geo_location.lon]"
-                                          @click="openPost(i)">
-                                    <l-tooltip>{{ advertisement.title }}</l-tooltip>
+                                          :lat-lng="[post.geo_location.lat, post.geo_location.lon]"
+                                          @click="openPost(post.i)">
+                                    <l-tooltip>{{ post.title }}</l-tooltip>
                                 </l-marker>
                             </template>
                         </l-map>
@@ -128,15 +128,15 @@
         <!--left side content-->
         <v-flex sm12 md6 order-md1 >
           <div style="height:70vh ;overflow:auto">
-            <template v-for="(advertisement, i) in visiblePages">
+            <template v-for="post in visiblePages">
               <v-card class="mb-3">
-                <v-list-item three-line @click="openPost(i)">
+                <v-list-item three-line @click="openPost(post.id)">
                   <v-list-item-content>
                     <v-list-item-title class="headline mb-1">{{
-                      advertisement.title
+                      post.title
                     }}</v-list-item-title>
                     <v-list-item-subtitle>{{
-                      advertisement.task
+                      post.task
                     }}</v-list-item-subtitle>
                   </v-list-item-content>
 
@@ -144,7 +144,7 @@
                     max-width="80px"
                     height="80px"
                     contain
-                    :src="advertisement.image"
+                    :src="post.image"
                   ></v-img>
                 </v-list-item>
               </v-card>
@@ -178,13 +178,13 @@
         components: {Header, LMap, LTileLayer, LMarker, LTooltip},
         data(): {
             postIsOpen: boolean;
-            currentPostId: number;
+            currentPostId: string;
             perPage: number;
             map: any;
         } {
             return {
                 postIsOpen: false,
-                currentPostId: 0,
+                currentPostId: '',
                 perPage: 15,
                 map: {
                     url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -214,7 +214,7 @@
             },
             currentPost(): Post | null {
                 return this.postIsOpen
-                    ? this.posts[this.currentPostId]
+                    ? this.posts.find((post) => post.id === this.currentPostId)
                     : null;
             },
             numberOfPages(): number {
@@ -227,7 +227,7 @@
         watch: {
             posts(val: Post[], oldVal: Post[]): void {
                 if (val.length === 1) {
-                    this.openPost(0);
+                    this.openPost(val[0].id);
                 }
                 if (val.length) {
                   const markers = val.map((post) => [post.geo_location.lat, post.geo_location.lon] as LatLngTuple);
@@ -246,15 +246,15 @@
         },
         methods: {
             ...mapActions(['hydrateStateFromURIParams', 'setResultPage', 'findPosts']),
-            openPost(index: number): void {
+            openPost(id: string): void {
                         this.postIsOpen = true;
-                        this.currentPostId = index + ((this.page - 1) * this.perPage);
+                        this.currentPostId = id;
                     },
             closePost(): void {
-                this.currentPostId = 0;
-                this.postIsOpen = false;
-                const currentPost = this.posts[this.currentPostId] as Post;
+                const currentPost = this.currentPost as Post;
                 const location = [currentPost.geo_location.lat, currentPost.geo_location.lon] as LatLngTuple;
+                this.currentPostId = '';
+                this.postIsOpen = false;
                 this.$nextTick(() => {
                     (this.$refs.map as LMap).setCenter(location);
                 });

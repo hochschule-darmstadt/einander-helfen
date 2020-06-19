@@ -73,7 +73,14 @@ class DataService {
     private performQuery<T>(query: QueryBuilder): Promise<T> {
         return new Promise<T>((resolve, reject) => {
             axios.post(this.baseUrl, query.build())
-                .then(({ data }) => { resolve(data.hits.hits.map((elem: any) => elem._source)); })
+                    .then(({ data }) => {
+                    resolve(data.hits.hits.map((elem: any) => {
+                        return {
+                            id: elem._id,
+                            ...elem._source
+                        };
+                    }));
+                })
                 .catch((error) => reject(error));
         });
     }
