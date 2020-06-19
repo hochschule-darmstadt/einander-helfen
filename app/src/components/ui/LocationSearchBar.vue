@@ -21,10 +21,10 @@
 </template>
 
 <script lang="ts">
-  import {mapActions, mapGetters, mapState} from 'vuex';
-  import Location from '../../models/location';
+  import { createNamespacedHelpers } from 'vuex';
+  import Location from '@/models/location';
 
-  declare var require: any;
+  const { mapState, mapActions, mapGetters } = createNamespacedHelpers('locationSearchModule');
   import Vue from 'vue';
 
   export default Vue.extend({
@@ -61,13 +61,7 @@
           }
           this.setSelectedLocation(newValue);
           if (this.$route.name === 'resultPage') {
-            this.$router.push({
-              name: 'resultPage',
-              query: {
-                ...this.$route.query,
-                location: newValue,
-              }
-            });
+            this.$store.dispatch('updateURIFromState', {}, { root: true });
           }
         },
         // Clear LocationSearchValue so that searching is not filtered to the currently selected zip-code
@@ -107,14 +101,7 @@
           }
         },
         routeToResultPage(evt): void {
-          this.$router.push({
-              name: 'resultPage',
-              query: {
-                q: this.$store.state.selectedTag,
-                location: this.selectedLocation,
-                radius: this.$store.state.radiusSearchValue
-              }
-            });
+          this.$store.dispatch('updateURIFromState', {}, { root: true });
         },
       },
     }

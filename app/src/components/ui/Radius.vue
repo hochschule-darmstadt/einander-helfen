@@ -3,18 +3,18 @@
             label="Umkreis"
             :items="radii"
             item-value="value"
-            v-model="selectedRadius"
+            @input="newSelectedRadius = $event"
+            v-bind:value="selectedRadius"
             :dark="dark"
             style="margin-left: 10px; margin-right: 10px;">
     </v-select>
 </template>
 
 <script lang="ts">
-    import {mapActions, mapGetters, mapState} from 'vuex';
-    declare var require: any;
+    import { createNamespacedHelpers } from 'vuex';
+    const { mapActions, mapState } = createNamespacedHelpers('radiusSearchModule');
+
     import Vue from 'vue';
-    import QueryBuilder from 'es-query-builder/dist';
-    import axios from 'axios';
 
     export default Vue.extend({
         props: {
@@ -24,31 +24,48 @@
             },
         },
         data(): {
-            selectedRadius: string,
+            newSelectedRadius: string,
+            radii: Array<{text: string, value: string}>
         } {
             return {
-                selectedRadius: this.$store.state.radiusSearchValue || '',
+                newSelectedRadius: '',
+                radii: [
+                    {
+                        text: 'Überall',
+                        value: '',
+                    },
+                    {
+                        text: '5 km',
+                        value: '5km',
+                    },
+                    {
+                        text: '10 km',
+                        value: '10km',
+                    },
+                    {
+                        text: '25 km',
+                        value: '25km',
+                    },
+                    {
+                        text: '50 km',
+                        value: '50km',
+                    },
+                ]
             };
         },
         watch: {
-            selectedRadius(newValue, oldValue): void {
-                this.setRadiusSearchValue(newValue);
+            newSelectedRadius(newValue, oldValue): void {
+                this.setSelectedRadius(newValue);
                 if (this.$route.name === 'resultPage') {
-                    this.$router.push({
-                    name: 'resultPage',
-                    query: {
-                        ...this.$route.query,
-                        radius: newValue,
-                    }
-                    });
+                   this.$store.dispatch('updateURIFromState');
                 }
             },
         },
-        methods: {
-            ...mapActions(['setRadiusSearchValue']),
-        },
         computed: {
-            ...mapState(['radii'])
+            ...mapState(['selectedRadius'])
+        },
+        methods: {
+            ...mapActions(['setSelectedRadius']),
         }
     });
 </script>
