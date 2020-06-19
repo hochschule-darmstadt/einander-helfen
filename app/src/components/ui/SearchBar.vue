@@ -2,8 +2,8 @@
     <v-combobox
             style="background: white"
             rounded
-            color="white"
-            label="z.B. Macher/in"
+            color="black"
+            placeholder="z.B.Jugendarbeit"
             append-icon="search"
             item-text="tag"
             autocomplete="off"
