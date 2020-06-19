@@ -15,12 +15,12 @@
                             <l-tile-layer :url="map.url" :attribution="map.attribution"></l-tile-layer>
                             <template v-for="(advertisement, i) in posts">
                                 <l-marker v-if="i === currentPostId" :icon="map.markerRed"
-                                          :lat-lng="[advertisement.lat, advertisement.lon]"
+                                          :lat-lng="[advertisement.geo_location.lat, advertisement.geo_location.lon]"
                                           @click="openPost(i)">
                                     <l-tooltip>{{ advertisement.title }}</l-tooltip>
                                 </l-marker>
                                 <l-marker v-else :icon="map.markerBlue"
-                                          :lat-lng="[advertisement.lat, advertisement.lon]"
+                                          :lat-lng="[advertisement.geo_location.lat, advertisement.geo_location.lon]"
                                           @click="openPost(i)">
                                     <l-tooltip>{{ advertisement.title }}</l-tooltip>
                                 </l-marker>
@@ -229,8 +229,10 @@
                 if (val.length === 1) {
                     this.openPost(0);
                 }
-                const markers = val.map((post) => [post.lat, post.lon] as LatLngTuple);
-                (this.$refs.map as LMap).fitBounds(markers);
+                if (val.length) {
+                  const markers = val.map((post) => [post.geo_location.lat, post.geo_location.lon] as LatLngTuple);
+                  (this.$refs.map as LMap).fitBounds(markers);
+                }
             },
             radiusSearchValue(): void {
                 this.findPosts();
@@ -251,8 +253,8 @@
             closePost(): void {
                 this.currentPostId = 0;
                 this.postIsOpen = false;
-                const currentPost = this.posts[this.currentPostId];
-                const location = [currentPost.lat, currentPost.lon] as LatLngTuple;
+                const currentPost = this.posts[this.currentPostId] as Post;
+                const location = [currentPost.geo_location.lat, currentPost.geo_location.lon] as LatLngTuple;
                 this.$nextTick(() => {
                     (this.$refs.map as LMap).setCenter(location);
                 });

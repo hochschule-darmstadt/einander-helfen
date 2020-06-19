@@ -12,8 +12,10 @@ interface Post {
   link: string;
   image: string;
   map_address: [];
-  lat: number;
-  lon: number;
+  geo_location: {
+    lat: number;
+    lon: number;
+  };
 }
 
 export {Post};

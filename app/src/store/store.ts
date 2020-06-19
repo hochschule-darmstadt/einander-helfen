@@ -4,6 +4,7 @@ import DataService from '../utils/services/DataService';
 import LocationService from '@/utils/services/LocationService';
 import router from '@/router';
 import Tag from '@/models/tag';
+import Post from '@/models/post';
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
@@ -34,7 +35,7 @@ const store = new Vuex.Store({
         value: '50km',
       },
     ],
-    posts: [],
+    posts: [] as Post[],
     labels: [] as string[],
     synonyms: [] as string[],
     searchValues: [] as string[],
