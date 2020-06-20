@@ -1,6 +1,6 @@
 import Tag from '@/models/tag';
 
-export interface SearchBarState {
+export interface TextSearchState {
   searchProposals: Array<{header: string}|{divider: boolean}|Tag>;
   labels: string[];
   synonyms: string[];

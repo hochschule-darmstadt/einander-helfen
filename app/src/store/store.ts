@@ -4,17 +4,15 @@ import DataService from '../utils/services/DataService';
 import LocationService from '@/utils/services/LocationService';
 import router from '@/router';
 import Post from '@/models/post';
-import searchBarModule from './SearchBarStore';
-import locationSearchModule from './LocationSearchStore';
-import radiusSearchModule from './RadiusSearchStore';
+import textSearchModule from './TextSearch';
+import locationSearchModule from './LocationSearch';
 import {RootState} from './types';
 Vue.use(Vuex);
 
 const store: StoreOptions<RootState> = {
   modules: {
-    searchBarModule,
+    textSearchModule,
     locationSearchModule,
-    radiusSearchModule
   },
   state: {
     posts: [] as Post[],
@@ -23,8 +21,8 @@ const store: StoreOptions<RootState> = {
   mutations: {
 
     clearSearchParams(state): void {
-      state.searchBarModule.searchValues = [];
-      state.radiusSearchModule.selectedRadius = '';
+      state.textSearchModule.searchValues = [];
+      state.locationSearchModule.selectedRadius = '';
       state.locationSearchModule.selectedLocation = '';
     },
 
@@ -46,8 +44,8 @@ const store: StoreOptions<RootState> = {
 
     findPosts({ commit, state }): void {
       const location = LocationService.findByTitle(state.locationSearchModule.selectedLocation);
-      const searchValues = state.searchBarModule.searchValues;
-      const radius = state.radiusSearchModule.selectedRadius;
+      const searchValues = state.textSearchModule.searchValues;
+      const radius = state.locationSearchModule.selectedRadius;
       DataService.findBySelection({
         searchValues,
         location,
@@ -61,13 +59,13 @@ const store: StoreOptions<RootState> = {
       // Clear previous search parameters. The URI is our single source of truth!
       commit('clearSearchParams');
       if ('q' in queryParams) {
-        dispatch('searchBarModule/addSearchValues', queryParams.q.split(','));
+        dispatch('textSearchModule/addSearchValues', queryParams.q.split(','));
       }
       if ('location' in queryParams) {
         dispatch('locationSearchModule/setSelectedLocation', queryParams.location);
       }
       if ('radius' in queryParams) {
-        dispatch('radiusSearchModule/setSelectedRadius', queryParams.radius);
+        dispatch('locationSearchModule/setSelectedRadius', queryParams.radius);
       }
       if ('page' in queryParams) {
         commit('setPage', parseInt(queryParams.page, 10));
@@ -79,9 +77,9 @@ const store: StoreOptions<RootState> = {
         name: 'resultPage',
         query: {
           ...router.currentRoute.query,
-          q: state.searchBarModule.searchValues.join(','),
+          q: state.textSearchModule.searchValues.join(','),
           location: state.locationSearchModule.selectedLocation,
-          radius: state.radiusSearchModule.selectedRadius,
+          radius: state.locationSearchModule.selectedRadius,
           page: state.page.toString()
         }
       }).catch((err) => err);

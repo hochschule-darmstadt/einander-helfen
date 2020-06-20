@@ -12,7 +12,7 @@
 
 <script lang="ts">
     import { createNamespacedHelpers } from 'vuex';
-    const { mapActions, mapState } = createNamespacedHelpers('radiusSearchModule');
+    const { mapActions, mapState } = createNamespacedHelpers('locationSearchModule');
 
     import Vue from 'vue';
 

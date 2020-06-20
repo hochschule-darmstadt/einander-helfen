@@ -68,7 +68,7 @@
 
 <script lang="ts">
 import { createNamespacedHelpers } from 'vuex';
-const { mapActions } = createNamespacedHelpers('searchBarModule');
+const { mapActions } = createNamespacedHelpers('textSearchModule');
 import Vue from 'vue';
 import Toolbar from '@/components/layout/Toolbar.vue';
 

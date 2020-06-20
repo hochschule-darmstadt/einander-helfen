@@ -1,10 +1,10 @@
 import { Module } from 'vuex';
 import { RootState } from '../types';
-import { SearchBarState } from './types';
+import { TextSearchState } from './types';
 import { mutations } from './mutations';
 import { actions } from './actions';
 
-const state: SearchBarState = {
+const state: TextSearchState = {
   searchProposals: [
     { header: 'Vorschläge' },
     { divider: true },
@@ -16,7 +16,7 @@ const state: SearchBarState = {
 };
 
 
-const locationSearchModule: Module<SearchBarState, RootState> = {
+const locationSearchModule: Module<TextSearchState, RootState> = {
   namespaced: true,
   state,
   mutations,

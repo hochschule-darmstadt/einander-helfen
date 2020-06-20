@@ -18,7 +18,7 @@ import Vue from 'vue';
 import TagService from '@/utils/services/TagService';
 import Tag from '@/models/tag';
 import { createNamespacedHelpers } from 'vuex';
-const { mapState, mapActions } = createNamespacedHelpers('searchBarModule');
+const { mapState, mapActions } = createNamespacedHelpers('textSearchModule');
 
 export default Vue.extend({
     data(): {

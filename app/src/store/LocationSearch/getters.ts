@@ -1,5 +1,5 @@
 import LocationService from '@/utils/services/LocationService';
-import {LocationSearchState} from '@/store/LocationSearchStore/types';
+import {LocationSearchState} from '@/store/LocationSearch/types';
 import {RootState} from '../types';
 import {GetterTree} from 'vuex';
 

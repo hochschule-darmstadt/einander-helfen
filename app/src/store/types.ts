@@ -1,12 +1,10 @@
 import Post from '@/models/post';
-import {SearchBarState} from '@/store/SearchBarStore/types';
-import {RadiusSearchState} from '@/store/RadiusSearchStore/types';
-import {LocationSearchState} from '@/store/LocationSearchStore/types';
+import {TextSearchState} from '@/store/TextSearch/types';
+import {LocationSearchState} from '@/store/LocationSearch/types';
 
 export interface RootState {
   posts: Post[];
   page: number;
-  searchBarModule: SearchBarState;
-  radiusSearchModule: RadiusSearchState;
+  textSearchModule: TextSearchState;
   locationSearchModule: LocationSearchState;
 }

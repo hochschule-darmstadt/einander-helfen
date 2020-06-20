@@ -1,9 +1,9 @@
 import {ActionTree} from 'vuex';
-import {SearchBarState} from '@/store/SearchBarStore/types';
+import {TextSearchState} from '@/store/TextSearch/types';
 import {RootState} from '@/store/types';
 import Tag from '@/models/tag';
 
-export const actions: ActionTree<SearchBarState, RootState> = {
+export const actions: ActionTree<TextSearchState, RootState> = {
   initializeSearchProposals({ commit }, proposals: Tag[]): void {
     commit('initializeSearchProposals', proposals);
   },

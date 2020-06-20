@@ -1,8 +1,8 @@
 import { MutationTree } from 'vuex';
-import { SearchBarState } from './types';
+import { TextSearchState } from './types';
 import Tag from '@/models/tag';
 
-export const mutations: MutationTree<SearchBarState> = {
+export const mutations: MutationTree<TextSearchState> = {
   addSearchValue(state, value: string): void {
     state.searchValues.push(value);
   },
