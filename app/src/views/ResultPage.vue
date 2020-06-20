@@ -93,7 +93,7 @@
             </v-row>
             <v-row class="pt-1" v-if="currentPost.link">
               <v-flex md4 xs6>Quelle</v-flex>
-              <v-flex md8 xs6><a :href="currentPost.link">{{ currentPost.link }}</a></v-flex>
+              <v-flex md8 xs6><a :href="currentPost.link" target="_blank">{{ currentPost.source }}</a></v-flex>
             </v-row>
           </v-card-text>
 
@@ -116,7 +116,7 @@
                   :href="currentPost.link"
                   target="_blank"
                 >
-                  Zum Stellenangebot
+                  Zum Angebot
                 </v-btn>
               </v-container>
             </v-flex>
