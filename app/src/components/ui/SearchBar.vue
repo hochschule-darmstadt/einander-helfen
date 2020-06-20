@@ -4,7 +4,6 @@
             rounded
             color="black"
             placeholder="z.B.Jugendarbeit"
-            append-icon="search"
             item-text="tag"
             autocomplete="off"
             :items="mySearchProposals"

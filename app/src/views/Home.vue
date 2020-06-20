@@ -1,7 +1,13 @@
 <template>
   <div class="home">
     <Toolbar />
-    <VueSlickCarousel :dots="true" :infinite="true" :autoplay="true" :autoplaySpeed="30000" style="margin-top:4vh">
+    <VueSlickCarousel
+      :dots="true"
+      :infinite="true"
+      :autoplay="true"
+      :autoplaySpeed="30000"
+      style="margin-top:4vh"
+    >
       <picture>
         <source media="(max-width: 768px)" srcset="/images/header/1_phone.jpg" />
         <img src="/images/header/1.jpg" />
@@ -19,10 +25,13 @@
     <v-container>
       <v-form class="mt-12 mb-12">
         <v-row justify="center">
-          <v-col cols="12" md="8">
-            <search-bar
-              @input="handleSearchEvent"
-            />
+          <v-col cols="12" md="6">
+            <search-bar v-model="selectedInput" />
+          </v-col>
+          <v-col cols="12" md="2">
+            <v-btn icon outlined fab color="#00254f" class="mt-2" @click="handleSearchEvent">
+              <v-icon>search</v-icon>
+            </v-btn>
           </v-col>
         </v-row>
 
@@ -67,7 +76,7 @@
 </template>
 
 <script lang="ts">
-import {mapActions, mapState} from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import Vue from 'vue';
 import Toolbar from '@/components/layout/Toolbar.vue';
 
@@ -79,7 +88,6 @@ import Radius from '@/components/ui/Radius.vue';
 import Tag from '@/models/tag';
 import SearchBar from '@/components/ui/SearchBar.vue';
 
-
 export default Vue.extend({
   components: {
     SearchBar,
@@ -89,7 +97,8 @@ export default Vue.extend({
     Toolbar
   },
   data(): {
-    volunteerTags: Array<{title: string, img: string}>,
+    volunteerTags: Array<{ title: string; img: string }>;
+    selectedInput: string;
   } {
     return {
       volunteerTags: [
@@ -110,6 +119,7 @@ export default Vue.extend({
           img: require('../../public/images/sozial.jpeg')
         }
       ],
+      selectedInput: ''
     };
   },
   computed: {
@@ -120,7 +130,7 @@ export default Vue.extend({
       this.$router.push({
         name: 'resultPage',
         query: {
-          q: searchValue,
+          q: this.selectedInput,
           location: this.selectedLocation,
           radius: this.radiusSearchValue
         }
