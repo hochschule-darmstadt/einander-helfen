@@ -67,7 +67,8 @@
 </template>
 
 <script lang="ts">
-import {mapActions, mapState} from 'vuex';
+import { createNamespacedHelpers } from 'vuex';
+const { mapActions } = createNamespacedHelpers('textSearchModule');
 import Vue from 'vue';
 import Toolbar from '@/components/layout/Toolbar.vue';
 
@@ -78,6 +79,7 @@ import LocationSearchBar from '@/components/ui/LocationSearchBar.vue';
 import Radius from '@/components/ui/Radius.vue';
 import Tag from '@/models/tag';
 import SearchBar from '@/components/ui/SearchBar.vue';
+import {map} from 'leaflet';
 
 
 export default Vue.extend({
@@ -112,19 +114,10 @@ export default Vue.extend({
       ],
     };
   },
-  computed: {
-    ...mapState(['selectedLocation', 'radiusSearchValue'])
-  },
   methods: {
+    ...mapActions(['addSearchValue']),
     handleSearchEvent(searchValue: string): void {
-      this.$router.push({
-        name: 'resultPage',
-        query: {
-          q: searchValue,
-          location: this.selectedLocation,
-          radius: this.radiusSearchValue
-        }
-      });
+      this.addSearchValue(searchValue);
     }
   }
 });

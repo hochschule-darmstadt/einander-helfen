@@ -1,6 +1,5 @@
-import importedTags from '@/utils/tags/index';
+import importedTags from '@/resources/tags/index';
 import Tag from '@/models/tag';
-import store from '@/store/store';
 
 class TagService {
     private tags: Tag[] = [];

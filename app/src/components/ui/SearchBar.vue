@@ -17,7 +17,8 @@
 import Vue from 'vue';
 import TagService from '@/utils/services/TagService';
 import Tag from '@/models/tag';
-import {mapActions, mapState} from 'vuex';
+import { createNamespacedHelpers } from 'vuex';
+const { mapState, mapActions } = createNamespacedHelpers('textSearchModule');
 
 export default Vue.extend({
     data(): {
@@ -36,7 +37,7 @@ export default Vue.extend({
         },
     },
     computed: {
-        ...mapState(['searchProposals', 'selectedLocation', 'radiusSearchValue']),
+        ...mapState(['searchProposals']),
         mySearchProposals(): string[] {
             if (!this.currentSearchValue || this.currentSearchValue.length < 1) {
                 return [];

@@ -97,7 +97,8 @@
 
 <script lang="ts">
     import Vue from 'vue';
-    import {mapActions, mapState} from 'vuex';
+    import { createNamespacedHelpers } from 'vuex';
+    const { mapActions, mapState } = createNamespacedHelpers('textSearchModule');
     import LocationSearchBar from '@/components/ui/LocationSearchBar.vue';
     import Radius from '@/components/ui/Radius.vue';
     import SearchBar from '@/components/ui/SearchBar.vue';
