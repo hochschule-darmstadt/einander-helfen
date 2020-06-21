@@ -121,17 +121,17 @@
 </template>
 
 <script lang="ts">
-import { mapActions, mapState } from 'vuex'
-import Vue from 'vue'
-import Toolbar from '@/components/layout/Toolbar.vue'
+import { mapActions, mapState } from 'vuex';
+import Vue from 'vue';
+import Toolbar from '@/components/layout/Toolbar.vue';
 
-import VueSlickCarousel from 'vue-slick-carousel'
-import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
-import 'vue-slick-carousel/dist/vue-slick-carousel.css'
-import LocationSearchBar from '@/components/ui/LocationSearchBar.vue'
-import Radius from '@/components/ui/Radius.vue'
-import Tag from '@/models/tag'
-import SearchBar from '@/components/ui/SearchBar.vue'
+import VueSlickCarousel from 'vue-slick-carousel';
+import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css';
+import 'vue-slick-carousel/dist/vue-slick-carousel.css';
+import LocationSearchBar from '@/components/ui/LocationSearchBar.vue';
+import Radius from '@/components/ui/Radius.vue';
+import Tag from '@/models/tag';
+import SearchBar from '@/components/ui/SearchBar.vue';
 
 export default Vue.extend({
   components: {
@@ -141,7 +141,7 @@ export default Vue.extend({
     Radius,
     Toolbar
   },
-  data (): {
+  data(): {
     volunteerTags: Array<{ title: string; img: string }>
     selectedInput: string
   } {
@@ -165,13 +165,13 @@ export default Vue.extend({
         }
       ],
       selectedInput: ''
-    }
+    };
   },
   computed: {
     ...mapState(['selectedLocation', 'radiusSearchValue'])
   },
   methods: {
-    handleSearchEvent (searchValue: string): void {
+    handleSearchEvent(searchValue: string): void {
       this.$router.push({
         name: 'resultPage',
         query: {
@@ -179,10 +179,10 @@ export default Vue.extend({
           location: this.selectedLocation,
           radius: this.radiusSearchValue
         }
-      })
+      });
     }
   }
-})
+});
 </script>
 
 <style>

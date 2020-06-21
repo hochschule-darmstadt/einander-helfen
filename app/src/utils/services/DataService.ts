@@ -48,14 +48,12 @@ class DataService {
                             }): Promise<any> {
         const query: QueryBuilder = new QueryBuilder();
         console.log(searchValues);
-        if(searchValues.join(',') !== "")
-            {
+        if (searchValues.join(',') !== '') {
             searchValues.forEach((value) => {
                 query.shouldMatch('categories', value)
                     .shouldMatch('title', value);
             });
-          }
-        else{
+          } else {
             this.performQuery(query);
         }
         query.size(100);
