@@ -1,5 +1,5 @@
 import Location from '@/models/location';
-import locationArray from '@/utils/range_search/index';
+import locationArray from '@/resources/locations/index';
 
 class LocationService {
     public locations: Location[] = [];

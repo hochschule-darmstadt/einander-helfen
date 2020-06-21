@@ -15,6 +15,8 @@
     const { mapActions, mapState } = createNamespacedHelpers('locationSearchModule');
 
     import Vue from 'vue';
+    import radii from '@/resources/radii';
+    import Radius from '@/models/radius';
 
     export default Vue.extend({
         props: {
@@ -25,36 +27,15 @@
         },
         data(): {
             newSelectedRadius: string,
-            radii: Array<{text: string, value: string}>
+            radii: Radius[]
         } {
             return {
                 newSelectedRadius: '',
-                radii: [
-                    {
-                        text: 'Überall',
-                        value: '',
-                    },
-                    {
-                        text: '5 km',
-                        value: '5km',
-                    },
-                    {
-                        text: '10 km',
-                        value: '10km',
-                    },
-                    {
-                        text: '25 km',
-                        value: '25km',
-                    },
-                    {
-                        text: '50 km',
-                        value: '50km',
-                    },
-                ]
+                radii
             };
         },
         watch: {
-            newSelectedRadius(newValue, oldValue): void {
+            newSelectedRadius(newValue): void {
                 this.setSelectedRadius(newValue);
                 if (this.$route.name === 'resultPage') {
                    this.$store.dispatch('updateURIFromState');
