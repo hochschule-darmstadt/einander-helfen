@@ -15,7 +15,8 @@ export default new Router({
         {
             path: '/posts',
             name: 'resultPage',
-            component: () => import('@/views/ResultPage.vue')
+            component: () => import('@/views/ResultPage.vue'),
+            alias: '/posts/:postId'
         },
         {
             path: '/imprint',
