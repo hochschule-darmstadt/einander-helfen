@@ -9,39 +9,77 @@
       style="margin-top:4vh"
     >
       <picture>
-        <source media="(max-width: 768px)" srcset="/images/header/1_phone.jpg" />
+        <source
+          media="(max-width: 768px)"
+          srcset="/images/header/1_phone.jpg"
+        />
         <img src="/images/header/1.jpg" />
       </picture>
       <picture>
-        <source media="(max-width: 768px)" srcset="/images/header/2_phone.jpg" />
+        <source
+          media="(max-width: 768px)"
+          srcset="/images/header/2_phone.jpg"
+        />
         <img src="/images/header/2.jpg" />
       </picture>
       <picture>
-        <source media="(max-width: 768px)" srcset="/images/header/3_phone.jpg" />
+        <source
+          media="(max-width: 768px)"
+          srcset="/images/header/3_phone.jpg"
+        />
         <img src="/images/header/3.jpg" />
       </picture>
     </VueSlickCarousel>
 
     <v-container>
-      <v-form class="mt-12 mb-12">
+      <v-form>
         <v-row justify="center">
-          <v-col cols="12" md="6">
-            <search-bar v-model="selectedInput" />
-          </v-col>
-          <v-col cols="12" md="2">
-            <v-btn icon outlined fab color="#00254f" class="mt-2" @click="handleSearchEvent">
-              <v-icon>search</v-icon>
-            </v-btn>
-          </v-col>
-        </v-row>
+          <v-col cols="12" md="8">
+            <v-layout
+              row
+              justify-center
+              no-gutters
+              class="mt-12 mb-12 "
+              style="padding: 1vh; "
+              
+            >
+              <v-flex style="margin-left:2%">
+                <v-form>
+                  <v-row>
+                    <v-col>
+                      <search-bar v-model="selectedInput" />
+                    </v-col>
+                  </v-row>
 
-        <v-row justify="center">
-          <v-col cols="12" md="6">
-            <location-search-bar />
-          </v-col>
+                  <v-row>
+                    <v-col>
+                      <location-search-bar />
+                    </v-col>
 
-          <v-col cols="12" md="2">
-            <radius />
+                    <v-col>
+                      <radius />
+                    </v-col>
+                  </v-row>
+                </v-form>
+              </v-flex>
+              <v-flex style="margin-left:2%">
+              <v-row justify="center">
+                <v-col>
+                  <v-btn
+                    icon
+                    outlined
+                    fab
+                    color="#00254f"
+                    class="mt-8 md-16"
+                    x-large
+                    @click="handleSearchEvent"
+                  >
+                    <v-icon>search</v-icon>
+                  </v-btn>
+                </v-col>
+              </v-row>
+              </v-flex>
+            </v-layout>
           </v-col>
         </v-row>
       </v-form>
@@ -50,10 +88,14 @@
         <template v-for="tag in volunteerTags">
           <v-col cols="12" md="2" :key="tag.title">
             <v-hover v-slot:default="{ hover }">
-              <v-card class="mx-auto" :elevation="hover ? 12 : 2" :class="{ 'on-hover': hover }">
+              <v-card
+                class="mx-auto"
+                :elevation="hover ? 12 : 2"
+                :class="{ 'on-hover': hover }"
+              >
                 <router-link
                   style="text-decoration: none; color: inherit;"
-                  :to="{name: 'resultPage', query:{q: tag.title} }"
+                  :to="{ name: 'resultPage', query: { q: tag.title } }"
                 >
                   <v-img
                     class="white--text align-end mt-10"
@@ -62,7 +104,10 @@
                     :src="tag.img"
                   >
                     <v-card>
-                      <v-card-title class="justify-center black--text" v-html="tag.title"></v-card-title>
+                      <v-card-title
+                        class="justify-center black--text"
+                        v-html="tag.title"
+                      ></v-card-title>
                     </v-card>
                   </v-img>
                 </router-link>
@@ -76,17 +121,17 @@
 </template>
 
 <script lang="ts">
-import { mapActions, mapState } from 'vuex';
-import Vue from 'vue';
-import Toolbar from '@/components/layout/Toolbar.vue';
+import { mapActions, mapState } from 'vuex'
+import Vue from 'vue'
+import Toolbar from '@/components/layout/Toolbar.vue'
 
-import VueSlickCarousel from 'vue-slick-carousel';
-import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css';
-import 'vue-slick-carousel/dist/vue-slick-carousel.css';
-import LocationSearchBar from '@/components/ui/LocationSearchBar.vue';
-import Radius from '@/components/ui/Radius.vue';
-import Tag from '@/models/tag';
-import SearchBar from '@/components/ui/SearchBar.vue';
+import VueSlickCarousel from 'vue-slick-carousel'
+import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
+import 'vue-slick-carousel/dist/vue-slick-carousel.css'
+import LocationSearchBar from '@/components/ui/LocationSearchBar.vue'
+import Radius from '@/components/ui/Radius.vue'
+import Tag from '@/models/tag'
+import SearchBar from '@/components/ui/SearchBar.vue'
 
 export default Vue.extend({
   components: {
@@ -96,9 +141,9 @@ export default Vue.extend({
     Radius,
     Toolbar
   },
-  data(): {
-    volunteerTags: Array<{ title: string; img: string }>;
-    selectedInput: string;
+  data (): {
+    volunteerTags: Array<{ title: string; img: string }>
+    selectedInput: string
   } {
     return {
       volunteerTags: [
@@ -120,13 +165,13 @@ export default Vue.extend({
         }
       ],
       selectedInput: ''
-    };
+    }
   },
   computed: {
     ...mapState(['selectedLocation', 'radiusSearchValue'])
   },
   methods: {
-    handleSearchEvent(searchValue: string): void {
+    handleSearchEvent (searchValue: string): void {
       this.$router.push({
         name: 'resultPage',
         query: {
@@ -134,10 +179,10 @@ export default Vue.extend({
           location: this.selectedLocation,
           radius: this.radiusSearchValue
         }
-      });
+      })
     }
   }
-});
+})
 </script>
 
 <style>

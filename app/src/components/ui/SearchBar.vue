@@ -8,6 +8,7 @@
             autocomplete="off"
             :items="mySearchProposals"
             @input="addSearchTag"
+            append-icon="none"
             :search-input.sync="currentSearchValue"
     ></v-combobox>
 </template>
