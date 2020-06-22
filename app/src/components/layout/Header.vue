@@ -29,7 +29,7 @@
           column
           style="margin-left: 10px; margin-right: 10px; margin-top: -20px"
         >
-          <v-chip :key="tag" @click:close="remove(tag)" close v-for="tag in searchValues">{{ tag }}</v-chip>
+          <v-chip :key="tag" @click:close="removeSearchValue(tag)" close v-for="tag in searchValues">{{ tag }}</v-chip>
         </v-chip-group>
       </v-flex>
 
@@ -86,7 +86,7 @@
 
 <script lang="ts">
     import Vue from 'vue';
-    import { createNamespacedHelpers } from 'vuex';
+    import { createNamespacedHelpers, mapActions as mapStateActions } from 'vuex';
     const { mapActions, mapState } = createNamespacedHelpers('textSearchModule');
     import LocationSearchBar from '@/components/ui/LocationSearchBar.vue';
     import Radius from '@/components/ui/Radius.vue';
@@ -112,9 +112,7 @@ export default Vue.extend({
   },
   methods: {
     ...mapActions(['addSearchValue', 'removeSearchValue']),
-    remove(tag: string): void {
-      this.removeSearchValue(tag);
-    }
+    ...mapStateActions(['updateURIFromState']),
   },
   computed: {
     ...mapState(['searchValues', 'searchProposals'])

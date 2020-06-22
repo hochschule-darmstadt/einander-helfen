@@ -103,7 +103,10 @@ export default Vue.extend({
             });
         },
         addSearchTag(tag: string): void {
-
+            // No empty tags!
+            if (!tag) {
+                return;
+            }
             const tagName = tag.includes(' (')
                     ? tag.substr(0, tag.indexOf(' ('))
                     : tag;

@@ -168,7 +168,9 @@
     import Header from '@/components/layout/Header.vue';
     import Post from '@/models/post';
     import Vue from 'vue';
-    import {mapActions, mapState} from 'vuex';
+    import {mapActions, mapState, createNamespacedHelpers} from 'vuex';
+    const {mapState: mapLocationState} = createNamespacedHelpers('locationSearchModule');
+    const {mapState: mapSearchState} = createNamespacedHelpers('textSearchModule');
 
     import L, {LatLngTuple} from 'leaflet';
     import {LMap, LTileLayer, LMarker, LTooltip, LIcon} from 'vue2-leaflet';
@@ -179,6 +181,7 @@
         data(): {
             perPage: number;
             map: any;
+            isInitialized: boolean;
         } {
             return {
                 perPage: 15,
@@ -197,11 +200,14 @@
                         iconUrl: require('../../public/images/marker/marker-icon-red.png'),
                         iconSize: [25, 41]
                     })
-                }
+                },
+                isInitialized: false
             };
         },
         computed: {
-            ...mapState(['posts', 'page', 'selectedLocation', 'radiusSearchValue', 'selectedPost']),
+            ...mapState(['posts', 'page', 'selectedPost']),
+            ...mapLocationState(['selectedLocation', 'selectedRadius']),
+            ...mapSearchState(['searchValues']),
             currentPostId(): string {
                 return this.selectedPost
                     ? this.selectedPost.id
@@ -222,6 +228,9 @@
         },
         created(): void {
             this.hydrateStateFromRoute(this.$route);
+            this.$nextTick(() => {
+                this.isInitialized = true;
+            });
         },
         watch: {
             posts(val: Post[], oldVal: Post[]): void {
@@ -233,11 +242,14 @@
                   (this.$refs.map as LMap).fitBounds(markers);
                 }
             },
-            radiusSearchValue(): void {
-                this.findPosts();
+            selectedRadius(): void {
+                this.update();
             },
             selectedLocation(): void {
-                this.findPosts();
+                this.update();
+            },
+            searchValues(): void {
+                this.update();
             },
             selectedPost(): void {
                 this.updateURIFromState();
@@ -259,6 +271,12 @@
                     (this.$refs.map as LMap).setCenter(location);
                 });
             },
+            update(): void {
+                if (this.isInitialized) {
+                    this.updateURIFromState();
+                    this.findPosts();
+                }
+            }
         }
     });
 </script>

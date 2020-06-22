@@ -12,7 +12,7 @@
               style="margin-left: 10px; margin-right: 10px;"
               v-on:keyup.self="locationOnKeyUp"
               auto-select-first
-              v-on:keyup.enter="routeToResultPage"
+              v-on:keyup.enter="emitInput"
               :dark="dark"
               >
             </v-autocomplete>
@@ -60,9 +60,7 @@
             this.setLocationSearchValue(''); // newValue HAS to be a string
           }
           this.setSelectedLocation(newValue);
-          if (this.$route.name === 'resultPage') {
-            this.$store.dispatch('updateURIFromState', {}, { root: true });
-          }
+          this.emitInput(newValue);
         },
         // Clear LocationSearchValue so that searching is not filtered to the currently selected zip-code
         isSearching(newValue, oldValue): void {
@@ -100,8 +98,11 @@
             }
           }
         },
-        routeToResultPage(evt): void {
-          this.$store.dispatch('updateURIFromState', {}, { root: true });
+        emitInput(data: string = ''): void {
+            if (!data) {
+                data = this.selectedLocation;
+            }
+            this.$emit('input', data);
         },
       },
     }
