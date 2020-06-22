@@ -221,7 +221,7 @@
             }
         },
         created(): void {
-            this.hydrateStateFromURIParams(this.$route.query);
+            this.hydrateStateFromRoute(this.$route);
         },
         watch: {
             posts(val: Post[], oldVal: Post[]): void {
@@ -247,7 +247,7 @@
             }
         },
         methods: {
-            ...mapActions(['hydrateStateFromURIParams', 'updateURIFromState', 'setSelectedPost', 'setResultPage', 'findPosts']),
+            ...mapActions(['hydrateStateFromRoute', 'updateURIFromState', 'setSelectedPost', 'setResultPage', 'findPosts']),
             openPost(id: string): void {
                         this.setSelectedPost(this.posts.find((post) => post.id === id));
                     },

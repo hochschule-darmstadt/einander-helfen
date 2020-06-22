@@ -35,13 +35,6 @@ const store: StoreOptions<RootState> = {
     },
     setPage(state, value: number): void {
       state.page = value;
-      router.replace({
-        name: 'resultPage',
-        query: {
-          ...router.currentRoute.query,
-          page: value.toString()
-        }
-      });
     }
   },
   actions: {
@@ -62,30 +55,37 @@ const store: StoreOptions<RootState> = {
       });
 
     },
+    setPage({ commit, dispatch }, page: number): void {
+        commit('setPage', page);
+        dispatch('updateURIFromState');
+    },
     setSelectedPost({ commit }, value: Post|null): void {
       commit('setSelectedPost', value);
     },
     setResultPage({ commit }, value: number): void {
       commit('setPage', value);
     },
-    hydrateStateFromURIParams({ commit, dispatch }, queryParams): void {
+    hydrateStateFromRoute({ commit, dispatch }, route): void {
+      const queryParams = route.query;
+      const params = route.params;
+
       // Clear previous search parameters. The URI is our single source of truth!
       commit('clearSearchParams');
       if ('q' in queryParams) {
         dispatch('textSearchModule/addSearchValues', queryParams.q.split(','));
       }
       if ('location' in queryParams) {
-        dispatch('locationSearchModule/setSelectedLocation', queryParams.location);
+        commit('locationSearchModule/setSelectedLocation', queryParams.location);
       }
       if ('radius' in queryParams) {
-        dispatch('locationSearchModule/setSelectedRadius', queryParams.radius);
+        commit('locationSearchModule/setSelectedRadius', queryParams.radius);
       }
       if ('page' in queryParams) {
         commit('setPage', parseInt(queryParams.page, 10));
       }
       dispatch('findPosts').then((posts: Post[]) => {
-        if ('post-id' in queryParams) {
-          const selectedPost = posts.find((post) => post.id === queryParams['post-id']);
+        if ('id' in params) {
+          const selectedPost = posts.find((post) => post.id === params.id);
           if (selectedPost) {
             commit('setSelectedPost', selectedPost);
           }
@@ -106,7 +106,7 @@ const store: StoreOptions<RootState> = {
       if (state.selectedPost) {
         path += '/' + state.selectedPost.id;
       }
-      console.log(path);
+
       router.replace({
         path,
         query
