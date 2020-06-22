@@ -121,8 +121,9 @@
 </template>
 
 <script lang="ts">
-import { createNamespacedHelpers } from 'vuex';
-const { mapActions } = createNamespacedHelpers('textSearchModule');
+import { createNamespacedHelpers, mapActions} from 'vuex';
+const { mapMutations } = createNamespacedHelpers('textSearchModule');
+
 import Vue from 'vue';
 import Toolbar from '@/components/layout/Toolbar.vue';
 
@@ -170,13 +171,15 @@ export default Vue.extend({
     };
   },
   methods: {
-    ...mapActions(['addSearchValue']),
+    ...mapMutations(['addSearchValue']),
+    ...mapActions(['updateURIFromState']),
     handleSearchEvent(): void {
       if (this.selectedInput) {
         this.addSearchValue(this.selectedInput);
       } else {
         this.addSearchValue(this.currentSearchValue);
       }
+      this.updateURIFromState();
     }
   }
 });
