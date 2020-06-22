@@ -45,7 +45,7 @@
 
             <!--display title, subtitle and image on the right side-->
             <v-list-item-content style="margin-top:2%" class="headline">{{
-                currentPost.title
+                selectedPost.title
               }}
             </v-list-item-content>
             <v-img
@@ -53,47 +53,47 @@
               max-width="80px"
               height="80px"
               contain
-              :src="currentPost.image"
+              :src="selectedPost.image"
             ></v-img>
           </v-list-item>
 
           <!--display content on the right side-->
           <v-card-text style="padding-left:5%; padding-right:5%">
-            <v-row v-if="currentPost.location">
+            <v-row v-if="selectedPost.location">
              <v-flex md4 xs6>Einsatzort</v-flex>
-             <v-flex md8 xs6 v-html="currentPost.location"></v-flex>
+             <v-flex md8 xs6 v-html="selectedPost.location"></v-flex>
             </v-row>
-            <v-row class="pt-1" v-if="currentPost.title">
+            <v-row class="pt-1" v-if="selectedPost.title">
              <v-flex md4 xs6 >Aufgabe</v-flex>
-             <v-flex md8 xs6 v-html="currentPost.task"></v-flex>
+             <v-flex md8 xs6 v-html="selectedPost.task"></v-flex>
             </v-row>
-            <v-row class="pt-1" v-if="currentPost.contact">
+            <v-row class="pt-1" v-if="selectedPost.contact">
               <v-flex md4 xs6>Ansprechpartner</v-flex>
-              <v-flex md8 xs6 v-html="currentPost.contact"></v-flex>
+              <v-flex md8 xs6 v-html="selectedPost.contact"></v-flex>
             </v-row>
-            <v-row class="pt-1" v-if="currentPost.organization">
+            <v-row class="pt-1" v-if="selectedPost.organization">
               <v-flex md4 xs6>Organisation</v-flex>
-              <v-flex md8 xs6 v-html="currentPost.organization"></v-flex>
+              <v-flex md8 xs6 v-html="selectedPost.organization"></v-flex>
             </v-row>
-            <v-row class="pt-1" v-if="currentPost.target_group">
+            <v-row class="pt-1" v-if="selectedPost.target_group">
               <v-flex md4 xs6>Zielgruppe</v-flex>
-              <v-flex md8 xs6 v-html="currentPost.target_group"></v-flex>
+              <v-flex md8 xs6 v-html="selectedPost.target_group"></v-flex>
             </v-row>
-            <v-row class="pt-1" v-if="currentPost.timing">
+            <v-row class="pt-1" v-if="selectedPost.timing">
               <v-flex md4 xs6>Einstiegsdatum / Beginn</v-flex>
-              <v-flex md8 xs6 v-html="currentPost.timing"></v-flex>
+              <v-flex md8 xs6 v-html="selectedPost.timing"></v-flex>
             </v-row>
-            <v-row class="pt-1" v-if="currentPost.effort">
+            <v-row class="pt-1" v-if="selectedPost.effort">
               <v-flex md4 xs6>Zeitaufwand</v-flex>
-              <v-flex md8 xs6 v-html="currentPost.effort"></v-flex>
+              <v-flex md8 xs6 v-html="selectedPost.effort"></v-flex>
             </v-row>
-            <v-row class="pt-1" v-if="currentPost.opportunities">
+            <v-row class="pt-1" v-if="selectedPost.opportunities">
               <v-flex md4 xs6>Möglichkeiten</v-flex>
-              <v-flex md8 xs6 v-html="currentPost.opportunities"></v-flex>
+              <v-flex md8 xs6 v-html="selectedPost.opportunities"></v-flex>
             </v-row>
-            <v-row class="pt-1" v-if="currentPost.link">
+            <v-row class="pt-1" v-if="selectedPost.link">
               <v-flex md4 xs6>Quelle</v-flex>
-              <v-flex md8 xs6><a :href="currentPost.link" target="_blank">{{ currentPost.source }}</a></v-flex>
+              <v-flex md8 xs6><a :href="selectedPost.link" target="_blank">{{ selectedPost.source }}</a></v-flex>
             </v-row>
           </v-card-text>
 
@@ -101,7 +101,7 @@
             <v-flex md12 sm12>
               <v-container style="margin-bottom: 10px">
                 <template
-                  v-for="(category, i) in currentPost.categories"
+                  v-for="(category, i) in selectedPost.categories"
                 >
                   <v-chip :key="i" class="mr-2 mt-2">{{ category }}</v-chip>
                 </template>
@@ -113,7 +113,7 @@
                   dark
                   large
                   color="#054C66"
-                  :href="currentPost.link"
+                  :href="selectedPost.link"
                   target="_blank"
                 >
                   Zum Angebot
@@ -155,7 +155,7 @@
       </v-layout>
                        <!--pageination-->
           <div class="text-center" style="margin-top:2%; margin-bottom:1%">
-            <v-pagination @input="setResultPage($event)" :value="page" :length="numberOfPages" total-visible="7" color="#054C66"></v-pagination>
+            <v-pagination @input="setPage($event)" :value="page" :length="numberOfPages" total-visible="7" color="#054C66"></v-pagination>
           </div>
 
   </div>
@@ -177,14 +177,10 @@
     export default Vue.extend({
         components: {Header, LMap, LTileLayer, LMarker, LTooltip},
         data(): {
-            postIsOpen: boolean;
-            currentPostId: string;
             perPage: number;
             map: any;
         } {
             return {
-                postIsOpen: false,
-                currentPostId: '',
                 perPage: 15,
                 map: {
                     url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -205,24 +201,27 @@
             };
         },
         computed: {
-            ...mapState(['posts', 'page', 'selectedLocation', 'radiusSearchValue']),
+            ...mapState(['posts', 'page', 'selectedLocation', 'radiusSearchValue', 'selectedPost']),
+            currentPostId(): string {
+                return this.selectedPost
+                    ? this.selectedPost.id
+                    : '';
+            },
+            postIsOpen(): boolean {
+                return !!this.selectedPost;
+            },
             visiblePages(): Post[] {
                 return this.posts.slice(
                     (this.page - 1) * this.perPage,
                     this.page * this.perPage
                 );
             },
-            currentPost(): Post | null {
-                return this.postIsOpen
-                    ? this.posts.find((post) => post.id === this.currentPostId)
-                    : null;
-            },
             numberOfPages(): number {
                 return Math.ceil(this.posts.length / this.perPage);
             }
         },
         created(): void {
-            this.hydrateStateFromURIParams(this.$route.query);
+            this.hydrateStateFromRoute(this.$route);
         },
         watch: {
             posts(val: Post[], oldVal: Post[]): void {
@@ -240,21 +239,22 @@
             selectedLocation(): void {
                 this.findPosts();
             },
+            selectedPost(): void {
+                this.updateURIFromState();
+            },
             page(value): void {
-                this.setResultPage(value);
+                this.setPage(value);
             }
         },
         methods: {
-            ...mapActions(['hydrateStateFromURIParams', 'setResultPage', 'findPosts']),
+            ...mapActions(['hydrateStateFromRoute', 'updateURIFromState', 'setSelectedPost', 'setPage', 'findPosts']),
             openPost(id: string): void {
-                        this.postIsOpen = true;
-                        this.currentPostId = id;
+                        this.setSelectedPost(this.posts.find((post) => post.id === id));
                     },
             closePost(): void {
-                const currentPost = this.currentPost as Post;
+                const currentPost = this.selectedPost as Post;
                 const location = [currentPost.geo_location.lat, currentPost.geo_location.lon] as LatLngTuple;
-                this.currentPostId = '';
-                this.postIsOpen = false;
+                this.setSelectedPost(null);
                 this.$nextTick(() => {
                     (this.$refs.map as LMap).setCenter(location);
                 });

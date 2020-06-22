@@ -1,6 +1,5 @@
-import importedTags from '@/utils/tags/index';
+import importedTags from '@/resources/tags/index';
 import Tag from '@/models/tag';
-import store from '@/store/store';
 
 class TagService {
     private tags: Tag[] = [];
@@ -14,7 +13,6 @@ class TagService {
 
 
     private changeSynonymsToStringArray(): Tag[] {
-        console.log(importedTags);
         return importedTags.map((tag) => {
             const synonyms = tag.synonyms
                 ? tag.synonyms.split(',').map((synonym) => synonym.trim())
