@@ -41,13 +41,13 @@
               no-gutters
               class="mt-12 mb-12 "
               style="padding: 1vh; "
-              
+
             >
               <v-flex style="margin-left:2%">
                 <v-form>
                   <v-row>
                     <v-col>
-                      <search-bar v-model="selectedInput" />
+                      <search-bar :searchInput.sync="currentSearchValue" v-model="selectedInput"/>
                     </v-col>
                   </v-row>
 
@@ -143,7 +143,8 @@ export default Vue.extend({
   },
   data(): {
     volunteerTags: Array<{ title: string; img: string }>
-    selectedInput: string
+    selectedInput: string,
+    currentSearchValue: string
   } {
     return {
       volunteerTags: [
@@ -164,7 +165,8 @@ export default Vue.extend({
           img: require('../../public/images/sozial.jpeg')
         }
       ],
-      selectedInput: ''
+      selectedInput: '',
+      currentSearchValue: ''
     };
   },
   computed: {

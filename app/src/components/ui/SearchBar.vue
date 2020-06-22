@@ -9,7 +9,7 @@
             :items="mySearchProposals"
             @input="addSearchTag"
             append-icon="none"
-            :search-input.sync="currentSearchValue"
+            :search-input.sync="mySearchValue"
     ></v-combobox>
 </template>
 
@@ -18,13 +18,17 @@ import Vue from 'vue';
 import TagService from '@/utils/services/TagService';
 import Tag from '@/models/tag';
 import {mapActions, mapState} from 'vuex';
+import {stringifyQuery} from 'vue-router/src/util/query';
 
 export default Vue.extend({
+    props: {
+        searchInput: String
+    },
     data(): {
-        currentSearchValue: string
+        mySearchValue: string
     } {
         return {
-            currentSearchValue: ''
+            mySearchValue: this.searchInput || ''
         };
     },
     created(): void {
@@ -34,14 +38,17 @@ export default Vue.extend({
         selectedTag(newValue): void {
             this.setSelectedTag(newValue);
         },
+        mySearchValue(value): void {
+            this.$emit('update:searchInput', value);
+        }
     },
     computed: {
         ...mapState(['searchProposals', 'selectedLocation', 'radiusSearchValue']),
         mySearchProposals(): string[] {
-            if (!this.currentSearchValue || this.currentSearchValue.length < 1) {
+            if (!this.mySearchValue || this.mySearchValue.length < 1) {
                 return [];
             }
-            const searchTerm = this.currentSearchValue;
+            const searchTerm = this.mySearchValue;
             const listOfMatchingTerms = this.matchSearchInput(searchTerm, this.searchProposals
                     .filter((element) => 'label' in element));
             const rankedListOfOrderedTerms = this.rankTerms(searchTerm, listOfMatchingTerms);
