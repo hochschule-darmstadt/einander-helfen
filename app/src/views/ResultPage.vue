@@ -155,7 +155,7 @@
       </v-layout>
                        <!--pageination-->
           <div class="text-center" style="margin-top:2%; margin-bottom:1%">
-            <v-pagination @input="setResultPage($event)" :value="page" :length="numberOfPages" total-visible="7" color="#054C66"></v-pagination>
+            <v-pagination @input="setPage($event)" :value="page" :length="numberOfPages" total-visible="7" color="#054C66"></v-pagination>
           </div>
 
   </div>
@@ -243,11 +243,11 @@
                 this.updateURIFromState();
             },
             page(value): void {
-                this.setResultPage(value);
+                this.setPage(value);
             }
         },
         methods: {
-            ...mapActions(['hydrateStateFromRoute', 'updateURIFromState', 'setSelectedPost', 'setResultPage', 'findPosts']),
+            ...mapActions(['hydrateStateFromRoute', 'updateURIFromState', 'setSelectedPost', 'setPage', 'findPosts']),
             openPost(id: string): void {
                         this.setSelectedPost(this.posts.find((post) => post.id === id));
                     },
