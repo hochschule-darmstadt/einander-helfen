@@ -131,9 +131,7 @@ import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css';
 import 'vue-slick-carousel/dist/vue-slick-carousel.css';
 import LocationSearchBar from '@/components/ui/LocationSearchBar.vue';
 import Radius from '@/components/ui/Radius.vue';
-import Tag from '@/models/tag';
 import SearchBar from '@/components/ui/SearchBar.vue';
-import {map} from 'leaflet';
 
 export default Vue.extend({
   components: {
@@ -173,8 +171,12 @@ export default Vue.extend({
   },
   methods: {
     ...mapActions(['addSearchValue']),
-    handleSearchEvent(searchValue: string): void {
-      this.addSearchValue(searchValue);
+    handleSearchEvent(): void {
+      if (this.selectedInput) {
+        this.addSearchValue(this.selectedInput);
+      } else {
+        this.addSearchValue(this.currentSearchValue);
+      }
     }
   }
 });
