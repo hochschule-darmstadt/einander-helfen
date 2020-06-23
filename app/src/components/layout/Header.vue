@@ -99,7 +99,7 @@
     import SearchBar from '@/components/ui/SearchBar.vue';
     import SearchButton from '@/components/ui/SearchButton.vue';
 
-export default Vue.extend({
+    export default Vue.extend({
   components: {
     LocationSearchBar,
     Radius,

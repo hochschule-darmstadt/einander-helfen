@@ -5,30 +5,30 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue from 'vue';
 import { createNamespacedHelpers, mapActions as mapStateActions } from 'vuex';
-const { mapMutations } = createNamespacedHelpers('textSearchModule')
+const { mapMutations } = createNamespacedHelpers('textSearchModule');
 
 export default Vue.extend({
   props: {
     searchInput: String
   },
-  data (): {
+  data(): {
     mySearchValue: string
   } {
     return {
       mySearchValue: this.searchInput || ''
-    }
+    };
   },
   watch: {
-    mySearchValue (value): void {
-      this.$emit('update:searchInput', value)
+    mySearchValue(value): void {
+      this.$emit('update:searchInput', value);
     }
   },
   methods: {
     ...mapMutations(['addSearchValue']),
     ...mapStateActions(['updateURIFromState', 'findPosts']),
-    handleSearchEvent (): void {
+    handleSearchEvent(): void {
        {
         this.addSearchValue(this.searchInput);
         this.updateURIFromState();
@@ -36,7 +36,7 @@ export default Vue.extend({
       }
     }
   }
-})
+});
 </script>
 
 <style scoped></style>

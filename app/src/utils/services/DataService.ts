@@ -51,7 +51,7 @@ class DataService {
             query.shouldMatch('categories', value)
                 .shouldMatch('title', value);
             });
-        
+
         query.size(100);
         const queryObject = query.build();
 
