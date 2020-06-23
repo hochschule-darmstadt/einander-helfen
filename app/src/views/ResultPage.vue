@@ -4,24 +4,24 @@
 
       <v-layout row wrap no-gutters>
         <!-- Map -->
-        <v-flex xs12 md6 order-md2 v-if="!postIsOpen">
-           <div class="map" v-if="!postIsOpen">
+        <v-flex xs12 md6 order-md2 v-if="postMapToggle === 'map'">
+           <div class="map">
                 <v-card tile height="70vh">
                     <div id="map" :style="{height: map.height, width: map.width}">
-                        <v-btn @click="closeMap()"
-                               style="position: absolute; z-index: 9999; margin-left: 50px; margin-top: 20px;">Details
+                        <v-btn v-if="currentPostId.length > 0" @click="postMapToggle = 'post'"
+                               style="position: absolute; right; z-index: 9999; margin-right: 30px; margin-top: 20px; right: 0;"><v-icon>info</v-icon> Details
                         </v-btn>
                         <l-map ref="map" :center="map.center" :zoom="map.zoom">
                             <l-tile-layer :url="map.url" :attribution="map.attribution"></l-tile-layer>
                             <template v-for="post in posts">
                                 <l-marker v-if="post.id === currentPostId" :icon="map.markerRed"
                                           :lat-lng="[post.geo_location.lat, post.geo_location.lon]"
-                                          @click="openPost(i)">
+                                          @click="openPost(post.id)">
                                     <l-tooltip>{{ post.title }}</l-tooltip>
                                 </l-marker>
                                 <l-marker v-else :icon="map.markerBlue"
                                           :lat-lng="[post.geo_location.lat, post.geo_location.lon]"
-                                          @click="openPost(post.i)">
+                                          @click="openPost(post.id)">
                                     <l-tooltip>{{ post.title }}</l-tooltip>
                                 </l-marker>
                             </template>
@@ -32,16 +32,19 @@
         </v-flex>
 
         <!-- right side content-->
-        <v-flex sm12 md6 order-md2 v-if="postIsOpen" mb-5>
+        <v-flex sm12 md6 order-md2 v-if="postMapToggle === 'post'" mb-5>
           <div>
           <v-card
             tile
             style="height:70vh ;overflow:auto"
           >
           <v-list-item three-line>
+            <!--
+              This functionality may be added later. This button allows to deselect the current post and load all markers on the map.
+
             <v-btn class="mr-3" text @click="closePost()">
               <v-icon>arrow_back</v-icon>
-            </v-btn>
+            </v-btn> -->
 
             <!--display title, subtitle and image on the right side-->
             <v-list-item-content style="margin-top:2%" class="headline">{{
@@ -55,6 +58,10 @@
               contain
               :src="selectedPost.image"
             ></v-img>
+
+            <v-btn style="margin-top:2%; background: #00254f" dark class="mr-3" text @click="openMap()">
+              <v-icon>map</v-icon> Karte
+            </v-btn>
           </v-list-item>
 
           <!--display content on the right side-->
@@ -182,9 +189,11 @@
         data(): {
             perPage: number;
             map: any;
+            postMapToggle: 'post' | 'map';
         } {
             return {
                 perPage: 15,
+                postMapToggle: 'map',
                 map: {
                     url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
@@ -259,12 +268,13 @@
             ...mapActions(['hydrateStateFromRoute', 'updateURIFromState', 'setSelectedPost', 'setPage', 'findPosts']),
             ...mapLocationActions(['setSelectedRadius']),
             openPost(id: string): void {
+                        this.postMapToggle = 'post';
                         this.setSelectedPost(this.posts.find((post) => post.id === id));
-                    },
-            closePost(): void {
+            },
+            openMap(): void {
                 const currentPost = this.selectedPost as Post;
                 const location = [currentPost.geo_location.lat, currentPost.geo_location.lon] as LatLngTuple;
-                this.setSelectedPost(null);
+                this.postMapToggle = 'map';
                 this.$nextTick(() => {
                     (this.$refs.map as LMap).setCenter(location);
                 });
