@@ -9,7 +9,7 @@
                 <v-card tile height="70vh">
                     <div id="map" :style="{height: map.height, width: map.width}">
                         <v-btn v-if="currentPostId !== ''" @click="postIsOpen = true"
-                               style="position: absolute; right; z-index: 9999; margin-right: 50px; margin-top: 20px; right: 0;"><v-icon>info</v-icon> Details
+                               style="position: absolute; right; z-index: 9999; margin-right: 30px; margin-top: 20px; right: 0;"><v-icon>info</v-icon> Details
                         </v-btn>
                         <l-map ref="map" :center="map.center" :zoom="map.zoom">
                             <l-tile-layer :url="map.url" :attribution="map.attribution"></l-tile-layer>
@@ -40,7 +40,7 @@
           >
           <v-list-item three-line>
             <!--
-              This functionality may be added later. This button allows to deselect the current post and load all markers on the map
+              This functionality may be added later. This button allows to deselect the current post and load all markers on the map.
 
             <v-btn class="mr-3" text @click="closePost()">
               <v-icon>arrow_back</v-icon>
