@@ -260,9 +260,6 @@
             openPost(id: string): void {
                         this.postMapToggle = 'post';
                         this.setSelectedPost(this.posts.find((post) => post.id === id));
-                    },
-            closePost(): void {
-                this.openMap();
             },
             openMap(): void {
                 const currentPost = this.selectedPost as Post;
