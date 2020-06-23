@@ -1,12 +1,12 @@
 <template>
-  <v-btn icon outlined fab color="#00254f" @click="handleSearchEvent">
-    <v-icon>search</v-icon>
+  <v-btn class="mx-2" fab dark large color="primary" @click="handleSearchEvent">
+    <v-icon dark>search</v-icon>
   </v-btn>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import { createNamespacedHelpers, mapActions } from 'vuex'
+import { createNamespacedHelpers, mapActions as mapStateActions } from 'vuex';
 const { mapMutations } = createNamespacedHelpers('textSearchModule')
 
 export default Vue.extend({
@@ -27,11 +27,12 @@ export default Vue.extend({
   },
   methods: {
     ...mapMutations(['addSearchValue']),
-    ...mapActions(['updateURIFromState']),
+    ...mapStateActions(['updateURIFromState', 'findPosts']),
     handleSearchEvent (): void {
        {
-        this.addSearchValue(this.searchInput)
-        this.updateURIFromState()
+        this.addSearchValue(this.searchInput);
+        this.updateURIFromState();
+        this.findPosts();
       }
     }
   }

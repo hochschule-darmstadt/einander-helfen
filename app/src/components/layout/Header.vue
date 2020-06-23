@@ -1,6 +1,6 @@
 <template>
   <header>
-    <v-layout row wrap justify-space-around no-gutters style="padding: 1vh; background: #00254f">
+    <v-layout row wrap justify-space-around align-center no-gutters style="padding: 2vh; background: #00254f">
       <v-btn
         class="d-none d-sm-flex justify-center mr-5"
         height="75px"
@@ -22,7 +22,7 @@
       </v-btn>
 
       <v-flex xs10 sm8 md6 style="background: white; border-radius: 20px; margin-right:2%">
-        <search-bar @input="addSearchValueAndUpdate" :currentSearchValue="currentSearchValue"/>
+        <search-bar :searchInput.sync="currentSearchValue"/>
         <v-spacer></v-spacer>
         <v-chip-group
           active-class="primary-text"
@@ -53,12 +53,18 @@
         </v-list>
       </v-menu>
 
-      <v-flex xs12 sm5 md3>
+      <v-flex xs12 sm5 md2>
         <location-search-bar @input="updateResults" :dark="true" />
       </v-flex>
 
       <v-flex xs12 sm4 md1>
         <radius @input="updateResults" :dark="true" />
+      </v-flex>
+
+      <v-flex xs12 sm4 md1>
+        <search-button
+          :searchInput.sync="currentSearchValue"
+          />
       </v-flex>
 
       <v-menu offset-y>
@@ -91,12 +97,14 @@
     import LocationSearchBar from '@/components/ui/LocationSearchBar.vue';
     import Radius from '@/components/ui/Radius.vue';
     import SearchBar from '@/components/ui/SearchBar.vue';
+    import SearchButton from '@/components/ui/SearchButton.vue';
 
 export default Vue.extend({
   components: {
     LocationSearchBar,
     Radius,
-    SearchBar
+    SearchBar,
+    SearchButton
   },
   data(): {
     links: any;
@@ -111,6 +119,11 @@ export default Vue.extend({
       ],
       currentSearchValue: ''
     };
+  },
+  watch: {
+        currentSearchValue(value): void {
+            this.$emit('update:currentSearchValue', value);
+        }
   },
   methods: {
     ...mapActions(['addSearchValue', 'removeSearchValue']),
