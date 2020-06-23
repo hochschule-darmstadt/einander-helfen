@@ -86,7 +86,7 @@
                     :key="tag.title"
                     :src="tag.img"
                   >
-                    <v-card>
+                    <v-card class="no-radius">
                       <v-card-title
                         class="justify-center black--text"
                         v-html="tag.title"
@@ -161,6 +161,10 @@ export default Vue.extend({
 <style>
 .v-input__slot {
   margin-bottom: 0;
+}
+
+.no-radius {
+  border-radius: 0!important;
 }
 
 img {
