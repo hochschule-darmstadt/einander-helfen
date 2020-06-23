@@ -4,12 +4,12 @@
             rounded
             color="black"
             placeholder="z.B.Jugendarbeit"
-            append-icon="search"
             item-text="tag"
             autocomplete="off"
             :items="mySearchProposals"
             @input="addSearchTag"
-            :search-input.sync="currentSearchValue"
+            append-icon="none"
+            :search-input.sync="mySearchValue"
     ></v-combobox>
 </template>
 
@@ -21,11 +21,14 @@ import { createNamespacedHelpers } from 'vuex';
 const { mapState, mapActions } = createNamespacedHelpers('textSearchModule');
 
 export default Vue.extend({
+    props: {
+        searchInput: String
+    },
     data(): {
-        currentSearchValue: string
+        mySearchValue: string
     } {
         return {
-            currentSearchValue: ''
+            mySearchValue: this.searchInput || ''
         };
     },
     created(): void {
@@ -35,14 +38,17 @@ export default Vue.extend({
         selectedTag(newValue): void {
             this.setSelectedTag(newValue);
         },
+        mySearchValue(value): void {
+            this.$emit('update:searchInput', value);
+        }
     },
     computed: {
         ...mapState(['searchProposals']),
         mySearchProposals(): string[] {
-            if (!this.currentSearchValue || this.currentSearchValue.length < 1) {
+            if (!this.mySearchValue || this.mySearchValue.length < 1) {
                 return [];
             }
-            const searchTerm = this.currentSearchValue;
+            const searchTerm = this.mySearchValue;
             const listOfMatchingTerms = this.matchSearchInput(searchTerm, this.searchProposals
                     .filter((element) => 'label' in element));
             const rankedListOfOrderedTerms = this.rankTerms(searchTerm, listOfMatchingTerms);
@@ -97,7 +103,10 @@ export default Vue.extend({
             });
         },
         addSearchTag(tag: string): void {
-
+            // No empty tags!
+            if (!tag) {
+                return;
+            }
             const tagName = tag.includes(' (')
                     ? tag.substr(0, tag.indexOf(' ('))
                     : tag;

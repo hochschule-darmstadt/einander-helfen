@@ -46,11 +46,12 @@ class DataService {
                                 location: Location|undefined,
                                 radius: string
                             }): Promise<any> {
-        const query = new QueryBuilder();
+        const query: QueryBuilder = new QueryBuilder();
         searchValues.forEach((value) => {
             query.shouldMatch('categories', value)
                 .shouldMatch('title', value);
-        });
+            });
+
         query.size(100);
         const queryObject = query.build();
 

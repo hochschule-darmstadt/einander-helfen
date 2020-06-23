@@ -104,7 +104,7 @@ const store: StoreOptions<RootState> = {
         path += '/' + state.selectedPost.id;
       }
 
-      router.replace({
+      router.push({
         path,
         query
       }).catch((err) => err);
