@@ -262,13 +262,7 @@
                         this.setSelectedPost(this.posts.find((post) => post.id === id));
                     },
             closePost(): void {
-                const currentPost = this.selectedPost as Post;
-                const location = [currentPost.geo_location.lat, currentPost.geo_location.lon] as LatLngTuple;
-                this.postMapToggle = 'map';
-                this.setSelectedPost(null);
-                this.$nextTick(() => {
-                    (this.$refs.map as LMap).setCenter(location);
-                });
+                this.openMap();
             },
             openMap(): void {
                 const currentPost = this.selectedPost as Post;
