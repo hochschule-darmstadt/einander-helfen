@@ -39,7 +39,7 @@
               row
               justify-center
               no-gutters
-              class="mt-12 mb-12 "
+              class="mt-8 mb-12 "
               style="padding: 1vh; "
             >
               <v-flex >
