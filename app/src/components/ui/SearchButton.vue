@@ -29,7 +29,7 @@ export default Vue.extend({
     ...mapMutations(['addSearchValue']),
     ...mapActions(['updateURIFromState']),
     handleSearchEvent (): void {
-      if (this.searchInput) {
+       {
         this.addSearchValue(this.searchInput)
         this.updateURIFromState()
       }
