@@ -41,43 +41,39 @@
               no-gutters
               class="mt-12 mb-12 "
               style="padding: 1vh; "
-
             >
-              <v-flex style="margin-left:2%">
+              <v-flex >
                 <v-form>
                   <v-row>
-                    <v-col>
-                      <search-bar :searchInput.sync="currentSearchValue" v-model="selectedInput"/>
+                    <v-col md="12">
+                      <search-bar
+                        :searchInput.sync="currentSearchValue"
+                        v-model="selectedInput"
+                      />
                     </v-col>
                   </v-row>
 
                   <v-row>
-                    <v-col>
+                    <v-col md="6">
                       <location-search-bar />
                     </v-col>
 
-                    <v-col>
+                    <v-col md="4">
                       <radius />
+                    </v-col>
+                    <v-col md="2">
+                      <v-btn
+                        icon
+                        outlined
+                        fab
+                        color="#00254f"
+                        @click="handleSearchEvent"
+                      >
+                        <v-icon>search</v-icon>
+                      </v-btn>
                     </v-col>
                   </v-row>
                 </v-form>
-              </v-flex>
-              <v-flex style="margin-left:2%">
-              <v-row justify="center">
-                <v-col>
-                  <v-btn
-                    icon
-                    outlined
-                    fab
-                    color="#00254f"
-                    class="mt-8 md-16"
-                    x-large
-                    @click="handleSearchEvent"
-                  >
-                    <v-icon>search</v-icon>
-                  </v-btn>
-                </v-col>
-              </v-row>
               </v-flex>
             </v-layout>
           </v-col>
