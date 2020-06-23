@@ -273,7 +273,6 @@
             openMap(): void {
                 const currentPost = this.selectedPost as Post;
                 const location = [currentPost.geo_location.lat, currentPost.geo_location.lon] as LatLngTuple;
-                this.postIsOpened = false;
                 this.postMapToggle = 'map';
                 this.$nextTick(() => {
                     (this.$refs.map as LMap).setCenter(location);
