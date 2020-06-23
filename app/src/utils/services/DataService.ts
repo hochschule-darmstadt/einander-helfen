@@ -46,14 +46,27 @@ class DataService {
                                 location: Location|undefined,
                                 radius: string
                             }): Promise<any> {
-        const query: QueryBuilder = new QueryBuilder();
-        searchValues.forEach((value) => {
-            query.shouldMatch('categories', value)
-                .shouldMatch('title', value);
-            });
+        const query = new QueryBuilder();
+        query.mustShouldMatch(searchValues.map((value) => [{key: 'title', value}, {key: 'categories', value}]).flat());
 
         query.size(100);
         const queryObject = query.build();
+
+        if (location) {
+            queryObject.sort.push({
+                _geo_distance : {
+                    geo_location : {
+                        lat: location.lat,
+                        lon: location.lon
+                    },
+                    order : 'asc',
+                    unit : 'km',
+                    mode : 'min',
+                    distance_type : 'arc',
+                    ignore_unmapped: true
+                }
+            });
+        }
 
         if (location && radius) {
             // @ts-ignore
