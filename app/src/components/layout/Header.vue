@@ -92,7 +92,7 @@
     import Radius from '@/components/ui/Radius.vue';
     import SearchBar from '@/components/ui/SearchBar.vue';
 
-export default Vue.extend({
+    export default Vue.extend({
   components: {
     LocationSearchBar,
     Radius,
