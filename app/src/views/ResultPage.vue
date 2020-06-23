@@ -168,7 +168,9 @@
     import Header from '@/components/layout/Header.vue';
     import Post from '@/models/post';
     import Vue from 'vue';
-    import {mapActions, mapState} from 'vuex';
+    import {mapActions, mapState, createNamespacedHelpers} from 'vuex';
+    const {mapState: mapLocationState} = createNamespacedHelpers('locationSearchModule');
+    const {mapState: mapSearchState} = createNamespacedHelpers('textSearchModule');
 
     import L, {LatLngTuple} from 'leaflet';
     import {LMap, LTileLayer, LMarker, LTooltip, LIcon} from 'vue2-leaflet';
@@ -201,7 +203,9 @@
             };
         },
         computed: {
-            ...mapState(['posts', 'page', 'selectedLocation', 'radiusSearchValue', 'selectedPost']),
+            ...mapState(['posts', 'page', 'selectedPost']),
+            ...mapLocationState(['selectedLocation', 'selectedRadius']),
+            ...mapSearchState(['searchValues']),
             currentPostId(): string {
                 return this.selectedPost
                     ? this.selectedPost.id
@@ -233,12 +237,6 @@
                   (this.$refs.map as LMap).fitBounds(markers);
                 }
             },
-            radiusSearchValue(): void {
-                this.findPosts();
-            },
-            selectedLocation(): void {
-                this.findPosts();
-            },
             selectedPost(): void {
                 this.updateURIFromState();
             },
@@ -258,7 +256,7 @@
                 this.$nextTick(() => {
                     (this.$refs.map as LMap).setCenter(location);
                 });
-            },
+            }
         }
     });
 </script>

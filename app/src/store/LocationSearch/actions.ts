@@ -8,7 +8,6 @@ export const actions: ActionTree<LocationSearchState, RootState> = {
   },
   setSelectedLocation({ commit, dispatch }, selectedLocation): void {
     commit('setSelectedLocation', selectedLocation);
-    dispatch('findPosts', {}, {root: true});
   },
   setSelectedRadius({ commit, dispatch }, radiusSearchValue): void {
     commit('setSelectedRadius', radiusSearchValue);

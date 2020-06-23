@@ -22,14 +22,14 @@
       </v-btn>
 
       <v-flex xs10 sm8 md6 style="background: white; border-radius: 20px; margin-right:2%">
-        <search-bar @input="addSearchValue" />
+        <search-bar @input="addSearchValueAndUpdate" :currentSearchValue="currentSearchValue"/>
         <v-spacer></v-spacer>
         <v-chip-group
           active-class="primary-text"
           column
           style="margin-left: 10px; margin-right: 10px; margin-top: -20px"
         >
-          <v-chip :key="tag" @click:close="remove(tag)" close v-for="tag in searchValues">{{ tag }}</v-chip>
+          <v-chip :key="tag" @click:close="removeSearchValueAndUpdate(tag)" close v-for="tag in searchValues">{{ tag }}</v-chip>
         </v-chip-group>
       </v-flex>
 
@@ -54,11 +54,11 @@
       </v-menu>
 
       <v-flex xs12 sm5 md3>
-        <location-search-bar :dark="true" />
+        <location-search-bar @input="updateResults" :dark="true" />
       </v-flex>
 
       <v-flex xs12 sm4 md1>
-        <radius :dark="true" />
+        <radius @input="updateResults" :dark="true" />
       </v-flex>
 
       <v-menu offset-y>
@@ -86,7 +86,7 @@
 
 <script lang="ts">
     import Vue from 'vue';
-    import { createNamespacedHelpers } from 'vuex';
+    import { createNamespacedHelpers, mapActions as mapStateActions } from 'vuex';
     const { mapActions, mapState } = createNamespacedHelpers('textSearchModule');
     import LocationSearchBar from '@/components/ui/LocationSearchBar.vue';
     import Radius from '@/components/ui/Radius.vue';
@@ -100,6 +100,7 @@ export default Vue.extend({
   },
   data(): {
     links: any;
+    currentSearchValue: string;
   } {
     return {
       links: [
@@ -107,13 +108,27 @@ export default Vue.extend({
         { text: 'Über uns', route: '/about' },
         { text: 'Impressum', route: '/imprint' },
         { text: 'Datenschutzerklärung', route: '/privacy' }
-      ]
+      ],
+      currentSearchValue: ''
     };
   },
   methods: {
     ...mapActions(['addSearchValue', 'removeSearchValue']),
-    remove(tag: string): void {
-      this.removeSearchValue(tag);
+    ...mapStateActions(['updateURIFromState', 'findPosts']),
+    updateResults(): void {
+        this.updateURIFromState();
+        this.findPosts();
+    },
+    addSearchValueAndUpdate(input): void {
+      this.addSearchValue(input);
+      this.$nextTick(() => {
+        this.currentSearchValue = '';
+      });
+      this.updateResults();
+    },
+    removeSearchValueAndUpdate(element): void {
+      this.removeSearchValue(element);
+      this.updateResults();
     }
   },
   computed: {
