@@ -16,12 +16,12 @@
                             <template v-for="post in posts">
                                 <l-marker v-if="post.id === currentPostId" :icon="map.markerRed"
                                           :lat-lng="[post.geo_location.lat, post.geo_location.lon]"
-                                          @click="openPost(post.i)">
+                                          @click="openPost(post.id)">
                                     <l-tooltip>{{ post.title }}</l-tooltip>
                                 </l-marker>
                                 <l-marker v-else :icon="map.markerBlue"
                                           :lat-lng="[post.geo_location.lat, post.geo_location.lon]"
-                                          @click="openPost(post.i)">
+                                          @click="openPost(post.id)">
                                     <l-tooltip>{{ post.title }}</l-tooltip>
                                 </l-marker>
                             </template>
