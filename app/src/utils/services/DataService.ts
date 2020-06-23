@@ -48,6 +48,7 @@ class DataService {
                             }): Promise<any> {
         const query = new QueryBuilder();
         query.mustShouldMatch(searchValues.map((value) => [{key: 'title', value}, {key: 'categories', value}]).flat());
+
         query.size(100);
         const queryObject = query.build();
 

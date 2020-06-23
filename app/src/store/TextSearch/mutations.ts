@@ -4,7 +4,9 @@ import Tag from '@/models/tag';
 
 export const mutations: MutationTree<TextSearchState> = {
   addSearchValue(state, value: string): void {
-    state.searchValues.push(value);
+    if (! state.searchValues.includes(value)) {
+      state.searchValues.push(value);
+    }
   },
   initializeSearchProposals(state, tags: Tag[]): void {
     state.searchProposals = state.searchProposals.concat(tags);

@@ -37,9 +37,7 @@
         watch: {
             newSelectedRadius(newValue): void {
                 this.setSelectedRadius(newValue);
-                if (this.$route.name === 'resultPage') {
-                   this.$store.dispatch('updateURIFromState');
-                }
+                this.$emit('input', newValue);
             },
         },
         computed: {
