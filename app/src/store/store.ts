@@ -16,6 +16,7 @@ const store: StoreOptions<RootState> = {
   },
   state: {
     posts: [] as Post[],
+    selectedPost: null,
     page: 1 as number
   } as RootState,
   mutations: {
@@ -29,59 +30,83 @@ const store: StoreOptions<RootState> = {
     setPosts(state, value): void {
       state.posts = value;
     },
+    setSelectedPost(state, value: Post|null): void {
+      state.selectedPost = value;
+    },
     setPage(state, value: number): void {
       state.page = value;
-      router.replace({
-        name: 'resultPage',
-        query: {
-          ...router.currentRoute.query,
-          page: value.toString()
-        }
-      });
     }
   },
   actions: {
 
-    findPosts({ commit, state }): void {
+    findPosts({ commit, state }): Promise<Post[]> {
       const location = LocationService.findByTitle(state.locationSearchModule.selectedLocation);
       const searchValues = state.textSearchModule.searchValues;
       const radius = state.locationSearchModule.selectedRadius;
-      DataService.findBySelection({
-        searchValues,
-        location,
-        radius
-      }).then((result) => commit('setPosts', result));
+      return new Promise((resolve, reject) => {
+        DataService.findBySelection({
+          searchValues,
+          location,
+          radius
+        }).then((result) => {
+          commit('setPosts', result);
+          resolve(result);
+        });
+      });
+
     },
-    setResultPage({ commit }, value: number): void {
-      commit('setPage', value);
+    setPage({ commit, dispatch }, page: number): void {
+        commit('setPage', page);
+        dispatch('updateURIFromState');
     },
-    hydrateStateFromURIParams({ commit, dispatch }, queryParams): void {
+    setSelectedPost({ commit }, value: Post|null): void {
+      commit('setSelectedPost', value);
+    },
+    hydrateStateFromRoute({ commit, dispatch }, route): void {
+      const queryParams = route.query;
+      const params = route.params;
+
       // Clear previous search parameters. The URI is our single source of truth!
       commit('clearSearchParams');
-      if ('q' in queryParams) {
+      if ('q' in queryParams && queryParams.q) {
         dispatch('textSearchModule/addSearchValues', queryParams.q.split(','));
       }
-      if ('location' in queryParams) {
-        dispatch('locationSearchModule/setSelectedLocation', queryParams.location);
+      if ('location' in queryParams && queryParams.location) {
+        commit('locationSearchModule/setSelectedLocation', queryParams.location);
       }
-      if ('radius' in queryParams) {
-        dispatch('locationSearchModule/setSelectedRadius', queryParams.radius);
+      if ('radius' in queryParams && queryParams.radius) {
+        commit('locationSearchModule/setSelectedRadius', queryParams.radius);
       }
-      if ('page' in queryParams) {
+      if ('page' in queryParams && queryParams.page) {
         commit('setPage', parseInt(queryParams.page, 10));
       }
-      dispatch('findPosts');
+      dispatch('findPosts').then((posts: Post[]) => {
+        if ('id' in params && params.id) {
+          const selectedPost = posts.find((post) => post.id === params.id);
+          if (selectedPost) {
+            commit('setSelectedPost', selectedPost);
+          }
+        }
+      });
     },
     updateURIFromState({ state }): void {
+      const query = {
+        ...router.currentRoute.query,
+        q: state.textSearchModule.searchValues.join(','),
+        location: state.locationSearchModule.selectedLocation,
+        radius: state.locationSearchModule.selectedRadius,
+        page: state.page.toString()
+      };
+
+      let path  = '/posts';
+      // is there a post currently open? => reflect it in the route
+      if (state.selectedPost) {
+        path += '/' + state.selectedPost.id;
+      }
+
       router.replace({
-        name: 'resultPage',
-        query: {
-          ...router.currentRoute.query,
-          q: state.textSearchModule.searchValues.join(','),
-          location: state.locationSearchModule.selectedLocation,
-          radius: state.locationSearchModule.selectedRadius,
-          page: state.page.toString()
-        }
+        path,
+        query
       }).catch((err) => err);
     },
   },

@@ -13,7 +13,6 @@ class TagService {
 
 
     private changeSynonymsToStringArray(): Tag[] {
-        console.log(importedTags);
         return importedTags.map((tag) => {
             const synonyms = tag.synonyms
                 ? tag.synonyms.split(',').map((synonym) => synonym.trim())
