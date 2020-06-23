@@ -169,12 +169,13 @@
     import Post from '@/models/post';
     import Vue from 'vue';
     import {mapActions, mapState, createNamespacedHelpers} from 'vuex';
-    const {mapState: mapLocationState} = createNamespacedHelpers('locationSearchModule');
+    const {mapState: mapLocationState, mapActions: mapLocationActions} = createNamespacedHelpers('locationSearchModule');
     const {mapState: mapSearchState} = createNamespacedHelpers('textSearchModule');
 
     import L, {LatLngTuple} from 'leaflet';
     import {LMap, LTileLayer, LMarker, LTooltip, LIcon} from 'vue2-leaflet';
     import 'leaflet/dist/leaflet.css';
+    import radii from '@/resources/radii';
 
     export default Vue.extend({
         components: {Header, LMap, LTileLayer, LMarker, LTooltip},
@@ -235,6 +236,16 @@
                 if (val.length) {
                   const markers = val.map((post) => [post.geo_location.lat, post.geo_location.lon] as LatLngTuple);
                   (this.$refs.map as LMap).fitBounds(markers);
+                } else {
+                  // Unsere Suche hat keine Ergebnisse geliefert.
+                  if (this.selectedLocation && this.selectedRadius) {
+                    // Wenn wir mit einem Radius um einen Ort suchen, den Radius vergrößern und nochmal probieren!
+                    const currentRadiusIndex = radii.findIndex((r) => r.value === this.selectedRadius);
+                    const nextBiggerRadius = radii[currentRadiusIndex + 1 % radii.length];
+                    this.setSelectedRadius(nextBiggerRadius.value);
+                    this.updateURIFromState();
+                    this.findPosts();
+                  }
                 }
             },
             selectedPost(): void {
@@ -246,6 +257,7 @@
         },
         methods: {
             ...mapActions(['hydrateStateFromRoute', 'updateURIFromState', 'setSelectedPost', 'setPage', 'findPosts']),
+            ...mapLocationActions(['setSelectedRadius']),
             openPost(id: string): void {
                         this.setSelectedPost(this.posts.find((post) => post.id === id));
                     },
