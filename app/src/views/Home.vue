@@ -1,13 +1,7 @@
 <template>
   <div class="home">
     <Toolbar />
-    <VueSlickCarousel
-      :dots="true"
-      :infinite="true"
-      :autoplay="true"
-      :autoplaySpeed="30000"
-      style="margin-top:4vh"
-    >
+    <VueSlickCarousel :dots="true" :infinite="true" :autoplay="true" :autoplaySpeed="30000">
       <picture>
         <source
           media="(max-width: 768px)"
