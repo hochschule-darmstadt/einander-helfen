@@ -61,15 +61,9 @@
                       <radius />
                     </v-col>
                     <v-col md="2">
-                      <v-btn
-                        icon
-                        outlined
-                        fab
-                        color="#00254f"
-                        @click="handleSearchEvent"
-                      >
-                        <v-icon>search</v-icon>
-                      </v-btn>
+                      <search-button
+                        :searchInput.sync="currentSearchValue"
+                      />
                     </v-col>
                   </v-row>
                 </v-form>
@@ -128,6 +122,7 @@ import 'vue-slick-carousel/dist/vue-slick-carousel.css';
 import LocationSearchBar from '@/components/ui/LocationSearchBar.vue';
 import Radius from '@/components/ui/Radius.vue';
 import SearchBar from '@/components/ui/SearchBar.vue';
+import SearchButton from '@/components/ui/SearchButton.vue';
 
 export default Vue.extend({
   components: {
@@ -135,7 +130,8 @@ export default Vue.extend({
     VueSlickCarousel,
     LocationSearchBar,
     Radius,
-    Toolbar
+    Toolbar,
+    SearchButton
   },
   data(): {
     volunteerTags: Array<{ title: string; img: string }>
@@ -164,18 +160,6 @@ export default Vue.extend({
       selectedInput: '',
       currentSearchValue: ''
     };
-  },
-  methods: {
-    ...mapMutations(['addSearchValue']),
-    ...mapActions(['updateURIFromState']),
-    handleSearchEvent(): void {
-      if (this.selectedInput) {
-        this.addSearchValue(this.selectedInput);
-      } else {
-        this.addSearchValue(this.currentSearchValue);
-      }
-      this.updateURIFromState();
-    }
   }
 });
 </script>
