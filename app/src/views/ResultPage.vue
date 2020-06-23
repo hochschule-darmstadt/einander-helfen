@@ -181,7 +181,6 @@
         data(): {
             perPage: number;
             map: any;
-            isInitialized: boolean;
         } {
             return {
                 perPage: 15,
@@ -200,8 +199,7 @@
                         iconUrl: require('../../public/images/marker/marker-icon-red.png'),
                         iconSize: [25, 41]
                     })
-                },
-                isInitialized: false
+                }
             };
         },
         computed: {
@@ -228,9 +226,6 @@
         },
         created(): void {
             this.hydrateStateFromRoute(this.$route);
-            this.$nextTick(() => {
-                this.isInitialized = true;
-            });
         },
         watch: {
             posts(val: Post[], oldVal: Post[]): void {
@@ -241,15 +236,6 @@
                   const markers = val.map((post) => [post.geo_location.lat, post.geo_location.lon] as LatLngTuple);
                   (this.$refs.map as LMap).fitBounds(markers);
                 }
-            },
-            selectedRadius(): void {
-                this.update();
-            },
-            selectedLocation(): void {
-                this.update();
-            },
-            searchValues(): void {
-                this.update();
             },
             selectedPost(): void {
                 this.updateURIFromState();
@@ -270,12 +256,6 @@
                 this.$nextTick(() => {
                     (this.$refs.map as LMap).setCenter(location);
                 });
-            },
-            update(): void {
-                if (this.isInitialized) {
-                    this.updateURIFromState();
-                    this.findPosts();
-                }
             }
         }
     });
