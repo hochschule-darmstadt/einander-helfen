@@ -120,11 +120,6 @@
       currentSearchValue: ''
     };
   },
-  watch: {
-        currentSearchValue(value): void {
-            this.$emit('update:currentSearchValue', value);
-        }
-  },
   methods: {
     ...mapActions(['addSearchValue', 'removeSearchValue']),
     ...mapStateActions(['updateURIFromState', 'findPosts']),
