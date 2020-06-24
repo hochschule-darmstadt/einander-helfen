@@ -136,7 +136,7 @@
         <v-flex sm12 md6 order-md1 >
           <div style="height:70vh ;overflow:auto">
             <template v-for="post in visiblePages">
-              <v-card class="mb-3">
+              <v-card class="mb-3" :class="{ activeListItem: currentPostId === post.id }">
                 <v-list-item three-line @click="openPost(post.id)">
                   <v-list-item-content>
                     <v-list-item-title class="headline mb-1">{{
@@ -284,34 +284,7 @@
 </script>
 
 <style scoped>
-    .grid {
-        width: 100%;
-        display: grid;
-        grid-template-columns: 50% 50%;
-        grid-template-areas: "posts detail";
-    }
-
-    .map,
-    .detail {
-        grid-area: detail;
-        height: 75vh;
-    }
-
-    .posts {
-        grid-area: posts;
-        height: 75vh;
-        overflow: auto
-    }
-
-    @media (max-width: 500px) {
-        .grid {
-            grid-template-columns: 100%;
-            grid-row-gap: 10px;
-            grid-template-areas: "detail" "posts";
-        }
-
-        .posts {
-            height: auto;
-        }
-    }
+   .activeListItem {
+     background-color: #c4e0ff;
+   }
 </style>
