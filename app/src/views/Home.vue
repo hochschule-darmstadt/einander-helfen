@@ -38,7 +38,7 @@
               <v-flex >
                 <v-form>
                   <v-row>
-                    <v-col md="12">
+                    <v-col cols="12">
                       <search-bar
                         :searchInput.sync="currentSearchValue"
                         v-model="selectedInput"
@@ -47,14 +47,14 @@
                   </v-row>
 
                   <v-row>
-                    <v-col md="6">
+                    <v-col cols="12" md="6">
                       <location-search-bar />
                     </v-col>
 
-                    <v-col md="4">
+                    <v-col cols="10" md="4">
                       <radius />
                     </v-col>
-                    <v-col md="2">
+                    <v-col cols="2">
                       <search-button @click="executeSearch" />
                     </v-col>
                   </v-row>
