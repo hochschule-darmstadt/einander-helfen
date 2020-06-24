@@ -159,6 +159,8 @@ export default Vue.extend({
     executeSearch(): void {
       if (! this.selectedInput) {
         this.addSearchValue(this.currentSearchValue);
+      } else {
+        this.addSearchValue(this.selectedInput);
       }
       this.updateURIFromState();
     }
