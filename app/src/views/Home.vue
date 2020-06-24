@@ -51,10 +51,10 @@
                       <location-search-bar />
                     </v-col>
 
-                    <v-col cols="10" md="4">
+                    <v-col cols="8" sm="9" md="4">
                       <radius />
                     </v-col>
-                    <v-col cols="2">
+                    <v-col cols="4" sm="3" md="2">
                       <search-button @click="executeSearch" />
                     </v-col>
                   </v-row>
