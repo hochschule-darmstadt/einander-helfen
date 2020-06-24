@@ -55,9 +55,7 @@
                       <radius />
                     </v-col>
                     <v-col md="2">
-                      <search-button
-                        :searchInput.sync="currentSearchValue"
-                      />
+                      <search-button @click="executeSearch" />
                     </v-col>
                   </v-row>
                 </v-form>
@@ -105,7 +103,7 @@
 
 <script lang="ts">
 import { createNamespacedHelpers, mapActions} from 'vuex';
-const { mapMutations } = createNamespacedHelpers('textSearchModule');
+const { mapMutations: mapTextSearchActions } = createNamespacedHelpers('textSearchModule');
 
 import Vue from 'vue';
 import Toolbar from '@/components/layout/Toolbar.vue';
@@ -154,6 +152,16 @@ export default Vue.extend({
       selectedInput: '',
       currentSearchValue: ''
     };
+  },
+  methods: {
+    ...mapTextSearchActions(['addSearchValue']),
+    ...mapActions(['updateURIFromState']),
+    executeSearch(): void {
+      if (! this.selectedInput) {
+        this.addSearchValue(this.currentSearchValue);
+      }
+      this.updateURIFromState();
+    }
   }
 });
 </script>

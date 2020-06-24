@@ -22,7 +22,7 @@
       </v-btn>
 
       <v-flex xs10 sm8 md6 style="background: white; border-radius: 20px; margin-right:2%">
-        <search-bar :searchInput.sync="currentSearchValue"/>
+        <search-bar @input="addSearchValueAndUpdate" :searchInput.sync="currentSearchValue"/>
         <v-spacer></v-spacer>
         <v-chip-group
           active-class="primary-text"
@@ -62,9 +62,7 @@
       </v-flex>
 
       <v-flex xs12 sm4 md1>
-        <search-button
-          :searchInput.sync="currentSearchValue"
-          />
+        <search-button @click="updateSearchValueFromCurrentInputAndUpdateResults" />
       </v-flex>
 
       <v-menu offset-y>
@@ -137,6 +135,13 @@
     removeSearchValueAndUpdate(element): void {
       this.removeSearchValue(element);
       this.updateResults();
+    },
+    updateSearchValueFromCurrentInputAndUpdateResults(): void {
+      if (this.currentSearchValue) {
+        this.addSearchValueAndUpdate(this.currentSearchValue);
+      } else {
+        this.updateResults();
+      }
     }
   },
   computed: {
