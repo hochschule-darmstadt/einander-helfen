@@ -13,17 +13,19 @@
                         </v-btn>
                         <l-map ref="map" :center="map.center" :zoom="map.zoom">
                             <l-tile-layer :url="map.url" :attribution="map.attribution"></l-tile-layer>
-                            <template v-for="post in posts">
+                            <template>
+                              <div v-for="(post,i) in posts" :key="i">
                                 <l-marker v-if="post.id === currentPostId" :icon="map.markerRed"
                                           :lat-lng="[post.geo_location.lat, post.geo_location.lon]"
-                                          @click="openPost(i)">
+                                          @click="openPost(post.id)">
                                     <l-tooltip>{{ post.title }}</l-tooltip>
                                 </l-marker>
                                 <l-marker v-else :icon="map.markerBlue"
                                           :lat-lng="[post.geo_location.lat, post.geo_location.lon]"
-                                          @click="openPost(post.i)">
+                                          @click="openPost(post.id)">
                                     <l-tooltip>{{ post.title }}</l-tooltip>
                                 </l-marker>
+                                </div>
                             </template>
                         </l-map>
                     </div>
@@ -128,9 +130,13 @@
         <!--left side content-->
         <v-flex sm12 md6 order-md1 >
           <div style="height:70vh ;overflow:auto">
-            <template v-for="post in visiblePages">
-              <v-card class="mb-3">
-                <v-list-item three-line @click="openPost(post.id)">
+            <template>
+              <v-card class="mb-3" style="background-color:#00254f0c">
+                <v-list-item-group v-model="model" class="mb-3"  mandatory="mandatory">
+                  <v-list-item class="mb-3" three-line 
+                  v-for="(post,i) in visiblePages" @click="openPost(post.id)"
+                  :key="i"
+                  style="background-color:white">
                   <v-list-item-content>
                     <v-list-item-title class="headline mb-1">{{
                       post.title
@@ -139,19 +145,18 @@
                       post.task
                     }}</v-list-item-subtitle>
                   </v-list-item-content>
-
                   <v-img
                     max-width="80px"
                     height="80px"
                     contain
                     :src="post.image"
                   ></v-img>
-                </v-list-item>
+                  </v-list-item>
+                </v-list-item-group>
               </v-card>
             </template>
           </div>
         </v-flex>
-
       </v-layout>
                        <!--pageination-->
           <div class="text-center" style="margin-top:2%; margin-bottom:1%">
