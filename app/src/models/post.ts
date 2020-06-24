@@ -1,4 +1,5 @@
-interface Advertisement {
+interface Post {
+  id: string;
   title: string;
   categories: string[];
   location: string;
@@ -12,9 +13,11 @@ interface Advertisement {
   link: string;
   image: string;
   map_address: [];
-  lat: number;
-  lon: number;
+  geo_location: {
+    lat: number;
+    lon: number;
+  };
 }
 
-export {Advertisement};
-export default Advertisement;
+export {Post};
+export default Post;

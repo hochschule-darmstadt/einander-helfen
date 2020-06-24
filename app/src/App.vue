@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <Header/>
-    <v-content >
+    <v-content style="background: #00254f0c" >
       <router-view></router-view>
     </v-content>
     <Footer />
@@ -10,17 +10,15 @@
 
 <script lang="ts">
 import { Vue } from 'vue-property-decorator';
-import Component from 'vue-class-component';
 import Toolbar from '@/components/layout/Toolbar.vue';
 import Footer from '@/components/layout/Footer.vue';
 
-@Component({
+export default Vue.extend({
   components: {
     Footer,
     Toolbar
   }
-})
-export default class Counter extends Vue {}
+});
 </script>
 
 

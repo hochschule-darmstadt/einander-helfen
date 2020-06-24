@@ -13,7 +13,7 @@ export default new Router({
             component: () => import('@/views/Home.vue')
         },
         {
-            path: '/resultPage',
+            path: '/posts/:id?',
             name: 'resultPage',
             component: () => import('@/views/ResultPage.vue')
         },
