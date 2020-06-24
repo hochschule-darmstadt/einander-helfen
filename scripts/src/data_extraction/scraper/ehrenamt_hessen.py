@@ -4,7 +4,7 @@ from data_extraction.Scraper import Scraper
 class EhrenamtHessenScraper(Scraper):
     base_url = 'https://www.ehrenamtssuche-hessen.de'
     debug = True
-    end_page = 6
+    # end_page = 6
 
     def parse(self, response, url):
 
