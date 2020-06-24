@@ -38,7 +38,7 @@
               <v-flex >
                 <v-form>
                   <v-row>
-                    <v-col md="12">
+                    <v-col cols="12">
                       <search-bar
                         :searchInput.sync="currentSearchValue"
                         v-model="selectedInput"
@@ -47,17 +47,15 @@
                   </v-row>
 
                   <v-row>
-                    <v-col md="6">
+                    <v-col cols="12" md="6">
                       <location-search-bar />
                     </v-col>
 
-                    <v-col md="4">
+                    <v-col cols="8" sm="9" md="4">
                       <radius />
                     </v-col>
-                    <v-col md="2">
-                      <search-button
-                        :searchInput.sync="currentSearchValue"
-                      />
+                    <v-col cols="4" sm="3" md="2">
+                      <search-button @click="executeSearch" />
                     </v-col>
                   </v-row>
                 </v-form>
@@ -105,7 +103,7 @@
 
 <script lang="ts">
 import { createNamespacedHelpers, mapActions} from 'vuex';
-const { mapMutations } = createNamespacedHelpers('textSearchModule');
+const { mapActions: mapTextSearchActions } = createNamespacedHelpers('textSearchModule');
 
 import Vue from 'vue';
 import Toolbar from '@/components/layout/Toolbar.vue';
@@ -154,6 +152,16 @@ export default Vue.extend({
       selectedInput: '',
       currentSearchValue: ''
     };
+  },
+  methods: {
+    ...mapTextSearchActions(['addSearchValue']),
+    ...mapActions(['updateURIFromState']),
+    executeSearch(): void {
+      if (! this.selectedInput) {
+        this.addSearchValue(this.currentSearchValue);
+      }
+      this.updateURIFromState();
+    }
   }
 });
 </script>
