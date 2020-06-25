@@ -64,7 +64,7 @@
           </v-list-item>
 
           <!--display content on the right side-->
-          <v-card-text style="padding-left:5%; padding-right:5%">
+          <v-card-text style="padding:0 10px;">
             <v-simple-table class="no-border">
               <tbody>
               <tr v-if="selectedPost.location">
