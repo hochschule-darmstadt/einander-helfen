@@ -65,14 +65,14 @@
 
           <!--display content on the right side-->
           <v-card-text style="padding:0 10px;">
-            <v-simple-table class="no-border">
+            <v-simple-table class="no-border detail-table">
               <tbody>
               <tr v-if="selectedPost.location">
                 <td>Einsatzort</td>
                 <td v-html="selectedPost.location"></td>
               </tr>
               <tr class="pt-1" v-if="selectedPost.title">
-                <td >Aufgabe</td>
+                <td>Aufgabe</td>
                 <td v-html="selectedPost.task"></td>
               </tr>
               <tr class="pt-1" v-if="selectedPost.contact">
@@ -293,7 +293,15 @@
    .no-border tr:not(:last-child) td:not(.v-data-table__mobile-row) {
     border: 0 !important;
    }
-  .no-border tr:hover {
+   .detail-table tr:hover {
     background: unset !important;
-  }
+   }
+   .detail-table tr {
+     margin-bottom: 10px;
+   }
+   .detail-table tr td {
+     vertical-align: top;
+     padding-bottom: 25px;
+   }
+
 </style>
