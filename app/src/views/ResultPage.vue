@@ -65,42 +65,46 @@
 
           <!--display content on the right side-->
           <v-card-text style="padding-left:5%; padding-right:5%">
-            <v-row v-if="selectedPost.location">
-             <v-flex lg2 md4 xs6>Einsatzort</v-flex>
-             <v-flex lg10 md8 xs6 v-html="selectedPost.location"></v-flex>
-            </v-row>
-            <v-row class="pt-1" v-if="selectedPost.title">
-             <v-flex lg2 md4 xs6 >Aufgabe</v-flex>
-             <v-flex lg10 md8 xs6 v-html="selectedPost.task"></v-flex>
-            </v-row>
-            <v-row class="pt-1" v-if="selectedPost.contact">
-              <v-flex lg2 md4 xs6>Ansprechpartner</v-flex>
-              <v-flex lg10 md8 xs6 v-html="selectedPost.contact"></v-flex>
-            </v-row>
-            <v-row class="pt-1" v-if="selectedPost.organization">
-              <v-flex lg2 md4 xs6>Organisation</v-flex>
-              <v-flex lg10 md8 xs6 v-html="selectedPost.organization"></v-flex>
-            </v-row>
-            <v-row class="pt-1" v-if="selectedPost.target_group">
-              <v-flex lg2 md4 xs6>Zielgruppe</v-flex>
-              <v-flex lg10 md8 xs6 v-html="selectedPost.target_group"></v-flex>
-            </v-row>
-            <v-row class="pt-1" v-if="selectedPost.timing">
-              <v-flex lg2 md4 xs6>Einstiegsdatum / Beginn</v-flex>
-              <v-flex lg10 md8 xs6 v-html="selectedPost.timing"></v-flex>
-            </v-row>
-            <v-row class="pt-1" v-if="selectedPost.effort">
-              <v-flex lg2 md4 xs6>Zeitaufwand</v-flex>
-              <v-flex lg10 md8 xs6 v-html="selectedPost.effort"></v-flex>
-            </v-row>
-            <v-row class="pt-1" v-if="selectedPost.opportunities">
-              <v-flex lg2 md4 xs6>Möglichkeiten</v-flex>
-              <v-flex lg10 md8 xs6 v-html="selectedPost.opportunities"></v-flex>
-            </v-row>
-            <v-row class="pt-1" v-if="selectedPost.link">
-              <v-flex lg2 md4 xs6>Quelle</v-flex>
-              <v-flex lg10 md8 xs6><a :href="selectedPost.link" target="_blank">{{ selectedPost.source }}</a></v-flex>
-            </v-row>
+            <v-simple-table class="no-border">
+              <tbody>
+              <tr v-if="selectedPost.location">
+                <td>Einsatzort</td>
+                <td v-html="selectedPost.location"></td>
+              </tr>
+              <tr class="pt-1" v-if="selectedPost.title">
+                <td >Aufgabe</td>
+                <td v-html="selectedPost.task"></td>
+              </tr>
+              <tr class="pt-1" v-if="selectedPost.contact">
+                <td>Ansprechpartner</td>
+                <td v-html="selectedPost.contact"></td>
+              </tr>
+              <tr class="pt-1" v-if="selectedPost.organization">
+                <td>Organisation</td>
+                <td v-html="selectedPost.organization"></td>
+              </tr>
+              <tr class="pt-1" v-if="selectedPost.target_group">
+                <td>Zielgruppe</td>
+                <td v-html="selectedPost.target_group"></td>
+              </tr>
+              <tr class="pt-1" v-if="selectedPost.timing">
+                <td>Einstiegsdatum / Beginn</td>
+                <td v-html="selectedPost.timing"></td>
+              </tr>
+              <tr class="pt-1" v-if="selectedPost.effort">
+                <td>Zeitaufwand</td>
+                <td v-html="selectedPost.effort"></td>
+              </tr>
+              <tr class="pt-1" v-if="selectedPost.opportunities">
+                <td>Möglichkeiten</td>
+                <td v-html="selectedPost.opportunities"></td>
+              </tr>
+              <tr class="pt-1" v-if="selectedPost.link">
+                <td>Quelle</td>
+                <td><a :href="selectedPost.link" target="_blank">{{ selectedPost.source }}</a></td>
+              </tr>
+              </tbody>
+            </v-simple-table>
           </v-card-text>
 
           <v-card-actions>
@@ -286,4 +290,10 @@
    .activeListItem {
      background-color: #c4e0ff;
    }
+   .no-border tr:not(:last-child) td:not(.v-data-table__mobile-row) {
+    border: 0 !important;
+   }
+  .no-border tr:hover {
+    background: unset !important;
+  }
 </style>
