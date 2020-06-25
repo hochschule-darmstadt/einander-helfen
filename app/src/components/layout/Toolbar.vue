@@ -8,7 +8,7 @@
                                 <v-toolbar-side-icon>
                                 <v-img class="mt-1" width=80px height=75px src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Heart-hand-shake.svg/256px-Heart-hand-shake.svg.png"></v-img>
                                 </v-toolbar-side-icon>
-                                <div class="pl-5 mt-5 headline font-weight-light white--text">einander-helfen.de</div>
+                                <div class="pl-5 mt-5 headline font-weight-light white--text">einander-helfen.org/div>
                             </v-layout>
                         </v-col>
                         <v-col>

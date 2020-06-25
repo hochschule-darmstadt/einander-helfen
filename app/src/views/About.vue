@@ -5,9 +5,9 @@
       <v-row justify="center">
         <v-col cols="12" md="10">
           <div>
-            <h1>Einander-helfen.de</h1>
+            <h1>Einander-helfen.org</h1>
             <p>
-              <strong>Einander-helfen.de</strong> ist das schnelle Suchportal für Freiwilligenarbeit und ehrenamtliche Tätigkeiten: mit einer Fülle von unterschiedlichen Angeboten im deutschsprachigen Raum.
+              <strong>Einander-helfen.org</strong> ist das schnelle Suchportal für Freiwilligenarbeit und ehrenamtliche Tätigkeiten: mit einer Fülle von unterschiedlichen Angeboten im deutschsprachigen Raum.
             </p>
           </div>
           <div>
