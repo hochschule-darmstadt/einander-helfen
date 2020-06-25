@@ -3,7 +3,7 @@ import QueryBuilder, { QueryObject } from 'es-query-builder';
 import Location from '@/models/location';
 
 class DataService {
-    private baseUrl = 'https://cai-einander-helfen.fbi.h-da.de/api/_search/';
+    private baseUrl = searchURI;
 
     public findById<T>(id: string): Promise<T> {
         const queryData = new QueryBuilder()
