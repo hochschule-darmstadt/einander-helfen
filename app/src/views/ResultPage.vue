@@ -273,7 +273,10 @@
             ...mapLocationActions(['setSelectedRadius']),
             openPost(id: string): void {
                         this.postMapToggle = 'post';
-                        this.setSelectedPost(this.posts.find((post) => post.id === id));
+                        const postIndex = this.posts.findIndex((post) => post.id === id);
+                        this.setSelectedPost(this.posts[postIndex]);
+                        const pageOfPost = Math.floor(postIndex / this.hitsPerPage) + 1; // pages are 1 indexed...
+                        this.setPage(pageOfPost);
             },
             openMap(): void {
                 const currentPost = this.selectedPost as Post;
