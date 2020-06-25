@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex, {StoreOptions} from 'vuex';
-import DataService from '../utils/services/DataService';
+import DataService, {PaginatedResponse} from '../utils/services/DataService';
 import LocationService from '@/utils/services/LocationService';
 import router from '@/router';
 import Post from '@/models/post';
@@ -17,7 +17,11 @@ const store: StoreOptions<RootState> = {
   state: {
     posts: [] as Post[],
     selectedPost: null,
-    page: 1 as number
+    page: 1 as number,
+    resultSetSize: 100,
+    totalResultSize: 0,
+    resultsFrom: 0,
+    hitsPerPage: 10 // must be a divider of resultSetSize, or the chunk loading gets complexer
   } as RootState,
   mutations: {
 
@@ -26,7 +30,12 @@ const store: StoreOptions<RootState> = {
       state.locationSearchModule.selectedRadius = '';
       state.locationSearchModule.selectedLocation = '';
     },
-
+    setResultsFrom(state, value: number): void {
+      state.resultsFrom = value;
+    },
+    setTotalResultSize(state, value: number): void {
+      state.totalResultSize = value;
+    },
     setPosts(state, value): void {
       state.posts = value;
     },
@@ -43,19 +52,42 @@ const store: StoreOptions<RootState> = {
       const location = LocationService.findByTitle(state.locationSearchModule.selectedLocation);
       const searchValues = state.textSearchModule.searchValues;
       const radius = state.locationSearchModule.selectedRadius;
-      return new Promise((resolve, reject) => {
+
+      const from = state.resultsFrom;
+      const size = state.resultSetSize;
+
+      return new Promise((resolve) => {
         DataService.findBySelection({
           searchValues,
           location,
-          radius
-        }).then((result) => {
-          commit('setPosts', result);
-          resolve(result);
+          radius,
+          from,
+          size
+        }).then((result: PaginatedResponse<Post>) => {
+          commit('setTotalResultSize', result.meta.total);
+          commit('setPosts', result.data);
+          resolve(result.data);
         });
       });
 
     },
-    setPage({ commit, dispatch }, page: number): void {
+    setPage({ commit, dispatch, state }, page: number): void {
+        if (page < 1) {
+          page = 1;
+        }
+        // Calculate the new from parameter to load the next resultSet chunk if necessary
+        const currentPageIndex = (page - 1) * state.hitsPerPage; // these hu-mons start counting their pages at 1...
+        const currentLoadedChunk = {
+          min: state.resultsFrom,
+          max: state.resultsFrom + state.resultSetSize - 1 // again with these hu-mons and their count beginning at 1...
+        };
+        if (! inChunk(currentPageIndex, currentLoadedChunk)) {
+          // Calculate the needed offset
+          // rounding off to the next multiple of our resultSetSize
+          const from = currentPageIndex - (currentPageIndex % state.resultSetSize);
+          commit('setResultsFrom', from);
+        }
+
         commit('setPage', page);
         dispatch('updateURIFromState');
     },
@@ -111,5 +143,9 @@ const store: StoreOptions<RootState> = {
     },
   },
 };
+
+function inChunk(x: number, chunk: {min: number, max: number}): boolean {
+  return x >= chunk.min && x <= chunk.max;
+}
 
 export default new Vuex.Store<RootState>(store);

@@ -9,7 +9,7 @@
                 <v-card tile height="70vh">
                     <div id="map" :style="{height: map.height, width: map.width}">
                         <v-btn v-if="currentPostId.length > 0" @click="postMapToggle = 'post'"
-                               style="position: absolute; right; z-index: 9999; margin-right: 30px; margin-top: 20px; right: 0;"><v-icon>info</v-icon> Details
+                               style="position: absolute; z-index: 9999; margin-right: 30px; margin-top: 20px; right: 0;"><v-icon>info</v-icon> Details
                         </v-btn>
                         <l-map ref="map" :center="map.center" :zoom="map.zoom">
                             <l-tile-layer :url="map.url" :attribution="map.attribution"></l-tile-layer>
@@ -135,7 +135,7 @@
         <!--left side content-->
         <v-flex sm12 md6 order-md1 >
           <div style="height:70vh ;overflow:auto">
-            <template v-for="post in visiblePages">
+            <template v-for="post in postsOnCurrentPage">
               <v-card class="mb-3" :class="{ activeListItem: currentPostId === post.id }">
                 <v-list-item three-line @click="openPost(post.id)">
                   <v-list-item-content>
@@ -180,19 +180,17 @@
     const {mapState: mapSearchState} = createNamespacedHelpers('textSearchModule');
 
     import L, {LatLngTuple} from 'leaflet';
-    import {LMap, LTileLayer, LMarker, LTooltip, LIcon} from 'vue2-leaflet';
+    import {LMap, LTileLayer, LMarker, LTooltip} from 'vue2-leaflet';
     import 'leaflet/dist/leaflet.css';
     import radii from '@/resources/radii';
 
     export default Vue.extend({
         components: {Header, LMap, LTileLayer, LMarker, LTooltip},
         data(): {
-            perPage: number;
             map: any;
             postMapToggle: 'post' | 'map';
         } {
             return {
-                perPage: 15,
                 postMapToggle: 'map',
                 map: {
                     url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -213,7 +211,8 @@
             };
         },
         computed: {
-            ...mapState(['posts', 'page', 'selectedPost']),
+            ...mapState(['posts', 'page', 'resultsFrom', 'totalResultSize',
+                         'hitsPerPage', 'selectedPost']),
             ...mapLocationState(['selectedLocation', 'selectedRadius']),
             ...mapSearchState(['searchValues']),
             currentPostId(): string {
@@ -224,21 +223,21 @@
             postIsOpen(): boolean {
                 return !!this.selectedPost;
             },
-            visiblePages(): Post[] {
+            postsOnCurrentPage(): Post[] {
                 return this.posts.slice(
-                    (this.page - 1) * this.perPage,
-                    this.page * this.perPage
+                  ((this.page - 1) * this.hitsPerPage) - this.resultsFrom,
+                  (this.page * this.hitsPerPage) - this.resultsFrom
                 );
             },
             numberOfPages(): number {
-                return Math.ceil(this.posts.length / this.perPage);
+                return Math.ceil(this.totalResultSize / this.hitsPerPage);
             }
         },
         created(): void {
             this.hydrateStateFromRoute(this.$route);
         },
         watch: {
-            posts(val: Post[], oldVal: Post[]): void {
+            posts(val: Post[]): void {
                 if (val.length === 1) {
                     this.openPost(val[0].id);
                 }
@@ -262,6 +261,11 @@
             },
             page(value): void {
                 this.setPage(value);
+            },
+            resultsFrom(oldValue, newValue): void {
+              if (oldValue !== newValue) {
+                this.findPosts();
+              }
             }
         },
         methods: {
