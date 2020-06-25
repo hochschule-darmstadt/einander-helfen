@@ -47,9 +47,8 @@
             </v-btn> -->
 
             <!--display title, subtitle and image on the right side-->
-            <v-list-item-content style="margin-top:2%" class="headline">{{
-                selectedPost.title
-              }}
+            <v-list-item-content style="margin-top:2%" class="headline">
+              {{selectedPost.title}}
             </v-list-item-content>
             <v-img
               style="margin-top:2%"
@@ -67,40 +66,40 @@
           <!--display content on the right side-->
           <v-card-text style="padding-left:5%; padding-right:5%">
             <v-row v-if="selectedPost.location">
-             <v-flex md4 xs6>Einsatzort</v-flex>
-             <v-flex md8 xs6 v-html="selectedPost.location"></v-flex>
+             <v-flex lg2 md4 xs6>Einsatzort</v-flex>
+             <v-flex lg10 md8 xs6 v-html="selectedPost.location"></v-flex>
             </v-row>
             <v-row class="pt-1" v-if="selectedPost.title">
-             <v-flex md4 xs6 >Aufgabe</v-flex>
-             <v-flex md8 xs6 v-html="selectedPost.task"></v-flex>
+             <v-flex lg2 md4 xs6 >Aufgabe</v-flex>
+             <v-flex lg10 md8 xs6 v-html="selectedPost.task"></v-flex>
             </v-row>
             <v-row class="pt-1" v-if="selectedPost.contact">
-              <v-flex md4 xs6>Ansprechpartner</v-flex>
-              <v-flex md8 xs6 v-html="selectedPost.contact"></v-flex>
+              <v-flex lg2 md4 xs6>Ansprechpartner</v-flex>
+              <v-flex lg10 md8 xs6 v-html="selectedPost.contact"></v-flex>
             </v-row>
             <v-row class="pt-1" v-if="selectedPost.organization">
-              <v-flex md4 xs6>Organisation</v-flex>
-              <v-flex md8 xs6 v-html="selectedPost.organization"></v-flex>
+              <v-flex lg2 md4 xs6>Organisation</v-flex>
+              <v-flex lg10 md8 xs6 v-html="selectedPost.organization"></v-flex>
             </v-row>
             <v-row class="pt-1" v-if="selectedPost.target_group">
-              <v-flex md4 xs6>Zielgruppe</v-flex>
-              <v-flex md8 xs6 v-html="selectedPost.target_group"></v-flex>
+              <v-flex lg2 md4 xs6>Zielgruppe</v-flex>
+              <v-flex lg10 md8 xs6 v-html="selectedPost.target_group"></v-flex>
             </v-row>
             <v-row class="pt-1" v-if="selectedPost.timing">
-              <v-flex md4 xs6>Einstiegsdatum / Beginn</v-flex>
-              <v-flex md8 xs6 v-html="selectedPost.timing"></v-flex>
+              <v-flex lg2 md4 xs6>Einstiegsdatum / Beginn</v-flex>
+              <v-flex lg10 md8 xs6 v-html="selectedPost.timing"></v-flex>
             </v-row>
             <v-row class="pt-1" v-if="selectedPost.effort">
-              <v-flex md4 xs6>Zeitaufwand</v-flex>
-              <v-flex md8 xs6 v-html="selectedPost.effort"></v-flex>
+              <v-flex lg2 md4 xs6>Zeitaufwand</v-flex>
+              <v-flex lg10 md8 xs6 v-html="selectedPost.effort"></v-flex>
             </v-row>
             <v-row class="pt-1" v-if="selectedPost.opportunities">
-              <v-flex md4 xs6>Möglichkeiten</v-flex>
-              <v-flex md8 xs6 v-html="selectedPost.opportunities"></v-flex>
+              <v-flex lg2 md4 xs6>Möglichkeiten</v-flex>
+              <v-flex lg10 md8 xs6 v-html="selectedPost.opportunities"></v-flex>
             </v-row>
             <v-row class="pt-1" v-if="selectedPost.link">
-              <v-flex md4 xs6>Quelle</v-flex>
-              <v-flex md8 xs6><a :href="selectedPost.link" target="_blank">{{ selectedPost.source }}</a></v-flex>
+              <v-flex lg2 md4 xs6>Quelle</v-flex>
+              <v-flex lg10 md8 xs6><a :href="selectedPost.link" target="_blank">{{ selectedPost.source }}</a></v-flex>
             </v-row>
           </v-card-text>
 
@@ -139,12 +138,12 @@
               <v-card class="mb-3" :class="{ activeListItem: currentPostId === post.id }">
                 <v-list-item three-line @click="openPost(post.id)">
                   <v-list-item-content>
-                    <v-list-item-title class="headline mb-1">{{
-                      post.title
-                    }}</v-list-item-title>
-                    <v-list-item-subtitle>{{
-                      post.task
-                    }}</v-list-item-subtitle>
+                    <v-list-item-title class="headline mb-1">
+                      {{post.title}}
+                    </v-list-item-title>
+                    <v-list-item-subtitle>
+                      {{post.location}} &mdash; {{post.task}}
+                    </v-list-item-subtitle>
                   </v-list-item-content>
 
                   <v-img
