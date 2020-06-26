@@ -81,7 +81,7 @@
             </a>
           </p>
 
-          <h3>Quellenangabe / Bildquellen</h3>
+          <h1>Quellenangabe / Bildquellen</h1>
           <ul class="mt-2 mb-5">
             <li v-for="item in items"
               class="mb-2">
@@ -116,7 +116,7 @@
           {
             position: 'Auf der Startseite erstes Bild im Karussel',
             author: 'truthseeker08',
-            source: 'https://pixabay.com/de/photos/hospiz-pflege-patienten-1821429/',
+            source: 'https://pixabay.com/de/photos/hospiz-pflege-krankenpflege-1797305/',
             license: 'https://pixabay.com/de/service/terms/#license'
           },
           {
