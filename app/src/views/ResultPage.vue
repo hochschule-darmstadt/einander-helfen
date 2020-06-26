@@ -139,12 +139,12 @@
               <v-card class="mb-3" :class="{ activeListItem: currentPostId === post.id }">
                 <v-list-item three-line @click="openPost(post.id)">
                   <v-list-item-content>
-                    <v-list-item-title class="headline mb-1">{{
-                      post.title
-                    }}</v-list-item-title>
-                    <v-list-item-subtitle>{{
-                      post.task
-                    }}</v-list-item-subtitle>
+                    <v-list-item-title class="headline mb-1">
+                      {{post.title}}
+                    </v-list-item-title>
+                    <v-list-item-subtitle>
+                      {{post.task}}
+                    </v-list-item-subtitle>
                   </v-list-item-content>
 
                   <v-img
@@ -163,6 +163,7 @@
                        <!--pageination-->
           <div class="text-center" style="margin-top:2%; margin-bottom:1%">
             <v-pagination @input="setPage($event)" :value="page" :length="numberOfPages" total-visible="7" color="#054C66"></v-pagination>
+            <span class="pl-2 mt-2 d-inline-block font-italic">{{totalResultSize}} Ergebnisse</span>
           </div>
 
   </div>
@@ -211,7 +212,7 @@
             };
         },
         computed: {
-            ...mapState(['posts', 'page', 'resultsFrom', 'selectedPost']),
+            ...mapState(['posts', 'page', 'resultsFrom', 'selectedPost', 'totalResultSize']),
             ...mapGetters(['postsOnCurrentPage', 'numberOfPages', 'pageOfCurrentPost']),
             ...mapLocationState(['selectedLocation', 'selectedRadius']),
             ...mapSearchState(['searchValues']),
@@ -284,4 +285,4 @@
    .activeListItem {
      background-color: #c4e0ff;
    }
-</style>%
+</style>

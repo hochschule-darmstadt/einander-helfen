@@ -37,7 +37,7 @@ class DataService {
                 {key: 'categories', value},
                 {key: 'task', value}
             ]).flat());
-      
+
         query.from(from);
         query.size(size);
 
