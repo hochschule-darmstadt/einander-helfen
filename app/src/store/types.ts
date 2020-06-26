@@ -8,4 +8,8 @@ export interface RootState {
   page: number;
   textSearchModule: TextSearchState;
   locationSearchModule: LocationSearchState;
+  totalResultSize: number;
+  resultSetSize: number;
+  resultsFrom: number;
+  hitsPerPage: number;
 }
