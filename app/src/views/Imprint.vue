@@ -82,9 +82,12 @@
           </p>
 
           <h3>Quellenangabe / Bildquellen</h3>
-          <ul>
-            <li v-for="item in items">
-              {{ item.position }}, {{ item.author }}: <a :href="item.source">{{ item.source }}</a>, {{ item.license }}
+          <ul class="mt-2 mb-5">
+            <li v-for="item in items"
+              class="mb-2">
+              <strong>{{ item.author }}</strong> - <i>{{ item.position }}</i>
+              <br>
+              <a :href="item.source">{{ item.source }}</a>, {{ item.license }}
             </li>
           </ul>
         </v-col>
@@ -109,6 +112,48 @@
             author: 'IIT Bombay',
             source: 'https://commons.wikimedia.org/wiki/File:Heart-hand-shake.svg',
             license: 'The copyright holder of this file, IIT Bombay, allows anyone to use it for any purpose, provided that the copyright holder is properly attributed. Redistribution, derivative work, commercial use, and all other use is permitted.'
+          },
+          {
+            position: 'Auf der Startseite erstes Bild im Karussel',
+            author: 'truthseeker08',
+            source: 'https://pixabay.com/de/photos/hospiz-pflege-patienten-1821429/',
+            license: 'https://pixabay.com/de/service/terms/#license'
+          },
+          {
+            position: 'Auf der Startseite zweites Bild im Karussel',
+            author: 'geralt',
+            source: 'https://pixabay.com/de/photos/hilfe-hand-anbieten-verzweiflung-3049553/',
+            license: 'https://pixabay.com/de/service/terms/#license'
+          },
+          {
+            position: 'Auf der Startseite drittes Bild im Karussel',
+            author: 'Anemone123',
+            source: 'https://pixabay.com/de/photos/teamgeist-zusammenhalt-gemeinsam-2447163/',
+            license: 'https://pixabay.com/de/service/terms/#license'
+          },
+          {
+            position: 'Auf der Startseite unten das Bild auf der ersten Kachel',
+            author: 'cottonbro',
+            source: 'https://www.pexels.com/de-de/foto/lebensmittel-hande-liebe-menschen-3992383/',
+            license: 'https://www.pexels.com/de-de/lizenz/'
+          },
+          {
+            position: 'Auf der Startseite unten das Bild auf der zweiten Kachel',
+            author: 'Andrea Piacquadio',
+            source: 'https://www.pexels.com/de-de/foto/mann-menschen-frau-schreibtisch-3769981/',
+            license: 'https://www.pexels.com/de-de/lizenz/'
+          },
+          {
+            position: 'Auf der Startseite unten das Bild auf der dritten Kachel',
+            author: 'fauxels',
+            source: 'https://www.pexels.com/de-de/foto/mann-menschen-frau-schreibtisch-3184357/',
+            license: 'https://www.pexels.com/de-de/lizenz/'
+          },
+          {
+            position: 'Auf der Startseite unten das Bild auf der vierten Kachel',
+            author: 'Andrea Piacquadio',
+            source: 'https://www.pexels.com/de-de/foto/lebensmittel-mann-menschen-frau-3772534/',
+            license: 'https://www.pexels.com/de-de/lizenz/'
           }
         ]
       };
