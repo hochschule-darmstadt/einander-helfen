@@ -80,6 +80,13 @@
               >https://www.e-recht24.de/impressum-generator.html
             </a>
           </p>
+
+          <h3>Quellenangabe / Bildquellen</h3>
+          <ul>
+            <li v-for="item in items">
+              {{ item.position }}, {{ item.author }}: <a :href="item.source">{{ item.source }}</a>, {{ item.license }}
+            </li>
+          </ul>
         </v-col>
       </v-row>
     </div>
@@ -87,13 +94,24 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import Header from '@/components/layout/Header.vue';
+  import Header from '@/components/layout/Header.vue';
+  import Vue from 'vue';
 
-@Component({
-  components: {
-    Header
-  }
-})
-export default class Imprint extends Vue {}
+  export default Vue.extend({
+    components: {Header},
+    data(): {
+      items: any;
+    } {
+      return {
+        items: [
+          {
+            position: 'Logo von einander-helfen.org',
+            author: 'IIT Bombay',
+            source: 'https://commons.wikimedia.org/wiki/File:Heart-hand-shake.svg',
+            license: 'The copyright holder of this file, IIT Bombay, allows anyone to use it for any purpose, provided that the copyright holder is properly attributed. Redistribution, derivative work, commercial use, and all other use is permitted.'
+          }
+        ]
+      };
+    }
+  });
 </script>
