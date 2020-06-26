@@ -20,7 +20,7 @@ export interface SearchParameters {
 }
 
 class DataService {
-    private baseUrl = 'https://cai-einander-helfen.fbi.h-da.de/api/_search/';
+    private baseUrl = searchURI;
 
     public findBySelection(params: SearchParameters): Promise<PaginatedResponse<Post>> {
         const {
@@ -32,9 +32,15 @@ class DataService {
         } = params;
 
         const query = new QueryBuilder();
-        query.mustShouldMatch(searchValues.map((value) => [{key: 'title', value}, {key: 'categories', value}]).flat());
+        query.mustShouldMatch(searchValues.map((value) => [
+                {key: 'title', value},
+                {key: 'categories', value},
+                {key: 'task', value}
+            ]).flat());
+      
         query.from(from);
         query.size(size);
+
         const queryObject = query.build();
 
         if (location) {
