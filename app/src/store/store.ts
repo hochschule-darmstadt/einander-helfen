@@ -29,6 +29,7 @@ const store: StoreOptions<RootState> = {
       state.textSearchModule.searchValues = [];
       state.locationSearchModule.selectedRadius = '';
       state.locationSearchModule.selectedLocation = '';
+      state.selectedPost = null;
     },
     setResultsFrom(state, value: number): void {
       state.resultsFrom = value;
@@ -47,7 +48,9 @@ const store: StoreOptions<RootState> = {
     }
   },
   actions: {
-
+    clearSearchParams({commit}): void {
+      commit('clearSearchParams');
+    },
     findPosts({ commit, state }): Promise<Post[]> {
       const location = LocationService.findByTitle(state.locationSearchModule.selectedLocation);
       const searchValues = state.textSearchModule.searchValues;

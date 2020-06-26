@@ -153,14 +153,17 @@ export default Vue.extend({
       currentSearchValue: ''
     };
   },
+  created () {
+    this.clearSearchParams();
+  },
   methods: {
     ...mapTextSearchActions(['addSearchValue']),
-    ...mapActions(['updateURIFromState']),
+    ...mapActions(['updateURIFromState', 'clearSearchParams']),
     executeSearch(): void {
-      if (! this.selectedInput) {
-        this.addSearchValue(this.currentSearchValue);
-      } else {
+      if (this.selectedInput) {
         this.addSearchValue(this.selectedInput);
+      } else if (this.currentSearchValue) {
+        this.addSearchValue(this.currentSearchValue);
       }
       this.updateURIFromState();
     }
