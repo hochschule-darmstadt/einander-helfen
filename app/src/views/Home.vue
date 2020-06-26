@@ -153,7 +153,7 @@ export default Vue.extend({
       currentSearchValue: ''
     };
   },
-  created () {
+  created(): void {
     this.clearSearchParams();
   },
   methods: {
