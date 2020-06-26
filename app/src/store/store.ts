@@ -107,19 +107,19 @@ const store: StoreOptions<RootState> = {
         dispatch('textSearchModule/addSearchValues', queryParams.q.split(','));
       }
       if ('location' in queryParams && queryParams.location) {
-        commit('locationSearchModule/setSelectedLocation', queryParams.location);
+        dispatch('locationSearchModule/setSelectedLocation', queryParams.location);
       }
       if ('radius' in queryParams && queryParams.radius) {
-        commit('locationSearchModule/setSelectedRadius', queryParams.radius);
+        dispatch('locationSearchModule/setSelectedRadius', queryParams.radius);
       }
       if ('page' in queryParams && queryParams.page) {
-        commit('setPage', parseInt(queryParams.page, 10));
+        dispatch('setPage', parseInt(queryParams.page, 10));
       }
       dispatch('findPosts').then((posts: Post[]) => {
         if ('id' in params && params.id) {
           const selectedPost = posts.find((post) => post.id === params.id);
           if (selectedPost) {
-            commit('setSelectedPost', selectedPost);
+            dispatch('setSelectedPost', selectedPost);
           }
         }
       });
