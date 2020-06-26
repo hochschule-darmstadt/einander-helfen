@@ -142,6 +142,25 @@ const store: StoreOptions<RootState> = {
       }).catch((err) => err);
     },
   },
+  getters: {
+    postsOnCurrentPage(state): Post[] {
+      return state.posts.slice(
+        ((state.page - 1) * state.hitsPerPage) - state.resultsFrom,
+        (state.page * state.hitsPerPage) - state.resultsFrom
+      );
+    },
+    numberOfPages(state): number {
+      return Math.ceil(state.totalResultSize / state.hitsPerPage);
+    },
+    pageOfCurrentPost(state): number|null {
+      const postIndex = state.posts.findIndex((post) => state.selectedPost && post.id === state.selectedPost.id);
+      if (postIndex < 0) {
+        return null;
+      }
+      const pageOffset = state.resultsFrom / state.hitsPerPage + 1; // pages are 1 indexed...
+      return Math.floor(postIndex / state.hitsPerPage) + pageOffset;
+    }
+  }
 };
 
 function inChunk(x: number, chunk: {min: number, max: number}): boolean {

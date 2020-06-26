@@ -175,7 +175,7 @@
     import Header from '@/components/layout/Header.vue';
     import Post from '@/models/post';
     import Vue from 'vue';
-    import {mapActions, mapState, createNamespacedHelpers} from 'vuex';
+    import {mapActions, mapState, mapGetters, createNamespacedHelpers} from 'vuex';
     const {mapState: mapLocationState, mapActions: mapLocationActions} = createNamespacedHelpers('locationSearchModule');
     const {mapState: mapSearchState} = createNamespacedHelpers('textSearchModule');
 
@@ -211,8 +211,8 @@
             };
         },
         computed: {
-            ...mapState(['posts', 'page', 'resultsFrom', 'totalResultSize',
-                         'hitsPerPage', 'selectedPost']),
+            ...mapState(['posts', 'page', 'resultsFrom', 'selectedPost']),
+            ...mapGetters(['postsOnCurrentPage', 'numberOfPages', 'pageOfCurrentPost']),
             ...mapLocationState(['selectedLocation', 'selectedRadius']),
             ...mapSearchState(['searchValues']),
             currentPostId(): string {
@@ -222,15 +222,6 @@
             },
             postIsOpen(): boolean {
                 return !!this.selectedPost;
-            },
-            postsOnCurrentPage(): Post[] {
-                return this.posts.slice(
-                  ((this.page - 1) * this.hitsPerPage) - this.resultsFrom,
-                  (this.page * this.hitsPerPage) - this.resultsFrom
-                );
-            },
-            numberOfPages(): number {
-                return Math.ceil(this.totalResultSize / this.hitsPerPage);
             }
         },
         created(): void {
@@ -275,8 +266,7 @@
                         this.postMapToggle = 'post';
                         const postIndex = this.posts.findIndex((post) => post.id === id);
                         this.setSelectedPost(this.posts[postIndex]);
-                        const pageOfPost = Math.floor(postIndex / this.hitsPerPage) + 1; // pages are 1 indexed...
-                        this.setPage(pageOfPost);
+                        this.setPage(this.pageOfCurrentPost);
             },
             openMap(): void {
                 const currentPost = this.selectedPost as Post;
@@ -294,4 +284,4 @@
    .activeListItem {
      background-color: #c4e0ff;
    }
-</style>
+</style>%
