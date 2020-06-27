@@ -1,5 +1,5 @@
 <template>
-    <v-app-bar flat color="#00254f">
+    <v-app-bar flat height="100vh" color="#00254f">
         <v-layout justify-space-between no-gutters color="#00254f">
                 <v-container>
                     <v-row>
