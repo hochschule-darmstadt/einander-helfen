@@ -54,7 +54,7 @@
                     <v-col cols="8" sm="9" md="4" class="pl-10">
                       <radius />
                     </v-col>
-                    <v-col cols="4" sm="3" md="2" class="pl-10 py-1">
+                    <v-col cols="4" sm="3" md="2" class="pl-12 py-1">
                       <search-button @click="executeSearch" />
                     </v-col>
                   </v-row>
