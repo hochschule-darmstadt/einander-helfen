@@ -3,24 +3,15 @@
     <Toolbar />
     <VueSlickCarousel :dots="true" :infinite="true" :autoplay="true" :autoplaySpeed="30000">
       <picture>
-        <source
-          media="(max-width: 768px)"
-          srcset="/images/header/1_phone.jpg"
-        />
+        <source media="(max-width: 768px)" srcset="/images/header/1_phone.jpg" />
         <img src="/images/header/1.jpg" />
       </picture>
       <picture>
-        <source
-          media="(max-width: 768px)"
-          srcset="/images/header/2_phone.jpg"
-        />
+        <source media="(max-width: 768px)" srcset="/images/header/2_phone.jpg" />
         <img src="/images/header/2.jpg" />
       </picture>
       <picture>
-        <source
-          media="(max-width: 768px)"
-          srcset="/images/header/3_phone.jpg"
-        />
+        <source media="(max-width: 768px)" srcset="/images/header/3_phone.jpg" />
         <img src="/images/header/3.jpg" />
       </picture>
     </VueSlickCarousel>
@@ -29,20 +20,12 @@
       <v-form>
         <v-row justify="center">
           <v-col cols="12" md="8">
-            <v-layout
-              row
-              justify-center
-              no-gutters
-              class="mt-8 mb-9 "
-            >
-              <v-flex >
+            <v-layout row justify-center no-gutters class="mt-8 mb-9">
+              <v-flex>
                 <v-form>
                   <v-row>
                     <v-col cols="12">
-                      <search-bar
-                        :searchInput.sync="currentSearchValue"
-                        v-model="selectedInput"
-                      />
+                      <search-bar :searchInput.sync="currentSearchValue" v-model="selectedInput" />
                     </v-col>
                   </v-row>
 
@@ -69,11 +52,7 @@
         <template v-for="tag in volunteerTags">
           <v-col cols="12" md="2" :key="tag.title">
             <v-hover v-slot:default="{ hover }">
-              <v-card
-                class="mx-auto"
-                :elevation="hover ? 12 : 2"
-                :class="{ 'on-hover': hover }"
-              >
+              <v-card class="mx-auto" :elevation="hover ? 12 : 2" :class="{ 'on-hover': hover }">
                 <router-link
                   style="text-decoration: none; color: inherit;"
                   :to="{ name: 'resultPage', query: { q: tag.title } }"
@@ -85,10 +64,7 @@
                     :src="tag.img"
                   >
                     <v-card class="no-radius">
-                      <v-card-title
-                        class="justify-center black--text"
-                        v-html="tag.title"
-                      ></v-card-title>
+                      <v-card-title class="justify-center black--text" v-html="tag.title"></v-card-title>
                     </v-card>
                   </v-img>
                 </router-link>
@@ -102,8 +78,10 @@
 </template>
 
 <script lang="ts">
-import { createNamespacedHelpers, mapActions} from 'vuex';
-const { mapActions: mapTextSearchActions } = createNamespacedHelpers('textSearchModule');
+import { createNamespacedHelpers, mapActions } from 'vuex';
+const { mapActions: mapTextSearchActions } = createNamespacedHelpers(
+  'textSearchModule'
+);
 
 import Vue from 'vue';
 import Toolbar from '@/components/layout/Toolbar.vue';
@@ -126,18 +104,18 @@ export default Vue.extend({
     SearchButton
   },
   data(): {
-    volunteerTags: Array<{ title: string; img: string }>
-    selectedInput: string,
-    currentSearchValue: string
+    volunteerTags: Array<{ title: string; img: string }>;
+    selectedInput: string;
+    currentSearchValue: string;
   } {
     return {
       volunteerTags: [
         {
-          title: 'Macher/in',
-          img: require('../../public/images/macherIN.jpeg')
+          title: 'Soziale',
+          img: require('../../public/images/sozial.jpeg')
         },
         {
-          title: 'Denker/in',
+          title: 'Kreative',
           img: require('../../public/images/denkerIN.jpeg')
         },
         {
@@ -145,8 +123,8 @@ export default Vue.extend({
           img: require('../../public/images/jugend.jpeg')
         },
         {
-          title: 'Soziale',
-          img: require('../../public/images/sozial.jpeg')
+          title: 'Macher/in',
+          img: require('../../public/images/macherIN.jpeg')
         }
       ],
       selectedInput: '',
@@ -177,7 +155,7 @@ export default Vue.extend({
 }
 
 .no-radius {
-  border-radius: 0!important;
+  border-radius: 0 !important;
 }
 
 img {
