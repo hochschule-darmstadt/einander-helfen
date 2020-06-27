@@ -1,28 +1,28 @@
 <template>
   <div>
     <Header />
-    
+
       <v-layout row wrap no-gutters>
         <!-- Map -->
-        <v-flex xs12 md6 order-md2 v-if="!postIsOpen">
-           <div class="map" v-if="!postIsOpen">
+        <v-flex xs12 md6 order-md2 v-if="postMapToggle === 'map'">
+           <div class="map">
                 <v-card tile height="70vh">
                     <div id="map" :style="{height: map.height, width: map.width}">
-                        <v-btn @click="closeMap()"
-                               style="position: absolute; z-index: 9999; margin-left: 50px; margin-top: 20px;">Details
+                        <v-btn v-if="currentPostId.length > 0" @click="postMapToggle = 'post'"
+                               style="position: absolute; z-index: 9999; margin-right: 30px; margin-top: 20px; right: 0;"><v-icon>info</v-icon> Details
                         </v-btn>
                         <l-map ref="map" :center="map.center" :zoom="map.zoom">
                             <l-tile-layer :url="map.url" :attribution="map.attribution"></l-tile-layer>
-                            <template v-for="(advertisement, i) in posts">
-                                <l-marker v-if="i === currentPostId" :icon="map.markerRed"
-                                          :lat-lng="[advertisement.lat, advertisement.lon]"
-                                          @click="openPost(i)">
-                                    <l-tooltip>{{ advertisement.title }}</l-tooltip>
+                            <template v-for="post in posts">
+                                <l-marker v-if="post.id === currentPostId" :icon="map.markerRed"
+                                          :lat-lng="[post.geo_location.lat, post.geo_location.lon]"
+                                          @click="openPost(post.id)">
+                                    <l-tooltip>{{ post.title }}</l-tooltip>
                                 </l-marker>
                                 <l-marker v-else :icon="map.markerBlue"
-                                          :lat-lng="[advertisement.lat, advertisement.lon]"
-                                          @click="openPost(i)">
-                                    <l-tooltip>{{ advertisement.title }}</l-tooltip>
+                                          :lat-lng="[post.geo_location.lat, post.geo_location.lon]"
+                                          @click="openPost(post.id)">
+                                    <l-tooltip>{{ post.title }}</l-tooltip>
                                 </l-marker>
                             </template>
                         </l-map>
@@ -30,78 +30,88 @@
                 </v-card>
             </div>
         </v-flex>
-        
+
         <!-- right side content-->
-        <v-flex sm12 md6 order-md2 v-if="postIsOpen" mb-5>
+        <v-flex sm12 md6 order-md2 v-if="postMapToggle === 'post'" mb-5>
           <div>
           <v-card
             tile
             style="height:70vh ;overflow:auto"
           >
           <v-list-item three-line>
+            <!--
+              This functionality may be added later. This button allows to deselect the current post and load all markers on the map.
+
             <v-btn class="mr-3" text @click="closePost()">
               <v-icon>arrow_back</v-icon>
-            </v-btn>
-           
+            </v-btn> -->
+
             <!--display title, subtitle and image on the right side-->
-            <v-list-item-content style="margin-top:2%" class="headline">{{
-                currentPost.title
-              }}
+            <v-list-item-content style="margin-top:2%" class="headline">
+              {{selectedPost.title}}
             </v-list-item-content>
             <v-img
               style="margin-top:2%"
               max-width="80px"
               height="80px"
               contain
-              :src="currentPost.image"
+              :src="selectedPost.image"
             ></v-img>
+
+            <v-btn style="margin-top:2%; background: #00254f" dark class="mr-3" text @click="openMap()">
+              <v-icon>map</v-icon> Karte
+            </v-btn>
           </v-list-item>
 
           <!--display content on the right side-->
-          <v-card-text style="padding-left:5%; padding-right:5%">   
-            <v-row v-if="currentPost.location">
-             <v-flex md4 xs6>Einsatzort</v-flex>
-             <v-flex md8 xs6 v-html="currentPost.location"></v-flex>
-            </v-row>
-            <v-row class="pt-1" v-if="currentPost.title">
-             <v-flex md4 xs6 >Aufgabe</v-flex>
-             <v-flex md8 xs6 v-html="currentPost.task"></v-flex>
-            </v-row>
-            <v-row class="pt-1" v-if="currentPost.contact">
-              <v-flex md4 xs6>Ansprechpartner</v-flex>
-              <v-flex md8 xs6 v-html="currentPost.contact"></v-flex>
-            </v-row>
-            <v-row class="pt-1" v-if="currentPost.organization">
-              <v-flex md4 xs6>Organisation</v-flex>
-              <v-flex md8 xs6 v-html="currentPost.organization"></v-flex>
-            </v-row>
-            <v-row class="pt-1" v-if="currentPost.target_group">
-              <v-flex md4 xs6>Zielgruppe</v-flex>
-              <v-flex md8 xs6 v-html="currentPost.target_group"></v-flex>
-            </v-row>
-            <v-row class="pt-1" v-if="currentPost.timing">
-              <v-flex md4 xs6>Einstiegsdatum / Beginn</v-flex>
-              <v-flex md8 xs6 v-html="currentPost.timing"></v-flex>
-            </v-row>
-            <v-row class="pt-1" v-if="currentPost.effort">
-              <v-flex md4 xs6>Zeitaufwand</v-flex>
-              <v-flex md8 xs6 v-html="currentPost.effort"></v-flex>
-            </v-row>
-            <v-row class="pt-1" v-if="currentPost.opportunities">
-              <v-flex md4 xs6>Möglichkeiten</v-flex>
-              <v-flex md8 xs6 v-html="currentPost.opportunities"></v-flex>
-            </v-row>
-            <v-row class="pt-1" v-if="currentPost.link">
-              <v-flex md4 xs6>Quelle</v-flex>
-              <v-flex md8 xs6><a :href="currentPost.link">{{ currentPost.link }}</a></v-flex>
-            </v-row>
+          <v-card-text style="padding:0 10px;">
+            <v-simple-table class="no-border detail-table">
+              <tbody>
+              <tr v-if="selectedPost.location">
+                <td>Einsatzort</td>
+                <td v-html="selectedPost.location"></td>
+              </tr>
+              <tr class="pt-1" v-if="selectedPost.title">
+                <td>Aufgabe</td>
+                <td v-html="selectedPost.task"></td>
+              </tr>
+              <tr class="pt-1" v-if="selectedPost.contact">
+                <td>Ansprechpartner</td>
+                <td v-html="selectedPost.contact"></td>
+              </tr>
+              <tr class="pt-1" v-if="selectedPost.organization">
+                <td>Organisation</td>
+                <td v-html="selectedPost.organization"></td>
+              </tr>
+              <tr class="pt-1" v-if="selectedPost.target_group">
+                <td>Zielgruppe</td>
+                <td v-html="selectedPost.target_group"></td>
+              </tr>
+              <tr class="pt-1" v-if="selectedPost.timing">
+                <td>Einstiegsdatum / Beginn</td>
+                <td v-html="selectedPost.timing"></td>
+              </tr>
+              <tr class="pt-1" v-if="selectedPost.effort">
+                <td>Zeitaufwand</td>
+                <td v-html="selectedPost.effort"></td>
+              </tr>
+              <tr class="pt-1" v-if="selectedPost.opportunities">
+                <td>Möglichkeiten</td>
+                <td v-html="selectedPost.opportunities"></td>
+              </tr>
+              <tr class="pt-1" v-if="selectedPost.link">
+                <td>Quelle</td>
+                <td><a :href="selectedPost.link" target="_blank">{{ selectedPost.source }}</a></td>
+              </tr>
+              </tbody>
+            </v-simple-table>
           </v-card-text>
 
           <v-card-actions>
             <v-flex md12 sm12>
               <v-container style="margin-bottom: 10px">
                 <template
-                  v-for="(category, i) in currentPost.categories"
+                  v-for="(category, i) in selectedPost.categories"
                 >
                   <v-chip :key="i" class="mr-2 mt-2">{{ category }}</v-chip>
                 </template>
@@ -113,10 +123,10 @@
                   dark
                   large
                   color="#054C66"
-                  :href="currentPost.link"
+                  :href="selectedPost.link"
                   target="_blank"
                 >
-                  Zum Stellenangebot
+                  Zum Angebot
                 </v-btn>
               </v-container>
             </v-flex>
@@ -124,27 +134,27 @@
         </v-card>
           </div>
         </v-flex>
-        
+
         <!--left side content-->
         <v-flex sm12 md6 order-md1 >
           <div style="height:70vh ;overflow:auto">
-            <template v-for="(advertisement, i) in visiblePages">
-              <v-card class="mb-3">
-                <v-list-item three-line @click="openPost(i)">
+            <template v-for="post in postsOnCurrentPage">
+              <v-card class="mb-3" :class="{ activeListItem: currentPostId === post.id }">
+                <v-list-item three-line @click="openPost(post.id)">
                   <v-list-item-content>
-                    <v-list-item-title class="headline mb-1">{{
-                      advertisement.title
-                    }}</v-list-item-title>
-                    <v-list-item-subtitle>{{
-                      advertisement.task
-                    }}</v-list-item-subtitle>
+                    <v-list-item-title class="headline mb-1">
+                      {{post.title}}
+                    </v-list-item-title>
+                    <v-list-item-subtitle>
+                      {{post.location}} &mdash; {{post.task}}
+                    </v-list-item-subtitle>
                   </v-list-item-content>
 
                   <v-img
                     max-width="80px"
                     height="80px"
                     contain
-                    :src="advertisement.image"
+                    :src="post.image"
                   ></v-img>
                 </v-list-item>
               </v-card>
@@ -155,9 +165,10 @@
       </v-layout>
                        <!--pageination-->
           <div class="text-center" style="margin-top:2%; margin-bottom:1%">
-            <v-pagination @input="setResultPage($event)" :value="page" :length="numberOfPages" total-visible="7" color="#054C66"></v-pagination>
+            <v-pagination @input="setPage($event)" :value="page" :length="numberOfPages" total-visible="7" color="#054C66"></v-pagination>
+            <span class="pl-2 mt-2 d-inline-block font-italic">{{totalResultSize}} Ergebnisse</span>
           </div>
-   
+
   </div>
 
 
@@ -168,24 +179,23 @@
     import Header from '@/components/layout/Header.vue';
     import Post from '@/models/post';
     import Vue from 'vue';
-    import {mapActions, mapState} from 'vuex';
+    import {mapActions, mapState, mapGetters, createNamespacedHelpers} from 'vuex';
+    const {mapState: mapLocationState, mapActions: mapLocationActions} = createNamespacedHelpers('locationSearchModule');
+    const {mapState: mapSearchState} = createNamespacedHelpers('textSearchModule');
 
     import L, {LatLngTuple} from 'leaflet';
-    import {LMap, LTileLayer, LMarker, LTooltip, LIcon} from 'vue2-leaflet';
+    import {LMap, LTileLayer, LMarker, LTooltip} from 'vue2-leaflet';
     import 'leaflet/dist/leaflet.css';
+    import radii from '@/resources/radii';
 
     export default Vue.extend({
         components: {Header, LMap, LTileLayer, LMarker, LTooltip},
         data(): {
-            postIsOpen: boolean;
-            currentPostId: number;
-            perPage: number;
             map: any;
+            postMapToggle: 'post' | 'map';
         } {
             return {
-                postIsOpen: false,
-                currentPostId: 0,
-                perPage: 15,
+                postMapToggle: 'map',
                 map: {
                     url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
@@ -205,91 +215,91 @@
             };
         },
         computed: {
-            ...mapState(['posts', 'page', 'selectedLocation', 'radiusSearchValue']),
-            visiblePages(): Post[] {
-                return this.posts.slice(
-                    (this.page - 1) * this.perPage,
-                    this.page * this.perPage
-                );
+            ...mapState(['posts', 'page', 'resultsFrom', 'selectedPost', 'totalResultSize']),
+            ...mapGetters(['postsOnCurrentPage', 'numberOfPages', 'pageOfCurrentPost']),
+            ...mapLocationState(['selectedLocation', 'selectedRadius']),
+            ...mapSearchState(['searchValues']),
+            currentPostId(): string {
+                return this.selectedPost
+                    ? this.selectedPost.id
+                    : '';
             },
-            currentPost(): Post | null {
-                return this.postIsOpen
-                    ? this.posts[this.currentPostId]
-                    : null;
-            },
-            numberOfPages(): number {
-                return Math.ceil(this.posts.length / this.perPage);
+            postIsOpen(): boolean {
+                return !!this.selectedPost;
             }
         },
         created(): void {
-            this.hydrateStateFromURIParams(this.$route.query);
+            this.hydrateStateFromRoute(this.$route);
         },
         watch: {
-            posts(val: Post[], oldVal: Post[]): void {
+            posts(val: Post[]): void {
                 if (val.length === 1) {
-                    this.openPost(0);
+                    this.openPost(val[0].id);
                 }
-                const markers = val.map((post) => [post.lat, post.lon] as LatLngTuple);
-                (this.$refs.map as LMap).fitBounds(markers);
+                if (val.length) {
+                  const markers = val.map((post) => [post.geo_location.lat, post.geo_location.lon] as LatLngTuple);
+                  (this.$refs.map as LMap).fitBounds(markers);
+                } else {
+                  // Unsere Suche hat keine Ergebnisse geliefert.
+                  if (this.selectedLocation && this.selectedRadius) {
+                    // Wenn wir mit einem Radius um einen Ort suchen, den Radius vergrößern und nochmal probieren!
+                    const currentRadiusIndex = radii.findIndex((r) => r.value === this.selectedRadius);
+                    const nextBiggerRadius = radii[currentRadiusIndex + 1 % radii.length];
+                    this.setSelectedRadius(nextBiggerRadius.value);
+                    this.updateURIFromState();
+                    this.findPosts();
+                  }
+                }
             },
-            radiusSearchValue(): void {
-                this.findPosts();
-            },
-            selectedLocation(): void {
-                this.findPosts();
+            selectedPost(): void {
+                this.updateURIFromState();
             },
             page(value): void {
-                this.setResultPage(value);
+                this.setPage(value);
+            },
+            resultsFrom(oldValue, newValue): void {
+              if (oldValue !== newValue) {
+                this.findPosts();
+              }
             }
         },
         methods: {
-            ...mapActions(['hydrateStateFromURIParams', 'setResultPage', 'findPosts']),
-            openPost(index: number): void {
-                        this.postIsOpen = true;
-                        this.currentPostId = index + ((this.page - 1) * this.perPage);
-                    },
-            closePost(): void {
-                this.currentPostId = 0;
-                this.postIsOpen = false;
-                const currentPost = this.posts[this.currentPostId];
-                const location = [currentPost.lat, currentPost.lon] as LatLngTuple;
+            ...mapActions(['hydrateStateFromRoute', 'updateURIFromState', 'setSelectedPost', 'setPage', 'findPosts']),
+            ...mapLocationActions(['setSelectedRadius']),
+            openPost(id: string): void {
+                        this.postMapToggle = 'post';
+                        const postIndex = this.posts.findIndex((post) => post.id === id);
+                        this.setSelectedPost(this.posts[postIndex]);
+                        this.setPage(this.pageOfCurrentPost);
+            },
+            openMap(): void {
+                const currentPost = this.selectedPost as Post;
+                const location = [currentPost.geo_location.lat, currentPost.geo_location.lon] as LatLngTuple;
+                this.postMapToggle = 'map';
                 this.$nextTick(() => {
                     (this.$refs.map as LMap).setCenter(location);
                 });
-            },
+            }
         }
     });
 </script>
 
 <style scoped>
-    .grid {
-        width: 100%;
-        display: grid;
-        grid-template-columns: 50% 50%;
-        grid-template-areas: "posts detail";
-    }
+   .activeListItem {
+     background-color: #c4e0ff;
+   }
+   .no-border tr:not(:last-child) td:not(.v-data-table__mobile-row) {
+    border: 0 !important;
+   }
+   .detail-table tr:hover {
+    background: unset !important;
+   }
+   .detail-table tr {
+     margin-bottom: 10px;
+   }
+   .detail-table tr td {
+     vertical-align: top;
+     padding-bottom: 25px;
+   }
 
-    .map,
-    .detail {
-        grid-area: detail;
-        height: 75vh;
-    }
-
-    .posts {
-        grid-area: posts;
-        height: 75vh;
-        overflow: auto
-    }
-
-    @media (max-width: 500px) {
-        .grid {
-            grid-template-columns: 100%;
-            grid-row-gap: 10px;
-            grid-template-areas: "detail" "posts";
-        }
-
-        .posts {
-            height: auto;
-        }
-    }
 </style>

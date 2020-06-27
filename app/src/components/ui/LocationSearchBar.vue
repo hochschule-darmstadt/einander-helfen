@@ -1,7 +1,6 @@
 <template>
   <v-row justify="center">
             <v-autocomplete
-              :dark="isDark"
               prepend-inner-icon="place"
               label="Standort"
               :filter="filterLocations"
@@ -13,7 +12,8 @@
               style="margin-left: 10px; margin-right: 10px;"
               v-on:keyup.self="locationOnKeyUp"
               auto-select-first
-              v-on:keyup.enter="routeToResultPage"
+              v-on:keyup.enter="emitInput"
+              :dark="dark"
               >
             </v-autocomplete>
   </v-row>
@@ -21,14 +21,19 @@
 </template>
 
 <script lang="ts">
-  import {mapActions, mapGetters, mapState} from 'vuex';
-  import Location from '../../models/location';
+  import { createNamespacedHelpers } from 'vuex';
+  import Location from '@/models/location';
 
-  declare var require: any;
+  const { mapState, mapActions, mapGetters } = createNamespacedHelpers('locationSearchModule');
   import Vue from 'vue';
 
-  export default Vue.extend(
-    {
+  export default Vue.extend({
+    props: {
+      dark: {
+        type: Boolean,
+        default: false
+      },
+    },
       data(): {
         newSelectedLocation: string,
         isSearching: boolean
@@ -37,9 +42,6 @@
           isSearching: false,
           newSelectedLocation: ''
         };
-      },
-      props: {
-          isDark: Boolean
       },
       computed: {
         ...mapState(['selectedLocation']),
@@ -58,15 +60,7 @@
             this.setLocationSearchValue(''); // newValue HAS to be a string
           }
           this.setSelectedLocation(newValue);
-          if (this.$route.name === 'resultPage') {
-            this.$router.push({
-              name: 'resultPage',
-              query: {
-                ...this.$route.query,
-                location: newValue,
-              }
-            });
-          }
+          this.emitInput(newValue);
         },
         // Clear LocationSearchValue so that searching is not filtered to the currently selected zip-code
         isSearching(newValue, oldValue): void {
@@ -104,15 +98,11 @@
             }
           }
         },
-        routeToResultPage(evt): void {
-          this.$router.push({
-              name: 'resultPage',
-              query: {
-                q: this.$store.state.selectedTag,
-                location: this.selectedLocation,
-                radius: this.$store.state.radiusSearchValue
-              }
-            });
+        emitInput(data: string = ''): void {
+            if (!data) {
+                data = this.selectedLocation;
+            }
+            this.$emit('input', data);
         },
       },
     }

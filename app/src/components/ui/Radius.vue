@@ -1,52 +1,50 @@
 <template>
     <v-select
-            :dark="isDark"
             label="Umkreis"
             :items="radii"
             item-value="value"
-            v-model="selectedRadius"
+            @input="newSelectedRadius = $event"
+            v-bind:value="selectedRadius"
+            :dark="dark"
             style="margin-left: 10px; margin-right: 10px;">
     </v-select>
 </template>
 
 <script lang="ts">
-    import {mapActions, mapGetters, mapState} from 'vuex';
-    declare var require: any;
-    import Vue from 'vue';
-    import QueryBuilder from 'es-query-builder/dist';
-    import axios from 'axios';
+    import { createNamespacedHelpers } from 'vuex';
+    const { mapActions, mapState } = createNamespacedHelpers('locationSearchModule');
 
-    export default Vue.extend(
-    {
-        data(): {
-            selectedRadius: string,
-        } {
-            return {
-                selectedRadius: this.$store.state.radiusSearchValue || '',
-            };
-        },
+    import Vue from 'vue';
+    import radii from '@/resources/radii';
+    import Radius from '@/models/radius';
+
+    export default Vue.extend({
         props: {
-            isDark: Boolean
-        },
-        watch: {
-            selectedRadius(newValue, oldValue): void {
-                this.setRadiusSearchValue(newValue);
-                if (this.$route.name === 'resultPage') {
-                    this.$router.push({
-                    name: 'resultPage',
-                    query: {
-                        ...this.$route.query,
-                        radius: newValue,
-                    }
-                    });
-                }
+            dark: {
+                type: Boolean,
+                default: false
             },
         },
-        methods: {
-            ...mapActions(['setRadiusSearchValue']),
+        data(): {
+            newSelectedRadius: string,
+            radii: Radius[]
+        } {
+            return {
+                newSelectedRadius: '',
+                radii
+            };
+        },
+        watch: {
+            newSelectedRadius(newValue): void {
+                this.setSelectedRadius(newValue);
+                this.$emit('input', newValue);
+            },
         },
         computed: {
-            ...mapState(['radii'])
+            ...mapState(['selectedRadius'])
+        },
+        methods: {
+            ...mapActions(['setSelectedRadius']),
         }
     });
 </script>
