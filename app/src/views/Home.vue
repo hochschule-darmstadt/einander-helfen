@@ -48,7 +48,7 @@
 
                   <v-row class="flex-grow-1 ps-4">
                       <location-search-bar />
-                      <radius />
+                      <div><radius /></div>
                       <search-button @click="executeSearch" />
                   </v-row>
                 </v-form>
