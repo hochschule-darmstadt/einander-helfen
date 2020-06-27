@@ -46,7 +46,7 @@
                     </v-col>
                   </v-row>
 
-                  <v-row class="flexgrow-1 ps-4">
+                  <v-row class="flex-grow-1 ps-4">
                       <location-search-bar />
                       <radius />
                       <search-button @click="executeSearch" />
