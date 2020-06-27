@@ -141,11 +141,11 @@ export default Vue.extend({
           img: require('../../public/images/denkerIN.jpeg')
         },
         {
-          title: 'Jugendarbeit',
+          title: 'Kommunikative',
           img: require('../../public/images/jugend.jpeg')
         },
         {
-          title: 'Soziales',
+          title: 'Soziale',
           img: require('../../public/images/sozial.jpeg')
         }
       ],
