@@ -48,7 +48,7 @@
         }
       },
       watch: {
-        newSelectedLocation(newValue, oldValue): void {
+        selectedLocation(newValue, oldValue): void {
           if (newValue !== '' && newValue !== oldValue) {
             this.isSearching = false; //
           }
