@@ -46,17 +46,10 @@
                     </v-col>
                   </v-row>
 
-                  <v-row>
-                    <v-col cols="12" md="6">
+                  <v-row class="flex-grow-1 ps-4">
                       <location-search-bar />
-                    </v-col>
-
-                    <v-col cols="8" sm="9" md="4">
-                      <radius />
-                    </v-col>
-                    <v-col cols="4" sm="3" md="2">
+                      <div><radius /></div>
                       <search-button @click="executeSearch" />
-                    </v-col>
                   </v-row>
                 </v-form>
               </v-flex>

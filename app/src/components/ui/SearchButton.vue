@@ -1,6 +1,6 @@
 <template>
-  <v-btn class="mx-2" fab dark large color="primary" @click="$emit('click')">
-    <v-icon dark>search</v-icon>
+  <v-btn class="mx-2" fab  large color="primary" @click="$emit('click')">
+    <v-icon >search</v-icon>
   </v-btn>
 </template>
 
