@@ -50,7 +50,7 @@
         }
       },
       watch: {
-        selectedLocation(newValue, oldValue): void {
+        newSelectedLocation(newValue, oldValue): void {
           if (newValue !== '' && newValue !== oldValue) {
             this.isSearching = false; //
           }
@@ -95,6 +95,9 @@
               this.setLocationSearchValue(plz[0]);
             } else {
               this.setLocationSearchValue(curValue);
+              if(!curValue) {
+                this.setSelectedLocation('');
+              }
             }
           }
         },
