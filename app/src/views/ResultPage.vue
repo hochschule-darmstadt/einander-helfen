@@ -2,8 +2,13 @@
   <div>
     <Header />
     <v-snackbar v-model="showRadiusExtendedMessage" top="top">
-      Zu Ihrer Suchanfrage mit einem Radius von {{radiusExtendedFrom}} haben wir keine Treffer gefunden.
-      Wir haben daher den Radius auf {{selectedRadius}} vergrößert.
+        Zu Ihrer Suchanfrage mit einem Radius von {{radiusExtendedFrom}} haben wir keine Treffer gefunden.
+        <template v-if="selectedRadius">
+          Wir haben daher den Radius auf {{selectedRadius}} vergrößert.
+        </template>
+        <template v-else>
+          Auch eine Vergrößerung des Radius lieferte keine Ergebnisse.
+        </template>
     </v-snackbar>
       <v-layout row wrap no-gutters>
         <!-- Map -->
@@ -269,7 +274,7 @@
                   if (this.selectedLocation && this.selectedRadius) {
                     // Wenn wir mit einem Radius um einen Ort suchen, den Radius vergrößern und nochmal probieren!
                     const currentRadiusIndex = radii.findIndex((r) => r.value === this.selectedRadius);
-                    const nextBiggerRadius = radii[currentRadiusIndex + 1 % radii.length];
+                    const nextBiggerRadius = radii[(currentRadiusIndex + 1) % (radii.length - 1)];
                     // Wir wollen uns merken, dass wir den Radius verändert haben, um den Nutzer darüber zu informieren.
                     // Aber nur, wenn wir das nicht bereits gemacht haben um uns den Wert nicht zu überschreiben.
                     if (!this.radiusExtendedFrom) {
