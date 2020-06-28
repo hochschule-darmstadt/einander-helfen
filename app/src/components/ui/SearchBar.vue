@@ -11,13 +11,13 @@
     append-icon="none"
     :search-input.sync="mySearchValue"
   >
-    <template v-slot:no-data>
+    <template v-slot:no-data v-if="mySearchValue.length > 0">
       <v-list-item>
         <v-list-item-content>
-          <v-list-item-title v-if="mySearchValue.length !=0">
+          <v-list-item-title>
             Drücken Sie
-            <kbd>Enter</kbd> für eine Freitextsuche mit Ihrer Eingabe "
-            <strong>{{ mySearchValue }}</strong>".
+            <kbd>Enter</kbd> für eine Freitextsuche mit Ihrer Eingabe 
+            <v-chip>"{{ mySearchValue }}"</v-chip>
           </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
@@ -40,7 +40,7 @@ export default Vue.extend({
     mySearchValue: string;
   } {
     return {
-      mySearchValue: this.searchInput || '',
+      mySearchValue: this.searchInput || ''
     };
   },
   created(): void {
@@ -131,9 +131,12 @@ export default Vue.extend({
       const tagName = tag.includes(' (')
         ? tag.substr(0, tag.indexOf(' ('))
         : tag;
-
       this.$emit('input', tagName);
-
+    },
+    clearInput(): void {
+      this.$nextTick(() => {
+        this.mySearchValue = '';
+      });
     }
   }
 });

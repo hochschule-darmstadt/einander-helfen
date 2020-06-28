@@ -95,6 +95,9 @@
               this.setLocationSearchValue(plz[0]);
             } else {
               this.setLocationSearchValue(curValue);
+              if (!curValue) {
+                this.setSelectedLocation('');
+              }
             }
           }
         },
