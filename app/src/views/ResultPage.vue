@@ -1,3 +1,4 @@
+import * as Vue2Leaflet from "vue2-leaflet";
 <template>
   <div>
     <Header />
@@ -21,18 +22,16 @@
                         </v-btn>
                         <l-map ref="map" :center="map.center" :zoom="map.zoom">
                             <l-tile-layer :url="map.url" :attribution="map.attribution"></l-tile-layer>
-                            <template v-for="post in posts">
-                                <l-marker v-if="post.id === currentPostId" :icon="map.markerRed"
-                                          :lat-lng="[post.geo_location.lat, post.geo_location.lon]"
-                                          @click="openPost(post.id)">
-                                    <l-tooltip>{{ post.title }}</l-tooltip>
-                                </l-marker>
-                                <l-marker v-else :icon="map.markerBlue"
-                                          :lat-lng="[post.geo_location.lat, post.geo_location.lon]"
-                                          @click="openPost(post.id)">
-                                    <l-tooltip>{{ post.title }}</l-tooltip>
-                                </l-marker>
-                            </template>
+                            <v-marker-cluster>
+                              <v-marker
+                                      v-for="post in posts"
+                                      :key="post.id"
+                                      :icon="post.id === currentPostId ? map.markerRed: map.markerBlue"
+                                      :lat-lng="[post.geo_location.lat, post.geo_location.lon]"
+                                      @click="openPost(post.id)">
+                                  <v-popup :content="post.title"></v-popup>
+                              </v-marker>
+                            </v-marker-cluster>
                         </l-map>
                     </div>
                 </v-card>
@@ -198,11 +197,16 @@
 
     import L, {LatLngTuple} from 'leaflet';
     import {LMap, LTileLayer, LMarker, LTooltip} from 'vue2-leaflet';
-    import 'leaflet/dist/leaflet.css';
+    import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster/Vue2LeafletMarkercluster.vue';
+    import * as Vue2Leaflet from 'vue2-leaflet';
     import radii from '@/resources/radii';
 
     export default Vue.extend({
-        components: {Header, LMap, LTileLayer, LMarker, LTooltip},
+        components: {Header, LMap, LTileLayer, LMarker, LTooltip,
+          'v-marker': Vue2Leaflet.LMarker,
+          'v-popup': Vue2Leaflet.LPopup,
+          'v-marker-cluster': Vue2LeafletMarkerCluster
+        },
         data(): {
             map: any;
             postMapToggle: 'post' | 'map';
@@ -334,9 +338,13 @@
     });
 </script>
 
-<style scoped>
+<style>
+  @import "~leaflet/dist/leaflet.css";
+  @import "~leaflet.markercluster/dist/MarkerCluster.css";
+  @import "~leaflet.markercluster/dist/MarkerCluster.Default.css";
+
    .activeListItem {
-     background-color: #c4e0ff;
+     background-color: #c4e0ff !important;
    }
    .no-border tr:not(:last-child) td:not(.v-data-table__mobile-row) {
     border: 0 !important;
