@@ -22,7 +22,11 @@
       </v-btn>
 
       <v-flex xs10 sm8 md6 style="background: white; border-radius: 20px; margin-right:2%">
-        <search-bar ref="searchBar" @input="addSearchValueAndUpdate" :searchInput.sync="currentSearchValue"/>
+        <search-bar ref="searchBar"
+                    @input="addSearchValueAndUpdate"
+                    :searchInput.sync="currentSearchValue"
+                    :enable-no-data-message="true"
+        />
         <v-spacer></v-spacer>
         <v-chip-group
           active-class="primary-text"

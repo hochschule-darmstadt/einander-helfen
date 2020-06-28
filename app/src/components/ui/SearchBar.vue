@@ -11,12 +11,12 @@
     append-icon="none"
     :search-input.sync="mySearchValue"
   >
-    <template v-slot:no-data v-if="mySearchValue && mySearchValue.length > 0">
+    <template v-slot:no-data v-if="showNoData">
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title>
             Drücken Sie
-            <kbd>Enter</kbd> für eine Freitextsuche mit Ihrer Eingabe 
+            <kbd>Enter</kbd> für eine Freitextsuche mit Ihrer Eingabe
             <v-chip>"{{ mySearchValue }}"</v-chip>
           </v-list-item-title>
         </v-list-item-content>
@@ -34,7 +34,11 @@ const { mapState, mapActions } = createNamespacedHelpers('textSearchModule');
 
 export default Vue.extend({
   props: {
-    searchInput: String
+    searchInput: String,
+    enableNoDataMessage: {
+      type: Boolean,
+      default: false
+    }
   },
   data(): {
     mySearchValue: string;
@@ -71,6 +75,11 @@ export default Vue.extend({
       );
 
       return rankedListOfOrderedTerms;
+    },
+    showNoData(): boolean {
+      return this.enableNoDataMessage
+              && this.mySearchValue !== null
+              && this.mySearchValue.length > 0;
     }
   },
   methods: {
