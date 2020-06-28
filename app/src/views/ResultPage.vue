@@ -20,7 +20,7 @@ import * as Vue2Leaflet from "vue2-leaflet";
                         <v-btn v-if="currentPostId.length > 0" @click="postMapToggle = 'post'"
                                style="position: absolute; z-index: 9999; margin-right: 30px; margin-top: 20px; right: 0;"><v-icon>info</v-icon> Details
                         </v-btn>
-                        <l-map ref="map" :center="map.center" :zoom="map.zoom" :gestureHandling="true">
+                        <l-map ref="map" :center="map.center" :zoom="map.zoom" :options="{gestureHandling: true}">
                             <l-tile-layer :url="map.url" :attribution="map.attribution"></l-tile-layer>
                             <v-marker-cluster>
                               <v-marker
