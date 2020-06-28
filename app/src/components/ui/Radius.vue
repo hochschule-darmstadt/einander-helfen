@@ -26,18 +26,21 @@
             },
         },
         data(): {
-            newSelectedRadius: string,
+            newSelectedRadius: string|null,
             radii: Radius[]
         } {
             return {
-                newSelectedRadius: '',
+                newSelectedRadius: null,
                 radii
             };
         },
         watch: {
-            newSelectedRadius(newValue): void {
+            newSelectedRadius(newValue: string|null): void {
+              if (newValue !== null) {
                 this.setSelectedRadius(newValue);
                 this.$emit('input', newValue);
+                this.newSelectedRadius = null;
+              }
             },
         },
         computed: {

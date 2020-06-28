@@ -6,6 +6,9 @@
         <template v-if="selectedRadius">
           Wir haben daher den Radius auf {{selectedRadius}} vergrößert.
         </template>
+        <template v-else>
+          Wir haben daher den Radius vergrößert, bis Ergebnisse gefunden wurden.
+        </template>
     </v-snackbar>
       <v-layout row wrap no-gutters>
         <!-- Map -->
