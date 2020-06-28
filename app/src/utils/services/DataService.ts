@@ -38,7 +38,7 @@ class DataService {
                 {key: 'task', value}
             ]).flat());
 
-        // query.from(from);
+        query.from(from);
         query.size(size);
 
         const queryObject = query.build();
