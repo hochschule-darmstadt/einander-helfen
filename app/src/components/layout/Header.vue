@@ -22,7 +22,7 @@
       </v-btn>
 
       <v-flex xs10 sm8 md6 style="background: white; border-radius: 20px; margin-right:2%">
-        <search-bar @input="addSearchValueAndUpdate" :searchInput.sync="currentSearchValue"/>
+        <search-bar ref="searchBar" @input="addSearchValueAndUpdate" :searchInput.sync="currentSearchValue"/>
         <v-spacer></v-spacer>
         <v-chip-group
           active-class="primary-text"
@@ -128,7 +128,8 @@
     addSearchValueAndUpdate(input): void {
       this.addSearchValue(input);
       this.$nextTick(() => {
-        this.currentSearchValue = '';
+        // @ts-ignore
+        this.$refs.searchBar.clearInput();
       });
       this.updateResults();
     },

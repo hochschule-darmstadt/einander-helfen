@@ -113,6 +113,11 @@ export default Vue.extend({
 
             this.$emit('input', tagName);
         },
+      clearInput(): void {
+          this.$nextTick(() => {
+            this.mySearchValue = '';
+          });
+      }
     }
 });
 </script>
