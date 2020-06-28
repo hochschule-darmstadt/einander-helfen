@@ -14,6 +14,7 @@
     "core-js": "^2.6.5",
     "es-query-builder": "github:hochschule-darmstadt/es-query-builder",
     "leaflet": "^1.6.0",
+    "leaflet-gesture-handling": "^1.1.8",
     "leaflet.markercluster": "^1.4.1",
     "vue": "^2.6.10",
     "vue-axios": "^2.1.4",

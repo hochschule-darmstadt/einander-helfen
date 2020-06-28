@@ -20,7 +20,7 @@ import * as Vue2Leaflet from "vue2-leaflet";
                         <v-btn v-if="currentPostId.length > 0" @click="postMapToggle = 'post'"
                                style="position: absolute; z-index: 9999; margin-right: 30px; margin-top: 20px; right: 0;"><v-icon>info</v-icon> Details
                         </v-btn>
-                        <l-map ref="map" :center="map.center" :zoom="map.zoom">
+                        <l-map ref="map" :center="map.center" :zoom="map.zoom" :gestureHandling="true">
                             <l-tile-layer :url="map.url" :attribution="map.attribution"></l-tile-layer>
                             <v-marker-cluster>
                               <v-marker
@@ -199,7 +199,10 @@ import * as Vue2Leaflet from "vue2-leaflet";
     import {LMap, LTileLayer, LMarker, LTooltip} from 'vue2-leaflet';
     import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster/Vue2LeafletMarkercluster.vue';
     import * as Vue2Leaflet from 'vue2-leaflet';
+    import { GestureHandling } from 'leaflet-gesture-handling';
     import radii from '@/resources/radii';
+
+    L.Map.addInitHook('addHandler', 'gestureHandling', GestureHandling);
 
     export default Vue.extend({
         components: {Header, LMap, LTileLayer, LMarker, LTooltip,
@@ -342,6 +345,7 @@ import * as Vue2Leaflet from "vue2-leaflet";
   @import "~leaflet/dist/leaflet.css";
   @import "~leaflet.markercluster/dist/MarkerCluster.css";
   @import "~leaflet.markercluster/dist/MarkerCluster.Default.css";
+  @import "~leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
 
    .activeListItem {
      background-color: #c4e0ff !important;
