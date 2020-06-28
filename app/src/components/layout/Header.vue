@@ -124,9 +124,10 @@
   },
   methods: {
     ...mapActions(['addSearchValue', 'removeSearchValue']),
-    ...mapStateActions(['updateURIFromState', 'findPosts']),
+    ...mapStateActions(['updateURIFromState', 'findPosts', 'setPage']),
     updateResults(): void {
-        this.updateURIFromState();
+        // After changing the query we want to begin on page 1
+        this.setPage(1);
         this.findPosts();
     },
     addSearchValueAndUpdate(input): void {
