@@ -1,7 +1,15 @@
 <template>
   <div>
     <Header />
-
+    <v-snackbar v-model="showRadiusExtendedMessage" top="top">
+        Zu Ihrer Suchanfrage mit einem Radius von {{radiusExtendedFrom}} haben wir keine Treffer gefunden.
+        <template v-if="selectedRadius">
+          Wir haben daher den Radius auf {{selectedRadius}} vergrößert.
+        </template>
+        <template v-else>
+          Wir haben daher den Radius vergrößert, bis Ergebnisse gefunden wurden.
+        </template>
+    </v-snackbar>
       <v-layout row wrap no-gutters>
         <!-- Map -->
         <v-flex xs12 md6 order-md2 v-if="postMapToggle === 'map'">
@@ -159,6 +167,11 @@
                 </v-list-item>
               </v-card>
             </template>
+            <template v-if="!postsOnCurrentPage.length">
+              <div class="text-center pt-12">
+                <h3 class="font-weight-bold ">Es wurden keine Suchergebnisse zu Ihrer Suchanfrage gefunden.</h3>
+              </div>
+            </template>
           </div>
         </v-flex>
 
@@ -193,6 +206,8 @@
         data(): {
             map: any;
             postMapToggle: 'post' | 'map';
+            radiusExtendedFrom: '';
+            showRadiusExtendedMessage: boolean;
         } {
             return {
                 postMapToggle: 'map',
@@ -211,7 +226,9 @@
                         iconUrl: require('../../public/images/marker/marker-icon-red.png'),
                         iconSize: [25, 41]
                     })
-                }
+                },
+                radiusExtendedFrom: '',
+                showRadiusExtendedMessage: false
             };
         },
         computed: {
@@ -232,6 +249,14 @@
             this.hydrateStateFromRoute(this.$route);
         },
         watch: {
+          /**
+           * Beobachtet die aktuell geladenen Posts.
+           * Wenn nur ein Post vorhanden ist, diesen direkt öffnen.
+           * Wenn überhaupt Posts vorhanden sind, den Viewport der Karte auf alle Marker setzen.
+           * Wenn keine Posts da sind, ggf. den Radius vergrößern und erneut suchen.
+           *
+           * @param val Post[]
+           */
             posts(val: Post[]): void {
                 if (val.length === 1) {
                     this.openPost(val[0].id);
@@ -239,17 +264,33 @@
                 if (val.length) {
                   const markers = val.map((post) => [post.geo_location.lat, post.geo_location.lon] as LatLngTuple);
                   (this.$refs.map as LMap).fitBounds(markers);
+
+                  if (this.radiusExtendedFrom) {
+                    this.showRadiusExtendedMessage = true;
+                  }
+
                 } else {
                   // Unsere Suche hat keine Ergebnisse geliefert.
                   if (this.selectedLocation && this.selectedRadius) {
                     // Wenn wir mit einem Radius um einen Ort suchen, den Radius vergrößern und nochmal probieren!
                     const currentRadiusIndex = radii.findIndex((r) => r.value === this.selectedRadius);
-                    const nextBiggerRadius = radii[currentRadiusIndex + 1 % radii.length];
+                    const nextBiggerRadius = radii[(currentRadiusIndex + 1) % (radii.length - 1)];
+                    // Wir wollen uns merken, dass wir den Radius verändert haben, um den Nutzer darüber zu informieren.
+                    // Aber nur, wenn wir das nicht bereits gemacht haben um uns den Wert nicht zu überschreiben.
+                    if (!this.radiusExtendedFrom) {
+                      this.radiusExtendedFrom = this.selectedRadius;
+                    }
                     this.setSelectedRadius(nextBiggerRadius.value);
                     this.updateURIFromState();
                     this.findPosts();
                   }
                 }
+            },
+            showRadiusExtendedMessage(newValue, oldValue): void {
+              // After the message closed we can remove this knowlage.
+              if (newValue !== oldValue && !newValue) {
+                this.radiusExtendedFrom = '';
+              }
             },
             selectedPost(): void {
                 this.updateURIFromState();
