@@ -11,7 +11,7 @@
     append-icon="none"
     :search-input.sync="mySearchValue"
   >
-    <template v-slot:no-data v-if="mySearchValue.length > 0">
+    <template v-slot:no-data v-if="mySearchValue && mySearchValue.length > 0">
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title>
