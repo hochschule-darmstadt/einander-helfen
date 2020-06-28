@@ -285,7 +285,9 @@
                 });
             },
             rerenderMap(): void {
-              (this.$refs.map as unknown as L.Map).invalidateSize();
+              this.$nextTick(() => {
+                (this.$refs.map as LMap).mapObject.invalidateSize();
+              });
             }
         }
     });
