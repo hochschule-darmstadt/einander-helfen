@@ -1,7 +1,6 @@
 <template>
     <v-app-bar flat height="100px" color="#00254f">
         <v-layout justify-space-between no-gutters color="#00254f">
-                <v-container>
                     <v-row>
                         <v-col>
                             <v-layout>
@@ -44,8 +43,6 @@
                             </div>
                         </v-col>
                     </v-row>
-                </v-container>
-
         </v-layout>
     </v-app-bar>
 </template>
