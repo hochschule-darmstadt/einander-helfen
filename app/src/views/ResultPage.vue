@@ -12,7 +12,7 @@
     </v-snackbar>
       <v-layout row wrap no-gutters>
         <!-- Map -->
-        <v-flex xs12 md6 order-md2 v-if="postMapToggle === 'map'">
+        <v-flex xs12 md6 order-md2 v-show="postMapToggle === 'map'">
            <div class="map">
                 <v-card tile height="70vh">
                     <div id="map" :style="{height: map.height, width: map.width}">
@@ -248,6 +248,9 @@
         created(): void {
             this.hydrateStateFromRoute(this.$route);
         },
+        mounted(): void {
+          this.rerenderMap();
+        },
         watch: {
           /**
            * Beobachtet die aktuell geladenen Posts.
@@ -317,9 +320,15 @@
                 const currentPost = this.selectedPost as Post;
                 const location = [currentPost.geo_location.lat, currentPost.geo_location.lon] as LatLngTuple;
                 this.postMapToggle = 'map';
+                this.rerenderMap();
                 this.$nextTick(() => {
                     (this.$refs.map as LMap).setCenter(location);
                 });
+            },
+            rerenderMap(): void {
+              this.$nextTick(() => {
+                (this.$refs.map as LMap).mapObject.invalidateSize();
+              });
             }
         }
     });
