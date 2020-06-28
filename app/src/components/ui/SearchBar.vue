@@ -59,7 +59,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapState(['searchProposals']),
+    ...mapState(['searchProposals', 'searchValues']),
     mySearchProposals(): string[] {
       if (!this.mySearchValue || this.mySearchValue.length < 1) {
         return [];
@@ -88,7 +88,8 @@ export default Vue.extend({
       const stringArray: string[] = [];
       searchTerm = searchTerm.toLowerCase();
 
-      proposals.forEach((tag) => {
+      proposals.filter((tag) => !this.searchValues.includes(tag.label))
+        .forEach((tag) => {
         if (tag.label.toLowerCase().match(searchTerm)) {
           stringArray.push(tag.label);
         } else {
