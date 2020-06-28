@@ -88,7 +88,9 @@
           }
         },
         locationOnKeyUp(evt): void {
-          if (evt.code.startsWith('Key') || evt.code.startsWith('Digit') || evt.code === 'Backspace') {
+          const handleDesktop = evt.code.startsWith('Key') || evt.code.startsWith('Digit') || evt.code === 'Backspace';
+          const handleMobile = Number.isInteger(evt.key) || evt.key.match(/[a-z]/i) || evt.key === 'Backspace';
+          if (handleDesktop || handleMobile) {
             const curValue = evt.target.value;
             const plz = curValue.match(/^\d+/);
             if (plz) {
