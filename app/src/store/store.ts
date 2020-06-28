@@ -74,8 +74,8 @@ const store: StoreOptions<RootState> = {
       });
 
     },
-    setPage({ commit, dispatch, state }, page: number): void {
-        if (page < 1) {
+    setPage({ commit, dispatch, state, getters }, page: number): void {
+        if (page < 1 || page > getters.numberOfPages) {
           page = 1;
         }
         // Calculate the new from parameter to load the next resultSet chunk if necessary
