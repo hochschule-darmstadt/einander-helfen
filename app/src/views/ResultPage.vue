@@ -1,7 +1,9 @@
 import * as Vue2Leaflet from "vue2-leaflet";
 <template>
   <div>
-    <Header />
+    <Header v-if="!isMobileDevice" />
+    <MobileFriendlyHeader v-if="isMobileDevice" :fixed="postMapToggle === 'map'"/>
+
     <v-snackbar v-model="showRadiusExtendedMessage" top="top">
         Zu Ihrer Suchanfrage mit einem Radius von {{radiusExtendedFrom}} haben wir keine Treffer gefunden.
         <template v-if="selectedRadius">
@@ -20,7 +22,7 @@ import * as Vue2Leaflet from "vue2-leaflet";
                         <v-btn v-if="currentPostId.length > 0" @click="postMapToggle = 'post'"
                                style="position: absolute; z-index: 9999; margin-right: 30px; margin-top: 20px; right: 0;"><v-icon>info</v-icon> Details
                         </v-btn>
-                        <l-map ref="map" :center="map.center" :zoom="map.zoom" :options="{gestureHandling: true}">
+                        <l-map ref="map" :center="map.center" :zoom="map.zoom" :options="{gestureHandling: true, zoomControl: false}">
                             <l-tile-layer :url="map.url" :attribution="map.attribution"></l-tile-layer>
                             <v-marker-cluster>
                               <v-marker
@@ -189,6 +191,7 @@ import * as Vue2Leaflet from "vue2-leaflet";
 <!-- test content -->
 <script lang="ts">
     import Header from '@/components/layout/Header.vue';
+    import MobileFriendlyHeader from '@/components/layout/MobileFriendlyHeader.vue';
     import Post from '@/models/post';
     import Vue from 'vue';
     import {mapActions, mapState, mapGetters, createNamespacedHelpers} from 'vuex';
@@ -205,7 +208,7 @@ import * as Vue2Leaflet from "vue2-leaflet";
     L.Map.addInitHook('addHandler', 'gestureHandling', GestureHandling);
 
     export default Vue.extend({
-        components: {Header, LMap, LTileLayer, LMarker, LTooltip,
+        components: {Header, MobileFriendlyHeader, LMap, LTileLayer, LMarker, LTooltip,
           'v-marker': Vue2Leaflet.LMarker,
           'v-popup': Vue2Leaflet.LPopup,
           'v-marker-cluster': Vue2LeafletMarkerCluster
@@ -215,6 +218,7 @@ import * as Vue2Leaflet from "vue2-leaflet";
             postMapToggle: 'post' | 'map';
             radiusExtendedFrom: '';
             showRadiusExtendedMessage: boolean;
+            windowWidth: number;
         } {
             return {
                 postMapToggle: 'map',
@@ -235,7 +239,8 @@ import * as Vue2Leaflet from "vue2-leaflet";
                     })
                 },
                 radiusExtendedFrom: '',
-                showRadiusExtendedMessage: false
+                showRadiusExtendedMessage: false,
+                windowWidth: window.innerWidth
             };
         },
         computed: {
@@ -250,6 +255,9 @@ import * as Vue2Leaflet from "vue2-leaflet";
             },
             postIsOpen(): boolean {
                 return !!this.selectedPost;
+            },
+            isMobileDevice(): boolean {
+              return this.windowWidth < 750;
             }
         },
         created(): void {
@@ -257,8 +265,14 @@ import * as Vue2Leaflet from "vue2-leaflet";
         },
         mounted(): void {
           this.rerenderMap();
+          this.$nextTick(() => {
+            window.addEventListener('resize', this.onResize);
+          });
         },
-        watch: {
+        beforeDestroy(): void {
+          window.removeEventListener('resize', this.onResize);
+        },
+      watch: {
           /**
            * Beobachtet die aktuell geladenen Posts.
            * Wenn nur ein Post vorhanden ist, diesen direkt öffnen.
@@ -336,6 +350,9 @@ import * as Vue2Leaflet from "vue2-leaflet";
               this.$nextTick(() => {
                 (this.$refs.map as LMap).mapObject.invalidateSize();
               });
+            },
+            onResize(): void {
+              this.windowWidth = window.innerWidth;
             }
         }
     });
@@ -346,7 +363,9 @@ import * as Vue2Leaflet from "vue2-leaflet";
   @import "~leaflet.markercluster/dist/MarkerCluster.css";
   @import "~leaflet.markercluster/dist/MarkerCluster.Default.css";
   @import "~leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
-
+   .map{
+     position:relative;
+   }
    .activeListItem {
      background-color: #c4e0ff !important;
    }
