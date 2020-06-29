@@ -10,9 +10,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/download-artifact@v2
-          with:
-            name: dist-dir
-            path: app/dist
+        with:
+          name: dist-dir
+          path: app/dist
       - name: rsync deployments
         uses: burnett01/rsync-deployments@4.1
         with:
