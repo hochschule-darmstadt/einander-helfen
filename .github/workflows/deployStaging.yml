@@ -1,0 +1,24 @@
+name: DEPLOY_STAGING
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v2
+          with:
+            name: dist-dir
+            path: app/dist
+      - name: rsync deployments
+        uses: burnett01/rsync-deployments@4.1
+        with:
+          switches: -avzr --delete
+          path: app/dist/
+          remote_path: ${{ secrets.DEPLOYMENT_PATH }}
+          remote_host: ${{ secrets.DEPLOYMENT_SERVER_STAGING }}
+          remote_user: ${{ secrets.DEPLOYMENT_USER }}
+          remote_key: ${{ secrets.DEPLOYMENT_KEY }}
