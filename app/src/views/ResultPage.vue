@@ -18,7 +18,7 @@ import * as Vue2Leaflet from "vue2-leaflet";
                 <v-card tile height="70vh">
                     <div id="map" :style="{height: map.height, width: map.width}">
                         <v-btn v-if="currentPostId.length > 0" @click="postMapToggle = 'post'"
-                               style="position: absolute; z-index: 9999; margin-right: 30px; margin-top: 20px; right: 0;"><v-icon>info</v-icon> Details
+                               class="button-details" dark><v-icon>info</v-icon> Details
                         </v-btn>
                         <l-map ref="map" :center="map.center" :zoom="map.zoom" :options="{gestureHandling: true}">
                             <l-tile-layer :url="map.url" :attribution="map.attribution"></l-tile-layer>
@@ -45,28 +45,34 @@ import * as Vue2Leaflet from "vue2-leaflet";
             tile
             style="height:70vh ;overflow:auto"
           >
+          <div class="container-buttons-smartphone">
+            <v-btn dark class="mr-3 button-smartphone button-map-smartphone" text @click="openMap()">
+              <v-icon>map</v-icon> Karte
+            </v-btn>
+            <v-btn class="button-close button-smartphone button-close-smartphone" icon @click="closePost()">
+              <v-icon>close</v-icon>
+            </v-btn>
+          </div>
           <v-list-item three-line>
-            <!--
-              This functionality may be added later. This button allows to deselect the current post and load all markers on the map.
-
-            <v-btn class="mr-3" text @click="closePost()">
-              <v-icon>arrow_back</v-icon>
-            </v-btn> -->
+            <v-btn dark class="mr-3 button-map" text @click="openMap()">
+              <v-icon>map</v-icon> Karte
+            </v-btn>
 
             <!--display title, subtitle and image on the right side-->
             <v-list-item-content style="margin-top:2%" class="headline">
               {{selectedPost.title}}
             </v-list-item-content>
+            <div>
             <v-img
               style="margin-top:2%"
               max-width="80px"
               height="80px"
               contain
               :src="selectedPost.image"
-            ></v-img>
+            ></v-img></div>
 
-            <v-btn style="margin-top:2%; background: #00254f" dark class="mr-3" text @click="openMap()">
-              <v-icon>map</v-icon> Karte
+            <v-btn class="button-close" icon @click="closePost()">
+              <v-icon>close</v-icon>
             </v-btn>
           </v-list-item>
 
@@ -147,7 +153,7 @@ import * as Vue2Leaflet from "vue2-leaflet";
           <div style="height:70vh ;overflow:auto">
             <template v-for="post in postsOnCurrentPage">
               <v-card class="mb-3" :class="{ activeListItem: currentPostId === post.id }">
-                <v-list-item three-line @click="openPost(post.id)">
+                <v-list-item three-line @click="currentPostId === post.id ? closePost() : openPost(post.id)">
                   <v-list-item-content>
                     <v-list-item-title class="headline mb-1">
                       {{post.title}}
@@ -272,8 +278,7 @@ import * as Vue2Leaflet from "vue2-leaflet";
                     this.openPost(val[0].id);
                 }
                 if (val.length) {
-                  const markers = val.map((post) => [post.geo_location.lat, post.geo_location.lon] as LatLngTuple);
-                  (this.$refs.map as LMap).fitBounds(markers);
+                  this.fitMapBounds(val);
 
                   if (this.radiusExtendedFrom) {
                     this.showRadiusExtendedMessage = true;
@@ -332,6 +337,16 @@ import * as Vue2Leaflet from "vue2-leaflet";
                     (this.$refs.map as LMap).setCenter(location);
                 });
             },
+            closePost(): void {
+                this.setSelectedPost(null);
+                this.postMapToggle = 'map';
+
+                this.fitMapBounds(this.posts);
+            },
+            fitMapBounds(posts: Post[]): void {
+                const markers = posts.map((post) => [post.geo_location.lat, post.geo_location.lon] as LatLngTuple);
+                (this.$refs.map as LMap).fitBounds(markers);
+            },
             rerenderMap(): void {
               this.$nextTick(() => {
                 (this.$refs.map as LMap).mapObject.invalidateSize();
@@ -362,6 +377,48 @@ import * as Vue2Leaflet from "vue2-leaflet";
    .detail-table tr td {
      vertical-align: top;
      padding-bottom: 25px;
+   }
+   .button-map {
+     margin-top: 30px;
+     background-color: rgb(5, 76, 102);
+     align-self: flex-start;
+   }
+   .button-smartphone {
+     display: none;
+   }
+   .button-map-smartphone {
+     background-color: rgb(5, 76, 102);
+   }
+   .button-close-smartphone {
+     position: absolute;
+     right: 0;
+   }
+   .container-buttons-smartphone {
+     display: none;
+     position: relative;
+     justify-content: center;
+     margin-top: 5px;
+   }
+   .button-details {
+     position: absolute;
+     z-index: 9999;
+     margin-left: 50px;
+     margin-top: 20px;
+     background-color: rgb(5, 76, 102) !important;
+   }
+   .button-close {
+     align-self: flex-start;
+   }
+   @media only screen and (max-width: 500px) {
+    .button-map, .button-close {
+      display: none;
+    }
+    .button-smartphone {
+      display: block;
+    }
+    .container-buttons-smartphone {
+      display: flex;
+    }
    }
 
 </style>
