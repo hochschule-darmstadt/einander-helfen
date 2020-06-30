@@ -394,7 +394,7 @@ import * as Vue2Leaflet from "vue2-leaflet";
      right: 0;
    }
    .container-buttons-smartphone {
-     display: flex;
+     display: none;
      position: relative;
      justify-content: center;
      margin-top: 5px;
@@ -415,6 +415,9 @@ import * as Vue2Leaflet from "vue2-leaflet";
     }
     .button-smartphone {
       display: block;
+    }
+    .container-buttons-smartphone {
+      display: flex;
     }
    }
 
