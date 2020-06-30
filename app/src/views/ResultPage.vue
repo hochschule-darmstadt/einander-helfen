@@ -1,4 +1,3 @@
-import * as Vue2Leaflet from "vue2-leaflet";
 <template>
   <div>
     <Header />
@@ -151,8 +150,12 @@ import * as Vue2Leaflet from "vue2-leaflet";
         <!--left side content-->
         <v-flex sm12 md6 order-md1 >
           <div style="height:70vh ;overflow:auto">
-            <template v-for="post in postsOnCurrentPage">
-              <v-card class="mb-3" :class="{ activeListItem: currentPostId === post.id }">
+              <v-card
+                      v-for="post in postsOnCurrentPage"
+                      :key="post.id"
+                      class="mb-3"
+                      :class="{ activeListItem: currentPostId === post.id }"
+              >
                 <v-list-item three-line @click="currentPostId === post.id ? closePost() : openPost(post.id)">
                   <v-list-item-content>
                     <v-list-item-title class="headline mb-1">
@@ -171,12 +174,11 @@ import * as Vue2Leaflet from "vue2-leaflet";
                   ></v-img>
                 </v-list-item>
               </v-card>
-            </template>
-            <template v-if="!postsOnCurrentPage.length">
-              <div class="text-center pt-12">
+
+
+              <div class="text-center pt-12" v-if="!postsOnCurrentPage.length">
                 <h3 class="font-weight-bold ">Es wurden keine Suchergebnisse zu Ihrer Suchanfrage gefunden.</h3>
               </div>
-            </template>
           </div>
         </v-flex>
 
@@ -307,7 +309,10 @@ import * as Vue2Leaflet from "vue2-leaflet";
                 this.radiusExtendedFrom = '';
               }
             },
-            selectedPost(): void {
+            selectedPost(value): void {
+                if (value === null) {
+                  this.closePost();
+                }
                 this.updateURIFromState();
             },
             page(value): void {
