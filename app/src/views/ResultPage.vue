@@ -45,7 +45,14 @@ import * as Vue2Leaflet from "vue2-leaflet";
             tile
             style="height:70vh ;overflow:auto"
           >
-
+          <div class="container-buttons-smartphone">
+            <v-btn dark class="mr-3 button-smartphone button-map-smartphone" text @click="openMap()">
+              <v-icon>map</v-icon> Karte
+            </v-btn>
+            <v-btn class="button-close button-smartphone button-close-smartphone" icon @click="closePost()">
+              <v-icon>close</v-icon>
+            </v-btn>
+          </div>
           <v-list-item three-line>
             <v-btn dark class="mr-3 button-map" text @click="openMap()">
               <v-icon>map</v-icon> Karte
@@ -372,8 +379,25 @@ import * as Vue2Leaflet from "vue2-leaflet";
      padding-bottom: 25px;
    }
    .button-map {
-     margin-top: 2px;
+     margin-top: 30px;
      background-color: rgb(5, 76, 102);
+     align-self: flex-start;
+   }
+   .button-smartphone {
+     display: none;
+   }
+   .button-map-smartphone {
+     background-color: rgb(5, 76, 102);
+   }
+   .button-close-smartphone {
+     position: absolute;
+     right: 0;
+   }
+   .container-buttons-smartphone {
+     display: flex;
+     position: relative;
+     justify-content: center;
+     margin-top: 5px;
    }
    .button-details {
      position: absolute;
@@ -382,10 +406,15 @@ import * as Vue2Leaflet from "vue2-leaflet";
      margin-top: 20px;
      background-color: rgb(5, 76, 102) !important;
    }
-
+   .button-close {
+     align-self: flex-start;
+   }
    @media only screen and (max-width: 500px) {
-    .button-map {
-      
+    .button-map, .button-close {
+      display: none;
+    }
+    .button-smartphone {
+      display: block;
     }
    }
 
