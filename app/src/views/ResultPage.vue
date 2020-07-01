@@ -38,7 +38,7 @@
         </v-flex>
 
         <!-- right side content-->
-        <v-flex sm12 md6 order-md2 v-if="postMapToggle === 'post'" mb-5>
+        <v-flex sm12 md6 order-md2 v-if="postMapToggle === 'post'" mb-5 class="hidden-sm-and-down">
           <div>
           <v-card
             tile
@@ -148,7 +148,10 @@
         </v-flex>
 
         <!--left side content-->
-        <v-flex sm12 md6 order-md1 >
+        <v-flex sm12 md6 order-md1 class="hidden-sm-and-down" >
+          <div class="text-center pt-12" v-if="!postsOnCurrentPage.length">
+              <h3 class="font-weight-bold ">Es wurden keine Suchergebnisse zu Ihrer Suchanfrage gefunden.</h3>
+          </div>
           <div style="height:70vh ;overflow:auto">
               <v-card
                       v-for="post in postsOnCurrentPage"
@@ -174,14 +177,150 @@
                   ></v-img>
                 </v-list-item>
               </v-card>
+              </div>
+          </v-flex>
 
 
+        <!--MOBILE VIEW Post details under selected post-->
+        <v-flex sm12 class="hidden-md-and-up"  >
+         <div style="height:70vh ;overflow:auto">
+           <v-expansion-panels >
+             <v-expansion-panel 
+                            v-for="post in postsOnCurrentPage" 
+                            :key="post.id" 
+                            class="mb-3"
+                            :class="{ activeListItem: currentPostId === post.id }"
+                            @click="currentPostId === post.id ? closePost() : openPost(post.id)"
+               >  
+                <v-expansion-panel-header  >
+                  <v-flex sm12>    
+                    <div class="headline mb-1">
+                      {{post.title}}
+                    <v-list-item three-line >
+                    <v-list-item-content>
+                      <v-list-item-subtitle>
+                         {{post.location}} &mdash; {{post.task}}
+                      </v-list-item-subtitle>
+                    </v-list-item-content>
+                    <v-img 
+                    max-width="80px"
+                    height="80px"
+                    contain
+                    :src="post.image"
+                    ></v-img>
+                  </v-list-item>
+                      </div>    
+                    <!--
+                  <v-list-item three-line >
+                    <v-list-item-content>
+                      <v-list-item-title class="headline mb-1">
+                        {{post.title}}
+                      </v-list-item-title>
+                      <v-list-item-subtitle>
+                         {{post.location}} &mdash; {{post.task}}
+                      </v-list-item-subtitle>
+                    </v-list-item-content>
+                    <v-img 
+                    max-width="80px"
+                    height="80px"
+                    contain
+                    :src="post.image"
+                    ></v-img>
+                  </v-list-item>
+                  -->
+                  </v-flex>    
+                </v-expansion-panel-header>
+                
+                <v-expansion-panel-content>
+                  <v-card flat 
+                          class="d-felx" 
+                          tile
+                          style="height:70vh ;overflow:auto"
+                          v-if="postMapToggle === 'post'" mb-5 
+                          :class="{ activeListItem: currentPostId === post.id }"
+                  > 
+                
+                    
+                          <v-btn dark class="mb-3 button-map" text @click="openMap()">
+                          <v-icon>map</v-icon> Karte
+                        </v-btn>
+
+                        <v-simple-table class="no-border detail-table" 
+                                        :class="{ activeListItem: currentPostId === post.id }">
+                          <tbody>
+                          <tr v-if="selectedPost.location">
+                            <td>Einsatzort</td>
+                            <td v-html="selectedPost.location"></td>
+                          </tr>
+                          <tr class="pt-1" v-if="selectedPost.title">
+                            <td>Aufgabe</td>
+                            <td v-html="selectedPost.task"></td>
+                          </tr>
+                          <tr class="pt-1" v-if="selectedPost.contact">
+                            <td>Ansprechpartner</td>
+                            <td v-html="selectedPost.contact"></td>
+                          </tr>
+                          <tr class="pt-1" v-if="selectedPost.organization">
+                            <td>Organisation</td>
+                            <td v-html="selectedPost.organization"></td>
+                          </tr>
+                          <tr class="pt-1" v-if="selectedPost.target_group">
+                            <td>Zielgruppe</td>
+                            <td v-html="selectedPost.target_group"></td>
+                          </tr>
+                          <tr class="pt-1" v-if="selectedPost.timing">
+                            <td>Einstiegsdatum / Beginn</td>
+                            <td v-html="selectedPost.timing"></td>
+                          </tr>
+                          <tr class="pt-1" v-if="selectedPost.effort">
+                            <td>Zeitaufwand</td>
+                            <td v-html="selectedPost.effort"></td>
+                          </tr>
+                          <tr class="pt-1" v-if="selectedPost.opportunities">
+                            <td>Möglichkeiten</td>
+                            <td v-html="selectedPost.opportunities"></td>
+                          </tr>
+                          <tr class="pt-1" v-if="selectedPost.link">
+                            <td>Quelle</td>
+                            <td><a :href="selectedPost.link" target="_blank">{{ selectedPost.source }}</a></td>
+                          </tr>
+                          </tbody>
+                        </v-simple-table>
+
+
+                      <v-card-actions>
+                        <v-flex sm12>
+                          <v-container style="margin-bottom: 10px">
+                            <template
+                              v-for="(category, i) in selectedPost.categories"
+                            >
+                              <v-chip :key="i" class="mr-2 mt-2">{{ category }}</v-chip>
+                            </template>
+                          </v-container>
+                          <v-spacer></v-spacer>
+                          <v-container style="display:flex;justify-content:center;">
+                            <v-btn
+                              class="my-2"
+                              dark
+                              large
+                              color="#054C66"
+                              :href="selectedPost.link"
+                              target="_blank"
+                            >
+                              Zum Angebot
+                            </v-btn>
+                          </v-container>
+                        </v-flex>
+                      </v-card-actions>
+            </v-card>
+          </v-expansion-panel-content>
+        </v-expansion-panel>        
+      </v-expansion-panels>
               <div class="text-center pt-12" v-if="!postsOnCurrentPage.length">
                 <h3 class="font-weight-bold ">Es wurden keine Suchergebnisse zu Ihrer Suchanfrage gefunden.</h3>
               </div>
           </div>
-        </v-flex>
-
+        </v-flex>    
       </v-layout>
                        <!--pageination-->
           <div class="text-center" style="margin-top:2%; margin-bottom:1%">
