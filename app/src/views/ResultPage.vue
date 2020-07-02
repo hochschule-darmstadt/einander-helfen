@@ -144,7 +144,10 @@
 
 
             <div v-if="showRadiusExtendedMessage" class="text-center pt-12 pb-12">
-              <h3 class="font-weight-bold ">Zu Ihrer Suchanfrage mit einem Radius von {{radiusExtendedFrom}} haben wir keine Treffer gefunden. Wir haben daher den Radius vergrößert, bis Ergebnisse gefunden wurden.</h3>
+              <h3 class="font-weight-bold">Zu Ihrer Suchanfrage mit einem Radius von {{radiusExtendedFrom}} haben wir keine Treffer gefunden.
+                <template v-if="alternateRadius">Folgende Ergebnisse werden in einem Umkreis von {{alternateRadius}} gefunden.</template>
+                <template v-else>Folgende Ergebnisse werden in einem Umkreis von mehr als 50 km gefunden.</template>
+              </h3>
             </div>
 
 
