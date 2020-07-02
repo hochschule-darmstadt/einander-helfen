@@ -164,7 +164,7 @@
                       {{post.title}}
                     </v-list-item-title>
                     <v-list-item-subtitle :set="distance = postDistance(post)">
-                      {{post.location}} <span v-if="distance">(in {{distance}})</span> &mdash; {{post.task}}
+                      <strong>{{post.location}} <em v-if="distance">(in {{distance}})</em></strong> &mdash; {{post.task}}
                     </v-list-item-subtitle>
                   </v-list-item-content>
 
