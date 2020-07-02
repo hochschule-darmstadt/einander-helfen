@@ -19,7 +19,7 @@
                                       :icon="post.id === currentPostId ? map.markerRed: map.markerBlue"
                                       :lat-lng="[post.geo_location.lat, post.geo_location.lon]"
                                       @click="openPost(post.id)">
-                                  <v-popup :content="post.title"></v-popup>
+                                  <l-tooltip :content="post.title"></l-tooltip>
                               </v-marker>
                             </v-marker-cluster>
                         </l-map>
@@ -148,8 +148,13 @@
             </div>
 
 
-            <template v-for="post in postsOnCurrentPage">
-              <v-card class="mb-3" :class="{ activeListItem: currentPostId === post.id }">
+
+            <v-card
+                    v-for="post in postsOnCurrentPage"
+                    :key="post.id"
+                    class="mb-3"
+                    :class="{ activeListItem: currentPostId === post.id }"
+            >
                 <v-list-item three-line @click="currentPostId === post.id ? closePost() : openPost(post.id)">
                   <v-list-item-content>
                     <v-list-item-title class="headline mb-1">
@@ -168,12 +173,11 @@
                   ></v-img>
                 </v-list-item>
               </v-card>
-            </template>
-            <template v-if="!postsOnCurrentPage.length">
-              <div class="text-center pt-12">
+
+
+              <div class="text-center pt-12" v-if="!postsOnCurrentPage.length">
                 <h3 class="font-weight-bold ">Es wurden keine Suchergebnisse zu Ihrer Suchanfrage gefunden.</h3>
               </div>
-            </template>
           </div>
         </v-flex>
 
@@ -301,8 +305,11 @@
                   }
                 }
             },
-            selectedPost(): void {
-                this.updateURIFromState();
+            selectedPost(value): void {
+              if (value === null) {
+                this.closePost();
+              }
+              this.updateURIFromState();
             },
             page(value): void {
                 this.setPage(value);

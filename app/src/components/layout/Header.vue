@@ -124,10 +124,12 @@
   },
   methods: {
     ...mapActions(['addSearchValue', 'removeSearchValue']),
-    ...mapStateActions(['updateURIFromState', 'findPosts', 'setPage']),
+    ...mapStateActions(['updateURIFromState', 'findPosts', 'setPage', 'setSelectedPost']),
     updateResults(): void {
         // After changing the query we want to begin on page 1
         this.setPage(1);
+        // We also want to deselect the current selected post!
+        this.setSelectedPost(null);
         this.findPosts();
     },
     addSearchValueAndUpdate(input): void {
