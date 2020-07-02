@@ -4,8 +4,8 @@ from data_extraction.Scraper import Scraper
 class EhrenamtHessenScraper(Scraper):
     base_url = 'https://www.ehrenamtssuche-hessen.de'
     debug = True
-    # end_page = 6
 
+    #   Handles the soupified response of a detail page in the predefined way and returns it
     def parse(self, response, url):
 
         parsed_object = {
@@ -30,7 +30,7 @@ class EhrenamtHessenScraper(Scraper):
                         'data-pos-lon') or 0) or None,
             },
             'source': 'www.ehrenamtssuche-hessen.de',
-            'image': 'https://www.ehrenamtssuche-hessen.de/resources/img/hessenlogo_h180.png',
+            'image': f'{self.base_url}/resources/img/hessenlogo_h180.png',
         }
         cat_object = []
         for cat in response.find('div', {'class': 'legendLeft'}, text='Kategorien').parent.find('div', {
@@ -41,19 +41,30 @@ class EhrenamtHessenScraper(Scraper):
 
         return parsed_object
 
-    def scrape_urls(self, index):
-        search_page_url = f'{self.base_url}/entry_search_result.cfm?locationId=0&entryTypeId=5&page={str(index)}'
-        search_page = self.soupify(search_page_url)
-        detail_links = [x.find('a') for x in search_page.find_all('div', {'class': 'easSearchResultTitle'})]
+    #   Adds all URLs of detail pages, found on the search pages, for the crawl function to scrape
+    def add_urls(self):
 
-        for detailLink in detail_links:
-            if self.base_url + detailLink['href'] in self.urls:
-                raise Exception({'index': index, 'search_page': search_page_url,
-                                 'duplicate_link': self.base_url + detailLink['href']})
-            else:
-                self.urls.append(self.base_url + detailLink['href'])
+        import time
 
-    def override_end_page(self):
+        end_page = self.fetch_end_page()
+
+        for index in range(1, end_page + 1):
+
+            time.sleep(self.delay)
+
+            search_page_url = f'{self.base_url}/entry_search_result.cfm?locationId=0&entryTypeId=5&page={str(index)}'
+            search_page = self.soupify(search_page_url)
+            detail_links = [x.find('a') for x in search_page.find_all('div', {'class': 'easSearchResultTitle'})]
+
+            for detailLink in detail_links:
+                if self.base_url + detailLink['href'] in self.urls:
+                    self.add_error({'func': 'add_urls', 'body': {'index': index, 'search_page': search_page_url, 'duplicate_link': self.base_url + detailLink['href']}})
+                else:
+                    self.urls.append(self.base_url + detailLink['href'])
+
+    # Domain-specific Function
+    # Fetches the number of pages from the search result page for the add_urls function
+    def fetch_end_page(self):
 
         import math
 
@@ -61,5 +72,9 @@ class EhrenamtHessenScraper(Scraper):
         search_page = self.soupify(search_page_url)
         total_entries_as_string = search_page.find('h2', {'class': 'easSearchHeading'}).next.strip()
         formatted_entry_number = int(total_entries_as_string.replace('.', ''))
-        self.end_page = math.ceil(formatted_entry_number / 15)
-        print(f'Crawling {self.end_page} pages with 15 entries each.')
+        end_page = math.ceil(formatted_entry_number / 15)
+
+        if(self.debug):
+            print(f'Crawling {end_page} pages with 15 entries each.')
+        
+        return end_page

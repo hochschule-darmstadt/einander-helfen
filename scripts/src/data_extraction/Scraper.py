@@ -21,11 +21,6 @@ class Scraper:
     # Delay between requests
     delay = 0.5
 
-    # Starting and Ending indices for adding urls via page crawling
-    # i.e. example.com?page=5
-    start_page = 1
-    end_page = None
-
     urls = []
     data = []
     errors = []
@@ -33,6 +28,9 @@ class Scraper:
     def __init__(self, name):
         self.name = name
 
+    # Runs the Scraper 
+    # Step 1: Adding URLs
+    # Step 2: Crawl each URL in the urls-array
     def run(self):
 
         if self.debug:
@@ -40,17 +38,14 @@ class Scraper:
 
         self.start = time.time()
 
-        if not self.end_page:
+        # Add URLs which should be crawled
+        try:
+            self.add_urls()
 
-            try:
-                self.override_end_page()
+        except Exception as err:
+            self.add_error({'fn': 'add_urls', 'body': err})
 
-            except Exception as err:
-                self.add_error({'func': 'override_end_page', 'body': err})
-
-        if self.start_page and self.end_page:
-            self.add_urls_by_index()
-
+        # Iterate over URLs and crawl each page
         for i, url in enumerate(self.urls):
             time.sleep(self.delay)
             self.crawl(url, i + 1)
@@ -60,6 +55,7 @@ class Scraper:
                 f"[{self.name}] took {(time.time() - self.start):0.2f} seconds to crawl {len(self.urls)} pages from {self.base_url}")
             print(f'Scraper {self.name} ended')
 
+    # Crawls page, runs the parse function over the GET-result and appends it to the data-array 
     def crawl(self, url, index):
 
         if self.debug:
@@ -71,48 +67,38 @@ class Scraper:
             self.data.append(parsed_data)
 
         except Exception as err:
-            self.add_error({'func': 'parse', 'body': err, 'index': index, 'url': url})
+            self.add_error({'fn': 'parse', 'body': err, 'index': index, 'url': url})
 
         if self.debug:
             print(f'[{self.name}] crawling page #{index} ended')
 
-    def add_urls_by_index(self):
-        for index in range(self.start_page, self.end_page + 1):
 
-            time.sleep(self.delay)
-
-            if self.debug:
-                print(f'[{self.name}] URLs added for page {index} from {self.end_page}.')
-
-            try:
-                self.scrape_urls(index)
-
-            except Exception as err:
-                self.add_error({'func': 'scrape_urls', 'body': err, 'index': index})
-
+    # Returns data of the Scraper
+    def get_data(self):
+        return self.data
+    
+    # Returns data of the Scraper in JSON-Format
     def get_json_data(self):
         return json.dumps(self.data)
 
-    def get_data(self):
-        return self.data
-
+    # Adds error to the error object (used for logging)
     def add_error(self, err: dict):
+        if(self.debug): 
+            print('[Error]:', err)
         self.errors.append(err)
 
+    # Executes GET-request with the given url, transforms it to a BeautifulSoup object and returns it
     @staticmethod
     def soupify(url):
-        session = requests.Session()
-        res = session.get(url)
+        res = requests.get(url)
         page = BeautifulSoup(res.text, 'html.parser')
         return page
 
-    #   Overwriteable functions for customized Scraping
+    #   Transforms the soupified response of a detail page in a predefined way and returns it
     @staticmethod
     def parse(response, url):
         return response.text
 
-    def scrape_urls(self, index):
+    #   Adds URLs to an array which is later iterated over and scraped each
+    def add_urls(self):
         self.urls.append(self.base_url)
-
-    def override_end_page(self):
-        pass
