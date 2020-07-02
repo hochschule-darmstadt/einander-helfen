@@ -28,7 +28,7 @@
                                       :icon="post.id === currentPostId ? map.markerRed: map.markerBlue"
                                       :lat-lng="[post.geo_location.lat, post.geo_location.lon]"
                                       @click="openPost(post.id)">
-                                  <v-popup :content="post.title"></v-popup>
+                                  <l-tooltip :content="post.title"></l-tooltip>
                               </v-marker>
                             </v-marker-cluster>
                         </l-map>
