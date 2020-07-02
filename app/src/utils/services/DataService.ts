@@ -13,7 +13,7 @@ export interface PaginatedResponse<T> {
 
 export interface SearchParameters {
     searchValues: string[];
-    location: Location|undefined;
+    location: Location|null;
     radius: string;
     from: number;
     size: number;

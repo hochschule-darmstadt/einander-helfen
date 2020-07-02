@@ -8,6 +8,7 @@ import { getters } from './getters';
 const state: LocationSearchState = {
   locationSearchValue: '',
   selectedLocation: '',
+  selectedLocationObject: null,
   selectedRadius: '',
   alternateRadius: '',
 };

@@ -155,8 +155,8 @@
                     <v-list-item-title class="headline mb-1">
                       {{post.title}}
                     </v-list-item-title>
-                    <v-list-item-subtitle>
-                      {{post.location}} &mdash; {{post.task}}
+                    <v-list-item-subtitle :set="distance = postDistance(post)">
+                      {{post.location}} <span v-if="distance">(in {{distance}})</span> &mdash; {{post.task}}
                     </v-list-item-subtitle>
                   </v-list-item-content>
 
@@ -244,7 +244,7 @@
         computed: {
             ...mapState(['posts', 'page', 'resultsFrom', 'selectedPost', 'totalResultSize']),
             ...mapGetters(['postsOnCurrentPage', 'numberOfPages', 'pageOfCurrentPost']),
-            ...mapLocationState(['selectedLocation', 'selectedRadius', 'alternateRadius']),
+            ...mapLocationState(['selectedLocation', 'selectedLocationObject', 'selectedRadius', 'alternateRadius']),
             ...mapSearchState(['searchValues']),
             currentPostId(): string {
                 return this.selectedPost
@@ -351,6 +351,40 @@
               this.$nextTick(() => {
                 (this.$refs.map as LMap).mapObject.invalidateSize();
               });
+            },
+            postDistance(post: Post): string {
+              if (!this.selectedLocationObject) {
+                return '';
+              }
+
+              const distance = this.haversineDistance([post.geo_location.lat, post.geo_location.lon],
+                [this.selectedLocationObject.lat, this.selectedLocationObject.lon]);
+
+              if (distance) {
+                return Math.round(distance) + ' km';
+              } else {
+                return '';
+              }
+
+            },
+            haversineDistance([lat1, lon1], [lat2, lon2]): number {
+              const toRadian = (angle) => (Math.PI / 180) * angle;
+              const distance = (a, b) => (Math.PI / 180) * (a - b);
+              const RADIUS_OF_EARTH_IN_KM = 6371;
+
+              const dLat = distance(lat2, lat1);
+              const dLon = distance(lon2, lon1);
+
+              lat1 = toRadian(lat1);
+              lat2 = toRadian(lat2);
+
+              // Haversine Formula
+              const h =
+                Math.pow(Math.sin(dLat / 2), 2) +
+                Math.pow(Math.sin(dLon / 2), 2) * Math.cos(lat1) * Math.cos(lat2);
+              const c = 2 * Math.asin(Math.sqrt(h));
+
+              return RADIUS_OF_EARTH_IN_KM * c;
             }
         }
     });
