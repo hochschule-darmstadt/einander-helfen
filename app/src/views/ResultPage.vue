@@ -1,16 +1,6 @@
-import * as Vue2Leaflet from "vue2-leaflet";
 <template>
   <div>
     <Header />
-    <v-snackbar v-model="showRadiusExtendedMessage" top="top">
-        Zu Ihrer Suchanfrage mit einem Radius von {{radiusExtendedFrom}} haben wir keine Treffer gefunden.
-        <template v-if="selectedRadius">
-          Wir haben daher den Radius auf {{selectedRadius}} vergrößert.
-        </template>
-        <template v-else>
-          Wir haben daher den Radius vergrößert, bis Ergebnisse gefunden wurden.
-        </template>
-    </v-snackbar>
       <v-layout row wrap no-gutters>
         <!-- Map -->
         <v-flex xs12 md6 order-md2 v-show="postMapToggle === 'map'">
@@ -151,6 +141,13 @@ import * as Vue2Leaflet from "vue2-leaflet";
         <!--left side content-->
         <v-flex sm12 md6 order-md1 >
           <div style="height:70vh ;overflow:auto">
+
+
+            <div v-if="showRadiusExtendedMessage" class="text-center pt-12 pb-12">
+              <h3 class="font-weight-bold ">Zu Ihrer Suchanfrage mit einem Radius von {{radiusExtendedFrom}} haben wir keine Treffer gefunden. Wir haben daher den Radius vergrößert, bis Ergebnisse gefunden wurden.</h3>
+            </div>
+
+
             <template v-for="post in postsOnCurrentPage">
               <v-card class="mb-3" :class="{ activeListItem: currentPostId === post.id }">
                 <v-list-item three-line @click="currentPostId === post.id ? closePost() : openPost(post.id)">
@@ -247,7 +244,7 @@ import * as Vue2Leaflet from "vue2-leaflet";
         computed: {
             ...mapState(['posts', 'page', 'resultsFrom', 'selectedPost', 'totalResultSize']),
             ...mapGetters(['postsOnCurrentPage', 'numberOfPages', 'pageOfCurrentPost']),
-            ...mapLocationState(['selectedLocation', 'selectedRadius']),
+            ...mapLocationState(['selectedLocation', 'selectedRadius', 'alternateRadius']),
             ...mapSearchState(['searchValues']),
             currentPostId(): string {
                 return this.selectedPost
@@ -286,26 +283,23 @@ import * as Vue2Leaflet from "vue2-leaflet";
 
                 } else {
                   // Unsere Suche hat keine Ergebnisse geliefert.
-                  if (this.selectedLocation && this.selectedRadius) {
+                  if (this.selectedLocation && (this.selectedRadius || this.alternateRadius)) {
+                    const myRadius = this.alternateRadius
+                      ? this.alternateRadius
+                      : this.selectedRadius;
+
                     // Wenn wir mit einem Radius um einen Ort suchen, den Radius vergrößern und nochmal probieren!
-                    const currentRadiusIndex = radii.findIndex((r) => r.value === this.selectedRadius);
-                    const nextBiggerRadius = radii[(currentRadiusIndex + 1) % (radii.length - 1)];
+                    const currentRadiusIndex = radii.findIndex((r) => r.value === myRadius);
+                    const nextBiggerRadius = radii[(currentRadiusIndex + 1) % radii.length];
                     // Wir wollen uns merken, dass wir den Radius verändert haben, um den Nutzer darüber zu informieren.
                     // Aber nur, wenn wir das nicht bereits gemacht haben um uns den Wert nicht zu überschreiben.
                     if (!this.radiusExtendedFrom) {
                       this.radiusExtendedFrom = this.selectedRadius;
                     }
-                    this.setSelectedRadius(nextBiggerRadius.value);
-                    this.updateURIFromState();
+                    this.setAlternateRadius(nextBiggerRadius.value);
                     this.findPosts();
                   }
                 }
-            },
-            showRadiusExtendedMessage(newValue, oldValue): void {
-              // After the message closed we can remove this knowlage.
-              if (newValue !== oldValue && !newValue) {
-                this.radiusExtendedFrom = '';
-              }
             },
             selectedPost(): void {
                 this.updateURIFromState();
@@ -313,15 +307,21 @@ import * as Vue2Leaflet from "vue2-leaflet";
             page(value): void {
                 this.setPage(value);
             },
-            resultsFrom(oldValue, newValue): void {
+            resultsFrom(newValue, oldValue): void {
               if (oldValue !== newValue) {
                 this.findPosts();
+              }
+            },
+            alternateRadius(newValue, oldValue): void {
+              if (oldValue !== newValue && !newValue) {
+                this.showRadiusExtendedMessage = false;
+                this.radiusExtendedFrom = '';
               }
             }
         },
         methods: {
             ...mapActions(['hydrateStateFromRoute', 'updateURIFromState', 'setSelectedPost', 'setPage', 'findPosts']),
-            ...mapLocationActions(['setSelectedRadius']),
+            ...mapLocationActions(['setSelectedRadius', 'setAlternateRadius']),
             openPost(id: string): void {
                         this.postMapToggle = 'post';
                         const postIndex = this.posts.findIndex((post) => post.id === id);

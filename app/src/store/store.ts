@@ -54,11 +54,12 @@ const store: StoreOptions<RootState> = {
     findPosts({ commit, state }): Promise<Post[]> {
       const location = LocationService.findByTitle(state.locationSearchModule.selectedLocation);
       const searchValues = state.textSearchModule.searchValues;
-      const radius = state.locationSearchModule.selectedRadius;
+      const radius = state.locationSearchModule.alternateRadius
+        ? state.locationSearchModule.alternateRadius
+        : state.locationSearchModule.selectedRadius;
 
       const from = state.resultsFrom;
       const size = state.resultSetSize;
-
       return new Promise((resolve) => {
         DataService.findBySelection({
           searchValues,

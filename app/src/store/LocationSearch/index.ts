@@ -9,6 +9,7 @@ const state: LocationSearchState = {
   locationSearchValue: '',
   selectedLocation: '',
   selectedRadius: '',
+  alternateRadius: '',
 };
 
 

@@ -11,4 +11,7 @@ export const mutations: MutationTree<LocationSearchState> = {
   setSelectedRadius(state, value): void {
     state.selectedRadius = value;
   },
+  setAlternateRadius(state, value): void {
+    state.alternateRadius = value;
+  },
 };
