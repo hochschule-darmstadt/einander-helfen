@@ -16,6 +16,7 @@
               :dark="dark"
               v-bind:hide-no-data="true"
               v-on:focus="clearOnFocus"
+              v-bind:append-icon="(showLocations.length > 0) ? '$dropdown' : ''"
               >
             </v-autocomplete>
   </v-row>
