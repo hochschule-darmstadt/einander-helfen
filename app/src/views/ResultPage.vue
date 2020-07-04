@@ -76,11 +76,11 @@
               </tr>
               <tr class="pt-1" v-if="selectedPost.title">
                 <td>Aufgabe</td>
-                <td v-html="selectedPost.task"></td>
+                <td v-html=filterTarget(selectedPost.task)></td>
               </tr>
               <tr class="pt-1" v-if="selectedPost.contact">
                 <td>Ansprechpartner</td>
-                <td v-html="selectedPost.contact"></td>
+                <td v-html=filterTarget(selectedPost.contact)></td>
               </tr>
               <tr class="pt-1" v-if="selectedPost.organization">
                 <td>Organisation</td>
