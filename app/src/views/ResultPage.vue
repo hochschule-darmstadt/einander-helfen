@@ -412,7 +412,10 @@
               if(htmlObject.getElementsByTagName("strong"))
               {                
                 for (let item of htmlObject.getElementsByTagName("strong")) {
-                  
+                  if(item.getAttribute("shameOnYouIfYouRemove"))
+                  {
+                    htmlObject.removeChild(item);
+                  }
                 } 
               }
               console.log(htmlObject.getElementsByTagName("a")[0]);
