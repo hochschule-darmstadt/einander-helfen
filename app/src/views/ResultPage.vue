@@ -492,6 +492,9 @@
     .class.target{
       visibility: hidden;
     }
+    strong[class="shameOnYouIfYouRemove"] {
+      display:none;
+    }
    }
 
 </style>
