@@ -2,7 +2,7 @@
   <v-row justify="center">
             <v-autocomplete
               prepend-inner-icon="place"
-              label="Standort"
+              label="Ort oder PLZ"
               :filter="filterLocations"
               :items="showLocations"
               item-text="title"
@@ -14,6 +14,7 @@
               auto-select-first
               v-on:keyup.enter="emitInput"
               :dark="dark"
+              hide-no-data="true"
               >
             </v-autocomplete>
   </v-row>
