@@ -1,15 +1,6 @@
 <template>
   <div>
     <Header />
-    <v-snackbar v-model="showRadiusExtendedMessage" top="top">
-        Zu Ihrer Suchanfrage mit einem Radius von {{radiusExtendedFrom}} haben wir keine Treffer gefunden.
-        <template v-if="selectedRadius">
-          Wir haben daher den Radius auf {{selectedRadius}} vergrößert.
-        </template>
-        <template v-else>
-          Wir haben daher den Radius vergrößert, bis Ergebnisse gefunden wurden.
-        </template>
-    </v-snackbar>
       <v-layout row wrap no-gutters>
         <!-- Map -->
         <v-flex xs12 md6 order-md2 v-show="postMapToggle === 'map'">
@@ -150,19 +141,30 @@
         <!--left side content-->
         <v-flex sm12 md6 order-md1 >
           <div style="height:70vh ;overflow:auto">
-              <v-card
-                      v-for="post in postsOnCurrentPage"
-                      :key="post.id"
-                      class="mb-3"
-                      :class="{ activeListItem: currentPostId === post.id }"
-              >
+
+
+            <div v-if="showRadiusExtendedMessage" class="text-center pt-12 pb-12">
+              <h3 class="font-weight-bold">Zu Ihrer Suchanfrage mit einem Radius von {{radiusExtendedFrom}} haben wir keine Treffer gefunden.
+                <template v-if="alternateRadius">Folgende Ergebnisse werden in einem Umkreis von {{alternateRadius}} gefunden.</template>
+                <template v-else>Folgende Ergebnisse werden in einem Umkreis von mehr als 50 km gefunden.</template>
+              </h3>
+            </div>
+
+
+
+            <v-card
+                    v-for="post in postsOnCurrentPage"
+                    :key="post.id"
+                    class="mb-3"
+                    :class="{ activeListItem: currentPostId === post.id }"
+            >
                 <v-list-item three-line @click="currentPostId === post.id ? closePost() : openPost(post.id)">
                   <v-list-item-content>
                     <v-list-item-title class="headline mb-1">
                       {{post.title}}
                     </v-list-item-title>
-                    <v-list-item-subtitle>
-                      {{post.location}} &mdash; {{post.task}}
+                    <v-list-item-subtitle :set="distance = postDistance(post)">
+                      <strong>{{post.location}} <em v-if="distance">(in {{distance}})</em></strong> &mdash; {{post.task}}
                     </v-list-item-subtitle>
                   </v-list-item-content>
 
@@ -249,7 +251,7 @@
         computed: {
             ...mapState(['posts', 'page', 'resultsFrom', 'selectedPost', 'totalResultSize']),
             ...mapGetters(['postsOnCurrentPage', 'numberOfPages', 'pageOfCurrentPost']),
-            ...mapLocationState(['selectedLocation', 'selectedRadius']),
+            ...mapLocationState(['selectedLocation', 'selectedLocationObject', 'selectedRadius', 'alternateRadius']),
             ...mapSearchState(['searchValues']),
             currentPostId(): string {
                 return this.selectedPost
@@ -288,45 +290,48 @@
 
                 } else {
                   // Unsere Suche hat keine Ergebnisse geliefert.
-                  if (this.selectedLocation && this.selectedRadius) {
+                  if (this.selectedLocation && (this.selectedRadius || this.alternateRadius)) {
+                    const myRadius = this.alternateRadius
+                      ? this.alternateRadius
+                      : this.selectedRadius;
+
                     // Wenn wir mit einem Radius um einen Ort suchen, den Radius vergrößern und nochmal probieren!
-                    const currentRadiusIndex = radii.findIndex((r) => r.value === this.selectedRadius);
-                    const nextBiggerRadius = radii[(currentRadiusIndex + 1) % (radii.length - 1)];
+                    const currentRadiusIndex = radii.findIndex((r) => r.value === myRadius);
+                    const nextBiggerRadius = radii[(currentRadiusIndex + 1) % radii.length];
                     // Wir wollen uns merken, dass wir den Radius verändert haben, um den Nutzer darüber zu informieren.
                     // Aber nur, wenn wir das nicht bereits gemacht haben um uns den Wert nicht zu überschreiben.
                     if (!this.radiusExtendedFrom) {
                       this.radiusExtendedFrom = this.selectedRadius;
                     }
-                    this.setSelectedRadius(nextBiggerRadius.value);
-                    this.updateURIFromState();
+                    this.setAlternateRadius(nextBiggerRadius.value);
                     this.findPosts();
                   }
                 }
             },
-            showRadiusExtendedMessage(newValue, oldValue): void {
-              // After the message closed we can remove this knowlage.
-              if (newValue !== oldValue && !newValue) {
-                this.radiusExtendedFrom = '';
-              }
-            },
             selectedPost(value): void {
-                if (value === null) {
-                  this.closePost();
-                }
-                this.updateURIFromState();
+              if (value === null) {
+                this.closePost();
+              }
+              this.updateURIFromState();
             },
             page(value): void {
                 this.setPage(value);
             },
-            resultsFrom(oldValue, newValue): void {
+            resultsFrom(newValue, oldValue): void {
               if (oldValue !== newValue) {
                 this.findPosts();
+              }
+            },
+            alternateRadius(newValue, oldValue): void {
+              if (oldValue !== newValue && !newValue) {
+                this.showRadiusExtendedMessage = false;
+                this.radiusExtendedFrom = '';
               }
             }
         },
         methods: {
             ...mapActions(['hydrateStateFromRoute', 'updateURIFromState', 'setSelectedPost', 'setPage', 'findPosts']),
-            ...mapLocationActions(['setSelectedRadius']),
+            ...mapLocationActions(['setSelectedRadius', 'setAlternateRadius']),
             openPost(id: string): void {
                         this.postMapToggle = 'post';
                         const postIndex = this.posts.findIndex((post) => post.id === id);
@@ -356,6 +361,40 @@
               this.$nextTick(() => {
                 (this.$refs.map as LMap).mapObject.invalidateSize();
               });
+            },
+            postDistance(post: Post): string {
+              if (!this.selectedLocationObject) {
+                return '';
+              }
+
+              const distance = this.haversineDistance([post.geo_location.lat, post.geo_location.lon],
+                [this.selectedLocationObject.lat, this.selectedLocationObject.lon]);
+
+              if (distance) {
+                return Math.round(distance) + ' km';
+              } else {
+                return '';
+              }
+
+            },
+            haversineDistance([lat1, lon1], [lat2, lon2]): number {
+              const toRadian = (angle) => (Math.PI / 180) * angle;
+              const distance = (a, b) => (Math.PI / 180) * (a - b);
+              const RADIUS_OF_EARTH_IN_KM = 6371;
+
+              const dLat = distance(lat2, lat1);
+              const dLon = distance(lon2, lon1);
+
+              lat1 = toRadian(lat1);
+              lat2 = toRadian(lat2);
+
+              // Haversine Formula
+              const h =
+                Math.pow(Math.sin(dLat / 2), 2) +
+                Math.pow(Math.sin(dLon / 2), 2) * Math.cos(lat1) * Math.cos(lat2);
+              const c = 2 * Math.asin(Math.sqrt(h));
+
+              return RADIUS_OF_EARTH_IN_KM * c;
             }
         }
     });
