@@ -76,15 +76,15 @@
               </tr>
               <tr class="pt-1" v-if="selectedPost.title">
                 <td>Aufgabe</td>
-                <td v-html=filterTarget(selectedPost.task)></td>
+                <td v-html=filterHtml(selectedPost.task)></td>
               </tr>
               <tr class="pt-1" v-if="selectedPost.contact">
                 <td>Ansprechpartner</td>
-                <td v-html=filterTarget(selectedPost.contact)></td>
+                <td v-html=filterHtml(selectedPost.contact)></td>
               </tr>
               <tr class="pt-1" v-if="selectedPost.organization">
                 <td>Organisation</td>
-                <td v-html=filterTarget(selectedPost.organization)></td>
+                <td v-html=filterHtml(selectedPost.organization)></td>
               </tr>
               <tr class="pt-1" v-if="selectedPost.target_group">
                 <td>Zielgruppe</td>
@@ -396,7 +396,7 @@
 
               return RADIUS_OF_EARTH_IN_KM * c;
             },
-            filterTarget(htmlString: string): string{
+            filterHtml(htmlString: string): string{
               console.log(htmlString);
               var htmlObject = document.createElement('div');
               htmlObject.innerHTML = htmlString;
