@@ -14,7 +14,8 @@
               auto-select-first
               v-on:keyup.enter="emitInput"
               :dark="dark"
-              hide-no-data="true"
+              v-bind:hide-no-data="true"
+              v-on:focus="clearOnFocus"
               >
             </v-autocomplete>
   </v-row>
@@ -103,6 +104,11 @@
               }
             }
           }
+        },
+        clearOnFocus(evt): void {
+            if (!evt.target.value) {
+                this.setLocationSearchValue('');
+            }
         },
         emitInput(data: string = ''): void {
             if (!data) {
