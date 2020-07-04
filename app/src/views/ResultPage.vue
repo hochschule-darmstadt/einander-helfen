@@ -404,6 +404,13 @@
               if(htmlObject.getElementsByTagName("a"))
               {                
                 for (let item of htmlObject.getElementsByTagName("a")) {
+                  //dont modify hrefs from mailto
+                  if(item.hasAttribute("href") && item.getAttribute("href")
+                    .includes('mailto:'))
+                  {
+                    continue;
+                  }
+                  console.log(item);
                   item.setAttribute("target", "_blank"); 
                   item.setAttribute("rel", "noopener noreferrer");
                 } 
@@ -412,13 +419,14 @@
               if(htmlObject.getElementsByTagName("strong"))
               {                
                 for (let item of htmlObject.getElementsByTagName("strong")) {
-                  if(item.getAttribute("shameOnYouIfYouRemove"))
+                  if(item.hasAttribute("class") && item.getAttribute("class")
+                    .includes("shameOnYouIfYouRemove"))
                   {
                     htmlObject.removeChild(item);
                   }
                 } 
               }
-              console.log(htmlObject.getElementsByTagName("a")[0]);
+              
               console.log(htmlObject);
               return htmlObject.innerHTML;
             }
