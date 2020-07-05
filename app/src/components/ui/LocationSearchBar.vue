@@ -117,6 +117,11 @@
             }
             this.$emit('input', data);
         },
+          clearInput(): void {
+            this.$nextTick(() => {
+                this.setLocationSearchValue('');
+            });
+          }
       },
     }
   );
