@@ -32,9 +32,6 @@
                 href="mailto:info@einander-helfen.org"
               >info@einander-helfen.org</a>
             </p>
-            <p>
-              <strong>THIS WILL BE ADDED LATER</strong>
-            </p>
           </div>
         </v-col>
       </v-row>
