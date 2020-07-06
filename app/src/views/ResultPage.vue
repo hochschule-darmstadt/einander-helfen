@@ -483,9 +483,6 @@
     .container-buttons-smartphone {
       display: flex;
     }
-    .class.target{
-      visibility: hidden;
-    }
    }
 
 </style>
