@@ -10,6 +10,7 @@
     @input="addSearchTag"
     append-icon="none"
     :search-input.sync="mySearchValue"
+    @keydown.enter="$emit('enter')"
   >
     <template v-slot:no-data v-if="showNoData">
       <v-list-item>

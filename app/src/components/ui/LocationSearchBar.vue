@@ -17,6 +17,7 @@
               v-bind:hide-no-data="true"
               v-on:focus="clearOnFocus"
               v-bind:append-icon="(showLocations.length > 0) ? '$dropdown' : ''"
+              @keydown.enter="$emit('enter')"
               >
             </v-autocomplete>
   </v-row>
