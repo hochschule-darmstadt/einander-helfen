@@ -5,6 +5,7 @@
             item-value="value"
             @input="newSelectedRadius = $event"
             v-bind:value="selectedRadius"
+            @keydown.enter="$emit('enter')"
             :dark="dark"
             style="margin-left: 10px; margin-right: 10px;">
     </v-select>
