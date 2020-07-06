@@ -397,37 +397,23 @@
               return RADIUS_OF_EARTH_IN_KM * c;
             },
             filterHtml(htmlString: string): string{
-              console.log(htmlString);
               var htmlObject = document.createElement('div');
               htmlObject.innerHTML = htmlString;
-              //modify hrefs #132
+              //modify hrefs
               if(htmlObject.getElementsByTagName("a"))
               {                
                 for (let item of htmlObject.getElementsByTagName("a")) {
                   //dont modify hrefs from mailto
+                  // @ts-ignore
                   if(item.hasAttribute("href") && item.getAttribute("href")
                     .includes('mailto:'))
                   {
                     continue;
                   }
-                  console.log(item);
                   item.setAttribute("target", "_blank"); 
                   item.setAttribute("rel", "noopener noreferrer");
                 } 
               }
-              // remove shameOnYouIfYouRemove ;) #137
-              if(htmlObject.getElementsByTagName("strong"))
-              {                
-                for (let item of htmlObject.getElementsByTagName("strong")) {
-                  if(item.hasAttribute("class") && item.getAttribute("class")
-                    .includes("shameOnYouIfYouRemove"))
-                  {
-                    htmlObject.removeChild(item);
-                  }
-                } 
-              }
-              
-              console.log(htmlObject);
               return htmlObject.innerHTML;
             }
         }
@@ -499,9 +485,6 @@
     }
     .class.target{
       visibility: hidden;
-    }
-    strong[class="shameOnYouIfYouRemove"] {
-      display:none;
     }
    }
 
