@@ -25,14 +25,14 @@
                 <v-form>
                   <v-row>
                     <v-col cols="12">
-                      <search-bar :searchInput.sync="currentSearchValue" v-model="selectedInput" />
+                      <search-bar :searchInput.sync="currentSearchValue" v-model="selectedInput" @enter="onSearchEnter" tabindex="1" />
                     </v-col>
                   </v-row>
 
                   <v-row class="flex-grow-1 ps-4">
-                      <location-search-bar />
-                      <div><radius /></div>
-                      <search-button @click="executeSearch" />
+                      <location-search-bar ref="locationSearchBar" @enter="onLocationEnter" tabindex="2" />
+                      <div><radius @enter="onRadiusEnter" tabindex="3" /></div>
+                      <search-button @click="executeSearch" tabindex="4" />
                   </v-row>
                 </v-form>
               </v-flex>
@@ -75,6 +75,10 @@ import { createNamespacedHelpers, mapActions } from 'vuex';
 const { mapActions: mapTextSearchActions } = createNamespacedHelpers(
   'textSearchModule'
 );
+const { mapState: mapLocationSearchState } = createNamespacedHelpers(
+  'locationSearchModule'
+);
+
 
 import Vue from 'vue';
 import Toolbar from '@/components/layout/Toolbar.vue';
@@ -126,6 +130,10 @@ export default Vue.extend({
   },
   created(): void {
     this.clearSearchParams();
+    this.clearLocationSearchValue();
+  },
+  computed: {
+    ...mapLocationSearchState(['selectedRadius', 'selectedLocation'])
   },
   methods: {
     ...mapTextSearchActions(['addSearchValue']),
@@ -137,6 +145,27 @@ export default Vue.extend({
         this.addSearchValue(this.currentSearchValue);
       }
       this.updateURIFromState();
+    },
+    clearLocationSearchValue(): void {
+      this.$nextTick(() => {
+        // @ts-ignore
+        this.$refs.locationSearchBar.clearInput();
+      });
+    },
+    onSearchEnter(): void {
+      if (this.selectedInput) {
+        this.executeSearch();
+      }
+    },
+    onLocationEnter(): void {
+      if (this.selectedLocation) {
+        this.executeSearch();
+      }
+    },
+    onRadiusEnter(): void {
+      if (this.selectedRadius) {
+       this.executeSearch();
+      }
     }
   }
 });

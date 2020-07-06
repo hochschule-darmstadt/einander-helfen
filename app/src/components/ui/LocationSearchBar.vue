@@ -2,7 +2,7 @@
   <v-row justify="center">
             <v-autocomplete
               prepend-inner-icon="place"
-              label="Standort"
+              label="Ort oder PLZ"
               :filter="filterLocations"
               :items="showLocations"
               item-text="title"
@@ -14,6 +14,10 @@
               auto-select-first
               v-on:keyup.enter="emitInput"
               :dark="dark"
+              v-bind:hide-no-data="true"
+              v-on:focus="clearOnFocus"
+              v-bind:append-icon="(showLocations.length > 0) ? '$dropdown' : ''"
+              @keydown.enter="$emit('enter')"
               >
             </v-autocomplete>
   </v-row>
@@ -103,12 +107,22 @@
             }
           }
         },
+        clearOnFocus(evt): void {
+            if (!evt.target.value) {
+                this.setLocationSearchValue('');
+            }
+        },
         emitInput(data: string = ''): void {
             if (!data) {
                 data = this.selectedLocation;
             }
             this.$emit('input', data);
         },
+          clearInput(): void {
+            this.$nextTick(() => {
+                this.setLocationSearchValue('');
+            });
+          }
       },
     }
   );
