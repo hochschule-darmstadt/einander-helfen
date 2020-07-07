@@ -74,17 +74,18 @@
                 <td>Einsatzort</td>
                 <td v-html="selectedPost.location"></td>
               </tr>
-              <tr class="pt-1" v-if="selectedPost.title">
+              <tr class="pt-1 hide-copyright" v-if="selectedPost.title">
+                <strong>You suck</strong>
                 <td>Aufgabe</td>
-                <td v-html=filterHtml(selectedPost.task)></td>
+                <td v-html="selectedPost.task"></td>
               </tr>
               <tr class="pt-1" v-if="selectedPost.contact">
                 <td>Ansprechpartner</td>
-                <td v-html=filterHtml(selectedPost.contact)></td>
+                <td v-html="selectedPost.contact"></td>
               </tr>
-              <tr class="pt-1" v-if="selectedPost.organization">
+              <tr class="pt-1 hide-copyright" v-if="selectedPost.organization">
                 <td>Organisation</td>
-                <td v-html=filterHtml(selectedPost.organization)></td>
+                <td v-html="selectedPost.organization"></td>
               </tr>
               <tr class="pt-1" v-if="selectedPost.target_group">
                 <td>Zielgruppe</td>
@@ -395,40 +396,6 @@
               const c = 2 * Math.asin(Math.sqrt(h));
 
               return RADIUS_OF_EARTH_IN_KM * c;
-            },
-            filterHtml(htmlString: string): string{
-              console.log(htmlString);
-              var htmlObject = document.createElement('div');
-              htmlObject.innerHTML = htmlString;
-              //modify hrefs #132
-              if(htmlObject.getElementsByTagName("a"))
-              {                
-                for (let item of htmlObject.getElementsByTagName("a")) {
-                  //dont modify hrefs from mailto
-                  if(item.hasAttribute("href") && item.getAttribute("href")
-                    .includes('mailto:'))
-                  {
-                    continue;
-                  }
-                  console.log(item);
-                  item.setAttribute("target", "_blank"); 
-                  item.setAttribute("rel", "noopener noreferrer");
-                } 
-              }
-              // remove shameOnYouIfYouRemove ;) #137
-              if(htmlObject.getElementsByTagName("strong"))
-              {                
-                for (let item of htmlObject.getElementsByTagName("strong")) {
-                  if(item.hasAttribute("class") && item.getAttribute("class")
-                    .includes("shameOnYouIfYouRemove"))
-                  {
-                    htmlObject.removeChild(item);
-                  }
-                } 
-              }
-              
-              console.log(htmlObject);
-              return htmlObject.innerHTML;
             }
         }
     });
@@ -440,6 +407,9 @@
   @import "~leaflet.markercluster/dist/MarkerCluster.Default.css";
   @import "~leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
 
+    .hide-copyright strong{
+      display:none;
+    }
    .activeListItem {
      background-color: #c4e0ff !important;
    }
@@ -497,12 +467,7 @@
     .container-buttons-smartphone {
       display: flex;
     }
-    .class.target{
-      visibility: hidden;
-    }
-    strong[class="shameOnYouIfYouRemove"] {
-      display:none;
-    }
+
    }
 
 </style>
