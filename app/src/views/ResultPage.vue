@@ -75,7 +75,6 @@
                 <td v-html="selectedPost.location"></td>
               </tr>
               <tr class="pt-1 hide-copyright" v-if="selectedPost.title">
-                <strong>You suck</strong>
                 <td>Aufgabe</td>
                 <td v-html="selectedPost.task"></td>
               </tr>
@@ -468,7 +467,6 @@
     .container-buttons-smartphone {
       display: flex;
     }
-
    }
 
 </style>
