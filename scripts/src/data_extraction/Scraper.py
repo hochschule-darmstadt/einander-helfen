@@ -72,18 +72,17 @@ class Scraper:
         if self.debug:
             print(f'[{self.name}] crawling page #{index} ended')
 
-
     # Returns data of the Scraper
     def get_data(self):
         return self.data
-    
+
     # Returns data of the Scraper in JSON-Format
     def get_json_data(self):
         return json.dumps(self.data)
 
     # Adds error to the error object (used for logging)
     def add_error(self, err: dict):
-        if(self.debug): 
+        if self.debug:
             print('[Error]:', err)
         self.errors.append(err)
 

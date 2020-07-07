@@ -14,7 +14,7 @@ class EhrenamtHessenScraper(Scraper):
             'organization': response.find('div', {'class': 'legendLeft'}, text='Organisation/Anbieter').parent.find(
                 'div', {'class': 'descriptionRight'}).decode_contents().strip() or None,
             'task': response.find('div', {'class': 'legendLeft'}, text='Ihr Aufgabenfeld').parent.find('div', {
-                'class': 'descriptionRight'}).text or None,
+                'class': 'descriptionRight'}).decode_contents().strip() or None,
             'location': response.find('div', {'class': 'legendLeft'}, text='Ort Ihres Ehrenamts').parent.find('div', {
                 'class': 'descriptionRight'}).next or None,
             'contact': response.find('div', {'class': 'legendLeft'}, text='Ihr Ansprechpartner').parent.find('div', {
@@ -58,7 +58,8 @@ class EhrenamtHessenScraper(Scraper):
 
             for detailLink in detail_links:
                 if self.base_url + detailLink['href'] in self.urls:
-                    self.add_error({'func': 'add_urls', 'body': {'index': index, 'search_page': search_page_url, 'duplicate_link': self.base_url + detailLink['href']}})
+                    self.add_error({'func': 'add_urls', 'body': {'index': index, 'search_page': search_page_url,
+                                                                 'duplicate_link': self.base_url + detailLink['href']}})
                 else:
                     self.urls.append(self.base_url + detailLink['href'])
 
@@ -74,7 +75,7 @@ class EhrenamtHessenScraper(Scraper):
         formatted_entry_number = int(total_entries_as_string.replace('.', ''))
         end_page = math.ceil(formatted_entry_number / 15)
 
-        if(self.debug):
+        if self.debug:
             print(f'Crawling {end_page} pages with 15 entries each.')
-        
+
         return end_page
