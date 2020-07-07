@@ -2,10 +2,8 @@ import hashlib
 import json
 
 from elasticsearch import Elasticsearch
-prod_ip = '141.100.60.78'
-staging_ip = '141.100.60.73'
 
-client = Elasticsearch([{'host': '141.100.60.73', 'port': 9200}])
+client = Elasticsearch([{'host': '127.0.0.1', 'port': 9200}])
 
 
 def write_to_elastic(posts, index):
