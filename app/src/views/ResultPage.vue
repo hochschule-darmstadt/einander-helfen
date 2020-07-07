@@ -29,7 +29,7 @@
         </v-flex>
 
         <!-- right side content-->
-        <v-flex sm12 md6 order-md2 v-if="postMapToggle === 'post'" mb-5>
+        <v-flex sm12 md6 order-md2 v-if="postMapToggle === 'post'">
           <div>
           <v-card
             tile
