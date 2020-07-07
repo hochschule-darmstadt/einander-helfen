@@ -407,9 +407,9 @@
   @import "~leaflet.markercluster/dist/MarkerCluster.Default.css";
   @import "~leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
 
-    .hide-copyright strong{
+   .hide-copyright strong{
       display:none;
-    }
+   }
    .activeListItem {
      background-color: #c4e0ff !important;
    }
