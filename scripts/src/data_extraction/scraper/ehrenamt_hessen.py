@@ -46,7 +46,8 @@ class EhrenamtHessenScraper(Scraper):
 
         import time
 
-        end_page = self.fetch_end_page()
+        # end_page = self.fetch_end_page()
+        end_page = 1
 
         for index in range(1, end_page + 1):
 

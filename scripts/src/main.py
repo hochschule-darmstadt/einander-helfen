@@ -23,11 +23,11 @@ for file in os.scandir(f'{SRC_PATH}/data_extraction/data'):
     # Write enhanced data to files
     write_data_to_json(f'{SRC_PATH}/data_enhancement/data', file.name, enhanced_data)
 
-for file in os.scandir(f'{SRC_PATH}/data_enhancement/data'):
-    # read enhanced data for indexing
-    data = read_data_from_json(file.path)
-
-    # Write enhanced data to Elastic Search
-    print('Starting Index Process!')
-    write_to_elastic(data, 'posts')
-    print('Finished Indexing!')
+# for file in os.scandir(f'{SRC_PATH}/data_enhancement/data'):
+#     # read enhanced data for indexing
+#     data = read_data_from_json(file.path)
+#
+#     # Write enhanced data to Elastic Search
+#     print('Starting Index Process!')
+#     write_to_elastic(data, 'posts')
+#     print('Finished Indexing!')
