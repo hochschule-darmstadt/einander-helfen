@@ -2,7 +2,7 @@ name: DEPLOY_STAGING
 on:
   push:
     branches:
-      - staging
+      - devops/deployment
 
 jobs:
   deploy:
