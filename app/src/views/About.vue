@@ -16,8 +16,12 @@
             <p>
               <strong>einander-helfen.org</strong> fasst Angebote von mehreren Anbietern im deutschsprachigen Raum zusammen und erlaubt es, bequem über alle zu suchen. Aktuell werden folgende Anbieter abgedeckt:
             </p>
+            <ul>
+              <li><a href="https://www.ehrenamtssuche-hessen.de/" target="_blank" rel="noopener">www.ehrenamtssuche-hessen.de</a></li>
+            </ul>
             <p>
-              Weitere Anbieter folgen. <br>
+              <br />
+              Weitere Anbieter folgen. <br />
               Fehlt Ihnen etwas? Dann kontaktieren Sie uns gerne unter
               <a href="mailto:info@einander-helfen.org">info@einander-helfen.org</a>.
             </p>
