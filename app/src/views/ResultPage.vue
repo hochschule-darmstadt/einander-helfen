@@ -68,13 +68,13 @@
 
           <!--display content on the right side-->
           <v-card-text style="padding:0 10px;">
-            <v-simple-table class="no-border detail-table">
+            <v-simple-table class="no-border detail-table hide-copyright">
               <tbody>
               <tr v-if="selectedPost.location">
                 <td>Einsatzort</td>
                 <td v-html="selectedPost.location"></td>
               </tr>
-              <tr class="pt-1 hide-copyright" v-if="selectedPost.title">
+              <tr class="pt-1" v-if="selectedPost.title">
                 <td>Aufgabe</td>
                 <td v-html="selectedPost.task"></td>
               </tr>
@@ -82,7 +82,7 @@
                 <td>Ansprechpartner</td>
                 <td v-html="selectedPost.contact"></td>
               </tr>
-              <tr class="pt-1 hide-copyright" v-if="selectedPost.organization">
+              <tr class="pt-1" v-if="selectedPost.organization">
                 <td>Organisation</td>
                 <td v-html="selectedPost.organization"></td>
               </tr>
