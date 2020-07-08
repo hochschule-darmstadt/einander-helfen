@@ -13,22 +13,26 @@ class LocationService {
         this.loadLocationCsv();
     }
 
+    /**
+     * This method finds a specified location by the title.
+     * @param title The title of the searched location.
+     */
     public findByTitle(title: string): Location|undefined {
         return this.locations.find((location) => location.title === title);
     }
 
     /**
-     * This method executes a query on on the locations specified by a string.
-     * If there is not input or a * the wildcard query is executed.
+     * This method executes a query on the locations specified by a string.
+     * If there is no input an empty array is returned.
      * Otherwise it searches for `Location`s where the name or plz starts with the input string.
      * @param searchValue   The input string for the query.
      * @returns A list of the top `this.selectedLocationAmount` `Location`s
      *          which have a diversity of `this.diversityValue` ordered by rank and name.
      */
     public findLocationByPlzOrName(searchValue: string): Location[] {
-        // call wildcard query if searchValue is null or empty
-        if (!searchValue || searchValue === '' || searchValue === '*') {
-            return this.findLocationWildcard();
+        // return empty on null
+        if (!searchValue) {
+            return [];
         }
 
         // get locations which start with the searchValue string

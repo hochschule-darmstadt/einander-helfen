@@ -30,7 +30,7 @@
                   </v-row>
 
                   <v-row class="flex-grow-1 ps-4">
-                      <location-search-bar />
+                      <location-search-bar ref="locationSearchBar" />
                       <div><radius /></div>
                       <search-button @click="executeSearch" />
                   </v-row>
@@ -126,6 +126,7 @@ export default Vue.extend({
   },
   created(): void {
     this.clearSearchParams();
+    this.clearLocationSearchValue();
   },
   methods: {
     ...mapTextSearchActions(['addSearchValue']),
@@ -137,6 +138,12 @@ export default Vue.extend({
         this.addSearchValue(this.currentSearchValue);
       }
       this.updateURIFromState();
+    },
+    clearLocationSearchValue(): void {
+      this.$nextTick(() => {
+        // @ts-ignore
+        this.$refs.locationSearchBar.clearInput();
+      });
     }
   }
 });

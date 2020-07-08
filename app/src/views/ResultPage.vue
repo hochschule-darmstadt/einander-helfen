@@ -1,15 +1,6 @@
 <template>
   <div>
     <Header />
-    <v-snackbar v-model="showRadiusExtendedMessage" top="top">
-        Zu Ihrer Suchanfrage mit einem Radius von {{radiusExtendedFrom}} haben wir keine Treffer gefunden.
-        <template v-if="selectedRadius">
-          Wir haben daher den Radius auf {{selectedRadius}} vergrößert.
-        </template>
-        <template v-else>
-          Wir haben daher den Radius vergrößert, bis Ergebnisse gefunden wurden.
-        </template>
-    </v-snackbar>
       <v-layout row wrap no-gutters>
         <!-- Map -->
         <v-flex xs12 md6 order-md2 v-show="postMapToggle === 'map'">
@@ -17,22 +8,20 @@
                 <v-card tile height="70vh">
                     <div id="map" :style="{height: map.height, width: map.width}">
                         <v-btn v-if="currentPostId.length > 0" @click="postMapToggle = 'post'"
-                               style="position: absolute; z-index: 9999; margin-right: 30px; margin-top: 20px; right: 0;"><v-icon>info</v-icon> Details
+                               class="button-details" dark><v-icon>info</v-icon> Details
                         </v-btn>
-                        <l-map ref="map" :center="map.center" :zoom="map.zoom">
+                        <l-map ref="map" :center="map.center" :zoom="map.zoom" :options="{gestureHandling: true}">
                             <l-tile-layer :url="map.url" :attribution="map.attribution"></l-tile-layer>
-                            <template v-for="post in posts">
-                                <l-marker v-if="post.id === currentPostId" :icon="map.markerRed"
-                                          :lat-lng="[post.geo_location.lat, post.geo_location.lon]"
-                                          @click="openPost(post.id)">
-                                    <l-tooltip>{{ post.title }}</l-tooltip>
-                                </l-marker>
-                                <l-marker v-else :icon="map.markerBlue"
-                                          :lat-lng="[post.geo_location.lat, post.geo_location.lon]"
-                                          @click="openPost(post.id)">
-                                    <l-tooltip>{{ post.title }}</l-tooltip>
-                                </l-marker>
-                            </template>
+                            <v-marker-cluster>
+                              <v-marker
+                                      v-for="post in posts"
+                                      :key="post.id"
+                                      :icon="post.id === currentPostId ? map.markerRed: map.markerBlue"
+                                      :lat-lng="[post.geo_location.lat, post.geo_location.lon]"
+                                      @click="openPost(post.id)">
+                                  <l-tooltip :content="post.title"></l-tooltip>
+                              </v-marker>
+                            </v-marker-cluster>
                         </l-map>
                     </div>
                 </v-card>
@@ -46,28 +35,34 @@
             tile
             style="height:70vh ;overflow:auto"
           >
+          <div class="container-buttons-smartphone">
+            <v-btn dark class="mr-3 button-smartphone button-map-smartphone" text @click="openMap()">
+              <v-icon>map</v-icon> Karte
+            </v-btn>
+            <v-btn class="button-close button-smartphone button-close-smartphone" icon @click="closePost()">
+              <v-icon>close</v-icon>
+            </v-btn>
+          </div>
           <v-list-item three-line>
-            <!--
-              This functionality may be added later. This button allows to deselect the current post and load all markers on the map.
-
-            <v-btn class="mr-3" text @click="closePost()">
-              <v-icon>arrow_back</v-icon>
-            </v-btn> -->
+            <v-btn dark class="mr-3 button-map" text @click="openMap()">
+              <v-icon>map</v-icon> Karte
+            </v-btn>
 
             <!--display title, subtitle and image on the right side-->
             <v-list-item-content style="margin-top:2%" class="headline">
               {{selectedPost.title}}
             </v-list-item-content>
+            <div>
             <v-img
               style="margin-top:2%"
               max-width="80px"
               height="80px"
               contain
               :src="selectedPost.image"
-            ></v-img>
+            ></v-img></div>
 
-            <v-btn style="margin-top:2%; background: #00254f" dark class="mr-3" text @click="openMap()">
-              <v-icon>map</v-icon> Karte
+            <v-btn class="button-close" icon @click="closePost()">
+              <v-icon>close</v-icon>
             </v-btn>
           </v-list-item>
 
@@ -146,15 +141,30 @@
         <!--left side content-->
         <v-flex sm12 md6 order-md1 >
           <div style="height:70vh ;overflow:auto">
-            <template v-for="post in postsOnCurrentPage">
-              <v-card class="mb-3" :class="{ activeListItem: currentPostId === post.id }">
-                <v-list-item three-line @click="openPost(post.id)">
+
+
+            <div v-if="showRadiusExtendedMessage" class="text-center pt-12 pb-12">
+              <h3 class="font-weight-bold">Zu Ihrer Suchanfrage mit einem Radius von {{radiusExtendedFrom}} haben wir keine Treffer gefunden.
+                <template v-if="alternateRadius">Folgende Ergebnisse werden in einem Umkreis von {{alternateRadius}} gefunden.</template>
+                <template v-else>Folgende Ergebnisse werden in einem Umkreis von mehr als 50 km gefunden.</template>
+              </h3>
+            </div>
+
+
+
+            <v-card
+                    v-for="post in postsOnCurrentPage"
+                    :key="post.id"
+                    class="mb-3"
+                    :class="{ activeListItem: currentPostId === post.id }"
+            >
+                <v-list-item three-line @click="currentPostId === post.id ? closePost() : openPost(post.id)">
                   <v-list-item-content>
                     <v-list-item-title class="headline mb-1">
                       {{post.title}}
                     </v-list-item-title>
-                    <v-list-item-subtitle>
-                      {{post.location}} &mdash; {{post.task}}
+                    <v-list-item-subtitle :set="distance = postDistance(post)">
+                      <strong>{{post.location}} <em v-if="distance">(in {{distance}})</em></strong> &mdash; {{post.task}}
                     </v-list-item-subtitle>
                   </v-list-item-content>
 
@@ -166,12 +176,11 @@
                   ></v-img>
                 </v-list-item>
               </v-card>
-            </template>
-            <template v-if="!postsOnCurrentPage.length">
-              <div class="text-center pt-12">
+
+
+              <div class="text-center pt-12" v-if="!postsOnCurrentPage.length">
                 <h3 class="font-weight-bold ">Es wurden keine Suchergebnisse zu Ihrer Suchanfrage gefunden.</h3>
               </div>
-            </template>
           </div>
         </v-flex>
 
@@ -198,11 +207,19 @@
 
     import L, {LatLngTuple} from 'leaflet';
     import {LMap, LTileLayer, LMarker, LTooltip} from 'vue2-leaflet';
-    import 'leaflet/dist/leaflet.css';
+    import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster/Vue2LeafletMarkercluster.vue';
+    import * as Vue2Leaflet from 'vue2-leaflet';
+    import { GestureHandling } from 'leaflet-gesture-handling';
     import radii from '@/resources/radii';
 
+    L.Map.addInitHook('addHandler', 'gestureHandling', GestureHandling);
+
     export default Vue.extend({
-        components: {Header, LMap, LTileLayer, LMarker, LTooltip},
+        components: {Header, LMap, LTileLayer, LMarker, LTooltip,
+          'v-marker': Vue2Leaflet.LMarker,
+          'v-popup': Vue2Leaflet.LPopup,
+          'v-marker-cluster': Vue2LeafletMarkerCluster
+        },
         data(): {
             map: any;
             postMapToggle: 'post' | 'map';
@@ -234,7 +251,7 @@
         computed: {
             ...mapState(['posts', 'page', 'resultsFrom', 'selectedPost', 'totalResultSize']),
             ...mapGetters(['postsOnCurrentPage', 'numberOfPages', 'pageOfCurrentPost']),
-            ...mapLocationState(['selectedLocation', 'selectedRadius']),
+            ...mapLocationState(['selectedLocation', 'selectedLocationObject', 'selectedRadius', 'alternateRadius']),
             ...mapSearchState(['searchValues']),
             currentPostId(): string {
                 return this.selectedPost
@@ -265,8 +282,7 @@
                     this.openPost(val[0].id);
                 }
                 if (val.length) {
-                  const markers = val.map((post) => [post.geo_location.lat, post.geo_location.lon] as LatLngTuple);
-                  (this.$refs.map as LMap).fitBounds(markers);
+                  this.fitMapBounds(val);
 
                   if (this.radiusExtendedFrom) {
                     this.showRadiusExtendedMessage = true;
@@ -274,42 +290,48 @@
 
                 } else {
                   // Unsere Suche hat keine Ergebnisse geliefert.
-                  if (this.selectedLocation && this.selectedRadius) {
+                  if (this.selectedLocation && (this.selectedRadius || this.alternateRadius)) {
+                    const myRadius = this.alternateRadius
+                      ? this.alternateRadius
+                      : this.selectedRadius;
+
                     // Wenn wir mit einem Radius um einen Ort suchen, den Radius vergrößern und nochmal probieren!
-                    const currentRadiusIndex = radii.findIndex((r) => r.value === this.selectedRadius);
-                    const nextBiggerRadius = radii[(currentRadiusIndex + 1) % (radii.length - 1)];
+                    const currentRadiusIndex = radii.findIndex((r) => r.value === myRadius);
+                    const nextBiggerRadius = radii[(currentRadiusIndex + 1) % radii.length];
                     // Wir wollen uns merken, dass wir den Radius verändert haben, um den Nutzer darüber zu informieren.
                     // Aber nur, wenn wir das nicht bereits gemacht haben um uns den Wert nicht zu überschreiben.
                     if (!this.radiusExtendedFrom) {
                       this.radiusExtendedFrom = this.selectedRadius;
                     }
-                    this.setSelectedRadius(nextBiggerRadius.value);
-                    this.updateURIFromState();
+                    this.setAlternateRadius(nextBiggerRadius.value);
                     this.findPosts();
                   }
                 }
             },
-            showRadiusExtendedMessage(newValue, oldValue): void {
-              // After the message closed we can remove this knowlage.
-              if (newValue !== oldValue && !newValue) {
-                this.radiusExtendedFrom = '';
+            selectedPost(value): void {
+              if (value === null) {
+                this.closePost();
               }
-            },
-            selectedPost(): void {
-                this.updateURIFromState();
+              this.updateURIFromState();
             },
             page(value): void {
                 this.setPage(value);
             },
-            resultsFrom(oldValue, newValue): void {
+            resultsFrom(newValue, oldValue): void {
               if (oldValue !== newValue) {
                 this.findPosts();
+              }
+            },
+            alternateRadius(newValue, oldValue): void {
+              if (oldValue !== newValue && !newValue) {
+                this.showRadiusExtendedMessage = false;
+                this.radiusExtendedFrom = '';
               }
             }
         },
         methods: {
             ...mapActions(['hydrateStateFromRoute', 'updateURIFromState', 'setSelectedPost', 'setPage', 'findPosts']),
-            ...mapLocationActions(['setSelectedRadius']),
+            ...mapLocationActions(['setSelectedRadius', 'setAlternateRadius']),
             openPost(id: string): void {
                         this.postMapToggle = 'post';
                         const postIndex = this.posts.findIndex((post) => post.id === id);
@@ -325,18 +347,67 @@
                     (this.$refs.map as LMap).setCenter(location);
                 });
             },
+            closePost(): void {
+                this.setSelectedPost(null);
+                this.postMapToggle = 'map';
+
+                this.fitMapBounds(this.posts);
+            },
+            fitMapBounds(posts: Post[]): void {
+                const markers = posts.map((post) => [post.geo_location.lat, post.geo_location.lon] as LatLngTuple);
+                (this.$refs.map as LMap).fitBounds(markers);
+            },
             rerenderMap(): void {
               this.$nextTick(() => {
                 (this.$refs.map as LMap).mapObject.invalidateSize();
               });
+            },
+            postDistance(post: Post): string {
+              if (!this.selectedLocationObject) {
+                return '';
+              }
+
+              const distance = this.haversineDistance([post.geo_location.lat, post.geo_location.lon],
+                [this.selectedLocationObject.lat, this.selectedLocationObject.lon]);
+
+              if (distance) {
+                return Math.round(distance) + ' km';
+              } else {
+                return '';
+              }
+
+            },
+            haversineDistance([lat1, lon1], [lat2, lon2]): number {
+              const toRadian = (angle) => (Math.PI / 180) * angle;
+              const distance = (a, b) => (Math.PI / 180) * (a - b);
+              const RADIUS_OF_EARTH_IN_KM = 6371;
+
+              const dLat = distance(lat2, lat1);
+              const dLon = distance(lon2, lon1);
+
+              lat1 = toRadian(lat1);
+              lat2 = toRadian(lat2);
+
+              // Haversine Formula
+              const h =
+                Math.pow(Math.sin(dLat / 2), 2) +
+                Math.pow(Math.sin(dLon / 2), 2) * Math.cos(lat1) * Math.cos(lat2);
+              const c = 2 * Math.asin(Math.sqrt(h));
+
+              return RADIUS_OF_EARTH_IN_KM * c;
             }
         }
     });
 </script>
 
-<style scoped>
+<style>
+  @import "~leaflet/dist/leaflet.css";
+  @import "~leaflet.markercluster/dist/MarkerCluster.css";
+  @import "~leaflet.markercluster/dist/MarkerCluster.Default.css";
+  @import "~leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
+
    .activeListItem {
-     background-color: #c4e0ff;
+     background-color: #c4e0ff !important;
    }
    .no-border tr:not(:last-child) td:not(.v-data-table__mobile-row) {
     border: 0 !important;
@@ -350,6 +421,48 @@
    .detail-table tr td {
      vertical-align: top;
      padding-bottom: 25px;
+   }
+   .button-map {
+     margin-top: 30px;
+     background-color: rgb(5, 76, 102);
+     align-self: flex-start;
+   }
+   .button-smartphone {
+     display: none;
+   }
+   .button-map-smartphone {
+     background-color: rgb(5, 76, 102);
+   }
+   .button-close-smartphone {
+     position: absolute;
+     right: 0;
+   }
+   .container-buttons-smartphone {
+     display: none;
+     position: relative;
+     justify-content: center;
+     margin-top: 5px;
+   }
+   .button-details {
+     position: absolute;
+     z-index: 9999;
+     margin-left: 50px;
+     margin-top: 20px;
+     background-color: rgb(5, 76, 102) !important;
+   }
+   .button-close {
+     align-self: flex-start;
+   }
+   @media only screen and (max-width: 500px) {
+    .button-map, .button-close {
+      display: none;
+    }
+    .button-smartphone {
+      display: block;
+    }
+    .container-buttons-smartphone {
+      display: flex;
+    }
    }
 
 </style>
