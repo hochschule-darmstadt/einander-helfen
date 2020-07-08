@@ -164,7 +164,8 @@
                       {{post.title}}
                     </v-list-item-title>
                     <v-list-item-subtitle :set="distance = postDistance(post)">
-                      <strong>{{post.location}} <em v-if="distance">(in {{distance}})</em></strong> &mdash; {{post.task}}
+                      <strong>{{post.location}} <em v-if="distance">(in {{distance}})</em></strong> &mdash;
+                       <span v-html="post.task"/>
                     </v-list-item-subtitle>
                   </v-list-item-content>
 
@@ -406,6 +407,11 @@
   @import "~leaflet.markercluster/dist/MarkerCluster.Default.css";
   @import "~leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
 
+   .copyright, .copy, .cpy, strong[class^="copyright"], strong[class^="cpy"], strong[class^="copy"] {
+    clear: both;
+    padding: 10px 0px;
+    display: none;
+   }
    .activeListItem {
      background-color: #c4e0ff !important;
    }
