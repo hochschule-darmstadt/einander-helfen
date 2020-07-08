@@ -1,149 +1,188 @@
 <template>
   <div class="home">
-    <h1>Einander Helfen</h1>
-    <v-card
-            color="red lighten-2"
-            dark
-    >
-      <v-card-text>
-        <v-autocomplete
-                v-model="model"
-                :items="items"
-                :loading="isLoading"
-                :search-input.sync="query"
-                color="white"
-                hide-no-data
-                hide-selected
-                item-text="Description"
-                item-value="API"
-                label="Public APIs"
-                placeholder="Start typing to Search"
-                prepend-icon="mdi-database-search"
-                return-object
-        ></v-autocomplete>
-      </v-card-text>
-      <v-divider></v-divider>
-      <v-expand-transition>
-        <v-list v-if="model" class="red lighten-3">
-          <v-list-item
-                  v-for="(field, i) in fields"
-                  :key="i"
-          >
-            <v-list-item-content>
-              <v-list-item-title v-text="field.value"></v-list-item-title>
-              <v-list-item-subtitle v-text="field.key"></v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-      </v-expand-transition>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn
-                :disabled="!model"
-                color="grey darken-3"
-                @click="model = null"
-        >
-          Clear
-          <v-icon right>mdi-close-circle</v-icon>
-        </v-btn>
-      </v-card-actions>
-    </v-card>
+    <Toolbar />
+    <VueSlickCarousel :dots="true" :infinite="true" :autoplay="true" :autoplaySpeed="30000">
+      <picture>
+        <source media="(max-width: 768px)" srcset="/images/header/1_phone.jpg" />
+        <img src="/images/header/1.jpg" />
+      </picture>
+      <picture>
+        <source media="(max-width: 768px)" srcset="/images/header/2_phone.jpg" />
+        <img src="/images/header/2.jpg" />
+      </picture>
+      <picture>
+        <source media="(max-width: 768px)" srcset="/images/header/3_phone.jpg" />
+        <img src="/images/header/3.jpg" />
+      </picture>
+    </VueSlickCarousel>
+
+    <v-container>
+      <v-form>
+        <v-row justify="center">
+          <v-col cols="12" md="8">
+            <v-layout row justify-center no-gutters class="mt-8 mb-9">
+              <v-flex>
+                <v-form>
+                  <v-row>
+                    <v-col cols="12">
+                      <search-bar :searchInput.sync="currentSearchValue" v-model="selectedInput" @enter="onSearchEnter" tabindex="1" />
+                    </v-col>
+                  </v-row>
+
+                  <v-row class="flex-grow-1 ps-4">
+                      <location-search-bar ref="locationSearchBar" @enter="onLocationEnter" tabindex="2" />
+                      <div><radius @enter="onRadiusEnter" tabindex="3" /></div>
+                      <search-button @click="executeSearch" tabindex="4" />
+                  </v-row>
+                </v-form>
+              </v-flex>
+            </v-layout>
+          </v-col>
+        </v-row>
+      </v-form>
+
+      <v-row justify="center">
+        <template v-for="tag in volunteerTags">
+          <v-col cols="12" md="2" :key="tag.title">
+            <v-hover v-slot:default="{ hover }">
+              <v-card class="mx-auto" :elevation="hover ? 12 : 2" :class="{ 'on-hover': hover }">
+                <router-link
+                  style="text-decoration: none; color: inherit;"
+                  :to="{ name: 'resultPage', query: { q: tag.title } }"
+                >
+                  <v-img
+                    class="white--text align-end mt-10"
+                    height="300px"
+                    :key="tag.title"
+                    :src="tag.img"
+                  >
+                    <v-card class="no-radius">
+                      <v-card-title class="justify-center black--text" v-html="tag.title"></v-card-title>
+                    </v-card>
+                  </v-img>
+                </router-link>
+              </v-card>
+            </v-hover>
+          </v-col>
+        </template>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { createNamespacedHelpers, mapActions } from 'vuex';
+const { mapActions: mapTextSearchActions } = createNamespacedHelpers(
+  'textSearchModule'
+);
+const { mapState: mapLocationSearchState } = createNamespacedHelpers(
+  'locationSearchModule'
+);
 
-interface Entry {
-  API: string;
-  Description: string;
-  Auth: string;
-  HTTPS: boolean;
-  Cors: string;
-  Link: URL;
-  Category: string;
-}
+
+import Vue from 'vue';
+import Toolbar from '@/components/layout/Toolbar.vue';
+
+import VueSlickCarousel from 'vue-slick-carousel';
+import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css';
+import 'vue-slick-carousel/dist/vue-slick-carousel.css';
+import LocationSearchBar from '@/components/ui/LocationSearchBar.vue';
+import Radius from '@/components/ui/Radius.vue';
+import SearchBar from '@/components/ui/SearchBar.vue';
+import SearchButton from '@/components/ui/SearchButton.vue';
 
 export default Vue.extend({
+  components: {
+    SearchBar,
+    VueSlickCarousel,
+    LocationSearchBar,
+    Radius,
+    Toolbar,
+    SearchButton
+  },
   data(): {
-    query: string,
-    isLoading: boolean,
-    model?: Entry
-    count: number,
-    entries: Entry[],
-    descriptionLimit: number,
+    volunteerTags: Array<{ title: string; img: string }>;
+    selectedInput: string;
+    currentSearchValue: string;
   } {
     return {
-      query: '',
-      isLoading: false,
-      model: undefined,
-      count: 0,
-      entries: [],
-      descriptionLimit: 60,
+      volunteerTags: [
+        {
+          title: 'Soziale',
+          img: require('../../public/images/sozial.jpeg')
+        },
+        {
+          title: 'Kreative',
+          img: require('../../public/images/denkerIN.jpeg')
+        },
+        {
+          title: 'Kommunikative',
+          img: require('../../public/images/jugend.jpeg')
+        },
+        {
+          title: 'Macher/in',
+          img: require('../../public/images/macherIN.jpeg')
+        }
+      ],
+      selectedInput: '',
+      currentSearchValue: ''
     };
   },
-
-  watch: {
-    query(val): void {
-      // Items have already been loaded
-      if (this.items.length > 0) {
-        return;
-      }
-
-      // Items have already been requested
-      if (this.isLoading) {
-        return;
-      }
-
-      this.isLoading = true;
-
-      // Lazily load input items
-      fetch('https://api.publicapis.org/entries')
-              .then((res) => res.json())
-              .then((res) => {
-                const { count, entries } = res;
-                this.count = count;
-                this.entries = entries;
-              })
-              .catch((err) => {
-                console.log(err);
-              })
-              .finally(() => (this.isLoading = false));
-    },
+  created(): void {
+    this.clearSearchParams();
+    this.clearLocationSearchValue();
   },
-
   computed: {
-    fields(): object {
-      if (!this.model) {
-        return [];
-      }
-
-      return Object.keys(this.model).map((key) => {
-        if (this.isValidKey(key, this.model)) {
-          return {
-            key,
-            value: this.model ? this.model[key] || 'n/a' : 'n/a',
-          };
-        }
-      });
-    },
-    items(): Entry[] {
-      return this.entries.map((entry) => {
-
-        const Description = entry.Description.length > this.descriptionLimit
-                ? entry.Description.slice(0, this.descriptionLimit) + '...'
-                : entry.Description;
-
-        return Object.assign({}, entry, { Description });
-      });
-    },
+    ...mapLocationSearchState(['selectedRadius', 'selectedLocation'])
   },
-
   methods: {
-    isValidKey(prop: string, obj: Entry | undefined): prop is keyof Entry {
-      return (obj && (prop in obj)) as boolean;
+    ...mapTextSearchActions(['addSearchValue']),
+    ...mapActions(['updateURIFromState', 'clearSearchParams']),
+    executeSearch(): void {
+      if (this.selectedInput) {
+        this.addSearchValue(this.selectedInput);
+      } else if (this.currentSearchValue) {
+        this.addSearchValue(this.currentSearchValue);
+      }
+      this.updateURIFromState();
+    },
+    clearLocationSearchValue(): void {
+      this.$nextTick(() => {
+        // @ts-ignore
+        this.$refs.locationSearchBar.clearInput();
+      });
+    },
+    onSearchEnter(): void {
+      if (this.selectedInput) {
+        this.executeSearch();
+      }
+    },
+    onLocationEnter(): void {
+      if (this.selectedLocation) {
+        this.executeSearch();
+      }
+    },
+    onRadiusEnter(): void {
+      if (this.selectedRadius) {
+       this.executeSearch();
+      }
     }
   }
-
 });
 </script>
+
+<style>
+.v-input__slot {
+  margin-bottom: 0;
+}
+
+.no-radius {
+  border-radius: 0 !important;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+</style>

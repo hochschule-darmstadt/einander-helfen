@@ -13,6 +13,11 @@ export default new Router({
             component: () => import('@/views/Home.vue')
         },
         {
+            path: '/posts/:id?',
+            name: 'resultPage',
+            component: () => import('@/views/ResultPage.vue')
+        },
+        {
             path: '/imprint',
             name: 'imprint',
             component: () => import('@/views/Imprint.vue')
@@ -21,6 +26,11 @@ export default new Router({
             path: '/privacy',
             name: 'privacy',
             component: () => import('@/views/Privacy.vue')
+        },
+        {
+            path: '/about',
+            name: 'about',
+            component: () => import('@/views/About.vue')
         },
         {
             path: '*',
