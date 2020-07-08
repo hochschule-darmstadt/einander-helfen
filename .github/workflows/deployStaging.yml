@@ -9,10 +9,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/download-artifact@v2
+      - name: build
+        uses: actions/setup-node@v1
         with:
-          name: dist-dir
-          path: app/dist
+          node-version: 12.x
+      - run: ls -la
+      - run: cd app && npm install && npm run build
       - name: rsync deployments
         uses: burnett01/rsync-deployments@4.1
         with:
