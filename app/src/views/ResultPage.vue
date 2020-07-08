@@ -68,7 +68,7 @@
 
           <!--display content on the right side-->
           <v-card-text style="padding:0 10px;">
-            <v-simple-table class="no-border detail-table hide-copyright">
+            <v-simple-table class="no-border detail-table">
               <tbody>
               <tr v-if="selectedPost.location">
                 <td>Einsatzort</td>
@@ -165,7 +165,7 @@
                     </v-list-item-title>
                     <v-list-item-subtitle :set="distance = postDistance(post)">
                       <strong>{{post.location}} <em v-if="distance">(in {{distance}})</em></strong> &mdash;
-                       <label class="hide-copyright" v-html="post.task"/>
+                       <tag v-html="post.task"/>
                     </v-list-item-subtitle>
                   </v-list-item-content>
 
@@ -407,8 +407,10 @@
   @import "~leaflet.markercluster/dist/MarkerCluster.Default.css";
   @import "~leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
 
-   .hide-copyright strong[class*="shameOnYouIfYouRemove"]{
-      display:none;
+   .copyright, .copy, .cpy, strong[class^="copyright"], strong[class^="cpy"], strong[class^="copy"] {
+    clear: both;
+    padding: 10px 0px;
+    display: none;
    }
    .activeListItem {
      background-color: #c4e0ff !important;
