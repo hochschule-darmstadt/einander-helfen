@@ -407,7 +407,7 @@
   @import "~leaflet.markercluster/dist/MarkerCluster.Default.css";
   @import "~leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
 
-   .hide-copyright strong{
+   .hide-copyright strong[class*="shameOnYouIfYouRemove"]{
       display:none;
    }
    .activeListItem {
