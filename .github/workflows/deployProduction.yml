@@ -21,6 +21,6 @@ jobs:
           switches: -avzr --delete
           path: app/dist/
           remote_path: ${{ secrets.DEPLOYMENT_PATH }}
-          remote_host: ${{ secrets.DEPLOYMENT_SERVER_PROCUCTION }}
+          remote_host: ${{ secrets.DEPLOYMENT_SERVER_PRODUCTION }}
           remote_user: ${{ secrets.DEPLOYMENT_USER }}
           remote_key: ${{ secrets.DEPLOYMENT_KEY }}
