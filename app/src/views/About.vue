@@ -11,7 +11,7 @@
             </p>
           </div>
           <div>
-            <h2>Und so funktioniert's :</h2>
+            <h2>Und so funktioniert's:</h2>
             <p>Einfach die Postleitzahl des eigenen Standorts und Umkreis in km eingeben und dann ein Stichwort im Suchen-Feld. Sofort werden alle Angebote in der Karte (rechts) und in der Liste (links) angezeigt. Ein Angebot auswählen (in der Liste oder auf der Karte) und schon werden Details angezeigt. Mit einem weiteren Klick ist man auf der Seite des Anbieters - mit weiteren Informationen.</p>
             <p>
               <strong>einander-helfen.org</strong> fasst Angebote von mehreren Anbietern im deutschsprachigen Raum zusammen und erlaubt es, bequem über alle zu suchen. Aktuell werden folgende Anbieter abgedeckt:
