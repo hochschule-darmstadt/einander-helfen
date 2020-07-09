@@ -5,7 +5,7 @@ from data_extraction.scrape_data import run as run_extraction
 from shared.utils import write_data_to_json, read_data_from_json
 from upload_to_elasticsearch.elastic import write_to_elastic
 
-SRC_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + '/src'
+SRC_PATH = os.path.dirname(os.path.realpath(__file__))
 
 scraped_data = run_extraction()
 

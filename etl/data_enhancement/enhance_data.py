@@ -1,7 +1,4 @@
-import os
 from importlib import import_module
-
-SRC_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 def run(data, file_name):
