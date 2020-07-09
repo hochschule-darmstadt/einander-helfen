@@ -264,7 +264,11 @@
             }
         },
         created(): void {
-            this.hydrateStateFromRoute(this.$route);
+            this.hydrateStateFromRoute(this.$route).then(() => {
+              if (this.postIsOpen) {
+                this.postMapToggle = 'post';
+              }
+            });
         },
         mounted(): void {
           this.rerenderMap();
