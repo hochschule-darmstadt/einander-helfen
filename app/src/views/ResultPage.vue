@@ -264,7 +264,11 @@
             }
         },
         created(): void {
-            this.hydrateStateFromRoute(this.$route);
+            this.hydrateStateFromRoute(this.$route).then(() => {
+              if (this.postIsOpen) {
+                this.postMapToggle = 'post';
+              }
+            });
         },
         mounted(): void {
           this.rerenderMap();
@@ -418,15 +422,17 @@
    .no-border tr:not(:last-child) td:not(.v-data-table__mobile-row) {
     border: 0 !important;
    }
+   .detail-table table {
+     border-spacing: 0 20px !important;
+   }
+   .detail-table td {
+     height:unset !important;
+   }
    .detail-table tr:hover {
     background: unset !important;
    }
-   .detail-table tr {
-     margin-bottom: 10px;
-   }
    .detail-table tr td {
      vertical-align: top;
-     padding-bottom: 25px;
    }
    .button-map {
      margin-top: 30px;
