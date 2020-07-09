@@ -11,6 +11,7 @@ def run(data):
     rank_tags(data)
 
 
+# loads given tags from csv file and returns them in a dict
 def load_tags_from_file():
     loaded_tags = {}
     with open(os.path.join(SRC_PATH, 'Tags-einander-helfen.csv'), newline='',
@@ -21,6 +22,7 @@ def load_tags_from_file():
     return loaded_tags
 
 
+# converts the synonyms to a list
 def get_synonyms_as_list(values):
     synonyms = []
     for val in values:
@@ -29,6 +31,8 @@ def get_synonyms_as_list(values):
     return synonyms
 
 
+# scans categories of crawled data to find tags not existing in the given csv
+# writes new found tags to output directory as new_tags.json
 def find_new_tags(file):
     loaded_tags = load_tags_from_file()
     synonyms = get_synonyms_as_list(loaded_tags.values())
@@ -42,11 +46,14 @@ def find_new_tags(file):
     write_data_to_json(f'{SRC_PATH}/output', 'new_tags.json', new_tags)
 
 
+# ranks the tags on count of occurrences in the task field and outputs it to the output file as ranked_tags.json
+# todo: find occurrences of synonyms and add to label count,
+#       print to json file in the same format like the tag ontology csv file,
+#       make a new index for the ranked tag ontology for frontend access
 def rank_tags(file):
     loaded_tags = load_tags_from_file()
     labels = loaded_tags.keys()
     synonyms = get_synonyms_as_list(loaded_tags.values())
-    # todo: find occurrences of synonyms and add to label count
     tag_ranking = {}
     for post in file:
         list_of_words = post['task'].split()
