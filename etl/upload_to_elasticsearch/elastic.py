@@ -1,9 +1,24 @@
 import hashlib
 import json
+import os
 
 from elasticsearch import Elasticsearch
 
+from shared.utils import read_data_from_json
+
+PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 client = Elasticsearch([{'host': '127.0.0.1', 'port': 9200}])
+
+
+def run_elastic_upload():
+    for file in os.scandir(f'{PATH}/data_enhancement/data'):
+        # read enhanced data for indexing
+        data = read_data_from_json(file.path)
+
+        # Write enhanced data to Elastic Search
+        print('Starting Index Process!')
+        write_to_elastic(data, 'posts')
+        print('Finished Indexing!')
 
 
 def write_to_elastic(posts, index):
