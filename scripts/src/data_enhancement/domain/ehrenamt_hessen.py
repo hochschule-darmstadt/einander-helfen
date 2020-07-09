@@ -11,6 +11,7 @@ def fix_organization_links(file):
         new_organization = posts['organization']
         new_organization = new_organization.replace('_self', '_blank')
         new_organization = new_organization.replace('/index.cfm', 'https://www.ehrenamtssuche-hessen.de/index.cfm')
+        new_organization['rel'] = 'noopener'
         posts['organization'] = new_organization
     return file
 
@@ -33,6 +34,7 @@ def add_target_blank(file, post_key: str):
         for link in links:
             if 'mailto' not in link.decode():
                 link['target'] = '_blank'
+                link['rel'] = 'noopener'
         posts[post_key] = soup.decode()
 
 
