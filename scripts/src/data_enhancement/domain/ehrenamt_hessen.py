@@ -7,12 +7,18 @@ def run(data):
 
 
 def fix_organization_links(file):
+    from bs4 import BeautifulSoup
     for posts in file:
         new_organization = posts['organization']
         new_organization = new_organization.replace('_self', '_blank')
         new_organization = new_organization.replace('/index.cfm', 'https://www.ehrenamtssuche-hessen.de/index.cfm')
-        new_organization['rel'] = 'noopener'
         posts['organization'] = new_organization
+        soup = BeautifulSoup(posts['organization'], 'html.parser')
+        links = soup.findAll('a')
+        for link in links:
+            if 'mailto' not in link.decode():
+                link['rel'] = 'noopener'
+        posts['organization'] = soup.decode()
     return file
 
 
