@@ -423,10 +423,10 @@
     border: 0 !important;
    }
    .detail-table table {
-     border-spacing: 0 20px;
+     border-spacing: 0 20px !important;
    }
    .detail-table td {
-     height:unset;
+     height:unset !important;
    }
    .detail-table tr:hover {
     background: unset !important;
