@@ -32,21 +32,23 @@ class DataService {
         } = params;
 
         const query = new QueryBuilder();
-        query.mustShouldMatch(
-          searchValues
-            .map((value) => value + '*')
-            .map((value) => [
-                {key: 'title', value},
-                {key: 'categories', value},
-                {key: 'task', value}
-            ])
-            .flat()
-        );
-
         query.from(from);
         query.size(size);
 
         const queryObject = query.build();
+
+        queryObject.query.bool.must.push({ bool: { should: [] } });
+
+        queryObject.query.bool.must[0].bool.should = searchValues
+          .map((value) => value + '*')
+          .map((value) => {
+              return {
+                  query_string: {
+                      query: value,
+                      fields: ['title', 'categories', 'task']
+                  }
+              };
+          });
 
         if (location) {
             queryObject.sort.push({
