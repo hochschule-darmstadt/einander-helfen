@@ -1,7 +1,7 @@
 import csv
 import os
 
-from lib.util import write_data_to_json
+from shared.utils import write_data_to_json
 
 SRC_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
