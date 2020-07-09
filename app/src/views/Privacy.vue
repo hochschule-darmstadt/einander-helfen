@@ -292,40 +292,6 @@
             gesetzliche Bestimmungen - insbesondere gesetzliche Aufbewahrungsfristen
             - bleiben unberührt.
           </p>
-
-          <h2>4. Plugins und Tools</h2>
-          <h3>Google Maps</h3>
-          <p>
-            Diese Seite nutzt über eine API den Kartendienst Google Maps.
-            Anbieter ist die Google Ireland Limited (&bdquo;Google&ldquo;), Gordon
-            House, Barrow Street, Dublin 4, Irland.
-          </p>
-          <p>
-            Zur Nutzung der Funktionen von Google Maps ist es notwendig, Ihre
-            IP-Adresse zu speichern. Diese Informationen werden in der Regel an
-            einen Server von Google in den USA übertragen und dort gespeichert.
-            Der Anbieter dieser Seite hat keinen Einfluss auf diese
-            Datenübertragung.
-          </p>
-          <p>
-            Die Nutzung von Google Maps erfolgt im Interesse einer ansprechenden
-            Darstellung unserer Online-Angebote und an einer leichten Auffindbarkeit
-            der von uns auf der Website angegebenen Orte. Dies stellt ein
-            berechtigtes Interesse im Sinne von Art. 6 Abs. 1 lit. f DSGVO dar.
-            Sofern eine entsprechende Einwilligung abgefragt wurde, erfolgt die
-            Verarbeitung ausschließlich auf Grundlage von Art. 6 Abs. 1 lit. a
-            DSGVO; die Einwilligung ist jederzeit widerrufbar.
-          </p>
-          <p>
-            Mehr Informationen zum Umgang mit Nutzerdaten finden Sie in der
-            Datenschutzerklürung von Google:
-            <a
-              href="https://policies.google.com/privacy?hl=de"
-              target="_blank"
-              rel="noopener noreferrer"
-              >https://policies.google.com/privacy?hl=de</a
-            >.
-          </p>
           <p>Quelle: <a href="https://www.e-recht24.de">e-recht24.de</a></p>
         </v-col>
       </v-row>
