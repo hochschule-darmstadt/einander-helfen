@@ -32,11 +32,16 @@ class DataService {
         } = params;
 
         const query = new QueryBuilder();
-        query.mustShouldMatch(searchValues.map((value) => [
+        query.mustShouldMatch(
+          searchValues
+            .map((value) => value + '*')
+            .map((value) => [
                 {key: 'title', value},
                 {key: 'categories', value},
                 {key: 'task', value}
-            ]).flat());
+            ])
+            .flat()
+        );
 
         query.from(from);
         query.size(size);
