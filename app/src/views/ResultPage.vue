@@ -418,15 +418,17 @@
    .no-border tr:not(:last-child) td:not(.v-data-table__mobile-row) {
     border: 0 !important;
    }
+   .detail-table table {
+     border-spacing: 0 20px;
+   }
+   .detail-table td {
+     height:unset;
+   }
    .detail-table tr:hover {
     background: unset !important;
    }
-   .detail-table tr {
-     margin-bottom: 10px;
-   }
    .detail-table tr td {
      vertical-align: top;
-     padding-bottom: 25px;
    }
    .button-map {
      margin-top: 30px;
