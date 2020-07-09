@@ -1,5 +1,7 @@
 .DS_Store
 node_modules
+data
+__pycache__
 
 
 # Editor directories and files
@@ -10,3 +12,4 @@ node_modules
 *.njsproj
 *.sln
 *.sw*
+etl/**/*.json
