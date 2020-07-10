@@ -21,8 +21,13 @@ class Scraper:
     # Delay between requests
     delay = 0.5
 
+    # The URLs which will be parsed and scraped  
     urls = []
+
+    # And array of the data of the scraped pages (each entry holds the scraped and parsed information of a detail page)
     data = []
+
+    # An error object to keep track of error occurences (which is used for logging)
     errors = []
 
     def __init__(self, name):

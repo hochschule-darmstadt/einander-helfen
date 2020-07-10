@@ -8,11 +8,8 @@ from data_enhancement.enhance_data import run as run_enhancement
 from data_extraction.scrape_data import run as run_extraction
 from shared.utils import write_data_to_json, read_data_from_json
 
-scraped_data = run_extraction()
-
-for file_name, data in scraped_data.items():
-    # Write scraped data to files
-    write_data_to_json(os.path.join(ROOT_DIR, 'data_extraction/data'), f'{file_name}.json', data)
+# Runs the extraction process and writes the scraped data to data_extraction/data directory
+run_extraction()
 
 for file in os.scandir(os.path.join(ROOT_DIR, 'data_extraction/data')):
 
