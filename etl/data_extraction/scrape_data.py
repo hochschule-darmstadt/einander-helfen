@@ -13,12 +13,12 @@ ROOT_DIR = os.environ['ROOT_DIR']
 # Contains all running scraper threads
 scraper_threads = []
 
+
 # Looks for the given file_name in the /data_extraction/scraper directory
 # Checks if the files contains a subclass of Scraper (/data_extraction/Scraper.py) and starts the run function
 # Writes the scraped data and errors during the scraping process data_extraction/data and data_extraction/errors
 def execute_scraper(scraper_file_name: str):
-
-    try: 
+    try:
         scraper_module = import_module(f'data_extraction.scraper.{scraper_file_name}')
         scraper_class = None
 
@@ -39,11 +39,12 @@ def execute_scraper(scraper_file_name: str):
         write_data_to_json(os.path.join(ROOT_DIR, 'data_extraction/data'), f'{scraper_file_name}.json', scraper_data)
 
         # Write the errors of the scraper to the data_extraction/errors directory
-        scraper_errors = scraper_instance.get_errors()    
+        scraper_errors = scraper_instance.get_errors()
         if len(scraper_errors):
             time_stamp = get_current_timestamp()
-            write_data_to_json(os.path.join(ROOT_DIR, 'data_extraction/errors'), f'{scraper_file_name}_{time_stamp}.log', scraper_errors)
-    
+            write_data_to_json(os.path.join(ROOT_DIR, 'data_extraction/errors'),
+                               f'{scraper_file_name}_{time_stamp}.log', scraper_errors)
+
     except Exception as err:
         print(err)
 
@@ -56,7 +57,8 @@ def run():
             scraper_module_name = os.path.splitext(
                 os.path.basename(file_entry))[0]
 
-            # Create a thread with each file in the directory data_extraction/scraper and execute the execute_scraper function with it 
+            # Create a thread with each file in the directory data_extraction/scraper
+            # and execute the execute_scraper function with it
             thread = threading.Thread(target=execute_scraper, args=(scraper_module_name,))
             thread.start()
             scraper_threads.append(thread)

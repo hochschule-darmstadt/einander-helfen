@@ -84,7 +84,7 @@ class Scraper:
     # Returns data of the Scraper in JSON-Format
     def get_json_data(self):
         return json.dumps(self.data)
-    
+
     # Returns errors of scraping process
     def get_errors(self):
         return self.errors

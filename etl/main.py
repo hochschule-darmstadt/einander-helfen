@@ -12,7 +12,6 @@ from shared.utils import write_data_to_json, read_data_from_json
 run_extraction()
 
 for file in os.scandir(os.path.join(ROOT_DIR, 'data_extraction/data')):
-
     file_name = os.path.splitext(file.name)[0]
 
     # read scraped data for enhancement

@@ -5,6 +5,7 @@ from shared.utils import write_data_to_json
 
 ROOT_DIR = os.environ['ROOT_DIR']
 
+
 def run(data):
     find_new_tags(data)
     rank_tags(data)
@@ -13,7 +14,7 @@ def run(data):
 # loads given tags from csv file and returns them in a dict
 def load_tags_from_file():
     loaded_tags = {}
-    with open(os.path.join(ROOT_DIR, 'data_enhancement' ,'Tags-einander-helfen.csv'), newline='',
+    with open(os.path.join(ROOT_DIR, 'data_enhancement', 'Tags-einander-helfen.csv'), newline='',
               encoding='utf-8') as csvfile:
         reader = csv.DictReader(csvfile, delimiter=';')
         for row in reader:
