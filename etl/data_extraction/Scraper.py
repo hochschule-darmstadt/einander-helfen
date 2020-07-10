@@ -43,7 +43,7 @@ class Scraper:
             self.add_urls()
 
         except Exception as err:
-            self.add_error({'fn': 'add_urls', 'body': err})
+            self.add_error({'fn': 'add_urls', 'body': str(err)})
 
         # Iterate over URLs and crawl each page
         for i, url in enumerate(self.urls):
@@ -67,7 +67,7 @@ class Scraper:
             self.data.append(parsed_data)
 
         except Exception as err:
-            self.add_error({'fn': 'parse', 'body': err, 'index': index, 'url': url})
+            self.add_error({'fn': 'parse', 'body': str(err), 'index': index, 'url': url})
 
         if self.debug:
             print(f'[{self.name}] crawling page #{index} ended')
@@ -79,6 +79,10 @@ class Scraper:
     # Returns data of the Scraper in JSON-Format
     def get_json_data(self):
         return json.dumps(self.data)
+    
+    # Returns errors of scraping process
+    def get_errors(self):
+        return self.errors
 
     # Adds error to the error object (used for logging)
     def add_error(self, err: dict):

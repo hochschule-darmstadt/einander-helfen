@@ -4,8 +4,10 @@ from importlib import import_module
 from inspect import getmembers, isclass
 
 from data_extraction.Scraper import Scraper
+from shared.utils import write_data_to_json
 
-ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Root Directory (/etl)
+ROOT_DIR = os.environ['ROOT_DIR']
 
 # Contains all running scraper threads
 scraper_threads = []
@@ -32,13 +34,17 @@ def execute_scraper(scraper_file_name: str):
     scraper_instance.run()
 
     scraper_results[scraper_file_name] = scraper_instance.get_data()
+    scraper_errors = scraper_instance.get_errors()
+
+    if len(scraper_errors):
+        write_data_to_json(os.path.join(ROOT_PATH, 'data_extraction/errors'), f'{scraper_file_name}.log', scraper_errors)
 
 
 #  Starts a thread with the execute_scraper function for all overridden scraper subclasses in /data_extraction/scraper
 #  Returns the results of all scrapers as a dict-object with the file name of the scraper as key
 #  and the scraped data (array) as value
 def run():
-    for file_entry in os.scandir(f'{ROOT_DIR}/data_extraction/scraper'):
+    for file_entry in os.scandir(os.path.join(ROOT_DIR, 'data_extraction/scraper')):
 
         if file_entry.is_file():
             scraper_module_name = os.path.splitext(

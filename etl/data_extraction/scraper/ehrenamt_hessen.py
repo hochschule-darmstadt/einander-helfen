@@ -51,13 +51,13 @@ class EhrenamtHessenScraper(Scraper):
         for index in range(1, end_page + 1):
 
             time.sleep(self.delay)
-
-            if self.debug:
-                print(f'Fetching urls from page {index} of {end_page}.')
-
+            
             search_page_url = f'{self.base_url}/entry_search_result.cfm?locationId=0&entryTypeId=5&page={str(index)}'
             search_page = self.soupify(search_page_url)
             detail_links = [x.find('a') for x in search_page.find_all('div', {'class': 'easSearchResultTitle'})]
+
+            if self.debug:
+                print(f'Fetched {len(detail_links)} URLs from {search_page_url}')
 
             for detailLink in detail_links:
                 if self.base_url + detailLink['href'] in self.urls:

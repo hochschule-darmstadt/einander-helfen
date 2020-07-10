@@ -6,12 +6,12 @@ from elasticsearch import Elasticsearch
 
 from shared.utils import read_data_from_json
 
-PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT_DIR = os.environ['ROOT_DIR']
 client = Elasticsearch([{'host': '127.0.0.1', 'port': 9200}])
 
 
 def run_elastic_upload():
-    for file in os.scandir(f'{PATH}/data_enhancement/data'):
+    for file in os.scandir(os.path.join(ROOT_DIR, 'data_enhancement/data')):
         # read enhanced data for indexing
         data = read_data_from_json(file.path)
 
