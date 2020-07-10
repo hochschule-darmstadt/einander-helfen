@@ -57,7 +57,7 @@ class EhrenamtHessenScraper(Scraper):
             detail_links = [x.find('a') for x in search_page.find_all('div', {'class': 'easSearchResultTitle'})]
 
             if self.debug:
-                print(f'Fetched {len(detail_links)} URLs from {search_page_url}')
+                print(f'Fetched {len(detail_links)} URLs from {search_page_url} [{index}/{end_page}]')
 
             for detailLink in detail_links:
                 if self.base_url + detailLink['href'] in self.urls:

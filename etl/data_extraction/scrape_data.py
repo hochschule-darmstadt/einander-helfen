@@ -4,7 +4,7 @@ from importlib import import_module
 from inspect import getmembers, isclass
 
 from data_extraction.Scraper import Scraper
-from shared.utils import write_data_to_json
+from shared.utils import write_data_to_json, get_current_timestamp
 
 # Root Directory (/etl)
 ROOT_DIR = os.environ['ROOT_DIR']
@@ -37,7 +37,8 @@ def execute_scraper(scraper_file_name: str):
     scraper_errors = scraper_instance.get_errors()
 
     if len(scraper_errors):
-        write_data_to_json(os.path.join(ROOT_PATH, 'data_extraction/errors'), f'{scraper_file_name}.log', scraper_errors)
+        time_stamp = get_current_timestamp()
+        write_data_to_json(os.path.join(ROOT_PATH, 'data_extraction/errors'), f'{scraper_file_name}_{time_stamp}.log', scraper_errors)
 
 
 #  Starts a thread with the execute_scraper function for all overridden scraper subclasses in /data_extraction/scraper
