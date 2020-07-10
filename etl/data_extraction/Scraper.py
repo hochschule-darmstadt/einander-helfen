@@ -59,7 +59,7 @@ class Scraper:
     def crawl(self, url, index):
 
         if self.debug:
-            print(f'[{self.name}] crawling page #{index}')
+            print(f'[{self.name}] Scraping page #{index} [{index}/{len(self.urls)}]')
 
         try:
             detail_page = self.soupify(url)
@@ -70,7 +70,7 @@ class Scraper:
             self.add_error({'fn': 'parse', 'body': str(err), 'index': index, 'url': url})
 
         if self.debug:
-            print(f'[{self.name}] crawling page #{index} ended')
+            print(f'[{self.name}] Scraping page #{index} ended')
 
     # Returns data of the Scraper
     def get_data(self):
