@@ -76,7 +76,7 @@ const store: StoreOptions<RootState> = {
 
     },
     setPage({ commit, dispatch, state, getters }, page: number): void {
-        if (page < 1 || page > getters.numberOfPages) {
+        if (page < 1) {
           page = 1;
         }
         // Calculate the new from parameter to load the next resultSet chunk if necessary
@@ -98,7 +98,7 @@ const store: StoreOptions<RootState> = {
     setSelectedPost({ commit }, value: Post|null): void {
       commit('setSelectedPost', value);
     },
-    hydrateStateFromRoute({ commit, dispatch }, route): void {
+    hydrateStateFromRoute({ commit, dispatch }, route): Promise<any> {
       const queryParams = route.query;
       const params = route.params;
 
@@ -116,7 +116,7 @@ const store: StoreOptions<RootState> = {
       if ('page' in queryParams && queryParams.page) {
         dispatch('setPage', parseInt(queryParams.page, 10));
       }
-      dispatch('findPosts').then((posts: Post[]) => {
+      return dispatch('findPosts').then((posts: Post[]) => {
         if ('id' in params && params.id) {
           const selectedPost = posts.find((post) => post.id === params.id);
           if (selectedPost) {
