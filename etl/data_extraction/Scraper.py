@@ -9,9 +9,6 @@ ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 class Scraper:
-    # Scraper name -> Overwritten by name of the scraper file
-    name = 'scraper'
-
     # Domain to be scraped on
     base_url = 'http://example.com'
 
@@ -21,17 +18,18 @@ class Scraper:
     # Delay between requests
     delay = 0.5
 
-    # The URLs which will be parsed and scraped  
-    urls = []
-
-    # And array of the data of the scraped pages (each entry holds the scraped and parsed information of a detail page)
-    data = []
-
-    # An error object to keep track of error occurences (which is used for logging)
-    errors = []
-
     def __init__(self, name):
+        # Scraper name -> Overwritten by name of the scraper file
         self.name = name
+        
+        # The URLs which will be parsed and scraped  
+        self.urls = []
+        
+        # And array of the data of the scraped pages (each entry holds the scraped and parsed information of a detail page)
+        self.data = []
+        
+        # An error object to keep track of error occurences (which is used for logging)
+        self.errors = []
 
     # Runs the Scraper 
     # Step 1: Adding URLs

@@ -13,3 +13,4 @@ __pycache__
 *.sln
 *.sw*
 etl/**/*.json
+etl/**/*.log
