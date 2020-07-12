@@ -59,12 +59,20 @@ class EhrenamtHessenScraper(Scraper):
             if self.debug:
                 print(f'Fetched {len(detail_links)} URLs from {search_page_url} [{index}/{end_page}]')
 
-            for detailLink in detail_links:
-                if self.base_url + detailLink['href'] in self.urls:
-                    self.add_error({'func': 'add_urls', 'body': {'index': index, 'search_page': search_page_url,
-                                                                 'duplicate_link': self.base_url + detailLink['href']}})
+            for detail_link in detail_links:
+                current_link = self.base_url + detail_link['href']
+                if current_link in self.urls:
+                    self.add_error({
+                        'func': 'add_urls', 
+                        'body': {
+                            'page_index': index, 
+                            'search_page': search_page_url,
+                            'duplicate_link': current_link, 
+                            'duplicate_index': self.urls.index(current_link)
+                        }
+                    })
                 else:
-                    self.urls.append(self.base_url + detailLink['href'])
+                    self.urls.append(current_link)
 
     # Domain-specific Function
     # Fetches the number of pages from the search result page for the add_urls function
