@@ -90,7 +90,7 @@ class Scraper:
     # Adds error to the error object (used for logging)
     def add_error(self, err: dict):
         if self.debug:
-            print('[Error]:', err)
+            print(f'Error [{self.name}]:', err)
         self.errors.append(err)
 
     # Executes GET-request with the given url, transforms it to a BeautifulSoup object and returns it
