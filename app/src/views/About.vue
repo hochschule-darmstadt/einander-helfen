@@ -31,7 +31,7 @@
             <p>
               Wir sind ein ehrenamtliches Team und haben die Seite mit viel Initiative und Eigenarbeit entwickelt. Die Software ist Open Source
               <a
-                href="https://github.com/hochschule-darmstadt/einander-helfen"
+                href="https://github.com/hochschule-darmstadt/einander-helfen" target="_blank"
               >https://github.com/hochschule-darmstadt/einander-helfen</a> und wurde initial von einem Team von Studierenden programmiert. Wir freuen uns auf Anregungen und Verbesserungsvorschläge unter
               <a
                 href="mailto:info@einander-helfen.org"
