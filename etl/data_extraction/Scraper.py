@@ -9,9 +9,6 @@ ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 class Scraper:
-    # Scraper name -> Overwritten by name of the scraper file
-    name = 'scraper'
-
     # Domain to be scraped on
     base_url = 'http://example.com'
 
@@ -21,12 +18,18 @@ class Scraper:
     # Delay between requests
     delay = 0.5
 
-    urls = []
-    data = []
-    errors = []
-
     def __init__(self, name):
+        # Scraper name -> Overwritten by name of the scraper file
         self.name = name
+        
+        # The URLs which will be parsed and scraped  
+        self.urls = []
+        
+        # And array of the data of the scraped pages (each entry holds the scraped and parsed information of a detail page)
+        self.data = []
+        
+        # An error object to keep track of error occurences (which is used for logging)
+        self.errors = []
 
     # Runs the Scraper 
     # Step 1: Adding URLs
@@ -43,7 +46,7 @@ class Scraper:
             self.add_urls()
 
         except Exception as err:
-            self.add_error({'fn': 'add_urls', 'body': err})
+            self.add_error({'fn': 'add_urls', 'body': str(err)})
 
         # Iterate over URLs and crawl each page
         for i, url in enumerate(self.urls):
@@ -59,7 +62,7 @@ class Scraper:
     def crawl(self, url, index):
 
         if self.debug:
-            print(f'[{self.name}] crawling page #{index}')
+            print(f'[{self.name}] Scraping page #{index} [{index}/{len(self.urls)}]')
 
         try:
             detail_page = self.soupify(url)
@@ -67,10 +70,10 @@ class Scraper:
             self.data.append(parsed_data)
 
         except Exception as err:
-            self.add_error({'fn': 'parse', 'body': err, 'index': index, 'url': url})
+            self.add_error({'fn': 'parse', 'body': str(err), 'index': index, 'url': url})
 
         if self.debug:
-            print(f'[{self.name}] crawling page #{index} ended')
+            print(f'[{self.name}] Scraping page #{index} ended')
 
     # Returns data of the Scraper
     def get_data(self):
@@ -80,10 +83,14 @@ class Scraper:
     def get_json_data(self):
         return json.dumps(self.data)
 
+    # Returns errors of scraping process
+    def get_errors(self):
+        return self.errors
+
     # Adds error to the error object (used for logging)
     def add_error(self, err: dict):
         if self.debug:
-            print('[Error]:', err)
+            print(f'Error [{self.name}]:', err)
         self.errors.append(err)
 
     # Executes GET-request with the given url, transforms it to a BeautifulSoup object and returns it

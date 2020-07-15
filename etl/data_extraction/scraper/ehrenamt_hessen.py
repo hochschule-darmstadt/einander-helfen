@@ -51,20 +51,28 @@ class EhrenamtHessenScraper(Scraper):
         for index in range(1, end_page + 1):
 
             time.sleep(self.delay)
-
-            if self.debug:
-                print(f'Fetching urls from page {index} of {end_page}.')
-
+            
             search_page_url = f'{self.base_url}/entry_search_result.cfm?locationId=0&entryTypeId=5&page={str(index)}'
             search_page = self.soupify(search_page_url)
             detail_links = [x.find('a') for x in search_page.find_all('div', {'class': 'easSearchResultTitle'})]
 
-            for detailLink in detail_links:
-                if self.base_url + detailLink['href'] in self.urls:
-                    self.add_error({'func': 'add_urls', 'body': {'index': index, 'search_page': search_page_url,
-                                                                 'duplicate_link': self.base_url + detailLink['href']}})
+            if self.debug:
+                print(f'Fetched {len(detail_links)} URLs from {search_page_url} [{index}/{end_page}]')
+
+            for detail_link in detail_links:
+                current_link = self.base_url + detail_link['href']
+                if current_link in self.urls:
+                    self.add_error({
+                        'func': 'add_urls', 
+                        'body': {
+                            'page_index': index, 
+                            'search_page': search_page_url,
+                            'duplicate_link': current_link, 
+                            'duplicate_index': self.urls.index(current_link)
+                        }
+                    })
                 else:
-                    self.urls.append(self.base_url + detailLink['href'])
+                    self.urls.append(current_link)
 
     # Domain-specific Function
     # Fetches the number of pages from the search result page for the add_urls function
