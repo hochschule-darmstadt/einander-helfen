@@ -1,6 +1,6 @@
 #!/bin/bash
 #changing working dir
-cd /home/mseith/einander-helfen/etl/scripts
+cd /home/etl/einander-helfen/etl/scripts
 
 # Installing required python packages
 pip3 install -r ../requirements.txt
