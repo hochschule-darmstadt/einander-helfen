@@ -1,9 +1,9 @@
 import csv
 import os
 
-from lib.util import write_data_to_json
+from shared.utils import write_data_to_json
 
-SRC_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT_DIR = os.environ['ROOT_DIR']
 
 
 def run(data):
@@ -11,9 +11,10 @@ def run(data):
     rank_tags(data)
 
 
+# loads given tags from csv file and returns them in a dict
 def load_tags_from_file():
     loaded_tags = {}
-    with open(os.path.join(SRC_PATH, 'Tags-einander-helfen.csv'), newline='',
+    with open(os.path.join(ROOT_DIR, 'data_enhancement', 'Tags-einander-helfen.csv'), newline='',
               encoding='utf-8') as csvfile:
         reader = csv.DictReader(csvfile, delimiter=';')
         for row in reader:
@@ -21,6 +22,7 @@ def load_tags_from_file():
     return loaded_tags
 
 
+# converts the synonyms to a list
 def get_synonyms_as_list(values):
     synonyms = []
     for val in values:
@@ -29,6 +31,8 @@ def get_synonyms_as_list(values):
     return synonyms
 
 
+# scans categories of crawled data to find tags not existing in the given csv
+# writes new found tags to output directory as new_tags.json
 def find_new_tags(file):
     loaded_tags = load_tags_from_file()
     synonyms = get_synonyms_as_list(loaded_tags.values())
@@ -39,14 +43,17 @@ def find_new_tags(file):
             if category not in loaded_tags.keys() and category not in synonyms:
                 new_tags.append(category)
     new_tags = list(set(new_tags))
-    write_data_to_json(f'{SRC_PATH}/output', 'new_tags.json', new_tags)
+    write_data_to_json(os.path.join(ROOT_DIR, 'data_enhancement/output'), 'new_tags.json', new_tags)
 
 
+# ranks the tags on count of occurrences in the task field and outputs it to the output file as ranked_tags.json
+# todo: find occurrences of synonyms and add to label count,
+#       print to json file in the same format like the tag ontology csv file,
+#       make a new index for the ranked tag ontology for frontend access
 def rank_tags(file):
     loaded_tags = load_tags_from_file()
     labels = loaded_tags.keys()
     synonyms = get_synonyms_as_list(loaded_tags.values())
-    # todo: find occurrences of synonyms and add to label count
     tag_ranking = {}
     for post in file:
         list_of_words = post['task'].split()
@@ -60,4 +67,4 @@ def rank_tags(file):
                     tag_ranking.update({tag: new_value})
     sorted_tags = sorted(tag_ranking.items(), key=lambda x: x[1], reverse=True)
     tag_ranking = dict(sorted_tags)
-    write_data_to_json(f'{SRC_PATH}/output', 'ranked_tags.json', tag_ranking)
+    write_data_to_json(os.path.join(ROOT_DIR, 'data_enhancement/output'), 'ranked_tags.json', tag_ranking)

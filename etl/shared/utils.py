@@ -16,3 +16,11 @@ def read_data_from_json(path):
     with open(path, 'r', encoding='utf-8') as data_file:
         json_load = json.load(data_file)
     return json_load
+
+
+def get_current_timestamp():
+    from datetime import datetime
+
+    now = datetime.now()
+
+    return now.strftime("%Y%m%dT%H%M%S")
