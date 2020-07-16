@@ -59,8 +59,8 @@
           <h3>Urheberrecht</h3>
           <p>
             Die durch die Seitenbetreiber erstellten Inhalte und Werke auf
-            diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfä
-            ltigung, Bearbeitung, Verbreitung und jede Art der Verwertung
+            diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung,
+            Bearbeitung, Verbreitung und jede Art der Verwertung
             außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen
             Zustimmung des jeweiligen Autors bzw. Erstellers. Downloads und
             Kopien dieser Seite sind nur für den privaten, nicht kommerziellen
