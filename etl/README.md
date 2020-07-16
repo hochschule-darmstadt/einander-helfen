@@ -34,5 +34,5 @@ Folders and scripts are structured by their ETL task.
 in the JSON format with the filename of its corresponding scraper.
 
 - Inside the data_enhancement folder, a data folder gets created and a JSON file for each enhanced domain is written.
-A output folder gets created with a file called new_tags.json which lists all new found tags which are not yet in 
+An output folder gets created with a file called new_tags.json which lists all new found tags which are not yet in 
 the tag ontology. Furthermore a ranked_tags.json file gets created with the ranked tag_ontology.
