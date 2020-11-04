@@ -1,2 +1,2 @@
 # einander-helfen
-Portal for volunteering https://einander-helfen.org/
+Portal for volunteering https://einander-helfen.org
