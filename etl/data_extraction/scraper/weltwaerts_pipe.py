@@ -7,15 +7,17 @@ class WeltwaertsScraper(Scraper):
 
     #   Handles the soupified response of a detail page in the predefined way and returns it
     def parse(self, response, url):
-        print(url)
+
+        param_box = response.find('div', {'class': 'parameter__box'})
+        content = response.find('div', {'class': 'mod_epdetail__content-container'})
 
         parsed_object = {
-            'title': None,
-            'link': None,
-            'organization': None,
-            'task': None,
-            'location': None,
-            'contact': None,
+            'title': param_box.find("h1").decode_contents().strip() or None,
+            'link': url or None,
+            'organization': content.find('h2', text='Die Aufnahmeorganisation vor Ort').findNext('div').p.decode_contents().strip() or None,
+            'task': content.find('h2', text='Deine Aufgabe').findNext('div').p.decode_contents().strip() or None,
+            'location': param_box.find('li').find('span', {'class': 'parameter__value'}).decode_contents().strip() or None,
+            'contact': content.find('h2', text='Ansprechpartner*in und Entsendeorganisation').findNext('div').p.prettify() or None,
             'geo_location': {
                 'lat': None,
                 'lon': None,
@@ -23,7 +25,6 @@ class WeltwaertsScraper(Scraper):
             'source': self.base_url,
             'image': None,
         }
-
 
         return parsed_object
 
@@ -45,7 +46,7 @@ class WeltwaertsScraper(Scraper):
                 print(f'Fetched {len(detail_link_tags)} URLs from {next_page_url} [{index}]')
 
             for link_tag in detail_link_tags:
-                current_link = self.base_url + link_tag['href']
+                current_link = self.base_url + '/' + link_tag['href']
                 if current_link in self.urls:
                     self.add_error({
                         'func': 'add_urls',
@@ -64,6 +65,8 @@ class WeltwaertsScraper(Scraper):
                 next_page_url = self.base_url + '/' + next_page_url
 
             index += 1
-            if index > 2:
-                break
+
+            # TESTING
+            #if index > 1:
+            #    break
             time.sleep(self.delay)
