@@ -15,31 +15,30 @@ class GuteTatBerlinScraper(Scraper):
 
         parsed_object = {
             'title': response.find('strong', text='Name des Projekts:').parent.parent.find_all('td')[1].text or None,
-            'categories': '',
-            'location': response.find('strong', text='PLZ, Ort:').parent.parent.find_all('td')[1].text + "<br" +
-                        response.find('strong', text='Straße:').parent.parent.find_all('td')[1].text + "<br" +
-                        response.find('strong', text='Bezirk:').parent.parent.find_all('td')[1].text + "<br" +
+            'categories': None,
+            'location': response.find_all('strong', text='PLZ, Ort:')[0].parent.parent.find_all('td')[1].text + ', ' +
+                        response.find('strong', text='Straße:').parent.parent.find_all('td')[1].text + ', ' +
+                        response.find('strong', text='Bezirk:').parent.parent.find_all('td')[1].text + ', ' +
                         response.find('strong', text='Ortsteil:').parent.parent.find_all('td')[1].text or None,
             'task': response.find('strong', text='Projektbeschreibung:').parent.parent.find_all('td')[1].text or None,
-            #'target_group': '',
-            #'timing': '',
-            #'effort': '',
-            #'opportunities': '',
-            #'organization': response.find('strong', text='Zentrale:').parent.parent.find_all('td')[1].text or None,
-            #'contact': response.find('div', {'class': 'legendLeft'}, text='Ihr Ansprechpartner').parent.find('div', {
-            #    'class': 'descriptionRight'}).find('div').prettify() or None,
+            'target_group': response.find('strong', text='Voraussetzungen/Vorkenntnisse:').parent.parent
+                                .find_all('td')[1].text or None,
+            'timing': response.find('strong', text='Zeitraum:').parent.parent.find_all('td')[1].text or None,
+            'effort': response.find('strong', text='Zeitbedarf:').parent.parent.find_all('td')[1].text or None,
+            'organization': response.find('strong', text='Zentrale:').parent.parent.find_all('td')[1].text or None,
+            'contact': response.find('strong', text='Ansprechperson:').parent.parent.find_all('td')[1].text + '<br>' +
+                       response.find('strong', text='Straße:').parent.parent.find_all('td')[1].text + '<br>' +
+                       response.find_all('strong', text='PLZ, Ort:')[1].parent.parent.find_all('td')[1].text + '<br>' +
+                       response.find('strong', text='Telefon:').parent.parent.find_all('td')[1].text + '<br>' +
+                       response.find('strong', text='Fax:').parent.parent.find_all('td')[1].text + '<br>' +
+                       response.find('strong', text='E-Mail:').parent.parent.find_all('td')[1].text + '<br>' +
+                       response.find('strong', text='Internet:').parent.parent.find_all('td')[1].text or None,
             'link': url or None,
             'image': f'{self.website_url}/wp-content/uploads/2014/10/logo_gute_tat.gif',
-            #'geo_location': {
-            #    'lat': float(
-            #        response.find('div', {'class': 'legendLeft'}, text='Ort Ihres Ehrenamts').parent.find('div', {
-            #            'class': 'descriptionRight'}).find('li', {'class': 'geodata'}).get(
-            #            'data-pos-lat') or 0) or None,
-            #    'lon': float(
-            #        response.find('div', {'class': 'legendLeft'}, text='Ort Ihres Ehrenamts').parent.find('div', {
-            #            'class': 'descriptionRight'}).find('li', {'class': 'geodata'}).get(
-            #            'data-pos-lon') or 0) or None,
-            #},
+            'geo_location': {
+                'lat': None,
+                'lon': None,
+            },
             'source': f'{self.website_url}/helfen/ehrenamtliches-engagement/projekte-berlin',
         }
 
@@ -62,7 +61,7 @@ class GuteTatBerlinScraper(Scraper):
                 print(f'Fetched {len(detail_links)} URLs from {search_page_url} [{index}/{end_page}]')
 
             for detail_link in detail_links:
-                current_link = self.base_url + '/' + detail_link['href']
+                current_link = self.base_url + '/oberflaeche/' + detail_link['href']
                 if current_link in self.urls:
                     self.add_error({
                         'func': 'add_urls',
