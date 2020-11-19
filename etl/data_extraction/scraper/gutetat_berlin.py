@@ -6,7 +6,9 @@ from data_extraction.Scraper import Scraper
 
 
 class GuteTatBerlinScraper(Scraper):
-    base_url = 'https://ehrenamtsmanager.gute-tat.de'
+    """Scrapes the website gute-tat.de for the region berlin."""
+
+    base_url = 'https://ehrenamtsmanager.gute-tat.de/oberflaeche/'
     website_url = 'www.gute-tat.de'
     debug = True
 
@@ -52,7 +54,7 @@ class GuteTatBerlinScraper(Scraper):
         for index in range(1, end_page + 1):
             time.sleep(self.delay)
 
-            search_page_url = f'{self.base_url}/oberflaeche/index.cfm?dateiname=ehrenamt_suche_ergebnis.cfm&anwender_id=14&seite={str(index)}&ehrenamt_id=0&ea_projekt=0&stichwort=&kiez=&kiez_fk=0&bezirk=&bezirk_fk=0&ort=&ort_fk=0&zielgruppe=0&taetigkeit=0&merkmale=0&einsatzbereiche=0&plz=&organisation_fk=0&rl=0'
+            search_page_url = f'{self.base_url}index.cfm?dateiname=ehrenamt_suche_ergebnis.cfm&anwender_id=14&seite={str(index)}&ehrenamt_id=0&ea_projekt=0&stichwort=&kiez=&kiez_fk=0&bezirk=&bezirk_fk=0&ort=&ort_fk=0&zielgruppe=0&taetigkeit=0&merkmale=0&einsatzbereiche=0&plz=&organisation_fk=0&rl=0'
             search_page = self.soupify(search_page_url)
             # last link needs to be ignored
             detail_links = [x for x in search_page.find_all('a', {'class': 'links'})][:-1]
@@ -61,7 +63,7 @@ class GuteTatBerlinScraper(Scraper):
                 print(f'Fetched {len(detail_links)} URLs from {search_page_url} [{index}/{end_page}]')
 
             for detail_link in detail_links:
-                current_link = self.base_url + '/oberflaeche/' + detail_link['href']
+                current_link = self.base_url + detail_link['href']
                 if current_link in self.urls:
                     self.add_error({
                         'func': 'add_urls',
@@ -78,15 +80,17 @@ class GuteTatBerlinScraper(Scraper):
         print(len(self.urls))
 
     def __fetch_end_page(self):
+        """Fetches the number of pages from the search result page for the add_urls function."""
+
         entries_per_page = 30
 
-        search_page_url = f'{self.base_url}/oberflaeche/index.cfm?dateiname=ehrenamt_suche_ergebnis.cfm&anwender_id=14&seite=1&ehrenamt_id=0&ea_projekt=0&stichwort=&kiez=&kiez_fk=0&bezirk=&bezirk_fk=0&ort=&ort_fk=0&zielgruppe=0&taetigkeit=0&merkmale=0&einsatzbereiche=0&plz=&organisation_fk=0&rl=0'
+        search_page_url = f'{self.base_url}index.cfm?dateiname=ehrenamt_suche_ergebnis.cfm&anwender_id=14&seite=1&ehrenamt_id=0&ea_projekt=0&stichwort=&kiez=&kiez_fk=0&bezirk=&bezirk_fk=0&ort=&ort_fk=0&zielgruppe=0&taetigkeit=0&merkmale=0&einsatzbereiche=0&plz=&organisation_fk=0&rl=0'
         search_page = self.soupify(search_page_url)
         total_entries_as_string = search_page.find('td', {'class': 'ueberschrift'}).next.strip()
         formatted_entry_number = int(re.search(r'\d+', total_entries_as_string).group())
         end_page = math.ceil(formatted_entry_number / entries_per_page)
 
         if self.debug:
-            print(f'Crawling {end_page} pages with 30 entries each.')
+            print(f'Crawling {end_page} pages with {entries_per_page} entries each.')
 
         return end_page
