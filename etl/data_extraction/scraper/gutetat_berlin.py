@@ -23,8 +23,6 @@ class GuteTatBerlinScraper(Scraper):
                         response.find('strong', text='Bezirk:').parent.parent.find_all('td')[1].text + ', ' +
                         response.find('strong', text='Ortsteil:').parent.parent.find_all('td')[1].text or None,
             'task': response.find('strong', text='Projektbeschreibung:').parent.parent.find_all('td')[1].text or None,
-            'target_group': response.find('strong', text='Voraussetzungen/Vorkenntnisse:').parent.parent
-                                .find_all('td')[1].text or None,
             'timing': response.find('strong', text='Zeitraum:').parent.parent.find_all('td')[1].text or None,
             'effort': response.find('strong', text='Zeitbedarf:').parent.parent.find_all('td')[1].text or None,
             'organization': response.find('strong', text='Zentrale:').parent.parent.find_all('td')[1].text or None,
