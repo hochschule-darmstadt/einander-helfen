@@ -436,7 +436,8 @@
      vertical-align: top;
    }
    .button-map {
-     margin-top: 30px;
+     margin-top: 21px;
+     margin-left: 35px;
      background-color: rgb(5, 76, 102);
      align-self: flex-start;
    }
