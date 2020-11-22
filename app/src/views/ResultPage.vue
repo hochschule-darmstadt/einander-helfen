@@ -5,7 +5,7 @@
         <!-- Map -->
         <v-flex xs12 md6 order-md2 v-show="postMapToggle === 'map'">
            <div class="map">
-                <v-card tile height="70vh">
+                <v-card tile id="mapcard" height="70vh">
                     <div id="map" :style="{height: map.height, width: map.width}">
                         <v-btn v-if="currentPostId.length > 0" @click="postMapToggle = 'post'"
                                class="button-details" dark><v-icon>info</v-icon> Details
@@ -33,8 +33,10 @@
           <div>
           <v-card
             tile
-            style="height:70vh ;overflow:auto"
+            id="postopenright"
+            style="height:70vh; overflow:auto"
           >
+          
           <div class="container-buttons-smartphone">
             <v-btn dark class="mr-3 button-smartphone button-map-smartphone" text @click="openMap()">
               <v-icon>map</v-icon> Karte
@@ -139,9 +141,8 @@
         </v-flex>
 
         <!--left side content-->
-        <v-flex sm12 md6 order-md1 >
-          <div style="height:70vh ;overflow:auto">
-
+        <v-flex sm12 md6 order-md1>
+          <div id=postbox style="height:70vh; overflow:auto;">
 
             <div v-if="showRadiusExtendedMessage" class="text-center pt-12 pb-12">
               <h3 class="font-weight-bold">Zu Ihrer Suchanfrage mit einem Radius von {{radiusExtendedFrom}} haben wir keine Treffer gefunden.
@@ -171,7 +172,7 @@
 
                   <v-img
                     max-width="80px"
-                    height="80px"
+                    height="55px"
                     contain
                     :src="post.image"
                   ></v-img>
@@ -477,4 +478,31 @@
     }
    }
 
+@media (max-width: 480px)
+{
+.card {
+  max-width: 75vh
+}
+
+}
+
+@media (min-width:800px) {
+#postbox {
+  width:80vh;
+  margin-top:5%; 
+  margin-left: 15%;
+}
+
+#mapcard {
+  width:80vh; 
+  margin-top: 5%; 
+  margin-right:15%;
+}
+#postopenright {
+  width:80vh; 
+  margin-top: 5%; 
+  margin-right:15%; 
+}
+
+}
 </style>

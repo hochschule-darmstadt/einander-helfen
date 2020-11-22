@@ -18,8 +18,8 @@
 
     <v-container>
       <v-form>
-        <v-row justify="center">
-          <v-col cols="12" md="8">
+        <v-row justify="center" lg="2">
+          <!--v-col cols="12" md="8"-->
             <v-layout row justify-center no-gutters class="mt-8 mb-9">
               <v-flex>
                 <v-form>
@@ -37,13 +37,13 @@
                 </v-form>
               </v-flex>
             </v-layout>
-          </v-col>
+          <!--/v-col-->
         </v-row>
       </v-form>
 
-      <v-row justify="center">
+      <v-row justify="center" lg="3">
         <template v-for="tag in volunteerTags">
-          <v-col cols="12" md="2" :key="tag.title">
+          <v-col md="3" xl="3" :key="tag.title">
             <v-hover v-slot:default="{ hover }">
               <v-card class="mx-auto" :elevation="hover ? 12 : 2" :class="{ 'on-hover': hover }">
                 <router-link
@@ -185,4 +185,13 @@ img {
   height: 100%;
   object-fit: contain;
 }
+
+@media (min-width: 800px)
+{
+.container {
+  max-width:85%
+}
+}
+
+
 </style>
