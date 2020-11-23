@@ -186,13 +186,13 @@ img {
 
 @media (min-width: 800px)
 {
-.container {
-  max-width:85%
-}
-#searchbox {
-  padding-left:12px;
-  padding-right:12px;
-}
+  .container {
+    max-width:85%
+  }
+  #searchbox {
+    padding-left:12px;
+    padding-right:12px;
+  }
 }
 
 
