@@ -18,8 +18,8 @@
 
     <v-container>
       <v-form>
-        <v-row justify="center" lg="2">
-          <!--v-col cols="12" md="8"-->
+        <v-row id="searchbox" justify="center" lg="2">
+          <!-- v-col cols="12" md="8"-->
             <v-layout row justify-center no-gutters class="mt-8 mb-9">
               <v-flex>
                 <v-form>
@@ -190,6 +190,10 @@ img {
 {
 .container {
   max-width:85%
+}
+#searchbox {
+  padding-left:12px;
+  padding-right:12px;
 }
 }
 
