@@ -19,25 +19,23 @@
     <v-container>
       <v-form>
         <v-row id="searchbox" justify="center" lg="2">
-          <!-- v-col cols="12" md="8"-->
-            <v-layout row justify-center no-gutters class="mt-8 mb-9">
-              <v-flex>
-                <v-form>
-                  <v-row>
-                    <v-col cols="12">
-                      <search-bar :searchInput.sync="currentSearchValue" v-model="selectedInput" @enter="onSearchEnter" tabindex="1" />
-                    </v-col>
-                  </v-row>
+          <v-layout row justify-center no-gutters class="mt-8 mb-9">
+            <v-flex>
+              <v-form>
+                <v-row>
+                  <v-col cols="12">
+                    <search-bar :searchInput.sync="currentSearchValue" v-model="selectedInput" @enter="onSearchEnter" tabindex="1" />
+                  </v-col>
+                </v-row>
 
-                  <v-row class="flex-grow-1 ps-4">
-                      <location-search-bar ref="locationSearchBar" @enter="onLocationEnter" tabindex="2" />
-                      <div><radius @enter="onRadiusEnter" tabindex="3" /></div>
-                      <search-button @click="executeSearch" tabindex="4" />
-                  </v-row>
-                </v-form>
-              </v-flex>
-            </v-layout>
-          <!--/v-col-->
+                <v-row class="flex-grow-1 ps-4">
+                    <location-search-bar ref="locationSearchBar" @enter="onLocationEnter" tabindex="2" />
+                    <div><radius @enter="onRadiusEnter" tabindex="3" /></div>
+                    <search-button @click="executeSearch" tabindex="4" />
+                </v-row>
+              </v-form>
+             </v-flex>
+          </v-layout>
         </v-row>
       </v-form>
 

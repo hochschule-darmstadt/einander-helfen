@@ -151,7 +151,7 @@
               </h3>
             </div>
 
-            <v-card
+            <v-card id="posttitlecard"
                     v-for="post in postsOnCurrentPage"
                     :key="post.id"
                     class="mb-3"
@@ -476,57 +476,72 @@
     }
    }
 
-@media (max-width: 480px)
-{
-.card {
-  max-width: 75vh
-}
+   @media (max-width: 480px){
+    .card {
+      max-width: 75vh
+    }
+   }
 
-}
+   @media (min-width:1025px){
+    #postbox {
+      width:80%;
+      margin-top:5%; 
+      margin-left: 15%;
+      margin-right: 1%;
+    }
 
-@media (min-width:1025px){
-#postbox {
-  width:80vh;
-  margin-top:5%; 
-  margin-left: 15%;
-}
+    #mapcard {
+      width:80%; 
+      margin-top: 5%; 
+      margin-right:15%;
+    }
 
-#mapcard {
-  width:80vh; 
-  margin-top: 5%; 
-  margin-right:15%;
-}
-#postopenright {
-  width:80vh; 
-  margin-top: 5%; 
-  margin-right:15%; 
-}
-}
+    #postopenright {
+      width:80%; 
+      margin-top: 5%; 
+      margin-right:15%; 
+    }
 
-/* Landscape iPad (Pro)*/
-@media only screen 
-  and (min-width: 1024px) 
-  and (max-height: 1366px) 
-  and (orientation: landscape) 
-  {
-  #postbox {
-  width:82%;
-  margin-top:5%; 
-  margin-left: 15%;
-}
+    .list-item {
+      width:80%;
+      margin-top:5%; 
+      margin-left: 15%;
+      margin-right: 1px
+    }
+   }
 
-  #mapcard {
-  width:83%; 
-  margin-top: 5%; 
-  margin-right:15%;
-}
-  #postopenright {
-  width:83%; 
-  margin-top: 5%; 
-  margin-right:15%; 
-}
+      /* Landscape iPad (Pro)*/
+   @media only screen 
+   and (min-width: 1024px) 
+   and (max-height: 1366px) 
+   and (orientation: landscape){
 
-}
+    #postbox {
+      width:82%;
+      margin-top:5%; 
+      margin-left: 15%;
+      margin-right: 1px;
+    }
+
+    #mapcard {
+      width:83%; 
+      margin-top: 5%; 
+      margin-right:15%;
+    }
+
+    #postopenright {
+      width:83%; 
+      margin-top: 5%; 
+      margin-right:15%; 
+    }
+
+    .list-item {
+      width:82%;
+      margin-top:5%; 
+      margin-left: 15%;
+      margin-right: 1px
+    }
+   }
 
 
 </style>
