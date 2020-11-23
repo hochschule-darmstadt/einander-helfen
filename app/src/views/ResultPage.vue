@@ -151,8 +151,6 @@
               </h3>
             </div>
 
-
-
             <v-card
                     v-for="post in postsOnCurrentPage"
                     :key="post.id"
@@ -178,7 +176,6 @@
                   ></v-img>
                 </v-list-item>
               </v-card>
-
 
               <div class="text-center pt-12" v-if="!postsOnCurrentPage.length">
                 <h3 class="font-weight-bold ">Es wurden keine Suchergebnisse zu Ihrer Suchanfrage gefunden.</h3>
@@ -487,7 +484,7 @@
 
 }
 
-@media (min-width:800px) {
+@media (min-width:1025px){
 #postbox {
   width:80vh;
   margin-top:5%; 
@@ -504,6 +501,32 @@
   margin-top: 5%; 
   margin-right:15%; 
 }
+}
+
+/* Landscape iPad (Pro)*/
+@media only screen 
+  and (min-width: 1024px) 
+  and (max-height: 1366px) 
+  and (orientation: landscape) 
+  {
+  #postbox {
+  width:82%;
+  margin-top:5%; 
+  margin-left: 15%;
+}
+
+  #mapcard {
+  width:83%; 
+  margin-top: 5%; 
+  margin-right:15%;
+}
+  #postopenright {
+  width:83%; 
+  margin-top: 5%; 
+  margin-right:15%; 
+}
 
 }
+
+
 </style>
