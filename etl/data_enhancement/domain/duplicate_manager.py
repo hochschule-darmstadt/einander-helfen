@@ -1,3 +1,4 @@
+from datetime import datetime
 from enum import Enum
 import os
 from shared.utils import read_data_from_json, write_data_to_json
@@ -9,44 +10,118 @@ from shared.utils import read_data_from_json, write_data_to_json
 
 
 def run():
-    post_dict = find_duplicated_posts_by_title()
-    for posts in post_dict:
-        analyse_post_quality(post_dict[posts])
-        # remove_duplicated_posts(posts)
+    start_time = datetime.now()
+
+    posts = get_posts_from_json()
+
+    marked_identical_posts = find_identical_posts(posts)
+    #no_identical_posts = remove_duplicated_posts(marked_identical_posts)
+
+    #marked_subsumed_posts = find_subsumed_posts(no_identical_posts)
+    marked_subsumed_posts = find_subsumed_posts(marked_identical_posts)
+    no_subsumed_posts = remove_duplicated_posts(marked_subsumed_posts)
+
+    marked_fuzzy_duplicates = find_fuzzy_posts(no_subsumed_posts)
+    remove_duplicated_posts(marked_fuzzy_duplicates)
+
+    end_time = datetime.now()
+    difference = (end_time - start_time).total_seconds()
+    print(f'Finding duplicates took {int((difference - (difference % 60)) / 60)}:{difference % 60} minutes')
 
 
-def find_duplicated_posts_by_title():
-    grouped_posts = {}
+def get_posts_from_json():
+    json_posts = []
     for file in os.scandir(os.path.join('/home/janf/git/einander-helfen/etl/', 'data_enhancement/data')):
         # read scraped data for enhancement
-        json = read_data_from_json(file.path)
+        json_object = read_data_from_json(file.path)
+        for json_post in json_object:
+            json_posts.append(JsonPost(file, json_post))
 
-        for post in json:
-            title = post['title']
-            title = title.rstrip()
-            if title in grouped_posts:
-                grouped_posts[title].append(post)
+    return json_posts
+
+
+def find_identical_posts(posts):
+    duplicate_counter = 0
+    for i in range(0, len(posts)):
+        print(f'Searching for identical posts for "{posts[i].json_post["title"].rstrip()}" [{i + 1}/{len(posts)}]')
+        for j in range(i + 1, len(posts)):
+            if posts[i].post_type == PostType.DUPLICATE or posts[j].post_type == PostType.DUPLICATE:
+                continue
+            if posts[i].json_post == posts[j].json_post:
+                posts[j].post_type = PostType.DUPLICATE
+                print(f'{posts[j].json_post["title"]} is identical to another post')
+                duplicate_counter += 1
+
+    print(f'Found {str(duplicate_counter)} identical posts')
+
+    return posts
+
+
+def find_subsumed_posts(posts):
+    duplicate_counter = 0
+    for i in range(0, len(posts)):
+        print(f'Searching for subsumed posts for "{posts[i].json_post["title"].rstrip()}" [{i + 1}/{len(posts)}]')
+
+        i_str = str(posts[i].json_post).rstrip()
+        i_ordered = list(dict.fromkeys(i_str.split()))  # only unique words in alphabetic order
+        i_ordered.sort()
+
+        for j in range(i + 1, len(posts)):
+            if posts[i].post_type == PostType.DUPLICATE or posts[j].post_type == PostType.DUPLICATE:
+                continue
+
+            j_str = str(posts[j].json_post).rstrip()
+            j_ordered = list(dict.fromkeys(j_str.split()))
+            j_ordered.sort()
+
+            if i_ordered == j_ordered:
+                posts[j].post_type = PostType.DUPLICATE
+                print(f'{posts[j].json_post["title"]} is identical to another post')
+                duplicate_counter += 1
+
+    print(f'Found {str(duplicate_counter)} subsumed posts')
+
+    return posts
+
+
+def find_fuzzy_posts(posts):
+    return posts
+
+
+def remove_duplicated_posts(posts):
+    post_files = {}
+    for post in posts:
+        if post.post_type == PostType.QUALIFIED:
+            if post.file.name in post_files:
+                post_files[post.file.name].append(post.json_post)
             else:
-                grouped_posts[title] = [post]
+                post_files[post.file.name] = [post.json_post]
+        else:
+            posts.remove(post)
 
-    post_dict = {}
-    for post_title in grouped_posts:
-        if len(grouped_posts[post_title]) <= 1:
-            continue
+    for file_name in post_files:
+        # Write enhanced data to files
+        write_data_to_json(os.path.join('/home/janf/git/einander-helfen/etl/', 'data_enhancement/data'), f'{file_name.split(".json")[0]}nd.json', post_files[file_name])  # todo fix path and remove 'nd' from name
 
-        for post_json in grouped_posts[post_title]:
-            post = Post("todo", post_json)
-            if post_title in post_dict:
-                post_dict[post_title].append(post)
-            else:
-                post_dict[post_title] = [post]
-
-    return post_dict
+    return posts
 
 
+class PostType(Enum):
+    QUALIFIED = 1
+    DUPLICATE = 2
+
+
+class JsonPost:
+    def __init__(self, file, json_post):
+        self.file = file
+        self.json_post = json_post
+        self.post_type = PostType.QUALIFIED
+
+
+"""
 def analyse_post_quality(posts):
     best_post = None
-    print('> ' + posts[0].attr_scores[0].content.rstrip(), end=':\t')
+    print('> ' + posts[0].score_attrs[0].content.rstrip(), end=':\t')
     for post in posts:
         post.calculate_quality_score()
         print('[' + str(post.quality_score) + '/' + str(post.quality_precise_score) + ']', end='\t')  # todo go on
@@ -61,24 +136,7 @@ def analyse_post_quality(posts):
     print('\nQualified: [' + str(best_post.quality_score) + '/' + str(best_post.quality_precise_score) + ']')
 
 
-def remove_duplicated_posts(posts):
-    # todo
-    # in post.data_file remove post where all parameter are equal
-    for post in posts:
-        if post.post_type == PostType.DUPLICATE:
-            pass
-
-    # Write enhanced data to files
-    # write_data_to_json(os.path.join(ROOT_DIR, 'data_enhancement/data'), f'{file_name}.json', enhanced_data)
-    pass
-
-
-class PostType(Enum):
-    QUALIFIED = 1
-    DUPLICATE = 2
-
-
-class AttrScore:
+class ScoreAttr:
     def __init__(self, content, weighting):
         self.content = content
         self.weighting = weighting
@@ -102,25 +160,26 @@ class Post:
         self.quality_precise_score = 0
         self.post_type = PostType.DUPLICATE
 
-        self.attr_scores = [
-            AttrScore(post_json.get('title'), 1),
-            AttrScore(post_json.get('categories'), 1),
-            AttrScore(post_json.get('location'), 1),
-            AttrScore(post_json.get('task'), 1),
-            AttrScore(post_json.get('target_group'), 1),
-            AttrScore(post_json.get('timing'), 1),
-            AttrScore(post_json.get('effort'), 1),
-            AttrScore(post_json.get('opportunities'), 1),
-            AttrScore(post_json.get('organization'), 1),
-            AttrScore(post_json.get('contact'), 1),
-            AttrScore(post_json.get('link'), 1),
-            AttrScore(post_json.get('image'), 1),
-            AttrScore(post_json.get('map_address'), 1),
-            AttrScore(post_json.get('lat'), 1),
-            AttrScore(post_json.get('lon'), 1),
+        self.score_attrs = [
+            ScoreAttr(post_json.get('title').rstrip(), 1),
+            ScoreAttr(post_json.get('categories').rstrip(), 1),
+            ScoreAttr(post_json.get('location').rstrip(), 1),
+            ScoreAttr(post_json.get('task').rstrip(), 1),
+            ScoreAttr(post_json.get('target_group').rstrip(), 1),
+            ScoreAttr(post_json.get('timing').rstrip(), 1),
+            ScoreAttr(post_json.get('effort').rstrip(), 1),
+            ScoreAttr(post_json.get('opportunities').rstrip(), 1),
+            ScoreAttr(post_json.get('organization').rstrip(), 1),
+            ScoreAttr(post_json.get('contact').rstrip(), 1),
+            ScoreAttr(post_json.get('link').rstrip(), 1),
+            ScoreAttr(post_json.get('image').rstrip(), 1),
+            ScoreAttr(post_json.get('map_address').rstrip(), 1),
+            ScoreAttr(post_json.get('lat').rstrip(), 1),
+            ScoreAttr(post_json.get('lon').rstrip(), 1),
         ]
 
     def calculate_quality_score(self):
-        for attr_score in self.attr_scores:
+        for attr_score in self.score_attrs:
             self.quality_score += attr_score.score
             self.quality_precise_score += attr_score.precise_score
+"""
