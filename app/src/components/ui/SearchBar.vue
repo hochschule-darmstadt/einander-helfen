@@ -3,7 +3,7 @@
     style="background: white"
     rounded
     color="black"
-    placeholder="z.B.Jugendarbeit"
+    placeholder="z. B. Jugendarbeit"
     item-text="tag"
     autocomplete="off"
     :items="mySearchProposals"
