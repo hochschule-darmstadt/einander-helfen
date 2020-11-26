@@ -17,7 +17,7 @@ class GuteTatBerlinScraper(Scraper):
 
         parsed_object = {
             'title': response.find('strong', text='Name des Projekts:').parent.parent.find_all('td')[1].text or None,
-            'categories': None,
+            'categories': [],
             'location': response.find_all('strong', text='PLZ, Ort:')[0].parent.parent.find_all('td')[1].text + ', ' +
                         response.find('strong', text='Straße:').parent.parent.find_all('td')[1].text + ', ' +
                         response.find('strong', text='Bezirk:').parent.parent.find_all('td')[1].text + ', ' +
@@ -36,8 +36,8 @@ class GuteTatBerlinScraper(Scraper):
             'link': url or None,
             'image': f'{self.website_url}/wp-content/uploads/2014/10/logo_gute_tat.gif',
             'geo_location': {
-                'lat': None,
-                'lon': None,
+                'lat': 52.520008,
+                'lon': 13.404954,
             },
             'source': f'{self.website_url}/helfen/ehrenamtliches-engagement/projekte-berlin',
         }
