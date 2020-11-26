@@ -5,7 +5,7 @@
         <!-- Map -->
         <v-flex xs12 md6 order-md2 v-show="postMapToggle === 'map'">
            <div class="map">
-                <v-card tile height="70vh">
+                <v-card tile id="mapcard" height="70vh">
                     <div id="map" :style="{height: map.height, width: map.width}">
                         <v-btn v-if="currentPostId.length > 0" @click="postMapToggle = 'post'"
                                class="button-details" dark><v-icon>info</v-icon> Details
@@ -33,8 +33,10 @@
           <div>
           <v-card
             tile
-            style="height:70vh ;overflow:auto"
+            id="postopenright"
+            style="height:70vh; overflow:auto"
           >
+          
           <div class="container-buttons-smartphone">
             <v-btn dark class="mr-3 button-smartphone button-map-smartphone" text @click="openMap()">
               <v-icon>map</v-icon> Karte
@@ -139,9 +141,8 @@
         </v-flex>
 
         <!--left side content-->
-        <v-flex sm12 md6 order-md1 >
-          <div style="height:70vh ;overflow:auto">
-
+        <v-flex sm12 md6 order-md1>
+          <div id=postbox style="height:70vh; overflow:auto;">
 
             <div v-if="showRadiusExtendedMessage" class="text-center pt-12 pb-12">
               <h3 class="font-weight-bold">Zu Ihrer Suchanfrage mit einem Radius von {{radiusExtendedFrom}} haben wir keine Treffer gefunden.
@@ -150,9 +151,7 @@
               </h3>
             </div>
 
-
-
-            <v-card
+            <v-card id="posttitlecard"
                     v-for="post in postsOnCurrentPage"
                     :key="post.id"
                     class="mb-3"
@@ -171,13 +170,12 @@
 
                   <v-img
                     max-width="80px"
-                    height="80px"
+                    height="55px"
                     contain
                     :src="post.image"
                   ></v-img>
                 </v-list-item>
               </v-card>
-
 
               <div class="text-center pt-12" v-if="!postsOnCurrentPage.length">
                 <h3 class="font-weight-bold ">Es wurden keine Suchergebnisse zu Ihrer Suchanfrage gefunden.</h3>
@@ -435,7 +433,8 @@
      vertical-align: top;
    }
    .button-map {
-     margin-top: 30px;
+     margin-top: 21px;
+     margin-left: 35px;
      background-color: rgb(5, 76, 102);
      align-self: flex-start;
    }
@@ -476,5 +475,73 @@
       display: flex;
     }
    }
+
+   @media (max-width: 480px){
+    .card {
+      max-width: 75vh
+    }
+   }
+
+   @media (min-width:1025px){
+    #postbox {
+      width:80%;
+      margin-top:5%; 
+      margin-left: 15%;
+      margin-right: 1%;
+    }
+
+    #mapcard {
+      width:80%; 
+      margin-top: 5%; 
+      margin-right:15%;
+    }
+
+    #postopenright {
+      width:80%; 
+      margin-top: 5%; 
+      margin-right:15%; 
+    }
+
+    .list-item {
+      width:80%;
+      margin-top:5%; 
+      margin-left: 15%;
+      margin-right: 1px
+    }
+   }
+
+      /* Landscape iPad (Pro)*/
+   @media only screen 
+   and (min-width: 1024px) 
+   and (max-height: 1366px) 
+   and (orientation: landscape){
+
+    #postbox {
+      width:82%;
+      margin-top:5%; 
+      margin-left: 15%;
+      margin-right: 1px;
+    }
+
+    #mapcard {
+      width:83%; 
+      margin-top: 5%; 
+      margin-right:15%;
+    }
+
+    #postopenright {
+      width:83%; 
+      margin-top: 5%; 
+      margin-right:15%; 
+    }
+
+    .list-item {
+      width:82%;
+      margin-top:5%; 
+      margin-left: 15%;
+      margin-right: 1px
+    }
+   }
+
 
 </style>
