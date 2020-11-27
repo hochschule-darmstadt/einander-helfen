@@ -1,9 +1,9 @@
 <template>
   <div>
     <Header />
-      <v-layout row wrap no-gutters>
+      <v-layout row wrap no-gutters ma-2>
         <!-- Map -->
-        <v-flex xs12 md6 order-md2 class="show-map" v-show="postMapToggle === 'map'">
+        <v-flex xs12 md6 mb-3 mb-sm-3 order-md2 class="show-map" v-show="postMapToggle === 'map'">
            <div class="map">
                 <v-card tile id="mapcard" class="map-heigth">
                     <div id="map" :style="{height: map.height, width: map.width}">
