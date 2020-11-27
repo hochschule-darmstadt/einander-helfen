@@ -3,9 +3,9 @@
     <Header />
       <v-layout row wrap no-gutters>
         <!-- Map -->
-        <v-flex xs12 md6 order-md2 v-show="postMapToggle === 'map'">
+        <v-flex xs12 md6 order-md2 class="show-map" v-show="postMapToggle === 'map'">
            <div class="map">
-                <v-card tile id="mapcard" height="70vh">
+                <v-card tile id="mapcard" class="map-heigth">
                     <div id="map" :style="{height: map.height, width: map.width}">
                         <v-btn v-if="currentPostId.length > 0" @click="postMapToggle = 'post'"
                                class="button-details" dark><v-icon>info</v-icon> Details
@@ -29,22 +29,13 @@
         </v-flex>
 
         <!-- right side content-->
-        <v-flex sm12 md6 order-md2 v-if="postMapToggle === 'post'">
+        <v-flex sm12 md6 order-md2 class="details" v-if="postMapToggle === 'post'">
           <div>
           <v-card
             tile
             id="postopenright"
             style="height:70vh; overflow:auto"
           >
-          
-          <div class="container-buttons-smartphone">
-            <v-btn dark class="mr-3 button-smartphone button-map-smartphone" text @click="openMap()">
-              <v-icon>map</v-icon> Karte
-            </v-btn>
-            <v-btn class="button-close button-smartphone button-close-smartphone" icon @click="closePost()">
-              <v-icon>close</v-icon>
-            </v-btn>
-          </div>
           <v-list-item three-line>
             <v-btn dark class="mr-3 button-map" text @click="openMap()">
               <v-icon>map</v-icon> Karte
@@ -155,9 +146,8 @@
                     v-for="post in postsOnCurrentPage"
                     :key="post.id"
                     class="mb-3"
-                    :class="{ activeListItem: currentPostId === post.id }"
             >
-                <v-list-item three-line @click="currentPostId === post.id ? closePost() : openPost(post.id)">
+                <v-list-item three-line :class="{ activeListItem: currentPostId === post.id }" @click="currentPostId === post.id ? closePost() : openPost(post.id)">
                   <v-list-item-content>
                     <v-list-item-title class="headline mb-1">
                       {{post.title}}
@@ -175,6 +165,74 @@
                     :src="post.image"
                   ></v-img>
                 </v-list-item>
+                <v-card-text class="details-smartphone" v-show="currentPostId == post.id">
+                  <h3 v-html="post.title"></h3>
+                  <br/>
+                  <div v-if="post.location">
+                  <h4>Einsatzort</h4>
+                  <p v-html="post.location"></p>
+                  </div>
+                  <div v-if="post.task">
+                  <h4>Aufgabe</h4>
+                  <p v-html="post.task"></p>
+                  </div>
+                  <div v-if="post.contact">
+                  <h4>Ansprechpartner</h4>
+                  <p v-html="post.contact"></p>
+                  </div>
+                  <div v-if="post.organization">
+                  <h4>Organisation</h4>
+                  <p v-html="post.organization"></p>
+                  </div>
+                  <div v-if="post.target_group">
+                  <h4>Zielgruppe</h4>
+                  <p v-html="post.target_group"></p>
+                  </div>
+                  <div v-if="post.timing">
+                  <h4>Einstiegsdatum / Beginn</h4>
+                  <p v-html="post.timing"></p>
+                  </div>
+                  <div v-if="post.effort">
+                  <h4>Zeitaufwand</h4>
+                  <p v-html="post.effort"></p>
+                  </div>
+                  <div v-if="post.opportunities">
+                  <h4>Möglichkeiten</h4>
+                  <p v-html="post.opportunities"></p>
+                  </div>
+                  <div v-if="post.link">
+                  <h4>Quelle</h4>
+                  <p>
+                    <a :href="post.link" target="_blank">{{
+                    post.source
+                    }}</a>
+                  </p>
+                  </div>
+                </v-card-text>
+                <v-card-actions class="details-smartphone" v-show="currentPostId == post.id">
+                  <v-flex md12 sm12>
+                    <v-container style="margin-bottom: 10px">
+                      <template
+                        v-for="(category, i) in post.categories"
+                      >
+                        <v-chip :key="i" class="mr-2 mt-2">{{ category }}</v-chip>
+                      </template>
+                    </v-container>
+                    <v-spacer></v-spacer>
+                    <v-container style="display:flex;justify-content:center;">
+                      <v-btn
+                        class="my-2"
+                        dark
+                        large
+                        color="#054C66"
+                        :href="post.link"
+                        target="_blank"
+                      >
+                        Zum Angebot
+                      </v-btn>
+                    </v-container>
+                  </v-flex>
+                </v-card-actions>
               </v-card>
 
               <div class="text-center pt-12" v-if="!postsOnCurrentPage.length">
@@ -340,11 +398,15 @@
                         const postIndex = this.posts.findIndex((post) => post.id === id);
                         this.setSelectedPost(this.posts[postIndex]);
                         this.setPage(this.pageOfCurrentPost);
+                        this.setMapLocation();
             },
             openMap(): void {
+                this.postMapToggle = 'map';
+                this.setMapLocation();
+            },
+            setMapLocation(): void {
                 const currentPost = this.selectedPost as Post;
                 const location = [currentPost.geo_location.lat, currentPost.geo_location.lon] as LatLngTuple;
-                this.postMapToggle = 'map';
                 this.rerenderMap();
                 this.$nextTick(() => {
                     (this.$refs.map as LMap).setCenter(location);
@@ -353,7 +415,6 @@
             closePost(): void {
                 this.setSelectedPost(null);
                 this.postMapToggle = 'map';
-
                 this.fitMapBounds(this.posts);
             },
             fitMapBounds(posts: Post[]): void {
@@ -448,12 +509,6 @@
      position: absolute;
      right: 0;
    }
-   .container-buttons-smartphone {
-     display: none;
-     position: relative;
-     justify-content: center;
-     margin-top: 5px;
-   }
    .button-details {
      position: absolute;
      z-index: 9999;
@@ -464,15 +519,36 @@
    .button-close {
      align-self: flex-start;
    }
+   .map-heigth {
+     height: 70vh;
+    }
+   .details-smartphone{
+     display: none;
+   }
+
+   @media only screen and (max-width: 960px) {
+    .map-heigth {
+       height: 40vh;
+    }
+    .details-smartphone {
+      display: block;
+    }
+    .details {
+      display: none;
+    }
+    .show-map {
+      display: block !important;
+    }
+    .button-details {
+      display: none;
+    }
+   }
    @media only screen and (max-width: 500px) {
     .button-map, .button-close {
       display: none;
     }
     .button-smartphone {
       display: block;
-    }
-    .container-buttons-smartphone {
-      display: flex;
     }
    }
 
