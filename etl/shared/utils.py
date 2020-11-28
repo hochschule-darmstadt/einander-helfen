@@ -24,11 +24,3 @@ def get_current_timestamp():
     now = datetime.now()
 
     return now.strftime("%Y%m%dT%H%M%S")
-
-
-def clean_string(value):
-    """Removes all line breaks, tabs and leading or trailing whitespaces from a string."""
-    if value is None:
-        return None
-
-    return value.replace('\n', '').replace('\r', '').replace('\t', '').strip()
