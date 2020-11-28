@@ -10,7 +10,9 @@ class WeltwaertsScraper(Scraper):
         import re
 
         param_box = response.find('div', {'class': 'parameter__box'})
+
         content = response.find('div', {'class': 'mod_epdetail__content-container'})
+        contact = content.find('h2', text='Ansprechpartner*in und Entsendeorganisation').findNext('div')
 
         google_map = response.find('a', {'class': 'mod_epdetail__link-map'})
         lat = None
@@ -24,27 +26,61 @@ class WeltwaertsScraper(Scraper):
             except (IndexError, TypeError, ValueError):
                 pass
 
-        contact_raw = content.find('h2', text='Ansprechpartner*in und Entsendeorganisation').findNext('div').p.decode_contents()
-        contact_raw = re.sub(r'<br/?>', '\n', contact_raw)
-        contact_raw = contact_raw.replace('</br>', '')
-        contact_raw = contact_raw.replace('\n\n', '\n')
-
         parsed_object = {
             'title': param_box.find("h1").decode_contents().strip() or None,
-            'link': url or None,
-            'organization': content.find('h2', text='Die Aufnahmeorganisation vor Ort').findNext('div').p.decode_contents().strip() or None,
-            'task': content.find('h2', text='Deine Aufgabe').findNext('div').p.decode_contents().strip() or None,
+            'categories': ['International'],
             'location': param_box.find('li').find('span', {'class': 'parameter__value'}).decode_contents().strip() or None,
-            'contact': contact_raw.strip() or None,
+            'task': content.find('h2', text='Deine Aufgabe').findNext('div').decode_contents().strip() or None,
+            'timing': param_box.find('li').findNext('li').findNext('li').find('span', {'class': 'parameter__value'}).decode_contents().strip() or None,
+            'organization': content.find('h2', text='Die Aufnahmeorganisation vor Ort').findNext('div').p.decode_contents().strip() or None,
+            'contact': contact.decode_contents().strip() or None,
+            'link': url or None,
+            'source': self.base_url,
+            'image': 'https://www.weltwaerts.de/files/framework/img/ww-logo-de.svg',
             'geo_location': {
                 'lat': lat,
                 'lon': lon,
             },
-            'languages': param_box.find('li').findNext('li').find('span', {
-                'class': 'parameter__value'}).decode_contents().strip() or None,
+            'languages': param_box.find('li').findNext('li').find('span', {'class': 'parameter__value'}).decode_contents().strip() or None,
             'requirements': content.find('h2', text='Anforderungen an dich').findNext('div').p.decode_contents().strip() or None,
-            'source': self.base_url,
-            'image': None,
+        }
+
+        contact_raw = re.sub(r'</?p>', '', parsed_object['contact'])
+        contact_raw = re.sub(r'<br/?>', '\n', contact_raw)
+        contact_raw = re.sub(r'<a.*</a>', '', contact_raw)
+        contact_raw = contact_raw.replace('</br>', '')
+        contact_raw = contact_raw.replace('\n\n', '\n').strip()
+        contact_split = list(filter(None, contact_raw.split('\n')))
+
+        if len(contact_split) > 3:
+            names_split = contact_split[:(len(contact_split)-2)]
+            names_raw = ', '.join(names_split)
+            contact_split = [names_raw, contact_split[-2], contact_split[-1]]
+
+        parsed_object['post_struct'] = {
+            'title': parsed_object['title'],
+            'categories': parsed_object['categories'],
+            'location': {
+                'country': parsed_object['location'].split(', ')[-1] or None,
+            },
+            'task': re.sub(r'</?p>', '', parsed_object['task']).strip(),
+            'timing': parsed_object['timing'],
+            'organization': {
+                'name': parsed_object['organization'],
+            },
+            'contact': {
+                'name':  contact_split[0].strip() or None,
+                'zipcode': contact_split[2][:5].strip() or None,
+                'city': contact_split[2][5:].strip() or None,
+                'street':  contact_split[1].strip() or None,
+                'email': contact.find('a', href=re.compile("mailto:.*"))['href'].replace('mailto:', '').strip() or None,
+            },
+            'link': parsed_object['link'],
+            'source': parsed_object['link'],
+            'image': parsed_object['link'],
+            'geo_location': parsed_object['geo_location'],
+            'languages': parsed_object['languages'],
+            'requirements': parsed_object['requirements'],
         }
 
         return parsed_object
