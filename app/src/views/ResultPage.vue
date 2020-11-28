@@ -407,7 +407,9 @@
             setMapLocation(): void {
                 const currentPost = this.selectedPost as Post;
                 const location = [currentPost.geo_location.lat, currentPost.geo_location.lon] as LatLngTuple;
-                this.rerenderMap();
+                if (this.postMapToggle === 'map') {
+                    this.rerenderMap();
+                }
                 this.$nextTick(() => {
                     (this.$refs.map as LMap).setCenter(location);
                 });
@@ -415,6 +417,7 @@
             closePost(): void {
                 this.setSelectedPost(null);
                 this.postMapToggle = 'map';
+                this.rerenderMap();
                 this.fitMapBounds(this.posts);
             },
             fitMapBounds(posts: Post[]): void {
