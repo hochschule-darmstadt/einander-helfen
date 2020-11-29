@@ -1,6 +1,8 @@
 import math
 import time
 
+from bs4 import BeautifulSoup
+
 from data_extraction.Scraper import Scraper
 
 
@@ -11,70 +13,71 @@ class EhrenamtHessenScraper(Scraper):
     def parse(self, response, url):
         """Handles the soupified response of a detail page in the predefined way and returns it."""
 
+        location_of = response.find('div', {'class': 'legendLeft'}, text='Ort Ihres Ehrenamts')
+        location = None
+        lat = 0
+        lon = 0
+        if location_of is not None and location_of.parent is not None:
+            desc_right = location_of.parent.find('div', {'class': 'descriptionRight'})
+            location = desc_right.next
+            geo_data = desc_right.find('li', {'class': 'geodata'})
+            lat = geo_data.get('data-pos-lat') or 0
+            lon = geo_data.get('data-pos-lon') or 0
+
+        task_field = response.find('div', {'class': 'legendLeft'}, text='Ihr Aufgabenfeld')
+        task = None
+        if task_field is not None and task_field.parent is not None:
+            desc_right = task_field.parent.find('div', {'class': 'descriptionRight'})
+            if desc_right is not None:
+                task = desc_right.decode_contents().strip()
+
+        organization_field = response.find('div', {'class': 'legendLeft'}, text='Organisation/Anbieter')
+        organization = None
+        if organization_field is not None and organization_field.parent is not None:
+            desc_right = organization_field.parent.find('div', {'class': 'descriptionRight'})
+            if desc_right is not None:
+                organization = desc_right.decode_contents().strip()
+
+        contact_field = response.find('div', {'class': 'legendLeft'}, text='Ihr Ansprechpartner')
+        contact = None
+        if contact_field is not None and contact_field.parent is not None:
+            contact = contact_field.parent.find('div', {'class': 'descriptionRight'}).find('div').prettify()
+
         parsed_object = {
             'title': response.find('h3', {'class': 'ItemTitle'}).text or None,
-            'location': response.find('div', {'class': 'legendLeft'}, text='Ort Ihres Ehrenamts').parent.find('div', {
-                'class': 'descriptionRight'}).next or None,
-            'task': response.find('div', {'class': 'legendLeft'}, text='Ihr Aufgabenfeld').parent.find('div', {
-                'class': 'descriptionRight'}).decode_contents().strip() or None,
+            'categories': self.__extract_categories(response),
+            'location': location or None,
+            'task': task or None,
             'target_group': None,
             'timing': None,
             'effort': None,
             'opportunities': None,
-            'organization': response.find('div', {'class': 'legendLeft'}, text='Organisation/Anbieter').parent.find(
-                'div', {'class': 'descriptionRight'}).decode_contents().strip() or None,
-            'contact': response.find('div', {'class': 'legendLeft'}, text='Ihr Ansprechpartner').parent.find('div', {
-                'class': 'descriptionRight'}).find('div').prettify() or None,
+            'organization': organization or None,
+            'contact': contact or None,
             'link': url or None,
             'source': 'www.ehrenamtssuche-hessen.de',
             'image': f'{self.base_url}/resources/img/hessenlogo_h180.png',
             'geo_location': {
-                'lat': float(
-                    response.find('div', {'class': 'legendLeft'}, text='Ort Ihres Ehrenamts').parent.find('div', {
-                        'class': 'descriptionRight'}).find('li', {'class': 'geodata'}).get(
-                        'data-pos-lat') or 0) or None,
-                'lon': float(
-                    response.find('div', {'class': 'legendLeft'}, text='Ort Ihres Ehrenamts').parent.find('div', {
-                        'class': 'descriptionRight'}).find('li', {'class': 'geodata'}).get(
-                        'data-pos-lon') or 0) or None,
+                'lat': float(lat),
+                'lon': float(lon),
             },
         }
-        cat_object = []
-        for cat in response.find('div', {'class': 'legendLeft'}, text='Kategorien').parent.find('div', {
-            'class': 'descriptionRight'}).find('div', {'class': 'easCategories'}).find_all('div', {'class': 'catIcon'}):
-            cat_object.append(cat.get('title'))
-
-        parsed_object['categories'] = cat_object
 
         parsed_object['post_struct'] = {
             'title': self.clean_string(parsed_object['title']) or None,
             'categories': parsed_object['categories'] or None,
             'location': {
                 'zipcode': None,
-                'city': self.clean_string(parsed_object['location']) or None,
+                'city': self.clean_string(parsed_object['location']).strip() or None,
                 'street': None,
             },
-            'task': self.clean_string(parsed_object['task']) or None,
+            'task': self.clean_html_tags(self.clean_string(parsed_object['task'])).strip() or None,
             'target_group': None,
             'timing': None,
             'effort': None,
             'opportunities': None,
-            'organization': {
-                'name': self.clean_string(parsed_object['todo']) or None,  # todo
-                'zipcode': None,
-                'city': None,
-                'street': None,
-                'phone': None,
-                'email': None,
-            },
-            'contact': {
-                'name': self.clean_string('todo') or None,  # todo
-                'zipcode': None,
-                'city': None,
-                'street': None,
-                'phone': self.clean_string('todo') or None,  # todo
-                'email': self.clean_string('todo') or None,  # todo
-            },
+            'organization': self.__extract_sub_data(parsed_object['organization']),
+            'contact': self.__extract_sub_data(parsed_object['contact']),
             'link': parsed_object['link'] or None,
             'source': parsed_object['source'] or None,
             'image': parsed_object['image'] or None,
@@ -92,7 +95,7 @@ class EhrenamtHessenScraper(Scraper):
         for index in range(1, end_page + 1):
 
             time.sleep(self.delay)
-            
+
             search_page_url = f'{self.base_url}/entry_search_result.cfm?locationId=0&entryTypeId=5&page={str(index)}'
             search_page = self.soupify(search_page_url)
             detail_links = [x.find('a') for x in search_page.find_all('div', {'class': 'easSearchResultTitle'})]
@@ -104,11 +107,11 @@ class EhrenamtHessenScraper(Scraper):
                 current_link = self.base_url + detail_link['href']
                 if current_link in self.urls:
                     self.add_error({
-                        'func': 'add_urls', 
+                        'func': 'add_urls',
                         'body': {
-                            'page_index': index, 
+                            'page_index': index,
                             'search_page': search_page_url,
-                            'duplicate_link': current_link, 
+                            'duplicate_link': current_link,
                             'duplicate_index': self.urls.index(current_link)
                         }
                     })
@@ -129,3 +132,64 @@ class EhrenamtHessenScraper(Scraper):
             print(f'Crawling {end_page} pages with 15 entries each.')
 
         return end_page
+
+    @staticmethod
+    def __extract_categories(response):
+        """Extracts the categories from corresponding field."""
+
+        cat_list = []
+        for cat in response.find('div', {'class': 'legendLeft'}, text='Kategorien').parent\
+                .find('div', {'class': 'descriptionRight'})\
+                .find('div', {'class': 'easCategories'})\
+                .find_all('div', {'class': 'catIcon'}):
+            cat_list.append(cat.get('title'))
+
+        return cat_list
+
+    def __extract_sub_data(self, value):
+        """Extracts name, street, zipcode, city, phone and email from a given string."""
+
+        clean = self.clean_string(value)
+        html = BeautifulSoup(clean, 'html.parser')
+        clean_list = clean.split('<br/>')
+        name = None
+        street = None
+        zipcode = None
+        city = None
+        phone = None
+        email = None
+
+        # name
+        if sum(i.isdigit() for i in clean_list[0]) == 0:
+            name = self.clean_html_tags(clean_list[0]).strip()
+        # street
+        for item in clean_list:
+            digits = sum(i.isdigit() for i in item)
+            if digits > 0 and digits != 5:
+                street = self.clean_html_tags(item).strip()
+                break
+        # plz & city
+        for item in clean_list:
+            digits = sum(i.isdigit() for i in item)
+            if digits == 5:
+                zipcode_city = self.clean_html_tags(item).strip().split(' ')
+                zipcode = zipcode_city[0]
+                city = zipcode_city[1]
+                break
+        # phone
+        phone_html = html.find('i', {'class': 'fa-phone'}) or None
+        if phone_html is not None:
+            phone = phone_html.next.next.strip()
+        # email
+        emails = html.select('a[href^=mailto]')
+        if emails is not None and len(emails) > 0:
+            email = emails[0].text.strip()
+
+        return {
+            'name': name or None,
+            'street': street or None,
+            'zipcode': zipcode or None,
+            'city': city or None,
+            'phone': phone or None,
+            'email': email or None,
+        }

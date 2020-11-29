@@ -117,3 +117,12 @@ class Scraper:
             return None
 
         return value.replace('\n', '').replace('\r', '').replace('\t', '').strip()
+
+    @staticmethod
+    def clean_html_tags(value):
+        """Removes all html tags."""
+
+        if value is None:
+            return None
+
+        return BeautifulSoup(value, 'lxml').text
