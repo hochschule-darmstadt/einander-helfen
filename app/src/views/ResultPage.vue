@@ -149,10 +149,10 @@
             >
                 <v-list-item three-line :class="{ activeListItem: currentPostId === post.id }" @click="currentPostId === post.id ? closePost() : openPost(post.id)">
                   <v-list-item-content>
-                    <v-list-item-title class="headline mb-1">
+                    <v-list-item-title class="headline mb-1" :class="{'full-text': currentPostId === post.id}">
                       {{post.title}}
                     </v-list-item-title>
-                    <v-list-item-subtitle :set="distance = postDistance(post)">
+                    <v-list-item-subtitle :set="distance = postDistance(post)" v-show="currentPostId != post.id">
                       <strong>{{post.location}} <em v-if="distance">(in {{distance}})</em></strong> &mdash;
                        <span v-html="post.task"/>
                     </v-list-item-subtitle>
@@ -166,42 +166,40 @@
                   ></v-img>
                 </v-list-item>
                 <v-card-text class="details-smartphone" v-show="currentPostId == post.id">
-                  <h3 v-html="post.title"></h3>
-                  <br/>
                   <div v-if="post.location">
-                  <h4>Einsatzort</h4>
+                  <h3>Einsatzort</h3>
                   <p v-html="post.location"></p>
                   </div>
                   <div v-if="post.task">
-                  <h4>Aufgabe</h4>
+                  <h3>Aufgabe</h3>
                   <p v-html="post.task"></p>
                   </div>
                   <div v-if="post.contact">
-                  <h4>Ansprechpartner</h4>
+                  <h3>Ansprechpartner</h3>
                   <p v-html="post.contact"></p>
                   </div>
                   <div v-if="post.organization">
-                  <h4>Organisation</h4>
+                  <h3>Organisation</h3>
                   <p v-html="post.organization"></p>
                   </div>
                   <div v-if="post.target_group">
-                  <h4>Zielgruppe</h4>
+                  <h3>Zielgruppe</h3>
                   <p v-html="post.target_group"></p>
                   </div>
                   <div v-if="post.timing">
-                  <h4>Einstiegsdatum / Beginn</h4>
+                  <h3>Einstiegsdatum / Beginn</h3>
                   <p v-html="post.timing"></p>
                   </div>
                   <div v-if="post.effort">
-                  <h4>Zeitaufwand</h4>
+                  <h3>Zeitaufwand</h3>
                   <p v-html="post.effort"></p>
                   </div>
                   <div v-if="post.opportunities">
-                  <h4>Möglichkeiten</h4>
+                  <h3>Möglichkeiten</h3>
                   <p v-html="post.opportunities"></p>
                   </div>
                   <div v-if="post.link">
-                  <h4>Quelle</h4>
+                  <h3>Quelle</h3>
                   <p>
                     <a :href="post.link" target="_blank">{{
                     post.source
@@ -544,6 +542,12 @@
     }
     .button-details {
       display: none;
+    }
+    .v-application .headline {
+      font-size: 1.3rem !important;
+    }
+    .full-text {
+      white-space: normal;
     }
    }
    @media only screen and (max-width: 500px) {
