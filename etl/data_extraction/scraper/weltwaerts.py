@@ -40,7 +40,7 @@ class WeltwaertsScraper(Scraper):
             'geo_location': {
                 'lat': lat,
                 'lon': lon,
-            },
+            } if lat and lon else None,
             'languages': param_box.find('li').findNext('li').find('span', {'class': 'parameter__value'}).decode_contents().strip() or None,
             'requirements': content.find('h2', text='Anforderungen an dich').findNext('div').p.decode_contents().strip() or None,
         }
