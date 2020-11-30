@@ -2,11 +2,14 @@ from data_extraction.Scraper import Scraper
 
 
 class WeltwaertsScraper(Scraper):
+    """Scrapes the website weltwaerts.de."""
+
     base_url = 'https://www.weltwaerts.de'
     debug = True
 
-    #   Handles the soupified response of a detail page in the predefined way and returns it
     def parse(self, response, url):
+        """Handles the soupified response of a detail page in the predefined way and returns it"""
+
         import re
 
         param_box = response.find('div', {'class': 'parameter__box'})
@@ -88,8 +91,9 @@ class WeltwaertsScraper(Scraper):
 
         return parsed_object
 
-    #   Adds all URLs of detail pages, found on the search pages, for the crawl function to scrape
     def add_urls(self):
+        """Adds all URLs of detail pages, found on the search pages, for the crawl function to scrape"""
+
         import time
 
         search_page_url = f'{self.base_url}/de/ep-ergebnis.html'
@@ -98,13 +102,21 @@ class WeltwaertsScraper(Scraper):
         index = 1
         while next_page_url:
 
-            response = self.soupify(next_page_url)
+            response = self.soupify_post(next_page_url, {
+                'ep-sortfilter': 1,
+                'ep-numperpage': 50,
+                'ep-sortorder': 'alpha'
+            })
 
             # Get tags of individual results
             detail_link_tags = [x.find('a') for x in response.find_all('h3', {'class': 'result__headline'})]
 
+            # Get maximum number of pages
+            index_max = response.find('div', {'class': 'result__pagination'}).nav.p.decode_contents().strip()
+            index_max = index_max.split(" von ", 1)[1]
+
             if self.debug:
-                print(f'Fetched {len(detail_link_tags)} URLs from {next_page_url} [{index}]')
+                print(f'Fetched {len(detail_link_tags)} URLs from {next_page_url} [{index}/{index_max}]')
 
             # Iterate links and add, if not already found
             for link_tag in detail_link_tags:

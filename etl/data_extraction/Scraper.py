@@ -100,6 +100,13 @@ class Scraper:
         page = BeautifulSoup(res.text, 'html.parser')
         return page
 
+    # Executes POST-request with the given url and form data, transforms it to a BeautifulSoup object and returns it
+    @staticmethod
+    def soupify_post(url, form_data):
+        res = requests.post(url, data=form_data)
+        page = BeautifulSoup(res.text, 'html.parser')
+        return page
+
     #   Transforms the soupified response of a detail page in a predefined way and returns it
     @staticmethod
     def parse(response, url):
