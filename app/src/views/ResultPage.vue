@@ -1,11 +1,11 @@
 <template>
   <div>
     <Header />
-      <v-layout row wrap no-gutters>
+      <v-container sitecontent row wrap no-gutters>
         <!-- Map -->
         <v-flex xs12 md6 order-md2 v-show="postMapToggle === 'map'">
            <div class="map">
-                <v-card tile id="mapcard" height="70vh">
+                <v-card tile height="70vh">
                     <div id="map" :style="{height: map.height, width: map.width}">
                         <v-btn v-if="currentPostId.length > 0" @click="postMapToggle = 'post'"
                                class="button-details" dark><v-icon>info</v-icon> Details
@@ -33,7 +33,6 @@
           <div>
           <v-card
             tile
-            id="postopenright"
             style="height:70vh; overflow:auto"
           >
           
@@ -50,6 +49,8 @@
               <v-icon>map</v-icon> Karte
             </v-btn>
 
+
+     
             <!--display title, subtitle and image on the right side-->
             <v-list-item-content style="margin-top:2%" class="headline">
               {{selectedPost.title}}
@@ -139,6 +140,7 @@
         </v-card>
           </div>
         </v-flex>
+      
 
         <!--left side content-->
         <v-flex sm12 md6 order-md1>
@@ -182,8 +184,8 @@
               </div>
           </div>
         </v-flex>
-
-      </v-layout>
+        
+      </v-container>
                        <!--pageination-->
           <div class="text-center" style="margin-top:2%; margin-bottom:1%">
             <v-pagination @input="setPage($event)" :value="page" :length="numberOfPages" total-visible="7" color="#054C66"></v-pagination>
@@ -482,66 +484,68 @@
     }
    }
 
-   @media (min-width:1025px){
-    #postbox {
-      width:80%;
-      margin-top:5%; 
-      margin-left: 15%;
-      margin-right: 1%;
+   @media (min-width:960px){
+    .sitecontent {
+      width: 960px;
+      margin: auto;
+      max-width: none;
+      margin-top: 2%;
     }
 
-    #mapcard {
-      width:80%; 
-      margin-top: 5%; 
-      margin-right:15%;
-    }
-
-    #postopenright {
-      width:80%; 
-      margin-top: 5%; 
-      margin-right:15%; 
+   #postbox {
+      margin-right: 2%;
     }
 
     .list-item {
-      width:80%;
       margin-top:5%; 
-      margin-left: 15%;
-      margin-right: 1px
-    }
-   }
-
-      /* Landscape iPad (Pro)*/
-   @media only screen 
-   and (min-width: 1024px) 
-   and (max-height: 1366px) 
-   and (orientation: landscape){
-
-    #postbox {
-      width:82%;
-      margin-top:5%; 
-      margin-left: 15%;
       margin-right: 1px;
     }
+   }
 
-    #mapcard {
-      width:83%; 
-      margin-top: 5%; 
-      margin-right:15%;
+   @media (min-width:1100px){
+    .sitecontent {
+      width: 1100px;
+      margin: auto;
+      margin-top: 2%;
     }
 
-    #postopenright {
-      width:83%; 
-      margin-top: 5%; 
-      margin-right:15%; 
-    }
-
-    .list-item {
-      width:82%;
-      margin-top:5%; 
-      margin-left: 15%;
-      margin-right: 1px
+    #postbox {
+      margin-right: 2%;
     }
    }
 
+   @media (min-width:1300px){
+    .sitecontent {
+      width: 1300px;
+      margin: auto;
+      margin-top: 2%; 
+    }
 
+    #postbox {
+      margin-right: 2%;
+    }
+   }
+
+   @media (min-width:1618px){
+    .sitecontent {
+      width: 1618px;
+      margin-top: 2%; 
+    }
+
+    #postbox {
+      margin-right: 2%;
+    }
+  }
+
+   @media (min-width:1904px){
+    .sitecontent {
+      width: 85%;
+      margin: auto;
+      margin-top: 2%; 
+    }
+
+    #postbox {
+      margin-right: 2%;
+    }
+  }
 </style>

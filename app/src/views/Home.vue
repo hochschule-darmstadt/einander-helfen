@@ -16,7 +16,7 @@
       </picture>
     </VueSlickCarousel>
 
-    <v-container>
+    <v-container id="container">
       <v-form>
         <v-row id="searchbox" justify="center" lg="2">
           <v-layout row justify-center no-gutters class="mt-8 mb-9">
@@ -184,10 +184,9 @@ img {
   object-fit: contain;
 }
 
-@media (min-width: 800px)
-{
-  .container {
-    max-width:85%
+@media (min-width: 800px) {
+  #container {
+    max-width:1450px;
   }
   #searchbox {
     padding-left:12px;
@@ -195,5 +194,40 @@ img {
   }
 }
 
+@media (min-width:960px) {
+  #container{
+    width: 960px;
+    margin: auto;
+    max-width: none;
+  }
+}
+
+@media (min-width:1100px) {
+  #container{
+    width: 1100px;
+    margin: auto;
+  }
+}
+
+@media (min-width:1300px) {
+  #container{
+    width: 1300px;
+    margin: auto;
+  }
+}
+
+@media (min-width:1618px) {
+  #container{
+    width: 1618px;
+    margin: auto;
+  }
+}
+
+@media (min-width:1904px) {
+  #container{
+    width: 85%;
+    margin: auto;
+  }
+}
 
 </style>
