@@ -125,9 +125,9 @@ class WeltwaertsScraper(Scraper):
                     self.urls.append(current_link)
 
             # Get next result page
-            next_page_url = response.find('li', {'class': 'next'}).find('a', {'class': 'next'})['href']
+            next_page_url = response.find('li', {'class': 'next'}).find('a', {'class': 'next'})
             if next_page_url:
-                next_page_url = self.base_url + '/' + next_page_url
+                next_page_url = self.base_url + '/' + next_page_url['href']
 
             index += 1
 
