@@ -18,6 +18,7 @@ class WeltwaertsScraper(Scraper):
         lat = None
         lon = None
 
+        # Scrape longitude and latitude, if available
         if google_map:
             try:
                 result = re.findall(r'q=(-?\d+\.\d+),(-?\d+\.\d+)', google_map['href'])
@@ -40,18 +41,21 @@ class WeltwaertsScraper(Scraper):
             'geo_location': {
                 'lat': lat,
                 'lon': lon,
-            } if lat and lon else None,
+            } if lat and lon else None, # If longitude and latitude are None, geo_location is set to None
             'languages': param_box.find('li').findNext('li').find('span', {'class': 'parameter__value'}).decode_contents().strip() or None,
             'requirements': content.find('h2', text='Anforderungen an dich').findNext('div').p.decode_contents().strip() or None,
         }
 
+        # Removing HTML-Tags
         contact_raw = re.sub(r'</?p>', '', parsed_object['contact'])
         contact_raw = re.sub(r'<br/?>', '\n', contact_raw)
         contact_raw = re.sub(r'<a.*</a>', '', contact_raw)
         contact_raw = contact_raw.replace('</br>', '')
+        # Removing newlines
         contact_raw = contact_raw.replace('\n\n', '\n').strip()
         contact_split = list(filter(None, contact_raw.split('\n')))
 
+        # If the contact data contains additional information, it is combined into a string
         if len(contact_split) > 3:
             names_split = contact_split[:(len(contact_split)-2)]
             names_raw = ', '.join(names_split)
@@ -73,11 +77,12 @@ class WeltwaertsScraper(Scraper):
                 'zipcode': contact_split[2][:5].strip() or None,
                 'city': contact_split[2][5:].strip() or None,
                 'street':  contact_split[1].strip() or None,
+                # Extract the e-mail address, if available
                 'email': contact.find('a', href=re.compile("mailto:.*"))['href'].replace('mailto:', '').strip() or None,
             },
             'link': parsed_object['link'],
-            'source': parsed_object['link'],
-            'image': parsed_object['link'],
+            'source': parsed_object['source'],
+            'image': parsed_object['image'],
             'geo_location': parsed_object['geo_location'],
             'languages': parsed_object['languages'],
             'requirements': parsed_object['requirements'],
@@ -97,11 +102,13 @@ class WeltwaertsScraper(Scraper):
 
             response = self.soupify(next_page_url)
 
+            # Get tags of individual results
             detail_link_tags = [x.find('a') for x in response.find_all('h3', {'class': 'result__headline'})]
 
             if self.debug:
                 print(f'Fetched {len(detail_link_tags)} URLs from {next_page_url} [{index}]')
 
+            # Iterate links and add, if not already found
             for link_tag in detail_link_tags:
                 current_link = self.base_url + '/' + link_tag['href']
                 if current_link in self.urls:
@@ -117,6 +124,7 @@ class WeltwaertsScraper(Scraper):
                 else:
                     self.urls.append(current_link)
 
+            # Get next result page
             next_page_url = response.find('li', {'class': 'next'}).find('a', {'class': 'next'})['href']
             if next_page_url:
                 next_page_url = self.base_url + '/' + next_page_url
