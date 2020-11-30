@@ -37,7 +37,6 @@ class WeltwaertsScraper(Scraper):
             'contact': contact.decode_contents().strip() or None,
             'link': url or None,
             'source': self.base_url,
-            'image': 'https://www.weltwaerts.de/files/framework/img/ww-logo-de.svg',
             'geo_location': {
                 'lat': lat,
                 'lon': lon,
@@ -82,7 +81,6 @@ class WeltwaertsScraper(Scraper):
             },
             'link': parsed_object['link'],
             'source': parsed_object['source'],
-            'image': parsed_object['image'],
             'geo_location': parsed_object['geo_location'],
             'languages': parsed_object['languages'],
             'requirements': parsed_object['requirements'],
