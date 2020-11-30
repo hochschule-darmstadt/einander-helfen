@@ -39,7 +39,6 @@ class GuteTatBerlinScraper(Scraper):
             'contact': contact_str or None,
             'link': url or None,
             'source': f'{self.website_url}/helfen/ehrenamtliches-engagement/projekte-berlin',
-            'image': f'{self.website_url}/wp-content/uploads/2014/10/logo_gute_tat.gif',
             'geo_location': {
                 'lat': 52.520008,
                 'lon': 13.404954,
@@ -86,7 +85,6 @@ class GuteTatBerlinScraper(Scraper):
             },
             'link': parsed_object['link'] or None,
             'source': parsed_object['source'] or None,
-            'image': parsed_object['image'] or None,
             'geo_location': parsed_object['geo_location'],
             'map_address': None,
         }

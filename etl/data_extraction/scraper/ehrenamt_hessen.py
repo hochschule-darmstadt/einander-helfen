@@ -56,7 +56,6 @@ class EhrenamtHessenScraper(Scraper):
             'contact': contact or None,
             'link': url or None,
             'source': 'www.ehrenamtssuche-hessen.de',
-            'image': f'{self.base_url}/resources/img/hessenlogo_h180.png',
             'geo_location': {
                 'lat': float(lat),
                 'lon': float(lon),
@@ -80,7 +79,6 @@ class EhrenamtHessenScraper(Scraper):
             'contact': self.__extract_sub_data(parsed_object['contact']),
             'link': parsed_object['link'] or None,
             'source': parsed_object['source'] or None,
-            'image': parsed_object['image'] or None,
             'geo_location': parsed_object['geo_location'],
             'map_address': None,
         }
