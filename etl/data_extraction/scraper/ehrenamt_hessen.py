@@ -169,6 +169,16 @@ class EhrenamtHessenScraper(Scraper):
     def __extract_sub_data(self, value):
         """Extracts name, street, zipcode, city, phone and email from a given string."""
 
+        if value is None:
+            return {
+                'name': None,
+                'street': None,
+                'zipcode': None,
+                'city': None,
+                'phone': None,
+                'email': None,
+            }
+
         clean = self.clean_string(value)
         html = BeautifulSoup(clean, 'html.parser')
         clean_list = clean.split('<br/>')
