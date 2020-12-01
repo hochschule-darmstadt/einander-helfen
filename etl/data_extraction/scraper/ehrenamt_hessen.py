@@ -19,29 +19,36 @@ class EhrenamtHessenScraper(Scraper):
         lon = 0
         if location_of is not None and location_of.parent is not None:
             desc_right = location_of.parent.find('div', {'class': 'descriptionRight'})
-            location = desc_right.next
-            geo_data = desc_right.find('li', {'class': 'geodata'})
-            lat = geo_data.get('data-pos-lat') or 0
-            lon = geo_data.get('data-pos-lon') or 0
+            if desc_right is not None:
+                location = desc_right.next
+                geo_data = desc_right.find('li', {'class': 'geodata'})
+                lat = geo_data.get('data-pos-lat') or 0
+                lon = geo_data.get('data-pos-lon') or 0
 
         task_field = response.find('div', {'class': 'legendLeft'}, text='Ihr Aufgabenfeld')
         task = None
         if task_field is not None and task_field.parent is not None:
             desc_right = task_field.parent.find('div', {'class': 'descriptionRight'})
             if desc_right is not None:
-                task = desc_right.decode_contents().strip()
+                task_string = desc_right.decode_contents()
+                if task_string:
+                    task = task_string.strip()
 
         organization_field = response.find('div', {'class': 'legendLeft'}, text='Organisation/Anbieter')
         organization = None
         if organization_field is not None and organization_field.parent is not None:
             desc_right = organization_field.parent.find('div', {'class': 'descriptionRight'})
             if desc_right is not None:
-                organization = desc_right.decode_contents().strip()
+                organization_string = desc_right.decode_contents()
+                if organization_string:
+                    organization = organization_string.strip()
 
         contact_field = response.find('div', {'class': 'legendLeft'}, text='Ihr Ansprechpartner')
         contact = None
         if contact_field is not None and contact_field.parent is not None:
-            contact = contact_field.parent.find('div', {'class': 'descriptionRight'}).find('div').prettify()
+            desc_right = contact_field.parent.find('div', {'class': 'descriptionRight'})
+            if desc_right is not None:
+                contact = desc_right.find('div').prettify()
 
         parsed_object = {
             'title': response.find('h3', {'class': 'ItemTitle'}).text or None,
@@ -62,15 +69,24 @@ class EhrenamtHessenScraper(Scraper):
             },
         }
 
+        city_string = self.clean_string(parsed_object['location'])
+        city = None
+        if city_string:
+            city = city_string.strip()
+        task_string = self.clean_html_tags(self.clean_string(parsed_object['task']))
+        task = None
+        if task_string:
+            task = task_string.strip()
+
         parsed_object['post_struct'] = {
             'title': self.clean_string(parsed_object['title']) or None,
             'categories': parsed_object['categories'] or None,
             'location': {
                 'zipcode': None,
-                'city': self.clean_string(parsed_object['location']).strip() or None,
+                'city': city or None,
                 'street': None,
             },
-            'task': self.clean_html_tags(self.clean_string(parsed_object['task'])).strip() or None,
+            'task': task or None,
             'target_group': None,
             'timing': None,
             'effort': None,
@@ -136,10 +152,16 @@ class EhrenamtHessenScraper(Scraper):
         """Extracts the categories from corresponding field."""
 
         cat_list = []
-        for cat in response.find('div', {'class': 'legendLeft'}, text='Kategorien').parent\
-                .find('div', {'class': 'descriptionRight'})\
-                .find('div', {'class': 'easCategories'})\
-                .find_all('div', {'class': 'catIcon'}):
+        categories_html = response.find('div', {'class': 'legendLeft'}, text='Kategorien')
+        if categories_html is None or categories_html.parent is None:
+            return []
+        desc_right = categories_html.parent.find('div', {'class': 'descriptionRight'})
+        if desc_right is None:
+            return []
+        eas = desc_right.find('div', {'class': 'easCategories'})
+        if eas is None:
+            return []
+        for cat in eas.find_all('div', {'class': 'catIcon'}):
             cat_list.append(cat.get('title'))
 
         return cat_list
@@ -159,29 +181,40 @@ class EhrenamtHessenScraper(Scraper):
 
         # name
         if sum(i.isdigit() for i in clean_list[0]) == 0:
-            name = self.clean_html_tags(clean_list[0]).strip()
+            name_string = self.clean_html_tags(clean_list[0])
+            if name_string:
+                name = name_string.strip()
         # street
         for item in clean_list:
             digits = sum(i.isdigit() for i in item)
             if digits > 0 and digits != 5:
-                street = self.clean_html_tags(item).strip()
-                break
+                street_string = self.clean_html_tags(item)
+                if street_string:
+                    street = street_string.strip()
+                    break
         # plz & city
         for item in clean_list:
             digits = sum(i.isdigit() for i in item)
             if digits == 5:
-                zipcode_city = self.clean_html_tags(item).strip().split(' ')
-                zipcode = zipcode_city[0]
-                city = zipcode_city[1]
-                break
+                zipcode_city_string = self.clean_html_tags(item)
+                if zipcode_city_string:
+                    zipcode_city = zipcode_city_string.strip().split(' ')
+                    zipcode = zipcode_city[0]
+                    city = zipcode_city[1]
+                    break
         # phone
         phone_html = html.find('i', {'class': 'fa-phone'}) or None
         if phone_html is not None:
-            phone = phone_html.next.next.strip()
+            phone_string = phone_html.next.next
+            if phone_string:
+                phone = phone_string.strip()
         # email
         emails = html.select('a[href^=mailto]')
-        if emails is not None and len(emails) > 0:
-            email = emails[0].text.strip()
+        if emails is not None:
+            if len(emails) > 0:
+                email_string = emails[0].text
+                if email_string:
+                    email = email_string.strip()
 
         return {
             'name': name or None,
