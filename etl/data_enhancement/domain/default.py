@@ -2,6 +2,7 @@ import csv
 import os
 
 from shared.utils import write_data_to_json
+from data_enhancement.utils.lat_lon_enhancer import LatLonEnhancer
 
 ROOT_DIR = os.environ['ROOT_DIR']
 
@@ -9,6 +10,7 @@ ROOT_DIR = os.environ['ROOT_DIR']
 def run(data):
     find_new_tags(data)
     rank_tags(data)
+    add_lat_lon(data)
 
 
 # loads given tags from csv file and returns them in a dict
@@ -68,3 +70,14 @@ def rank_tags(file):
     sorted_tags = sorted(tag_ranking.items(), key=lambda x: x[1], reverse=True)
     tag_ranking = dict(sorted_tags)
     write_data_to_json(os.path.join(ROOT_DIR, 'data_enhancement/output'), 'ranked_tags.json', tag_ranking)
+
+
+# Enhance the geo_location
+def add_lat_lon(file):
+    enhancer = LatLonEnhancer()
+
+    index = 1
+    for post in file:
+        post = enhancer.enhance(post)
+        print(f'Enhanced geo_location from post [{index}/{len(file)}]')
+        index += 1
