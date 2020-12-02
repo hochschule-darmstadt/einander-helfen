@@ -1,6 +1,7 @@
 from geopy.geocoders import Nominatim
 import csv
-
+import time
+import json
 
 class LatLonEnhancer:
 
@@ -9,12 +10,16 @@ class LatLonEnhancer:
 
     def enhance(self, object):
         # If object has lat lon: return object
+        if None is object['geo_location']:
+            #print(object['post_struct']['title'])
+            request_string = LatLonEnhancer.get_api_request_string(object)
+            #print("Parsed request string:", request_string)
+            latlon = self.__handle_api_requests(request_string)
+            return latlon
+        else:
+            print("object exists:", object['geo_location'])
+            return object['geo_location']
 
-        print(object['post_struct']['title'])
-        request_string = LatLonEnhancer.get_api_request_string(object)
-        print("Parsed request string:", request_string)
-
-        pass
 
     def __check_local_storage(self, request_string):
         # Already read local storage file?
@@ -31,7 +36,18 @@ class LatLonEnhancer:
         pass
 
     def __handle_api_requests(self, request_string):
-        pass
+        if request_string != "":
+            print("Input String: " + request_string)
+            location = self.geolocator.geocode(request_string)
+            print("API-Output: " + location.address)
+            print(location.latitude, location.longitude)
+           # print(location.raw)
+            geo_location = {'lat': location.latitude, 'lon': location.longitude}
+            geo_location = json.dumps(geo_location)
+            print(geo_location)
+            time.sleep(1)
+
+            return geo_location
 
     @staticmethod
     def get_api_request_string(post_object):
@@ -53,6 +69,55 @@ class LatLonEnhancer:
 
 
 enhancer = LatLonEnhancer()
+enhancer.enhance({
+        "title": "\"300 mit Gideon\" - Sozialprojekt und Kinderheim in Brasilien",
+        "categories": [
+            "International"
+        ],
+        "location": "Lajeado, Brasilien",
+        "task": "<p>Das Projekt \"300 mit Gideon\" hat 2 Kinderheime, ein Durchgangskinderheim und Landwirtschaftsprojekte aufgebaut.  Es ist ein geschützter Lebensraum für zur Zeit 52 Kinder, die in 5 Familien integriert aufwachsen. Die verantwortlichen Ehepaare geben ihr Bestes, um den Mädchen und Jungen ein liebevolles Zuhause zu geben. Die heranwachsenden Kinder können in den missionseigenen Werkstätten und Betriebseinrichtungen Berufe erlernen, werden aber auch extern ausgebildet und während dieser Lehrzeit betreut.\nDarüber hinaus unterstützt das Projekt über 60 Kinder, die noch keinen Platz in den Familien haben und verteilt Nahrung, Kleider und Medikamente an Slumkinder. Daneben ist „Kinder mit Familien“ in der eigenen Schreinerei, in der Landwirtschaft, in der Suppenküche und in Kirchengemeinden aktiv.</p>\n<p>Freiwillige werden je nach Begabung eingesetzt. Möglichkeiten gibt es im handwerklichen Bereich, im gärtnerischen Bereich, in der Landwirtschaft und in einer Wohngruppe im Kinderheim. Bei Letztgenanntem unterstützt der  / die Freiwillige die Erzieher(innen) und Hauptamtlichen, also Betreuung, spielen, malen, Helfen bei der Versorgung usw.</p>",
+        "timing": "ab August  | 12 Monate",
+        "organization": "Centro Social Trezentos de Gidion",
+        "contact": "<p>\nArbeitsgemeinschaft Freiwilligendienste im Bund Freikirchlicher Pfingstgemeinden - Worldwide Volunteers<br/>\nKlaus Poppenberg<br>\nHauptstraße 4<br>78333 Stockach                </br></br></p>\n<p>\n<a class=\"link-standard link-standard--red\" href=\"mailto:info@ww-volunteers.de\">Sende eine E-mail an diese Entsendeorganisation</a><br/>\n</p>",
+        "link": "https://www.weltwaerts.de/de/ep-detail.html?id=206947",
+        "source": "https://www.weltwaerts.de",
+        "geo_location": {
+            "lat": -29.4682891,
+            "lon": -51.9643648
+        },
+        "languages": "Portugiesisch",
+        "requirements": "Grundlegende Sprachkenntnisse der portugiesischen Sprache sollten vorhanden sein oder vor Antritt des Freiwilligenjahres durch einen Grundkurs erworben werden. Es sollte jemand sein, der ein offener Mensch ist und lernwillig ist. Jemand der sich gern mit Menschen aus anderen Kulturen auseinandersetzt und ihnen helfen will. Teamfähigkeit ist unbedingt notwendig; und natürlich der Wunsch, mit Kindern zu arbeiten.",
+        "post_struct": {
+            "title": "\"300 mit Gideon\" - Sozialprojekt und Kinderheim in Brasilien",
+            "categories": [
+                "International"
+            ],
+            "location": {
+                "country": "Brasilien"
+            },
+            "task": "Das Projekt \"300 mit Gideon\" hat 2 Kinderheime, ein Durchgangskinderheim und Landwirtschaftsprojekte aufgebaut.  Es ist ein geschützter Lebensraum für zur Zeit 52 Kinder, die in 5 Familien integriert aufwachsen. Die verantwortlichen Ehepaare geben ihr Bestes, um den Mädchen und Jungen ein liebevolles Zuhause zu geben. Die heranwachsenden Kinder können in den missionseigenen Werkstätten und Betriebseinrichtungen Berufe erlernen, werden aber auch extern ausgebildet und während dieser Lehrzeit betreut.\nDarüber hinaus unterstützt das Projekt über 60 Kinder, die noch keinen Platz in den Familien haben und verteilt Nahrung, Kleider und Medikamente an Slumkinder. Daneben ist „Kinder mit Familien“ in der eigenen Schreinerei, in der Landwirtschaft, in der Suppenküche und in Kirchengemeinden aktiv.\nFreiwillige werden je nach Begabung eingesetzt. Möglichkeiten gibt es im handwerklichen Bereich, im gärtnerischen Bereich, in der Landwirtschaft und in einer Wohngruppe im Kinderheim. Bei Letztgenanntem unterstützt der  / die Freiwillige die Erzieher(innen) und Hauptamtlichen, also Betreuung, spielen, malen, Helfen bei der Versorgung usw.",
+            "timing": "ab August  | 12 Monate",
+            "organization": {
+                "name": "Centro Social Trezentos de Gidion"
+            },
+            "contact": {
+                "name": "Arbeitsgemeinschaft Freiwilligendienste im Bund Freikirchlicher Pfingstgemeinden - Worldwide Volunteers, Klaus Poppenberg",
+                "zipcode": "78333",
+                "city": "Stockach",
+                "street": "Hauptstraße 4",
+                "email": "info@ww-volunteers.de"
+            },
+            "link": "https://www.weltwaerts.de/de/ep-detail.html?id=206947",
+            "source": "https://www.weltwaerts.de",
+            "geo_location": {
+                "lat": -29.4682891,
+                "lon": -51.9643648
+            },
+            "languages": "Portugiesisch",
+            "requirements": "Grundlegende Sprachkenntnisse der portugiesischen Sprache sollten vorhanden sein oder vor Antritt des Freiwilligenjahres durch einen Grundkurs erworben werden. Es sollte jemand sein, der ein offener Mensch ist und lernwillig ist. Jemand der sich gern mit Menschen aus anderen Kulturen auseinandersetzt und ihnen helfen will. Teamfähigkeit ist unbedingt notwendig; und natürlich der Wunsch, mit Kindern zu arbeiten."
+        }
+    })
+
 enhancer.enhance({
         "title": "1 millión de niños lectores: Bau von innovativen Schulbibliotheken zur Förderung des  Lesens",
         "categories": [
