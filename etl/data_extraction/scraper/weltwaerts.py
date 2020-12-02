@@ -51,7 +51,7 @@ class WeltwaertsScraper(Scraper):
             'requirements': content.find('h2', text='Anforderungen an dich').findNext('div').p.decode_contents().strip() or None,
         }
 
-        contact_split = self.__extract_contact_data(parsed_object['contact'])
+        contact_split = self.__extract_contact_data(contact, parsed_object['contact'])
 
         parsed_object['post_struct'] = {
             'title': parsed_object['title'],
@@ -75,15 +75,7 @@ class WeltwaertsScraper(Scraper):
                 'phone': None,
                 'email': None,
             },
-            'contact': {
-                'name':  contact_split[0].strip() or None,
-                'zipcode': contact_split[2][:5].strip() or None,
-                'city': contact_split[2][5:].strip() or None,
-                'street':  contact_split[1].strip() or None,
-                'phone': None,
-                # Extract the e-mail address, if available
-                'email': contact.find('a', href=re.compile("mailto:.*"))['href'].replace('mailto:', '').strip() or None,
-            },
+            'contact': contact_split,
             'link': parsed_object['link'],
             'source': parsed_object['source'],
             'geo_location': parsed_object['geo_location'],
@@ -145,19 +137,38 @@ class WeltwaertsScraper(Scraper):
 
             time.sleep(self.delay)
 
-    def __extract_contact_data(self, contact_raw):
+    def __extract_contact_data(self, contact_html, contact_raw):
         """Extracts the contact data"""
+
+        contact = {
+            'name': None,
+            'zipcode': None,
+            'city': None,
+            'street': None,
+            'phone': None,
+            'email': contact_html.find('a', href=re.compile("mailto:.*"))['href'].replace('mailto:', '').strip() or None
+        }
 
         # Removing HTML-Tags
         contact_raw = re.sub(r'<br/?>', '\n', contact_raw)
         contact_raw = Scraper.clean_html_tags(contact_raw)
 
-        contact_split = list(filter(lambda s: 'E-mail' not in s, filter(None, contact_raw.split('\n'))))
+        contact_split = list(filter(lambda s: 'E-mail' not in s, filter(None, re.split('\n|,', contact_raw))))
 
-        # If the contact data contains additional information, it is combined into a string
-        if len(contact_split) > 3:
-            names_split = contact_split[:(len(contact_split)-2)]
-            names_raw = ', '.join(names_split)
-            contact_split = [names_raw, contact_split[-2], contact_split[-1]]
+        contact_split = ', '.join(contact_split).split(',')
 
-        return contact_split
+        if re.search('[0-9]{4,5}', contact_raw):
+            if len(contact_split) > 3:
+                names_split = contact_split[:(len(contact_split)-2)]
+                names_raw = ', '.join(names_split)
+                contact_split = [names_raw, contact_split[-2], contact_split[-1]]
+
+            contact['name'] = contact_split[0].strip()
+            contact['zipcode'] = contact_split[2][:6].strip()
+            contact['city'] = contact_split[2][6:].strip()
+            contact['street'] = contact_split[1].strip()
+
+        else:
+            contact['name'] = ', '.join(contact_split)
+
+        return contact
