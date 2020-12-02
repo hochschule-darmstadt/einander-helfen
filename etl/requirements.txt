@@ -1,2 +1,4 @@
-bs4
-elasticsearch
+bs4~=0.0.1
+elasticsearch~=7.9.1
+requests~=2.25.0
+lxml~=4.6.1
