@@ -11,7 +11,6 @@ interface Post {
   organization: string;
   contact: string;
   link: string;
-  image: string;
   map_address: [];
   geo_location: {
     lat: number;
