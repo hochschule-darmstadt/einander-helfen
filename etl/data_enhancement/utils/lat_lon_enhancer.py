@@ -1,56 +1,86 @@
 from geopy.geocoders import Nominatim
 import csv
 import time
-import json
 
 class LatLonEnhancer:
+    dict_file = 'geocoder_lat_lon.csv'
+
+    lat_lon_dict = {}
 
     def __init__(self):
         self.geolocator = Nominatim(user_agent="einander-helfen.org")
+        self.__load_local_storage()
 
     def enhance(self, object):
         # If object has lat lon: return object
         if None is object['geo_location']:
-            #print(object['post_struct']['title'])
             request_string = LatLonEnhancer.get_api_request_string(object)
-            #print("Parsed request string:", request_string)
-            latlon = self.__handle_api_requests(request_string)
-            return latlon
+
+            lat_lon = self.__check_local_storage(request_string)
+
+            if not lat_lon:
+                lat_lon = self.__handle_api_requests(request_string)
+                if lat_lon:
+                    self.__add_new_entry(request_string, lat_lon)
+
+            print("Output:", request_string, lat_lon)
+            return lat_lon
         else:
             print("object exists:", object['geo_location'])
             return object['geo_location']
 
-
     def __check_local_storage(self, request_string):
-        # Already read local storage file?
+        """Already read local storage file?"""
+        """return: None if object was not found in local storage, geo_location object otherwise"""
 
-        # return: None if object was not found in local storage, geo_location object otherwise
+        if request_string in self.lat_lon_dict:
+            return self.lat_lon_dict[request_string]
         return None
 
     def __load_local_storage(self):
-        # Reads local storage file (.csv) into class attribute
-        pass
+        """Reads local storage file (.csv) into class attribute"""
+
+        # Initialize the file, if it is not
+        with open(self.dict_file, 'a', newline='') as csvfile:
+            if not csvfile.tell():
+                fieldnames = ['request', 'lat', 'lon']
+                writer = csv.DictWriter(csvfile, fieldnames)
+                writer.writeheader()
+
+        # Read the file
+        with open(self.dict_file, newline='') as csvfile:
+            geocoder_lat_lon = csv.reader(csvfile, delimiter=',')
+            for row in geocoder_lat_lon:
+                if row and row[0] != 'request':
+                    # row[0]: request string, row[1]: lat, row[2]: lon
+                    self.lat_lon_dict[row[0]] = {'lat': float(row[1]), 'lon': float(row[2])}
 
     def __add_new_entry(self, request_string, geo_location):
-        # Adds new entry to local storage
-        pass
+        """Adds new entry to local storage"""
+
+        self.lat_lon_dict[request_string] = geo_location
+        with open(self.dict_file, 'a', newline='') as csvfile:
+            fieldnames = ['request', 'lat', 'lon']
+            writer = csv.writer(csvfile)
+
+            writer.writerow([request_string, str(geo_location['lat']), str(geo_location['lon'])])
 
     def __handle_api_requests(self, request_string):
+        """Executes the API request"""
+
         if request_string != "":
-            print("Input String: " + request_string)
             location = self.geolocator.geocode(request_string)
-            print("API-Output: " + location.address)
-            print(location.latitude, location.longitude)
-           # print(location.raw)
+
             geo_location = {'lat': location.latitude, 'lon': location.longitude}
-            geo_location = json.dumps(geo_location)
-            print(geo_location)
             time.sleep(1)
 
             return geo_location
+        return None
 
     @staticmethod
     def get_api_request_string(post_object):
+        """Build the API request string"""
+
         struct_data = post_object['post_struct']
         request_string = ""
 
