@@ -141,7 +141,4 @@ class WeltwaertsScraper(Scraper):
 
             index += 1
 
-            if index > 1: # for debug
-                break
-
             time.sleep(self.delay)
