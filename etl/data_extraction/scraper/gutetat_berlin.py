@@ -15,31 +15,78 @@ class GuteTatBerlinScraper(Scraper):
     def parse(self, response, url):
         """Transforms the soupified response of a detail page in a predefined way and returns it."""
 
+        main_table = response.find('table')
+        project_address_attr = main_table.find_all('tr')[23:30]
+        project_address_str = ''
+        for tr in project_address_attr:
+            project_address_str += str(tr)
+
+        contact_attr = main_table.find_all('tr')[34:47]
+        contact_str = ''
+        for tr in contact_attr:
+            contact_str += str(tr)
+
         parsed_object = {
             'title': response.find('strong', text='Name des Projekts:').parent.parent.find_all('td')[1].text or None,
             'categories': [],
-            'location': response.find_all('strong', text='PLZ, Ort:')[0].parent.parent.find_all('td')[1].text + ', ' +
-                        response.find('strong', text='Straße:').parent.parent.find_all('td')[1].text + ', ' +
-                        response.find('strong', text='Bezirk:').parent.parent.find_all('td')[1].text + ', ' +
-                        response.find('strong', text='Ortsteil:').parent.parent.find_all('td')[1].text or None,
+            'location': project_address_str or None,
             'task': response.find('strong', text='Projektbeschreibung:').parent.parent.find_all('td')[1].text or None,
+            'target_group': None,
             'timing': response.find('strong', text='Zeitraum:').parent.parent.find_all('td')[1].text or None,
             'effort': response.find('strong', text='Zeitbedarf:').parent.parent.find_all('td')[1].text or None,
-            'organization': response.find('strong', text='Zentrale:').parent.parent.find_all('td')[1].text or None,
-            'contact': response.find('strong', text='Ansprechperson:').parent.parent.find_all('td')[1].text + '<br>' +
-                       response.find('strong', text='Straße:').parent.parent.find_all('td')[1].text + '<br>' +
-                       response.find_all('strong', text='PLZ, Ort:')[1].parent.parent.find_all('td')[1].text + '<br>' +
-                       response.find('strong', text='Telefon:').parent.parent.find_all('td')[1].text + '<br>' +
-                       response.find('strong', text='Fax:').parent.parent.find_all('td')[1].text + '<br>' +
-                       response.find('strong', text='E-Mail:').parent.parent.find_all('td')[1].text + '<br>' +
-                       response.find('strong', text='Internet:').parent.parent.find_all('td')[1].text or None,
+            'opportunities': None,
+            'organization': None,
+            'contact': contact_str or None,
             'link': url or None,
-            'image': f'{self.website_url}/wp-content/uploads/2014/10/logo_gute_tat.gif',
+            'source': f'{self.website_url}/helfen/ehrenamtliches-engagement/projekte-berlin',
             'geo_location': {
                 'lat': 52.520008,
                 'lon': 13.404954,
             },
-            'source': f'{self.website_url}/helfen/ehrenamtliches-engagement/projekte-berlin',
+        }
+
+        location_street = response.find_all('strong', text='Straße:')[0].parent.parent.find_all('td')[1].text or None
+        location_plzort = response.find_all('strong', text='PLZ, Ort:')[0].parent.parent.find_all('td')[1].text.split(', ') or None
+
+        contact_name = response.find('strong', text='Ansprechperson:').parent.parent.find_all('td')[1].text or None
+        contact_street = response.find_all('strong', text='Straße:')[1].parent.parent.find_all('td')[1].text or None
+        contact_plzort = response.find_all('strong', text='PLZ, Ort:')[1].parent.parent.find_all('td')[1].text.split(', ') or None
+        contact_phone = response.find('strong', text='Telefon:').parent.parent.find_all('td')[1].text or None
+        contact_email = response.find('strong', text='E-Mail:').parent.parent.find_all('td')[1].text or None
+
+        parsed_object['post_struct'] = {
+            'title': self.clean_string(parsed_object['title']) or None,
+            'categories': [],
+            'location': {
+                'zipcode': self.clean_string(location_plzort[0]) or None,
+                'city': self.clean_string(location_plzort[1]) or None,
+                'street': self.clean_string(location_street) or None,
+            },
+            'task': self.clean_string(parsed_object['task']) or None,
+            'target_group': None,
+            'timing': self.clean_string(parsed_object['timing']) or None,
+            'effort': self.clean_string(parsed_object['effort']) or None,
+            'opportunities': None,
+            'organization': {
+                'name': None,
+                'zipcode': None,
+                'city': None,
+                'street': None,
+                'phone': None,
+                'email': None,
+            },
+            'contact': {
+                'name': self.clean_string(contact_name) or None,
+                'zipcode': self.clean_string(contact_plzort[0]) or None,
+                'city': self.clean_string(contact_plzort[1]) or None,
+                'street': self.clean_string(contact_street) or None,
+                'phone': self.clean_string(contact_phone) or None,
+                'email': self.clean_string(contact_email) or None,
+            },
+            'link': parsed_object['link'] or None,
+            'source': parsed_object['source'] or None,
+            'geo_location': parsed_object['geo_location'],
+            'map_address': None,
         }
 
         return parsed_object
