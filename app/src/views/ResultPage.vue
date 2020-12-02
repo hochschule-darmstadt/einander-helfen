@@ -547,7 +547,7 @@
 
    @media only screen and (max-width: 960px) {
     .map-heigth {
-       height: 40vh;
+       height: 60vh;
     }
     .details-smartphone {
       display: block;
