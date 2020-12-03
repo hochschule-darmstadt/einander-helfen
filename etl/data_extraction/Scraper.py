@@ -115,3 +115,21 @@ class Scraper:
     #   Adds URLs to an array which is later iterated over and scraped each
     def add_urls(self):
         self.urls.append(self.base_url)
+
+    @staticmethod
+    def clean_string(value):
+        """Removes all line breaks, tabs and leading or trailing whitespaces from a string."""
+
+        if value is None:
+            return None
+
+        return value.replace('\n', '').replace('\r', '').replace('\t', '').strip()
+
+    @staticmethod
+    def clean_html_tags(value):
+        """Removes all html tags."""
+
+        if value is None:
+            return None
+
+        return BeautifulSoup(value, 'lxml').text

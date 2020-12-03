@@ -1,7 +1,7 @@
 <template>
   <div>
     <Header />
-      <v-layout row wrap no-gutters>
+      <v-container sitecontent row wrap no-gutters>
         <!-- Map -->
         <v-flex xs12 md6 order-md2 v-show="postMapToggle === 'map'">
            <div class="map">
@@ -33,8 +33,9 @@
           <div>
           <v-card
             tile
-            style="height:70vh ;overflow:auto"
+            style="height:70vh; overflow:auto"
           >
+          
           <div class="container-buttons-smartphone">
             <v-btn dark class="mr-3 button-smartphone button-map-smartphone" text @click="openMap()">
               <v-icon>map</v-icon> Karte
@@ -48,19 +49,12 @@
               <v-icon>map</v-icon> Karte
             </v-btn>
 
+
+     
             <!--display title, subtitle and image on the right side-->
             <v-list-item-content style="margin-top:2%" class="headline">
               {{selectedPost.title}}
             </v-list-item-content>
-            <div>
-            <v-img
-              style="margin-top:2%"
-              max-width="80px"
-              height="80px"
-              contain
-              :src="selectedPost.image"
-            ></v-img></div>
-
             <v-btn class="button-close" icon @click="closePost()">
               <v-icon>close</v-icon>
             </v-btn>
@@ -137,11 +131,11 @@
         </v-card>
           </div>
         </v-flex>
+      
 
         <!--left side content-->
-        <v-flex sm12 md6 order-md1 >
-          <div style="height:70vh ;overflow:auto">
-
+        <v-flex sm12 md6 order-md1>
+          <div id=postbox style="height:70vh; overflow:auto;">
 
             <div v-if="showRadiusExtendedMessage" class="text-center pt-12 pb-12">
               <h3 class="font-weight-bold">Zu Ihrer Suchanfrage mit einem Radius von {{radiusExtendedFrom}} haben wir keine Treffer gefunden.
@@ -150,9 +144,7 @@
               </h3>
             </div>
 
-
-
-            <v-card
+            <v-card id="posttitlecard"
                     v-for="post in postsOnCurrentPage"
                     :key="post.id"
                     class="mb-3"
@@ -168,24 +160,16 @@
                        <span v-html="post.task"/>
                     </v-list-item-subtitle>
                   </v-list-item-content>
-
-                  <v-img
-                    max-width="80px"
-                    height="80px"
-                    contain
-                    :src="post.image"
-                  ></v-img>
                 </v-list-item>
               </v-card>
-
 
               <div class="text-center pt-12" v-if="!postsOnCurrentPage.length">
                 <h3 class="font-weight-bold ">Es wurden keine Suchergebnisse zu Ihrer Suchanfrage gefunden.</h3>
               </div>
           </div>
         </v-flex>
-
-      </v-layout>
+        
+      </v-container>
                        <!--pageination-->
           <div class="text-center" style="margin-top:2%; margin-bottom:1%">
             <v-pagination @input="setPage($event)" :value="page" :length="numberOfPages" total-visible="7" color="#054C66"></v-pagination>
@@ -435,7 +419,8 @@
      vertical-align: top;
    }
    .button-map {
-     margin-top: 30px;
+     margin-top: 21px;
+     margin-left: 35px;
      background-color: rgb(5, 76, 102);
      align-self: flex-start;
    }
@@ -477,4 +462,74 @@
     }
    }
 
+   @media (max-width: 480px){
+    .card {
+      max-width: 75vh
+    }
+   }
+
+   @media (min-width:960px){
+    .sitecontent {
+      width: 960px;
+      margin: auto;
+      max-width: none;
+      margin-top: 2%;
+    }
+
+   #postbox {
+      margin-right: 2%;
+    }
+
+    .list-item {
+      margin-top:5%; 
+      margin-right: 1px;
+    }
+   }
+
+   @media (min-width:1100px){
+    .sitecontent {
+      width: 1100px;
+      margin: auto;
+      margin-top: 2%;
+    }
+
+    #postbox {
+      margin-right: 2%;
+    }
+   }
+
+   @media (min-width:1300px){
+    .sitecontent {
+      width: 1300px;
+      margin: auto;
+      margin-top: 2%; 
+    }
+
+    #postbox {
+      margin-right: 2%;
+    }
+   }
+
+   @media (min-width:1618px){
+    .sitecontent {
+      width: 1618px;
+      margin-top: 2%; 
+    }
+
+    #postbox {
+      margin-right: 2%;
+    }
+  }
+
+   @media (min-width:1904px){
+    .sitecontent {
+      width: 85%;
+      margin: auto;
+      margin-top: 2%; 
+    }
+
+    #postbox {
+      margin-right: 2%;
+    }
+  }
 </style>
