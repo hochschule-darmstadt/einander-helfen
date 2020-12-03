@@ -33,6 +33,7 @@ class EhrenamtHessenScraper(Scraper):
                 task_string = desc_right.decode_contents()
                 if task_string:
                     task = task_string.strip()
+                    task = EhrenamtHessenScraper.__fix_target_blank(task)
 
         organization_field = response.find('div', {'class': 'legendLeft'}, text='Organisation/Anbieter')
         organization = None
@@ -42,6 +43,9 @@ class EhrenamtHessenScraper(Scraper):
                 organization_string = desc_right.decode_contents()
                 if organization_string:
                     organization = organization_string.strip()
+                    organization = organization.replace('_self', '_blank')
+                    organization = organization.replace('/index.cfm', 'https://www.ehrenamtssuche-hessen.de/index.cfm')
+                    organization = EhrenamtHessenScraper.__fix_mail_to_links(organization)
 
         contact_field = response.find('div', {'class': 'legendLeft'}, text='Ihr Ansprechpartner')
         contact = None
@@ -49,6 +53,7 @@ class EhrenamtHessenScraper(Scraper):
             desc_right = contact_field.parent.find('div', {'class': 'descriptionRight'})
             if desc_right is not None:
                 contact = desc_right.find('div').prettify()
+                contact = EhrenamtHessenScraper.__fix_target_blank(contact)
 
         parsed_object = {
             'title': response.find('h3', {'class': 'ItemTitle'}).text or None,
@@ -234,3 +239,28 @@ class EhrenamtHessenScraper(Scraper):
             'phone': phone or None,
             'email': email or None,
         }
+
+    @staticmethod
+    def __fix_mail_to_links(data):
+        print("start __fix_mail_to_links")
+        soup = BeautifulSoup(data, 'html.parser')
+        links = soup.findAll('a')
+        for link in links:
+            if 'mailto' not in link.decode():
+                link['rel'] = 'noopener'
+        data = soup.decode()
+        print("end start __fix_mail_to_links")
+        return data
+
+    @staticmethod
+    def __fix_target_blank(data):
+        print("start __fix_target_blank")
+        soup = BeautifulSoup(data, 'html.parser')
+        links = soup.findAll('a')
+        for link in links:
+            if 'mailto' not in link.decode():
+                link['target'] = '_blank'
+                link['rel'] = 'noopener'
+        data = soup.decode()
+        print("end __fix_target_blank")
+        return data
