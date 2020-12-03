@@ -4,15 +4,20 @@ import time
 
 
 class LatLonEnhancer:
+    """Class handling the enhancement of posts by adding geo data."""
+
     dict_file = 'data_enhancement/output/geocoder_lat_lon.csv'
 
     lat_lon_dict = {}
 
     def __init__(self):
+        """Initializes the enhancer."""
         self.geo_locator = Nominatim(user_agent="einander-helfen.org")
         self.__load_local_storage()
 
     def enhance(self, post):
+        """Adds latitude and longitude to a given post, if both are missing. Returns the enhanced post."""
+
         # If object has lat lon: return object
         if None is post['geo_location']:
             request_string = LatLonEnhancer.get_api_request_string(post)
