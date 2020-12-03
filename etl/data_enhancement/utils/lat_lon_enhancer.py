@@ -9,13 +9,13 @@ class LatLonEnhancer:
     lat_lon_dict = {}
 
     def __init__(self):
-        self.geolocator = Nominatim(user_agent="einander-helfen.org")
+        self.geo_locator = Nominatim(user_agent="einander-helfen.org")
         self.__load_local_storage()
 
-    def enhance(self, object):
+    def enhance(self, post):
         # If object has lat lon: return object
-        if None is object['geo_location']:
-            request_string = LatLonEnhancer.get_api_request_string(object)
+        if None is post['geo_location']:
+            request_string = LatLonEnhancer.get_api_request_string(post)
 
             lat_lon = self.__check_local_storage(request_string)
 
@@ -24,9 +24,9 @@ class LatLonEnhancer:
                 if lat_lon:
                     self.__add_new_entry(request_string, lat_lon)
 
-            object['geo_location'] = lat_lon
-            object['post_struct']['geo_location'] = lat_lon
-        return object
+            post['geo_location'] = lat_lon
+            post['post_struct']['geo_location'] = lat_lon
+        return post
 
     def __check_local_storage(self, request_string):
         """Already read local storage file?"""
@@ -69,7 +69,7 @@ class LatLonEnhancer:
         """Executes the API request"""
 
         if request_string != "":
-            location = self.geolocator.geocode(request_string)
+            location = self.geo_locator.geocode(request_string)
 
             geo_location = {'lat': location.latitude, 'lon': location.longitude}
             time.sleep(1)
@@ -78,21 +78,20 @@ class LatLonEnhancer:
         return None
 
     @staticmethod
-    def get_api_request_string(post_object):
+    def get_api_request_string(post):
         """Build the API request string"""
 
-        struct_data = post_object['post_struct']
+        struct_data = post['post_struct']
         request_string = ""
 
         # Try to build request string from:
         # 1. structured location 2. structured address of contact 3. structured address of organisation
-        for field in ['location', 'contact', 'organisation']:
+        for field in ['location', 'contact', 'organization']:
             if len(request_string) < 1 and field in struct_data and struct_data[field] and len(struct_data[field]) > 0:
                 request_string += struct_data[field]['street'] + ' ' if 'street' in struct_data[field] and struct_data[field]['street'] else ''
                 request_string += struct_data[field]['zipcode'] + ' ' if 'zipcode' in struct_data[field] and struct_data[field]['zipcode'] else ''
                 request_string += struct_data[field]['city'] + ' ' if 'city' in struct_data[field] and struct_data[field]['city'] else ''
                 request_string += struct_data[field]['country'] + ' ' if 'country' in struct_data[field] and struct_data[field]['country'] else ''
+                request_string = request_string.strip()
 
-        # TODO: If string is empty at this point, maybe use formatted location
-
-        return request_string.strip()
+        return request_string
