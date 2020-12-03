@@ -304,7 +304,7 @@
             };
         },
         computed: {
-            ...mapState(['posts', 'page', 'resultsFrom', 'selectedPost', 'totalResultSize']),
+            ...mapState(['posts', 'page', 'resultsFrom', 'selectedPost', 'totalResultSize', 'hitsPerPage']),
             ...mapGetters(['postsOnCurrentPage', 'numberOfPages', 'pageOfCurrentPost']),
             ...mapLocationState(['selectedLocation', 'selectedLocationObject', 'selectedRadius', 'alternateRadius']),
             ...mapSearchState(['searchValues']),
@@ -398,7 +398,8 @@
                 this.setSelectedPost(this.posts[postIndex]);
                 this.setPage(this.pageOfCurrentPost);
                 this.setMapLocation();
-                const el = this.$refs.detailsSmartphone[postIndex].$el;
+                const position = postIndex % this.hitsPerPage;
+                const el = this.$refs.detailsSmartphone[position].$el;
                 el.style.maxHeight = el.scrollHeight + 'px';
             },
             openMap(): void {
@@ -418,7 +419,8 @@
             closePost(): void {
                 if (this.selectedPost != null) {
                   const postIndex = this.posts.findIndex((post) => post.id === this.selectedPost.id);
-                  const el = this.$refs.detailsSmartphone[postIndex].$el;
+                  const position = postIndex % this.hitsPerPage;
+                  const el = this.$refs.detailsSmartphone[position].$el;
                   el.style.maxHeight = 0;
                 }
                 this.setSelectedPost(null);
@@ -472,7 +474,8 @@
             showDetails(e): void {
               if (window.innerHeight <= 960 && this.selectedPost != null) {
                 const postIndex = this.posts.findIndex((post) => post.id === this.selectedPost.id);
-                const el = this.$refs.detailsSmartphone[postIndex].$el;
+                const position = postIndex % this.hitsPerPage;
+                const el = this.$refs.detailsSmartphone[position].$el;
                 el.style.maxHeight = el.scrollHeight + 'px';
               }
             }
