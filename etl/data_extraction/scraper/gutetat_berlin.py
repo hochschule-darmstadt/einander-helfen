@@ -48,10 +48,7 @@ class GuteTatBerlinScraper(Scraper):
             'contact': contact_str or None,
             'link': url or None,
             'source': f'{self.website_url}/helfen/ehrenamtliches-engagement/projekte-berlin',
-            'geo_location': {
-                'lat': 52.520008,
-                'lon': 13.404954,
-            },
+            'geo_location': None,
         }
 
         location_street = response.find_all('strong', text='Straße:')[0].parent.parent.find_all('td')[1].text or None
