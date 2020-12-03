@@ -76,7 +76,5 @@ def rank_tags(file):
 def add_lat_lon(file):
     enhancer = LatLonEnhancer()
 
-    index = 1
     for post in file:
         post = enhancer.enhance(post)
-        index += 1
