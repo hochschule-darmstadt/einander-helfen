@@ -63,6 +63,7 @@ class LatLonEnhancer:
             writer = csv.writer(csvfile)
 
             writer.writerow([request_string, str(geo_location['lat']), str(geo_location['lon'])])
+        print(f'Added geo location from \'{request_string}\' to the dictionary')
 
     def __handle_api_requests(self, request_string):
         """Executes the API request"""

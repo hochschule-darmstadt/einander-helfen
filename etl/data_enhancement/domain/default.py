@@ -79,5 +79,4 @@ def add_lat_lon(file):
     index = 1
     for post in file:
         post = enhancer.enhance(post)
-        print(f'Enhanced geo_location from post [{index}/{len(file)}]')
         index += 1
