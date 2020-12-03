@@ -1,3 +1,5 @@
+import re
+
 from data_extraction.Scraper import Scraper
 
 
@@ -9,8 +11,6 @@ class WeltwaertsScraper(Scraper):
 
     def parse(self, response, url):
         """Handles the soupified response of a detail page in the predefined way and returns it"""
-
-        import re
 
         param_box = response.find('div', {'class': 'parameter__box'})
 
@@ -35,7 +35,10 @@ class WeltwaertsScraper(Scraper):
             'categories': ['International'],
             'location': param_box.find('li').find('span', {'class': 'parameter__value'}).decode_contents().strip() or None,
             'task': content.find('h2', text='Deine Aufgabe').findNext('div').decode_contents().strip() or None,
+            'target_group': None,
             'timing': param_box.find('li').findNext('li').findNext('li').find('span', {'class': 'parameter__value'}).decode_contents().strip() or None,
+            'effort': None,
+            'opportunities': None,
             'organization': content.find('h2', text='Die Aufnahmeorganisation vor Ort').findNext('div').p.decode_contents().strip() or None,
             'contact': contact.decode_contents().strip() or None,
             'link': url or None,
@@ -48,40 +51,31 @@ class WeltwaertsScraper(Scraper):
             'requirements': content.find('h2', text='Anforderungen an dich').findNext('div').p.decode_contents().strip() or None,
         }
 
-        # Removing HTML-Tags
-        contact_raw = re.sub(r'</?p>', '', parsed_object['contact'])
-        contact_raw = re.sub(r'<br/?>', '\n', contact_raw)
-        contact_raw = re.sub(r'<a.*</a>', '', contact_raw)
-        contact_raw = contact_raw.replace('</br>', '')
-        # Removing newlines
-        contact_raw = contact_raw.replace('\n\n', '\n').strip()
-        contact_split = list(filter(None, contact_raw.split('\n')))
-
-        # If the contact data contains additional information, it is combined into a string
-        if len(contact_split) > 3:
-            names_split = contact_split[:(len(contact_split)-2)]
-            names_raw = ', '.join(names_split)
-            contact_split = [names_raw, contact_split[-2], contact_split[-1]]
+        contact_split = self.__extract_contact_data(contact, parsed_object['contact'])
 
         parsed_object['post_struct'] = {
             'title': parsed_object['title'],
             'categories': parsed_object['categories'],
             'location': {
                 'country': parsed_object['location'].split(', ')[-1] or None,
+                'zipcode': None,
+                'city': None,
+                'street': None,
             },
             'task': re.sub(r'</?p>', '', parsed_object['task']).strip(),
+            'target_group': None,
             'timing': parsed_object['timing'],
+            'effort': None,
+            'opportunities': None,
             'organization': {
                 'name': parsed_object['organization'],
+                'zipcode': None,
+                'city': None,
+                'street': None,
+                'phone': None,
+                'email': None,
             },
-            'contact': {
-                'name':  contact_split[0].strip() or None,
-                'zipcode': contact_split[2][:5].strip() or None,
-                'city': contact_split[2][5:].strip() or None,
-                'street':  contact_split[1].strip() or None,
-                # Extract the e-mail address, if available
-                'email': contact.find('a', href=re.compile("mailto:.*"))['href'].replace('mailto:', '').strip() or None,
-            },
+            'contact': contact_split,
             'link': parsed_object['link'],
             'source': parsed_object['source'],
             'geo_location': parsed_object['geo_location'],
@@ -142,3 +136,39 @@ class WeltwaertsScraper(Scraper):
             index += 1
 
             time.sleep(self.delay)
+
+    def __extract_contact_data(self, contact_html, contact_raw):
+        """Extracts the contact data"""
+
+        contact = {
+            'name': None,
+            'zipcode': None,
+            'city': None,
+            'street': None,
+            'phone': None,
+            'email': contact_html.find('a', href=re.compile("mailto:.*"))['href'].replace('mailto:', '').strip() or None
+        }
+
+        # Removing HTML-Tags
+        contact_raw = re.sub(r'<br/?>', '\n', contact_raw)
+        contact_raw = Scraper.clean_html_tags(contact_raw)
+
+        contact_split = list(filter(lambda s: 'E-mail' not in s, filter(None, re.split('\n|,', contact_raw))))
+
+        contact_split = ', '.join(contact_split).split(',')
+
+        if re.search('[0-9]{4,5}', contact_raw):
+            if len(contact_split) > 3:
+                names_split = contact_split[:(len(contact_split)-2)]
+                names_raw = ', '.join(names_split)
+                contact_split = [names_raw, contact_split[-2], contact_split[-1]]
+
+            contact['name'] = contact_split[0].strip()
+            contact['zipcode'] = contact_split[2][:6].strip()
+            contact['city'] = contact_split[2][6:].strip()
+            contact['street'] = contact_split[1].strip()
+
+        else:
+            contact['name'] = ', '.join(contact_split)
+
+        return contact
