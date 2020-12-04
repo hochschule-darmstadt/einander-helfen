@@ -64,6 +64,7 @@ class GuteTatBerlinScraper(Scraper):
             'title': self.clean_string(parsed_object['title']) or None,
             'categories': [],
             'location': {
+                'country': "Deutschland",
                 'zipcode': self.clean_string(location_plzort[0]) or None,
                 'city': self.clean_string(location_plzort[1]) or None,
                 'street': self.clean_string(location_street) or None,
