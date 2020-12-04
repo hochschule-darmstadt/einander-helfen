@@ -7,6 +7,7 @@ ROOT_DIR = os.environ['ROOT_DIR']
 
 
 def run(data, domain):
+    """ calls functions for extracting and ranking tags """
     find_new_tags(data, domain)
     rank_tags(data, domain)
 
@@ -69,6 +70,5 @@ def rank_tags(file, domain):
                         tag_ranking.update({tag: new_value})
     sorted_tags = sorted(tag_ranking.items(), key=lambda x: x[1], reverse=True)
     tag_ranking = dict(sorted_tags)
-    print("ranked: ", os.path.join(ROOT_DIR, 'data_enhancement', 'output'))
     write_data_to_json(os.path.join(ROOT_DIR, 'data_enhancement', 'output'),
                        f"ranked_tags_{domain}{'.json'}", tag_ranking)

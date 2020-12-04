@@ -1,14 +1,10 @@
-import os
-from shared.utils import write_data_to_json, read_data_from_json
 from .enhancement_tags import enhancement_tags as e_tags
 from .enhancement_location import enhancement_location as e_location
 from .enhancement_location.lat_lon_enhancer import add_lat_lon
 
 
-os.environ['ROOT_DIR'] = os.getcwd()
-
-
 class Enhancer:
+    """ Class handling the enhancement steps for crawled data based on its origin """
 
     def __init__(self, data, domain_name):
         self.__data = data
@@ -22,16 +18,21 @@ class Enhancer:
         self.__function_map = {
             'ehrenamt_hessen': self.__enhance_ehrenamt_hessen,
             'weltwaerts': self.__enhance_weltwaerts,
+            'gutetat_berlin': self.__enhance_gute_tat,
+            'gutetat_hamburg': self.__enhance_gute_tat,
+            'gutetat_munich': self.__enhance_gute_tat,
         }
 
     def run(self):
         """ run general enhancements and load domainspecific enhancement. """
-        print("run for", self.__domain_name)
+        print(f"Run general enhancement enhancement for {self.__domain_name}")
+        e_location.add_map_address(self.__data)
         self.__run_for_domain(self.__domain_name)
         return self.__data
 
     def __run_for_domain(self, domain):
         """ run domainspecific enhancement. """
+        print(f"Run domain specific enhancement enhancement for {domain}")
         if domain in self.__function_map:
             self.__function_map[domain]()
         else:
@@ -40,14 +41,11 @@ class Enhancer:
     def __enhance_ehrenamt_hessen(self):
         """ domain specific enhancement for ehrenamtsuche hessen """
         e_tags.run(self.__data, self.__domain_name)
-        e_location.add_map_address(self.__data)
 
     def __enhance_weltwaerts(self):
         """ domain specific enhancement for weltwaerst """
-        e_location.add_map_address(self.__data)
         add_lat_lon(self.__data)
 
-    def enhance_gute_tat(self):
-        """ domain specific enhancement for gute-tat"""
-        # dummy call gute tat enhance
-        pass
+    def __enhance_gute_tat(self):
+        """ domain specific enhancement for gute-tat website group"""
+        e_tags.run(self.__data, self.__domain_name)
