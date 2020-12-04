@@ -27,6 +27,7 @@ class Enhancer:
         """ run general enhancements and load domainspecific enhancement. """
         print(f"Run general enhancement enhancement for {self.__domain_name}")
         e_location.add_map_address(self.__data)
+        add_lat_lon(self.__data)
         self.__run_for_domain(self.__domain_name)
         return self.__data
 
@@ -44,8 +45,8 @@ class Enhancer:
 
     def __enhance_weltwaerts(self):
         """ domain specific enhancement for weltwaerst """
-        add_lat_lon(self.__data)
+        pass
 
     def __enhance_gute_tat(self):
         """ domain specific enhancement for gute-tat website group"""
-        e_tags.run(self.__data, self.__domain_name)
+        pass

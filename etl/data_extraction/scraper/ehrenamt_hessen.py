@@ -66,7 +66,7 @@ class EhrenamtHessenScraper(Scraper):
             'geo_location': {
                 'lat': float(lat),
                 'lon': float(lon),
-            },
+            } if lat and lon else None,
         }
 
         city_string = self.clean_string(parsed_object['location'])
