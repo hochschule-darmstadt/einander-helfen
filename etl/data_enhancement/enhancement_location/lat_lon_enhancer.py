@@ -31,7 +31,6 @@ class LatLonEnhancer:
 
             post['geo_location'] = lat_lon
             post['post_struct']['geo_location'] = lat_lon
-        return post
 
     def __check_local_storage(self, request_string):
         """Already read local storage file?"""
@@ -105,4 +104,4 @@ def add_lat_lon(data):
     """ sets up LatLon Enhancer and runs it for data """
     enhancer = LatLonEnhancer()
     for post in data:
-        post = enhancer.enhance(post)
+        enhancer.enhance(post)

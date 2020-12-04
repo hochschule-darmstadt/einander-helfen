@@ -1,9 +1,8 @@
 import os
 from shared.utils import write_data_to_json, read_data_from_json
 from .enhancement_tags import enhancement_tags as e_tags
-from .enhancement_links import enhancement_links as e_links
 from .enhancement_location import enhancement_location as e_location
-from .enhancement_location.lat_lon_enhancer import LatLonEnhancer, add_lat_lon
+from .enhancement_location.lat_lon_enhancer import add_lat_lon
 
 
 os.environ['ROOT_DIR'] = os.getcwd()
@@ -41,16 +40,14 @@ class Enhancer:
     def __enhance_ehrenamt_hessen(self):
         """ domain specific enhancement for ehrenamtsuche hessen """
         e_tags.run(self.__data, self.__domain_name)
-        self.__data = e_location.add_map_address(self.__data)
-        return self.__data
+        e_location.add_map_address(self.__data)
 
     def __enhance_weltwaerts(self):
         """ domain specific enhancement for weltwaerst """
-        self.__data = e_location.add_map_address(self.__data)
+        e_location.add_map_address(self.__data)
         add_lat_lon(self.__data)
-
 
     def enhance_gute_tat(self):
         """ domain specific enhancement for gute-tat"""
         # dummy call gute tat enhance
-        return self.__data
+        pass
