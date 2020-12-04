@@ -82,6 +82,7 @@ class EhrenamtHessenScraper(Scraper):
             'title': self.clean_string(parsed_object['title']) or None,
             'categories': parsed_object['categories'] or None,
             'location': {
+                'country': "Deutschland",
                 'zipcode': None,
                 'city': city or None,
                 'street': None,
