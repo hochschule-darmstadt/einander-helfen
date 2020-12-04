@@ -99,3 +99,10 @@ class LatLonEnhancer:
                 request_string = request_string.strip()
 
         return request_string
+
+
+def add_lat_lon(data):
+    """ sets up LatLon Enhancer and runs it for data """
+    enhancer = LatLonEnhancer()
+    for post in data:
+        post = enhancer.enhance(post)
