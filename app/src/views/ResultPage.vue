@@ -55,15 +55,6 @@
             <v-list-item-content style="margin-top:2%" class="headline">
               {{selectedPost.title}}
             </v-list-item-content>
-            <div>
-            <v-img
-              style="margin-top:2%"
-              max-width="80px"
-              height="80px"
-              contain
-              :src="selectedPost.image"
-            ></v-img></div>
-
             <v-btn class="button-close" icon @click="closePost()">
               <v-icon>close</v-icon>
             </v-btn>
@@ -169,13 +160,6 @@
                        <span v-html="post.task"/>
                     </v-list-item-subtitle>
                   </v-list-item-content>
-
-                  <v-img
-                    max-width="80px"
-                    height="55px"
-                    contain
-                    :src="post.image"
-                  ></v-img>
                 </v-list-item>
               </v-card>
 

@@ -1,0 +1,47 @@
+@media (max-width: 370px) {
+  .wordbreak{
+    overflow-wrap: break-word;
+  }
+}
+
+@media (min-width: 800px) {
+  .containerwithcontent {
+    max-width:1450px;
+  }
+}
+
+@media (min-width:960px) {
+  .containerwithcontent{
+    width: 960px;
+    margin: auto;
+    max-width: none;
+  }
+}
+
+@media (min-width:1100px) {
+  .containerwithcontent{
+    width: 1100px;
+    margin: auto;
+  }
+}
+
+@media (min-width:1300px) {
+  .containerwithcontent{
+    width: 1300px;
+    margin: auto;
+  }
+}
+
+@media (min-width:1618px) {
+  .containerwithcontent{
+    width: 1618px;
+    margin: auto;
+  }
+}
+
+@media (min-width:1904px) {
+  .containerwithcontent{
+    width: 85%;
+    margin: auto;
+  }
+}
