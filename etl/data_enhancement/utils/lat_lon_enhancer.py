@@ -74,11 +74,11 @@ class LatLonEnhancer:
 
         if request_string != "":
             location = self.geo_locator.geocode(request_string)
-
-            geo_location = {'lat': location.latitude, 'lon': location.longitude}
             time.sleep(1)
 
-            return geo_location
+            if location:
+                geo_location = {'lat': location.latitude, 'lon': location.longitude}
+                return geo_location
         return None
 
     @staticmethod

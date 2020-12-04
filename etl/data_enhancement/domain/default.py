@@ -58,15 +58,16 @@ def rank_tags(file):
     synonyms = get_synonyms_as_list(loaded_tags.values())
     tag_ranking = {}
     for post in file:
-        list_of_words = post['task'].split()
-        for tag in labels:
-            count = list_of_words.count(tag)
-            if count > 0:
-                if not tag_ranking.get(tag):
-                    tag_ranking.update({tag: count})
-                else:
-                    new_value = int(tag_ranking.get(tag)) + count
-                    tag_ranking.update({tag: new_value})
+        if post['task']:
+            list_of_words = post['task'].split()
+            for tag in labels:
+                count = list_of_words.count(tag)
+                if count > 0:
+                    if not tag_ranking.get(tag):
+                        tag_ranking.update({tag: count})
+                    else:
+                        new_value = int(tag_ranking.get(tag)) + count
+                        tag_ranking.update({tag: new_value})
     sorted_tags = sorted(tag_ranking.items(), key=lambda x: x[1], reverse=True)
     tag_ranking = dict(sorted_tags)
     write_data_to_json(os.path.join(ROOT_DIR, 'data_enhancement/output', 'ranked_tags.json'), tag_ranking)
@@ -75,6 +76,5 @@ def rank_tags(file):
 # Enhance the geo_location
 def add_lat_lon(file):
     enhancer = LatLonEnhancer()
-
     for post in file:
-        post = enhancer.enhance(post)
+        enhancer.enhance(post)
