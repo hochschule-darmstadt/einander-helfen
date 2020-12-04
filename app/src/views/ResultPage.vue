@@ -164,7 +164,7 @@
                     :src="post.image"
                   ></v-img>
                 </v-list-item>
-                <v-card ref="detailsSmartphone" class="details-smartphone">
+                <v-card ref="detailsSmartphone"  class="details-smartphone" :class="{ 'active' : currentPostId === post.id }">
                   <v-card-text>
                     <div v-if="post.location">
                     <h3>Einsatzort</h3>
@@ -394,6 +394,12 @@
             ...mapLocationActions(['setSelectedRadius', 'setAlternateRadius']),
             openPost(id: string): void {
                 this.postMapToggle = 'post';
+                if (this.selectedPost != null) {
+                  const lastIndex = this.posts.findIndex((post) => post.id === this.selectedPost.id);
+                  const lastPosition = lastIndex % this.hitsPerPage;
+                  const lastEl = this.$refs.detailsSmartphone[lastPosition].$el;
+                  lastEl.style.maxHeight = 0;
+                }
                 const postIndex = this.posts.findIndex((post) => post.id === id);
                 this.setSelectedPost(this.posts[postIndex]);
                 this.setPage(this.pageOfCurrentPost);
@@ -557,6 +563,9 @@
       max-height: 0;
       overflow: hidden;
       transition: max-height 0.3s ease-in-out;
+    }
+    .details-smartphone.active {
+      max-height: 100%;
     }
     .details {
       display: none;
