@@ -6,7 +6,7 @@ import time
 class LatLonEnhancer:
     """Class handling the enhancement of posts by adding geo data."""
 
-    dict_file = 'data_enhancement/output/geocoder_lat_lon.csv'
+    dict_file = 'data_enhancement/enhancement_location/geocoder_lat_lon.csv'
 
     lat_lon_dict = {}
 
