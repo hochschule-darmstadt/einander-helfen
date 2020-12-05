@@ -66,7 +66,7 @@ class EhrenamtHessenScraper(Scraper):
             'geo_location': {
                 'lat': float(lat),
                 'lon': float(lon),
-            },
+            } if lat and lon else None,
         }
 
         city_string = self.clean_string(parsed_object['location'])
@@ -100,6 +100,23 @@ class EhrenamtHessenScraper(Scraper):
             'map_address': None,
         }
 
+        if parsed_object['organization'] is not None:
+            organization = parsed_object['organization']
+            organization = organization.replace('_self', '_blank')
+            organization = organization.replace('/index.cfm', 'https://www.ehrenamtssuche-hessen.de/index.cfm')
+            organization = EhrenamtHessenScraper.__fix_mail_to_links(organization)
+            parsed_object['organization'] = organization
+
+        if parsed_object['contact'] is not None:
+            contact = parsed_object['contact']
+            contact = EhrenamtHessenScraper.__fix_target_blank(contact)
+            parsed_object['contact'] = contact
+
+        if parsed_object['task'] is not None:
+            task = parsed_object['task']
+            task = EhrenamtHessenScraper.__fix_target_blank(task)
+            parsed_object['task'] = task
+
         return parsed_object
 
     def add_urls(self):
@@ -117,7 +134,6 @@ class EhrenamtHessenScraper(Scraper):
 
             if self.debug:
                 print(f'Fetched {len(detail_links)} URLs from {search_page_url} [{index}/{end_page}]')
-
             for detail_link in detail_links:
                 current_link = self.base_url + detail_link['href']
                 if current_link in self.urls:
@@ -221,6 +237,7 @@ class EhrenamtHessenScraper(Scraper):
                 phone = phone_string.strip()
         # email
         emails = html.select('a[href^=mailto]')
+
         if emails is not None:
             if len(emails) > 0:
                 email_string = emails[0].text
@@ -235,3 +252,26 @@ class EhrenamtHessenScraper(Scraper):
             'phone': phone or None,
             'email': email or None,
         }
+
+    @staticmethod
+    def __fix_mail_to_links(data):
+        """ implements ehrenamtsuche specific fixes for mailto links in organisation field """
+        soup = BeautifulSoup(data, 'html.parser')
+        links = soup.findAll('a')
+        for link in links:
+            if 'mailto' not in link.decode():
+                link['rel'] = 'noopener'
+        data = soup.decode()
+        return data
+
+    @staticmethod
+    def __fix_target_blank(data):
+        """ implements ehrenamtsuche specific fixes for mailto links in task and contact field """
+        soup = BeautifulSoup(data, 'html.parser')
+        links = soup.findAll('a')
+        for link in links:
+            if 'mailto' not in link.decode():
+                link['target'] = '_blank'
+                link['rel'] = 'noopener'
+        data = soup.decode()
+        return data

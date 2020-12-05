@@ -6,7 +6,7 @@ import time
 class LatLonEnhancer:
     """Class handling the enhancement of posts by adding geo data."""
 
-    dict_file = 'data_enhancement/output/geocoder_lat_lon.csv'
+    dict_file = 'data_enhancement/enhancement_location/geocoder_lat_lon.csv'
 
     lat_lon_dict = {}
 
@@ -98,3 +98,10 @@ class LatLonEnhancer:
                 request_string = request_string.strip()
 
         return request_string
+
+
+def add_lat_lon(data):
+    """ sets up LatLon Enhancer and runs it for data """
+    enhancer = LatLonEnhancer()
+    for post in data:
+        enhancer.enhance(post)
