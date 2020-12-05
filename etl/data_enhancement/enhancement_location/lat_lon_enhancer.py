@@ -22,7 +22,6 @@ class LatLonEnhancer:
             print("Create missing geocoder_lat_lon.csv as", self.dict_file)
             open(self.dict_file, "x")
 
-
     def enhance(self, post):
         """Adds latitude and longitude to a given post, if both are missing. Returns the enhanced post."""
 
