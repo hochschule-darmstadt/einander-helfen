@@ -1,19 +1,26 @@
 from geopy.geocoders import Nominatim
 import csv
 import time
+import os
 
 
 class LatLonEnhancer:
     """Class handling the enhancement of posts by adding geo data."""
 
-    dict_file = 'data_enhancement/enhancement_location/geocoder_lat_lon.csv'
-
+    dict_file = os.path.join(os.getenv('ROOT_DIR'), 'data_enhancement',
+                             'enhancement_location', 'geocoder_lat_lon.csv')
     lat_lon_dict = {}
 
     def __init__(self):
         """Initializes the enhancer."""
+        self.__setup()
         self.geo_locator = Nominatim(user_agent="einander-helfen.org")
         self.__load_local_storage()
+
+    def __setup(self):
+        if not os.path.exists(self.dict_file):
+            print("Create missing geocoder_lat_lon.csv as", self.dict_file)
+            open(self.dict_file, "x")
 
     def enhance(self, post):
         """Adds latitude and longitude to a given post, if both are missing. Returns the enhanced post."""
