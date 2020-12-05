@@ -45,7 +45,7 @@ def find_new_tags(file):
             if category not in loaded_tags.keys() and category not in synonyms:
                 new_tags.append(category)
     new_tags = list(set(new_tags))
-    write_data_to_json(os.path.join(ROOT_DIR, 'data_enhancement/output'), 'new_tags.json', new_tags)
+    write_data_to_json(os.path.join(ROOT_DIR, 'data_enhancement/output', 'new_tags.json'), new_tags)
 
 
 # ranks the tags on count of occurrences in the task field and outputs it to the output file as ranked_tags.json
@@ -69,7 +69,7 @@ def rank_tags(file):
                     tag_ranking.update({tag: new_value})
     sorted_tags = sorted(tag_ranking.items(), key=lambda x: x[1], reverse=True)
     tag_ranking = dict(sorted_tags)
-    write_data_to_json(os.path.join(ROOT_DIR, 'data_enhancement/output'), 'ranked_tags.json', tag_ranking)
+    write_data_to_json(os.path.join(ROOT_DIR, 'data_enhancement/output', 'ranked_tags.json'), tag_ranking)
 
 
 # Enhance the geo_location
