@@ -7,8 +7,8 @@ import os
 class LatLonEnhancer:
     """Class handling the enhancement of posts by adding geo data."""
 
-    dict_file = 'data_enhancement/enhancement_location/geocoder_lat_lon.csv'
-
+    dict_file = os.path.join(os.getenv('ROOT_DIR'), 'data_enhancement',
+                             'enhancement_location', 'geocoder_lat_lon.csv')
     lat_lon_dict = {}
 
     def __init__(self):
@@ -19,7 +19,7 @@ class LatLonEnhancer:
 
     def __setup(self):
         if not os.path.exists(self.dict_file):
-            print("Create missing geocoder_lat_lon.csv")
+            print("Create missing geocoder_lat_lon.csv as", self.dict_file)
             open(self.dict_file, "x")
 
 
