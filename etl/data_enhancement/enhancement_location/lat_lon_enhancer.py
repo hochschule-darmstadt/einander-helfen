@@ -6,7 +6,7 @@ import time
 class LatLonEnhancer:
     """Class handling the enhancement of posts by adding geo data."""
 
-    dict_file = 'data_enhancement/output/geocoder_lat_lon.csv'
+    dict_file = 'data_enhancement/enhancement_location/geocoder_lat_lon.csv'
 
     lat_lon_dict = {}
 
@@ -31,7 +31,6 @@ class LatLonEnhancer:
 
             post['geo_location'] = lat_lon
             post['post_struct']['geo_location'] = lat_lon
-        return post
 
     def __check_local_storage(self, request_string):
         """Already read local storage file?"""
@@ -74,11 +73,11 @@ class LatLonEnhancer:
 
         if request_string != "":
             location = self.geo_locator.geocode(request_string)
-
-            geo_location = {'lat': location.latitude, 'lon': location.longitude}
             time.sleep(1)
 
-            return geo_location
+            if location:
+                geo_location = {'lat': location.latitude, 'lon': location.longitude}
+                return geo_location
         return None
 
     @staticmethod
@@ -99,3 +98,10 @@ class LatLonEnhancer:
                 request_string = request_string.strip()
 
         return request_string
+
+
+def add_lat_lon(data):
+    """ sets up LatLon Enhancer and runs it for data """
+    enhancer = LatLonEnhancer()
+    for post in data:
+        enhancer.enhance(post)
