@@ -4,7 +4,7 @@ import time
 import requests
 from bs4 import BeautifulSoup
 
-from utils import append_data_to_json, write_data_to_json
+from shared.utils import append_data_to_json, write_data_to_json
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
