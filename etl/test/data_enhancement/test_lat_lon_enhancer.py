@@ -1,6 +1,6 @@
 import unittest
 
-from data_enhancement.utils.lat_lon_enhancer import LatLonEnhancer
+from data_enhancement.enhancement_location.lat_lon_enhancer import LatLonEnhancer
 
 
 class TestLatLonEnhancer(unittest.TestCase):

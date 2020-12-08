@@ -1,19 +1,26 @@
 from geopy.geocoders import Nominatim
 import csv
 import time
+import os
 
 
 class LatLonEnhancer:
     """Class handling the enhancement of posts by adding geo data."""
 
-    dict_file = 'data_enhancement/output/geocoder_lat_lon.csv'
-
+    dict_file = os.path.join(os.getenv('ROOT_DIR'), 'data_enhancement',
+                             'enhancement_location', 'geocoder_lat_lon.csv')
     lat_lon_dict = {}
 
     def __init__(self):
         """Initializes the enhancer."""
+        self.__setup()
         self.geo_locator = Nominatim(user_agent="einander-helfen.org")
         self.__load_local_storage()
+
+    def __setup(self):
+        if not os.path.exists(self.dict_file):
+            print("Create missing geocoder_lat_lon.csv as", self.dict_file)
+            open(self.dict_file, "x")
 
     def enhance(self, post):
         """Adds latitude and longitude to a given post, if both are missing. Returns the enhanced post."""
@@ -31,7 +38,6 @@ class LatLonEnhancer:
 
             post['geo_location'] = lat_lon
             post['post_struct']['geo_location'] = lat_lon
-        return post
 
     def __check_local_storage(self, request_string):
         """Already read local storage file?"""
@@ -74,11 +80,11 @@ class LatLonEnhancer:
 
         if request_string != "":
             location = self.geo_locator.geocode(request_string)
-
-            geo_location = {'lat': location.latitude, 'lon': location.longitude}
             time.sleep(1)
 
-            return geo_location
+            if location:
+                geo_location = {'lat': location.latitude, 'lon': location.longitude}
+                return geo_location
         return None
 
     @staticmethod
@@ -99,3 +105,10 @@ class LatLonEnhancer:
                 request_string = request_string.strip()
 
         return request_string
+
+
+def add_lat_lon(data):
+    """ sets up LatLon Enhancer and runs it for data """
+    enhancer = LatLonEnhancer()
+    for post in data:
+        enhancer.enhance(post)
