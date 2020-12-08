@@ -23,7 +23,7 @@
             <v-flex>
               <v-form>
                 <v-row>
-                  <v-col cols="12">
+                  <v-col id=searchCol cols="12">
                     <search-bar :searchInput.sync="currentSearchValue" id="search" :attachTo="'#search'" @click.native="focussearch" v-model="selectedInput" @enter="onSearchEnter" tabindex="1" />
                   </v-col>
                 </v-row>
@@ -172,10 +172,10 @@ export default Vue.extend({
                navigator.userAgent.indexOf('CriOS') === -1 &&
                navigator.userAgent.indexOf('FxiOS') === -1;
 
-      const focussearch = document.getElementById('search');
+      const focussearch = document.getElementById('searchCol');
 
       if (isSafari === false && focussearch !== null && window.matchMedia('(max-width: 420px)').matches) {
-        focussearch.scrollIntoView(true);
+      focussearch.scrollIntoView(true);
       }
     }
   }

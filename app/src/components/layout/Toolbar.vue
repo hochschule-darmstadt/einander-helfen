@@ -77,7 +77,7 @@ export default {
     display: none !important;
 }
 
-@media (max-width: 283px) {
+@media (max-width: 300px) {
     .column {
         padding-bottom: 19px !important ;
     }
@@ -86,7 +86,7 @@ export default {
     }
 
     .menuCol {
-        max-width: 10% !important;
+        max-width: 30% !important;
     }
 
     #logo {
@@ -96,7 +96,7 @@ export default {
     }
 }
 
-@media (min-width: 284px) and (max-width:423px) {
+@media (min-width: 301px) and (max-width:423px) {
     .column {
         padding-bottom: 19px !important;
     }
