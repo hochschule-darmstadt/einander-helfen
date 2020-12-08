@@ -79,7 +79,7 @@
             style="margin-top: 1vh"
             icon
           >
-            <v-icon>more_vert</v-icon>
+            <v-icon>menu</v-icon>
           </v-btn>
         </template>
         <v-list>

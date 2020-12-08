@@ -29,7 +29,7 @@
                 </v-row>
 
                 <v-row class="flex-grow-1 ps-4" id="locationDiv">
-                    <location-search-bar @click.native="focuslocation" id="location" :attachTo="'#location'" ref="locationSearchBar" @enter="onLocationEnter" tabindex="2" />
+                    <location-search-bar @click.native="focussearch" id="location" :attachTo="'#location'" ref="locationSearchBar" @enter="onLocationEnter" tabindex="2" />
                     <radius id="radius" @enter="onRadiusEnter" tabindex="3" />
                     <search-button id="searchButton" @click="executeSearch" tabindex="4" />
                 </v-row>
@@ -177,20 +177,7 @@ export default Vue.extend({
       if (isSafari === false && focussearch !== null && window.matchMedia('(max-width: 420px)').matches) {
         focussearch.scrollIntoView(true);
       }
-    },
-
-    focuslocation(): void {
-      const isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
-              navigator.userAgent &&
-              navigator.userAgent.indexOf('CriOS') === -1 &&
-              navigator.userAgent.indexOf('FxiOS') === -1;
-
-      const focuslocation = document.getElementById('location');
-
-      if (isSafari === false && focuslocation !== null && window.matchMedia('(max-width: 420px)').matches) {
-        focuslocation.scrollIntoView({behavior: 'smooth'});
-      }
-    },
+    }
   }
 });
 </script>
@@ -220,8 +207,8 @@ img {
 }
 
 #searchbox {
-  padding-left:12px;
-  padding-right:12px;
+  padding-left: 12px;
+  padding-right: 12px;
 }
 
 #container{
@@ -315,32 +302,32 @@ img {
   }
 }
 
-@media (min-width:960px) {
+@media (min-width: 960px) {
   #container {
     width: 960px;
     max-width: none;
   }
 }
 
-@media (min-width:1100px) {
+@media (min-width: 1100px) {
   #container {
     width: 1100px;
   }
 }
 
-@media (min-width:1300px) {
+@media (min-width: 1300px) {
   #container {
     width: 1300px;
   }
 }
 
-@media (min-width:1618px) {
+@media (min-width: 1618px) {
   #container {
     width: 1618px;
   }
 }
 
-@media (min-width:1904px) {
+@media (min-width: 1904px) {
   #container {
     width: 85%;
   }

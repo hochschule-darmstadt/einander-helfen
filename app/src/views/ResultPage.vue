@@ -486,7 +486,7 @@
     }
    }
 
-   @media (min-width:1100px){
+   @media (min-width: 1100px){
     .sitecontent {
       width: 1100px;
       margin: auto;
@@ -498,7 +498,7 @@
     }
    }
 
-   @media (min-width:1300px){
+   @media (min-width: 1300px){
     .sitecontent {
       width: 1300px;
       margin: auto;
@@ -510,7 +510,7 @@
     }
    }
 
-   @media (min-width:1618px){
+   @media (min-width: 1618px){
     .sitecontent {
       width: 1618px;
       margin-top: 2%; 
@@ -521,7 +521,7 @@
     }
   }
 
-   @media (min-width:1904px){
+   @media (min-width: 1904px){
     .sitecontent {
       width: 85%;
       margin: auto;
