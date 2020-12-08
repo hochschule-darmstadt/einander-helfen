@@ -396,9 +396,11 @@
                 this.postMapToggle = 'post';
                 if (this.selectedPost != null) {
                   const lastIndex = this.posts.findIndex((post) => post.id === this.selectedPost.id);
-                  const lastPosition = lastIndex % this.hitsPerPage;
-                  const lastEl = this.$refs.detailsSmartphone[lastPosition].$el;
-                  lastEl.style.maxHeight = 0;
+                  if (lastIndex > -1) {
+                    const lastPosition = lastIndex % this.hitsPerPage;
+                    const lastEl = this.$refs.detailsSmartphone[lastPosition].$el;
+                    lastEl.style.maxHeight = 0;
+                  }
                 }
                 const postIndex = this.posts.findIndex((post) => post.id === id);
                 this.setSelectedPost(this.posts[postIndex]);
