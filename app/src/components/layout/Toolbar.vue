@@ -3,7 +3,7 @@
         <v-layout justify-space-between no-gutters color="#00254f">
                     <v-row>
                         <v-col class="column logoCol">
-                            <v-layout id="testlayout">
+                            <v-layout>
                                 <v-toolbar-side-icon>
                                 <v-img class="mt-1" width=80px height=75px src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Heart-hand-shake.svg/256px-Heart-hand-shake.svg.png"></v-img>
                                 </v-toolbar-side-icon>
