@@ -175,7 +175,7 @@ export default Vue.extend({
       const focussearch = document.getElementById('searchCol');
 
       if (isSafari === false && focussearch !== null && window.matchMedia('(max-width: 420px)').matches) {
-      focussearch.scrollIntoView(true);
+        focussearch.scrollIntoView(true);
       }
     }
   }
