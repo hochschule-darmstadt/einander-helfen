@@ -34,6 +34,8 @@ def remove_duplicates(data):
 
 
 def __one_to_one_comparison(posts, duplicates):
+    """Makes a one to one comparison between all JsonPosts in a list."""
+
     for i in range(0, len(posts)):
         for j in range(i + 1, len(posts)):
             if posts[i].is_duplicate or posts[j].is_duplicate:

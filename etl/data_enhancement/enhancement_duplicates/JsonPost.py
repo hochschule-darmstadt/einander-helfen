@@ -2,14 +2,19 @@ from copy import deepcopy
 
 
 class JsonPost:
+    """Handles the data to find duplicates."""
 
     def __init__(self, json):
+        """Constructor of JsonPost."""
+
         self.json = json
         self.mod_json = self.__remove_not_needed_data(deepcopy(json))
         self.is_duplicate = False
 
     @staticmethod
     def __remove_not_needed_data(json):
+        """Removes data from json which should not be use in the comparison."""
+
         if 'link' in json:
             del json['link']
         if 'source' in json:
