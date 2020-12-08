@@ -8,9 +8,16 @@ from data_extraction.Scraper import Scraper
 class GuteTatBerlinScraper(Scraper):
     """Scrapes the website gute-tat.de for the region berlin."""
 
-    base_url = 'https://ehrenamtsmanager.gute-tat.de/oberflaeche/'
-    website_url = 'www.gute-tat.de'
-    debug = True
+    def __init__(self, name):
+        """Constructor of GuteTatBerlinScraper."""
+
+        super().__init__(name)
+        self.base_url = 'https://ehrenamtsmanager.gute-tat.de/oberflaeche/'
+        self.website_url = 'www.gute-tat.de'
+        self.debug = True
+
+        # user id 14 leads to berlin
+        self.user_id = 14
 
     def parse(self, response, url):
         """Transforms the soupified response of a detail page in a predefined way and returns it."""
@@ -20,11 +27,13 @@ class GuteTatBerlinScraper(Scraper):
         project_address_str = ''
         for tr in project_address_attr:
             project_address_str += str(tr)
+        project_address_str = "<table>" + project_address_str + "</table>"
 
         contact_attr = main_table.find_all('tr')[34:47]
         contact_str = ''
         for tr in contact_attr:
             contact_str += str(tr)
+        contact_str = "<table>" + contact_str + "</table>"
 
         parsed_object = {
             'title': response.find('strong', text='Name des Projekts:').parent.parent.find_all('td')[1].text or None,
@@ -39,10 +48,7 @@ class GuteTatBerlinScraper(Scraper):
             'contact': contact_str or None,
             'link': url or None,
             'source': f'{self.website_url}/helfen/ehrenamtliches-engagement/projekte-berlin',
-            'geo_location': {
-                'lat': 52.520008,
-                'lon': 13.404954,
-            },
+            'geo_location': None,
         }
 
         location_street = response.find_all('strong', text='Straße:')[0].parent.parent.find_all('td')[1].text or None
@@ -58,6 +64,7 @@ class GuteTatBerlinScraper(Scraper):
             'title': self.clean_string(parsed_object['title']) or None,
             'categories': [],
             'location': {
+                'country': "Deutschland",
                 'zipcode': self.clean_string(location_plzort[0]) or None,
                 'city': self.clean_string(location_plzort[1]) or None,
                 'street': self.clean_string(location_street) or None,
@@ -99,7 +106,7 @@ class GuteTatBerlinScraper(Scraper):
         for index in range(1, end_page + 1):
             time.sleep(self.delay)
 
-            search_page_url = f'{self.base_url}index.cfm?dateiname=ehrenamt_suche_ergebnis.cfm&anwender_id=14&seite={str(index)}&ehrenamt_id=0&ea_projekt=0&stichwort=&kiez=&kiez_fk=0&bezirk=&bezirk_fk=0&ort=&ort_fk=0&zielgruppe=0&taetigkeit=0&merkmale=0&einsatzbereiche=0&plz=&organisation_fk=0&rl=0'
+            search_page_url = f'{self.base_url}index.cfm?dateiname=ehrenamt_suche_ergebnis.cfm&anwender_id={self.user_id}&seite={str(index)}&ehrenamt_id=0&ea_projekt=0&stichwort=&kiez=&kiez_fk=0&bezirk=&bezirk_fk=0&ort=&ort_fk=0&zielgruppe=0&taetigkeit=0&merkmale=0&einsatzbereiche=0&plz=&organisation_fk=0&rl=0'
             search_page = self.soupify(search_page_url)
             # last link needs to be ignored
             detail_links = [x for x in search_page.find_all('a', {'class': 'links'})][:-1]
@@ -129,7 +136,7 @@ class GuteTatBerlinScraper(Scraper):
 
         entries_per_page = 30
 
-        search_page_url = f'{self.base_url}index.cfm?dateiname=ehrenamt_suche_ergebnis.cfm&anwender_id=14&seite=1&ehrenamt_id=0&ea_projekt=0&stichwort=&kiez=&kiez_fk=0&bezirk=&bezirk_fk=0&ort=&ort_fk=0&zielgruppe=0&taetigkeit=0&merkmale=0&einsatzbereiche=0&plz=&organisation_fk=0&rl=0'
+        search_page_url = f'{self.base_url}index.cfm?dateiname=ehrenamt_suche_ergebnis.cfm&anwender_id={self.user_id}&seite=1&ehrenamt_id=0&ea_projekt=0&stichwort=&kiez=&kiez_fk=0&bezirk=&bezirk_fk=0&ort=&ort_fk=0&zielgruppe=0&taetigkeit=0&merkmale=0&einsatzbereiche=0&plz=&organisation_fk=0&rl=0'
         search_page = self.soupify(search_page_url)
         total_entries_as_string = search_page.find('td', {'class': 'ueberschrift'}).next.strip()
         formatted_entry_number = int(re.search(r'\d+', total_entries_as_string).group())
