@@ -569,6 +569,10 @@
     .details-smartphone.active {
       max-height: 100%;
     }
+    .details-smartphone p,
+    .details-smartphone h3{
+      color: rgba(0,0,0,.87)!important;
+    }
     .details {
       display: none;
     }
