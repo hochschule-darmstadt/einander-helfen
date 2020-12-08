@@ -8,25 +8,36 @@ class TestEnhancementExactDuplicates(unittest.TestCase):
     def test_remove_duplicates(self):
         data = '[' \
                '    {' \
-               '        "a": "a1",' \
-               '        "link": "a2",' \
-               '        "source": "a3",' \
-               '        "id": "a4",' \
-               '        "post_struct": "a5"' \
+               '        "title": "a1",' \
+               '        "task": "a2",' \
+               '        "link": "a3",' \
+               '        "source": "a4",' \
+               '        "id": "a5",' \
+               '        "post_struct": "a6"' \
                '    },' \
                '    {' \
-               '        "a": "a1",' \
-               '        "link": "a6",' \
-               '        "source": "a7",' \
-               '        "id": "a8",' \
-               '        "post_struct": "a9"' \
+               '        "title": "a1",' \
+               '        "task": "a2",' \
+               '        "link": "a3",' \
+               '        "source": "a4",' \
+               '        "id": "a5",' \
+               '        "post_struct": "a6"' \
                '    },' \
                '    {' \
-               '        "a": "a10",' \
-               '        "link": "a6",' \
-               '        "source": "a7",' \
-               '        "id": "a8",' \
-               '        "post_struct": "a9"' \
+               '        "title": "a1",' \
+               '        "task": "a2",' \
+               '        "link": "a7",' \
+               '        "source": "a8",' \
+               '        "id": "a9",' \
+               '        "post_struct": "a10"' \
+               '    },' \
+               '    {' \
+               '        "title": "a11",' \
+               '        "task": "a12",' \
+               '        "link": "a7",' \
+               '        "source": "a8",' \
+               '        "id": "a9",' \
+               '        "post_struct": "a10"' \
                '    }' \
                ']'
         json_data = json.loads(data)

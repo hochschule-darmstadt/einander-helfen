@@ -6,6 +6,7 @@ class JsonPost:
     def __init__(self, json):
         self.json = json
         self.mod_json = self.__remove_not_needed_data(deepcopy(json))
+        self.is_duplicate = False
 
     @staticmethod
     def __remove_not_needed_data(json):
