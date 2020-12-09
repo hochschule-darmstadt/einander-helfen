@@ -1,3 +1,4 @@
+from .enhancement_duplicates import enhancement_exact_duplicates as e_exact_duplicates
 from .enhancement_tags import enhancement_tags as e_tags
 from .enhancement_location import enhancement_location as e_location
 from .enhancement_location.lat_lon_enhancer import add_lat_lon
@@ -28,6 +29,7 @@ class Enhancer:
     def run(self):
         """ run general enhancements and load domainspecific enhancement. """
         print(f"Run general enhancement enhancement for {self.__domain_name}")
+        e_exact_duplicates.remove_duplicates(self.__data)
         e_location.add_map_address(self.__data)
         add_lat_lon(self.__data)
         self.__run_for_domain(self.__domain_name)
