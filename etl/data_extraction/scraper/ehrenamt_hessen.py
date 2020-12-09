@@ -13,6 +13,12 @@ class EhrenamtHessenScraper(Scraper):
     def parse(self, response, url):
         """Handles the soupified response of a detail page in the predefined way and returns it."""
 
+        tab = response.find('a', {'href': '?param&searchTab=jobentries&entryTypeId=5&showEntryTypeFilterSelect=false'})
+        tab_parent_div = tab.parent
+        tab_classes = tab_parent_div['class']
+        if 'active' not in tab_classes:
+            return None
+
         location_of = response.find('div', {'class': 'legendLeft'}, text='Ort Ihres Ehrenamts')
         location = None
         lat = 0

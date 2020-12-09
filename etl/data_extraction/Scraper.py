@@ -73,7 +73,8 @@ class Scraper:
         try:
             detail_page = self.soupify(url)
             parsed_data = self.parse(detail_page, url)
-            append_data_to_json(os.path.join(ROOT_DIR, 'data_extraction/data', f'{self.name}.json'), parsed_data)
+            if parsed_data is not None:
+                append_data_to_json(os.path.join(ROOT_DIR, 'data_extraction/data', f'{self.name}.json'), parsed_data)
 
         except Exception as err:
             self.add_error({'fn': 'parse', 'body': str(err), 'index': index, 'url': url})
