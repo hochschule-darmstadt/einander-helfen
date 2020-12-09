@@ -3,7 +3,7 @@ from data_extraction.Scraper import Scraper
 import re
 import math
 
-class Ein_Jahr_Freiwillig(Scraper):
+class EinJahrFreiwillig(Scraper):
     """Scrapes the website ein-jahr-freiwillig.de."""
 
     base_url = 'https://ein-jahr-freiwillig.de'
@@ -139,5 +139,8 @@ class Ein_Jahr_Freiwillig(Scraper):
                 next_page_url = self.base_url + '/de/suche/ort' + next_page_url.find('a')['href']
 
             index += 1
+
+            if index > 50:
+                break
 
             time.sleep(self.delay)
