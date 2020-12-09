@@ -17,6 +17,8 @@ class EhrenamtHessenScraper(Scraper):
         tab_parent_div = tab.parent
         tab_classes = tab_parent_div['class']
         if 'active' not in tab_classes:
+            if self.debug:
+                print(f'[INFO]\t\'{url}\' is not volunteering work')
             return None
 
         location_of = response.find('div', {'class': 'legendLeft'}, text='Ort Ihres Ehrenamts')
