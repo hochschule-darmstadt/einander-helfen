@@ -140,7 +140,4 @@ class EinJahrFreiwillig(Scraper):
 
             index += 1
 
-            if index > 50:
-                break
-
             time.sleep(self.delay)
