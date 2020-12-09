@@ -394,21 +394,12 @@
             ...mapLocationActions(['setSelectedRadius', 'setAlternateRadius']),
             openPost(id: string): void {
                 this.postMapToggle = 'post';
-                if (this.selectedPost != null) {
-                  const lastIndex = this.posts.findIndex((post) => post.id === this.selectedPost.id);
-                  if (lastIndex > -1) {
-                    const lastPosition = lastIndex % this.hitsPerPage;
-                    const lastEl = this.$refs.detailsSmartphone[lastPosition].$el;
-                    lastEl.style.maxHeight = 0;
-                  }
-                }
+                this.setDetailsHeight('0');
                 const postIndex = this.posts.findIndex((post) => post.id === id);
                 this.setSelectedPost(this.posts[postIndex]);
                 this.setPage(this.pageOfCurrentPost);
                 this.setMapLocation();
-                const position = postIndex % this.hitsPerPage;
-                const el = this.$refs.detailsSmartphone[position].$el;
-                el.style.maxHeight = el.scrollHeight + 'px';
+                this.setDetailsHeight('100%');
             },
             openMap(): void {
                 this.postMapToggle = 'map';
@@ -425,12 +416,7 @@
                 });
             },
             closePost(): void {
-                if (this.selectedPost != null) {
-                  const postIndex = this.posts.findIndex((post) => post.id === this.selectedPost.id);
-                  const position = postIndex % this.hitsPerPage;
-                  const el = this.$refs.detailsSmartphone[position].$el;
-                  el.style.maxHeight = 0;
-                }
+                this.setDetailsHeight('0');
                 this.setSelectedPost(null);
                 this.postMapToggle = 'map';
                 this.rerenderMap();
@@ -478,6 +464,18 @@
               const c = 2 * Math.asin(Math.sqrt(h));
 
               return RADIUS_OF_EARTH_IN_KM * c;
+            },
+            setDetailsHeight(heigth: string): void {
+              if (this.selectedPost == null) {
+                return;
+              }
+              const postIndex = this.posts.findIndex((post) => post.id === this.selectedPost.id);
+              const postDetails = this.$refs.detailsSmartphone[postIndex];
+              if (postDetails != null) {
+                const position = postIndex % this.hitsPerPage;
+                const el = this.$refs.detailsSmartphone[position].$el;
+                el.style.maxHeight = heigth;
+              }
             },
             showDetails(e): void {
               if (window.innerHeight <= 960 && this.selectedPost != null) {
