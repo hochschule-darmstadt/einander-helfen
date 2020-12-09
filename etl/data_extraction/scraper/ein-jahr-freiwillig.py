@@ -39,7 +39,7 @@ class Ein_Jahr_Freiwillig(Scraper):
             'timing': timing.find('div', {'class': 'field__item'}).decode_contents().strip() if timing is not None else None,
             'effort': effort.find('div', {'class': 'field__item'}).decode_contents().strip() if effort is not None else None,
             'opportunities': None,
-            'organization': organization.find_all('div')[1].decode_contents().strip() if organization is not None else None,
+            'organization': organization.find("a").decode_contents().strip() if organization is not None else None,
             'contact': None,
             'link': url or None,
             'source': self.base_url,
