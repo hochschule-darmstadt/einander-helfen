@@ -1,5 +1,7 @@
 from data_extraction.Scraper import Scraper
 
+import re
+import math
 
 class Ein_Jahr_Freiwillig(Scraper):
     """Scrapes the website ein-jahr-freiwillig.de."""
@@ -10,39 +12,61 @@ class Ein_Jahr_Freiwillig(Scraper):
     def parse(self, response, url):
         """Handles the soupified response of a detail page in the predefined way and returns it"""
 
+        content = response.find('div', {'class': 'node__content'})
+
+        location = content.find('p', {'class': 'address'})
+        task = content.find('div', {'class ': 'clearfix text-formatted field field--name-body field--type-text-with-summary field--label-hidden field__item'})
+        timing = content.find('div', {'class': 'field field--name-field-field-verfuegbar-ab field--type-string field--label-above'})
+        effort = content.find('div', {'class': 'field field--name-field-laenge-dienstzeit field--type-string field--label-above'})
+        organization = content.find('div', {'class': 'field field--name-field-traeger field--type-entity-reference field--label-above'})
+        prerequisits = content.find('div', {'class': 'field field--name-field-voraussetzungen field--type-string-long field--label-above'})
+
+        categories = content.find('div', {'class': 'field field--name-field-einsatzfelder field--type-entity-reference field--label-hidden field__items'})
+        category_names = []
+        if categories is not None:
+            categories = categories.find_all('a')
+            for category in categories:
+                category_names.append(category.decode_contents().strip())
+
         parsed_object = {
             'title': response.find('span', {'class': 'field field--name-title field--type-string field--label-hidden'}).decode_contents().strip() or None,
-            'location': response.find('p', {'class': 'address'}).decode_contents().strip() or None,
-            'task': response.find('div', {'class' :'clearfix text-formatted field field--name-body field--type-text-with-summary field--label-hidden field__item'}).p[2].decode_contents().strip() or None,
+            'categories': category_names,
+            'location': location.decode_contents().strip() if location is not None else None,
+            'task': task.decode_contents().strip() if task is not None else None,
             'target_group': None,
-            'timing': response.find('div', {'class': 'field field--name-field-field-verfuegbar-ab field--type-string field--label-above'}).find('div', {'class': 'field__item'}).decode_contents().strip() or None,
-            'effort': response.find('div', {'class': 'field field--name-field-laenge-dienstzeit field--type-string field--label-above'}).find('div', {'class': 'field__item'}).decode_contents().strip() or None,
+            'prerequisites': prerequisits.find('div', {'class': 'field__item'}).decode_contents().strip() if prerequisits is not None else None,
+            'language_skills': None,
+            'timing': timing.find('div', {'class': 'field__item'}).decode_contents().strip() if timing is not None else None,
+            'effort': effort.find('div', {'class': 'field__item'}).decode_contents().strip() if effort is not None else None,
             'opportunities': None,
-            'organization': response.find('div', {'class': 'field field--name-field-traeger field--type-entity-reference field--label-above'}).find('div')[2].decode_contents().strip() or None,
+            'organization': organization.find_all('div')[1].decode_contents().strip() if organization is not None else None,
             'contact': None,
             'link': url or None,
             'source': self.base_url,
             'geo_location':  None,
-            'requirements': response.find('div', {'class': 'field field--name-field-voraussetzungen field--type-string-long field--label-above'}).find('div', {'class': 'field__item'}).decode_contents().strip() or None,
         }
 
-        location_street = response.find('span', {'class': 'address-line2'}).decode_contents().strip() or None
-        #contact_name = profil.find('span', {'class': 'address-line1'}).decode_contents().strip() or None
-        location_plz = response.find('span', {'class': 'postal-code'}).decode_contents().strip() or None
-        location_ort = response.find('span', {'class': 'locality'}).decode_contents().strip() or None
-        location_country = response.find('span', {'class': 'country'}).decode_contents().strip() or None
+        contact_name = location.find('span', {'class': 'address-line1'})
+        location_street = location.find('span', {'class': 'address-line2'})
+        location_plz = location.find('span', {'class': 'postal-code'})
+        location_ort = location.find('span', {'class': 'locality'})
+        location_country = location.find('span', {'class': 'country'})
+
+        phone = content.find('div', {'class': 'field field--name-field-einrichtung-telefon field--type-string field--label-above'})
 
         parsed_object['post_struct'] = {
             'title': self.clean_string(parsed_object['title']) or None,
-            'categories': self.clean_string(parsed_object['categories']) or None,
+            'categories': parsed_object['categories'] or None,
             'location': {
-                'country': self.clean_string(location_country) or None,
-                'zipcode': self.clean_string(location_plz) or None,
-                'city': self.clean_string(location_ort) or None,
-                'street': self.clean_string(location_street) or None,
+                'country': self.clean_string(location_country.decode_contents()) if location_country is not None else None,
+                'zipcode': self.clean_string(location_plz.decode_contents()) if location_plz is not None else None,
+                'city': self.clean_string(location_ort.decode_contents()) if location_ort is not None else None,
+                'street': self.clean_string(location_street.decode_contents()) if location_street is not None else None,
             },
             'task': self.clean_string(parsed_object['task']) or None,
             'target_group': None,
+            'prerequisites': self.clean_string(parsed_object['prerequisites']),
+            'language_skills': None,
             'timing': self.clean_string(parsed_object['timing']) or None,
             'effort': self.clean_string(parsed_object['effort']) or None,
             'opportunities': None,
@@ -54,13 +78,18 @@ class Ein_Jahr_Freiwillig(Scraper):
                 'phone': None,
                 'email': None,
             },
-            'contact': None,
+            'contact': {
+                'name': self.clean_string(contact_name.decode_contents()) if contact_name is not None else None,
+                'zipcode': self.clean_string(location_plz.decode_contents()) if location_plz is not None else None,
+                'city': self.clean_string(location_ort.decode_contents()) if location_ort is not None else None,
+                'street': self.clean_string(location_street.decode_contents()) if location_street is not None else None,
+                'phone': self.clean_string(phone.find('div', {'class': 'field__item'}).decode_contents()) if phone is not None else None,
+                'email': None,
+            },
             'link': self.clean_string(parsed_object['link']) or None,
             'source': self.clean_string(parsed_object['source']) or None,
             'geo_location': None,
-            'requirements': self.clean_string(parsed_object['requirements']) or None,
         }
-
 
         return parsed_object
 
@@ -75,17 +104,15 @@ class Ein_Jahr_Freiwillig(Scraper):
         index = 1
         while next_page_url:
 
-            response = self.soupify_post(next_page_url, {
-                'ep-sortfilter': 1,
-                'ep-numperpage': 50,
-                'ep-sortorder': 'alpha'
-            })
+            response = self.soupify(next_page_url)
 
             # Get tags of individual results
-            detail_link_tags = [x.find('a') for x in response.find_all('div', {'class': 'field field--name-title field--type-string field--label-hidden'})]
+            detail_link_tags = [x.find('a') for x in response.find_all('div', {'class': 'field-link l-more'})]
+            detail_link_tags = list(filter(lambda x: x['href'].startswith('/stellen/'), detail_link_tags))
 
             # Get maximum number of pages
-            index_max = 9 #response.find('div', {'class': 'pager__item'}).findNext('a').decode_contents().strip()
+            index_max = float(re.search('([0-9]+) Treffer', response.find('div', {'class': 'field-result-count'}).decode_contents().strip()).group(1))
+            index_max = math.ceil(index_max / 20)
 
             if self.debug:
                 print(f'Fetched {len(detail_link_tags)} URLs from {next_page_url} [{index}/{index_max}]')
@@ -107,12 +134,10 @@ class Ein_Jahr_Freiwillig(Scraper):
                     self.urls.append(current_link)
 
             # Get next result page
-            next_page_url = response.find('li', {'class': 'pager__item pager__item--next'}).find('a')
+            next_page_url = response.find('li', {'class': 'pager__item pager__item--next'})
             if next_page_url:
-                next_page_url = self.base_url + '/de/suche/ort' + next_page_url['href']
+                next_page_url = self.base_url + '/de/suche/ort' + next_page_url.find('a')['href']
 
             index += 1
 
-            if index > 2:
-                break
             time.sleep(self.delay)
