@@ -18,6 +18,7 @@ class GuteTatBerlinScraper(Scraper):
 
         # user id 14 leads to berlin
         self.user_id = 14
+        self.source = f'{self.website_url}/helfen/ehrenamtliches-engagement/projekte-berlin'
 
     def parse(self, response, url):
         """Transforms the soupified response of a detail page in a predefined way and returns it."""
@@ -47,7 +48,7 @@ class GuteTatBerlinScraper(Scraper):
             'organization': None,
             'contact': contact_str or None,
             'link': url or None,
-            'source': f'{self.website_url}/helfen/ehrenamtliches-engagement/projekte-berlin',
+            'source': self.source,
             'geo_location': None,
         }
 

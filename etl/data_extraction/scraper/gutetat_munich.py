@@ -12,3 +12,4 @@ class GuteTatMunichScraper(GuteTatBerlinScraper, Scraper):
 
         # user id 16 leads to munich
         self.user_id = 16
+        self.source = f'{self.website_url}/helfen/ehrenamtliches-engagement/projekte-muenchen'
