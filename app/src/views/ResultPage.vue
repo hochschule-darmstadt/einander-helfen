@@ -156,7 +156,7 @@
                       {{post.title}}
                     </v-list-item-title>
                     <v-list-item-subtitle :set="distance = postDistance(post)">
-                      <strong>{{post.location}} <em v-if="distance">(in {{distance}})</em></strong> &mdash;
+                      <strong>{{fixLocation(post.location)}} <em v-if="distance">(in {{distance}})</em></strong> &mdash;
                        <span v-html="post.task"/>
                     </v-list-item-subtitle>
                   </v-list-item-content>
@@ -335,6 +335,16 @@
                 this.$nextTick(() => {
                     (this.$refs.map as LMap).setCenter(location);
                 });
+            },
+            fixLocation(location): string {
+              const regEx = /PLZ, Ort:.*?\s*?<td>\s*?(.+?)\s*?<\/td>/gim;
+              if (location && location.indexOf('PLZ, Ort:')) {
+                const result = regEx.exec(location);
+                if (result) {
+                  return result[1];
+                }
+              }
+              return location;
             },
             closePost(): void {
                 this.setSelectedPost(null);
