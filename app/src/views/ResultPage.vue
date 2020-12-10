@@ -3,7 +3,7 @@
     <Header />
       <v-layout row wrap no-gutters ma-2>
         <!-- Map -->
-        <v-flex xs12 md6 mb-3 mb-sm-3 order-md2 class="show-map" v-show="postMapToggle === 'map'">
+        <v-flex xs12 md6 order-md2 class="show-map" v-show="postMapToggle === 'map'">
            <div class="map">
                 <v-card tile id="mapcard" class="map-heigth">
                     <div id="map" :style="{height: map.height, width: map.width}">
@@ -394,12 +394,12 @@
             ...mapLocationActions(['setSelectedRadius', 'setAlternateRadius']),
             openPost(id: string): void {
                 this.postMapToggle = 'post';
-                this.setDetailsHeight('0');
+                this.setDetailsHeight();
                 const postIndex = this.posts.findIndex((post) => post.id === id);
                 this.setSelectedPost(this.posts[postIndex]);
                 this.setPage(this.pageOfCurrentPost);
                 this.setMapLocation();
-                this.setDetailsHeight('100%');
+                this.setDetailsHeight();
             },
             openMap(): void {
                 this.postMapToggle = 'map';
@@ -416,7 +416,7 @@
                 });
             },
             closePost(): void {
-                this.setDetailsHeight('0');
+                this.setDetailsHeight();
                 this.setSelectedPost(null);
                 this.postMapToggle = 'map';
                 this.rerenderMap();
@@ -465,7 +465,7 @@
 
               return RADIUS_OF_EARTH_IN_KM * c;
             },
-            setDetailsHeight(heigth: string): void {
+            setDetailsHeight(): void {
               if (this.selectedPost == null) {
                 return;
               }
@@ -474,15 +474,19 @@
               if (postDetails != null) {
                 const position = postIndex % this.hitsPerPage;
                 const el = this.$refs.detailsSmartphone[position].$el;
-                el.style.maxHeight = heigth;
+                if (window.innerWidth > 960) {
+                  return;
+                }
+                if (el.style.maxHeight !== '0px' && el.style.maxHeight !== '') {
+                  el.style.maxHeight = 0;
+                } else {
+                  el.style.maxHeight = el.scrollHeight + 'px';
+                }
               }
             },
             showDetails(e): void {
-              if (window.innerHeight <= 960 && this.selectedPost != null) {
-                const postIndex = this.posts.findIndex((post) => post.id === this.selectedPost.id);
-                const position = postIndex % this.hitsPerPage;
-                const el = this.$refs.detailsSmartphone[position].$el;
-                el.style.maxHeight = el.scrollHeight + 'px';
+              if (window.innerWidth <= 960 && this.selectedPost != null) {
+                this.setDetailsHeight();
               }
             }
         }
@@ -562,7 +566,7 @@
       display: block;
       max-height: 0;
       overflow: hidden;
-      transition: max-height 0.3s ease-in-out;
+      transition: max-height 0.4s ease;
     }
     .details-smartphone.active {
       max-height: 100%;
@@ -576,6 +580,7 @@
     }
     .show-map {
       display: block !important;
+      margin-bottom: 12px;
     }
     .button-details {
       display: none;
