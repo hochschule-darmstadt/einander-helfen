@@ -14,7 +14,7 @@
                             <l-tile-layer :url="map.url" :attribution="map.attribution"></l-tile-layer>
                             <v-marker-cluster>
                               <v-marker
-                                      v-for="post in posts"
+                                      v-for="post in postWithGeoLocation"
                                       :key="post.id"
                                       :icon="post.id === currentPostId ? map.markerRed: map.markerBlue"
                                       :lat-lng="[post.geo_location.lat, post.geo_location.lon]"
@@ -37,7 +37,7 @@
           >
           
           <div class="container-buttons-smartphone">
-            <v-btn dark class="mr-3 button-smartphone button-map-smartphone" text @click="openMap()">
+            <v-btn :disabled="selectedPost.geo_location === null" dark class="mr-3 button-smartphone button-map-smartphone" text @click="openMap()">
               <v-icon>map</v-icon> Karte
             </v-btn>
             <v-btn class="button-close button-smartphone button-close-smartphone" icon @click="closePost()">
@@ -45,7 +45,7 @@
             </v-btn>
           </div>
           <v-list-item three-line>
-            <v-btn dark class="mr-3 button-map" text @click="openMap()">
+            <v-btn :disabled="selectedPost.geo_location === null" dark class="mr-3 button-map" text @click="openMap()">
               <v-icon>map</v-icon> Karte
             </v-btn>
 
@@ -245,6 +245,9 @@
             },
             postIsOpen(): boolean {
                 return !!this.selectedPost;
+            },
+            postWithGeoLocation(): any {
+              return this.posts.filter((post) => post.geo_location !== null);
             }
         },
         created(): void {
@@ -343,7 +346,8 @@
                 this.fitMapBounds(this.posts);
             },
             fitMapBounds(posts: Post[]): void {
-                const markers = posts.map((post) => [post.geo_location.lat, post.geo_location.lon] as LatLngTuple);
+                const markers = posts.filter((post) => post.geo_location !== null )
+                  .map((post) => [post.geo_location.lat, post.geo_location.lon] as LatLngTuple);
                 (this.$refs.map as LMap).fitBounds(markers);
             },
             rerenderMap(): void {
