@@ -3,6 +3,7 @@ from data_extraction.Scraper import Scraper
 import re
 import math
 
+
 class EinJahrFreiwillig(Scraper):
     """Scrapes the website ein-jahr-freiwillig.de."""
 
@@ -21,12 +22,19 @@ class EinJahrFreiwillig(Scraper):
         organization = content.find('div', {'class': 'field field--name-field-traeger field--type-entity-reference field--label-above'})
         prerequisits = content.find('div', {'class': 'field field--name-field-voraussetzungen field--type-string-long field--label-above'})
 
-        categories = content.find('div', {'class': 'field field--name-field-einsatzfelder field--type-entity-reference field--label-hidden field__items'})
         category_names = []
+        categories = content.find('div', {'class': 'field field--name-field-einsatzfelder field--type-entity-reference field--label-hidden field__items'})
         if categories is not None:
             categories = categories.find_all('a')
             for category in categories:
                 category_names.append(category.decode_contents().strip())
+
+        # Service types are added as an additional tag
+        service_types = content.find('div', {'class': 'field field--name-field-dienstarten field--type-entity-reference field--label-hidden field__items'})
+        if service_types is not None:
+            service_types = service_types.find_all('a')
+            for service_type in service_types:
+                category_names.append(service_type.decode_contents().strip())
 
         parsed_object = {
             'title': response.find('span', {'class': 'field field--name-title field--type-string field--label-hidden'}).decode_contents().strip() or None,
@@ -103,7 +111,6 @@ class EinJahrFreiwillig(Scraper):
 
         index = 1
         while next_page_url:
-
             response = self.soupify(next_page_url)
 
             # Get tags of individual results

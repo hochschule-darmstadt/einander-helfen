@@ -57,4 +57,4 @@ class Enhancer:
 
     def __enhance_ein_jahr_freiwillig(self):
         """ domain specific enhancement for ein-jahr-freiwillig """
-        pass
+        e_tags.run(self.__data, self.__domain_name)
