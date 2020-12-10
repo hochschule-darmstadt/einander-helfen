@@ -323,7 +323,6 @@
                 this.postMapToggle = 'post';
               }
             });
-            window.addEventListener('resize', this.showDetails);
         },
         mounted(): void {
           this.rerenderMap();
@@ -394,12 +393,12 @@
             ...mapLocationActions(['setSelectedRadius', 'setAlternateRadius']),
             openPost(id: string): void {
                 this.postMapToggle = 'post';
-                this.setDetailsHeight();
+                this.setDetailsHeight(false);
                 const postIndex = this.posts.findIndex((post) => post.id === id);
                 this.setSelectedPost(this.posts[postIndex]);
                 this.setPage(this.pageOfCurrentPost);
                 this.setMapLocation();
-                this.setDetailsHeight();
+                this.setDetailsHeight(true);
             },
             openMap(): void {
                 this.postMapToggle = 'map';
@@ -416,7 +415,7 @@
                 });
             },
             closePost(): void {
-                this.setDetailsHeight();
+                this.setDetailsHeight(false);
                 this.setSelectedPost(null);
                 this.postMapToggle = 'map';
                 this.rerenderMap();
@@ -465,7 +464,7 @@
 
               return RADIUS_OF_EARTH_IN_KM * c;
             },
-            setDetailsHeight(): void {
+            setDetailsHeight(open: boolean): void {
               if (this.selectedPost == null) {
                 return;
               }
@@ -477,16 +476,11 @@
                 if (window.innerWidth > 960) {
                   return;
                 }
-                if (el.style.maxHeight !== '0px' && el.style.maxHeight !== '') {
-                  el.style.maxHeight = 0;
-                } else {
+                if (open) {
                   el.style.maxHeight = el.scrollHeight + 'px';
+                } else {
+                  el.style.maxHeight = 0;
                 }
-              }
-            },
-            showDetails(e): void {
-              if (window.innerWidth <= 960 && this.selectedPost != null) {
-                this.setDetailsHeight();
               }
             }
         }
