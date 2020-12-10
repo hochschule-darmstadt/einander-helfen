@@ -1,0 +1,16 @@
+version: '2.1'
+services:
+ elasticEinanderHelfen:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.6.2
+    restart: always
+    hostname: elastic
+    environment:
+      - discovery.type=single-node
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    ports:
+      - 127.0.0.1:9200:9200
+volumes:
+  elasticsearch-data:
+    driver: local
+
