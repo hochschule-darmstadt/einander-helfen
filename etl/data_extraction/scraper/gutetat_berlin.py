@@ -47,7 +47,7 @@ class GuteTatBerlinScraper(Scraper):
             'organization': None,
             'contact': contact_str or None,
             'link': url or None,
-            'source': f'{self.website_url}/helfen/ehrenamtliches-engagement/projekte-berlin',
+            'source': self.website_url,
             'geo_location': None,
         }
 
