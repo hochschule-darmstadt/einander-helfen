@@ -3,7 +3,7 @@
     <Header />
       <v-layout row wrap no-gutters ma-2>
         <!-- Map -->
-        <v-flex xs12 md6 mb-3 mb-sm-3 order-md2 class="show-map" v-show="postMapToggle === 'map'">
+        <v-flex xs12 md6 order-md2 class="show-map" v-show="postMapToggle === 'map'">
            <div class="map">
                 <v-card tile id="mapcard" class="map-heigth">
                     <div id="map" :style="{height: map.height, width: map.width}">
@@ -53,7 +53,6 @@
               contain
               :src="selectedPost.image"
             ></v-img></div>
-
             <v-btn class="button-close" icon @click="closePost()">
               <v-icon>close</v-icon>
             </v-btn>
@@ -149,10 +148,10 @@
             >
                 <v-list-item three-line :class="{ activeListItem: currentPostId === post.id }" @click="currentPostId === post.id ? closePost() : openPost(post.id)">
                   <v-list-item-content>
-                    <v-list-item-title class="headline mb-1">
+                    <v-list-item-title class="headline mb-1" :class="{'full-text': currentPostId === post.id}">
                       {{post.title}}
                     </v-list-item-title>
-                    <v-list-item-subtitle :set="distance = postDistance(post)">
+                    <v-list-item-subtitle :set="distance = postDistance(post)" :class="{ 'post-subtitle': currentPostId === post.id }">
                       <strong>{{post.location}} <em v-if="distance">(in {{distance}})</em></strong> &mdash;
                        <span v-html="post.task"/>
                     </v-list-item-subtitle>
@@ -165,79 +164,78 @@
                     :src="post.image"
                   ></v-img>
                 </v-list-item>
-                <v-card-text class="details-smartphone" v-show="currentPostId == post.id">
-                  <h3 v-html="post.title"></h3>
-                  <br/>
-                  <div v-if="post.location">
-                  <h4>Einsatzort</h4>
-                  <p v-html="post.location"></p>
-                  </div>
-                  <div v-if="post.task">
-                  <h4>Aufgabe</h4>
-                  <p v-html="post.task"></p>
-                  </div>
-                  <div v-if="post.contact">
-                  <h4>Ansprechpartner</h4>
-                  <p v-html="post.contact"></p>
-                  </div>
-                  <div v-if="post.organization">
-                  <h4>Organisation</h4>
-                  <p v-html="post.organization"></p>
-                  </div>
-                  <div v-if="post.target_group">
-                  <h4>Zielgruppe</h4>
-                  <p v-html="post.target_group"></p>
-                  </div>
-                  <div v-if="post.timing">
-                  <h4>Einstiegsdatum / Beginn</h4>
-                  <p v-html="post.timing"></p>
-                  </div>
-                  <div v-if="post.effort">
-                  <h4>Zeitaufwand</h4>
-                  <p v-html="post.effort"></p>
-                  </div>
-                  <div v-if="post.opportunities">
-                  <h4>Möglichkeiten</h4>
-                  <p v-html="post.opportunities"></p>
-                  </div>
-                  <div v-if="post.link">
-                  <h4>Quelle</h4>
-                  <p>
-                    <a :href="post.link" target="_blank">{{
-                    post.source
-                    }}</a>
-                  </p>
-                  </div>
-                </v-card-text>
-                <v-card-actions class="details-smartphone" v-show="currentPostId == post.id">
-                  <v-flex md12 sm12>
-                    <v-container style="margin-bottom: 10px">
-                      <template
-                        v-for="(category, i) in post.categories"
-                      >
-                        <v-chip :key="i" class="mr-2 mt-2">{{ category }}</v-chip>
-                      </template>
-                    </v-container>
-                    <v-spacer></v-spacer>
-                    <v-container style="display:flex;justify-content:center;">
-                      <v-btn
-                        class="my-2"
-                        dark
-                        large
-                        color="#054C66"
-                        :href="post.link"
-                        target="_blank"
-                      >
-                        Zum Angebot
-                      </v-btn>
-                    </v-container>
-                  </v-flex>
-                </v-card-actions>
+                <v-card ref="detailsSmartphone"  class="details-smartphone" :class="{ 'active' : currentPostId === post.id }">
+                  <v-card-text>
+                    <div v-if="post.location">
+                    <h3>Einsatzort</h3>
+                    <p v-html="post.location"></p>
+                    </div>
+                    <div v-if="post.task">
+                    <h3>Aufgabe</h3>
+                    <p v-html="post.task"></p>
+                    </div>
+                    <div v-if="post.contact">
+                    <h3>Ansprechpartner</h3>
+                    <p v-html="post.contact"></p>
+                    </div>
+                    <div v-if="post.organization">
+                    <h3>Organisation</h3>
+                    <p v-html="post.organization"></p>
+                    </div>
+                    <div v-if="post.target_group">
+                    <h3>Zielgruppe</h3>
+                    <p v-html="post.target_group"></p>
+                    </div>
+                    <div v-if="post.timing">
+                    <h3>Einstiegsdatum / Beginn</h3>
+                    <p v-html="post.timing"></p>
+                    </div>
+                    <div v-if="post.effort">
+                    <h3>Zeitaufwand</h3>
+                    <p v-html="post.effort"></p>
+                    </div>
+                    <div v-if="post.opportunities">
+                    <h3>Möglichkeiten</h3>
+                    <p v-html="post.opportunities"></p>
+                    </div>
+                    <div v-if="post.link">
+                    <h3>Quelle</h3>
+                    <p>
+                      <a :href="post.link" target="_blank">{{
+                      post.source
+                      }}</a>
+                    </p>
+                    </div>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-flex md12 sm12>
+                      <v-container style="margin-bottom: 10px">
+                        <template
+                          v-for="(category, i) in post.categories"
+                        >
+                          <v-chip :key="i" class="mr-2 mt-2">{{ category }}</v-chip>
+                        </template>
+                      </v-container>
+                      <v-spacer></v-spacer>
+                      <v-container style="display:flex;justify-content:center;">
+                        <v-btn
+                          class="my-2"
+                          dark
+                          large
+                          color="#054C66"
+                          :href="post.link"
+                          target="_blank"
+                        >
+                          Zum Angebot
+                        </v-btn>
+                      </v-container>
+                    </v-flex>
+                  </v-card-actions>
+                </v-card>
               </v-card>
-
-              <div class="text-center pt-12" v-if="!postsOnCurrentPage.length">
-                <h3 class="font-weight-bold ">Es wurden keine Suchergebnisse zu Ihrer Suchanfrage gefunden.</h3>
-              </div>
+            <div class="text-center pt-12" v-if="!postsOnCurrentPage.length">
+              <h3 class="font-weight-bold ">Es wurden keine Suchergebnisse zu Ihrer Suchanfrage gefunden.</h3>
+            </div>
           </div>
         </v-flex>
 
@@ -306,7 +304,7 @@
             };
         },
         computed: {
-            ...mapState(['posts', 'page', 'resultsFrom', 'selectedPost', 'totalResultSize']),
+            ...mapState(['posts', 'page', 'resultsFrom', 'selectedPost', 'totalResultSize', 'hitsPerPage']),
             ...mapGetters(['postsOnCurrentPage', 'numberOfPages', 'pageOfCurrentPost']),
             ...mapLocationState(['selectedLocation', 'selectedLocationObject', 'selectedRadius', 'alternateRadius']),
             ...mapSearchState(['searchValues']),
@@ -394,11 +392,13 @@
             ...mapActions(['hydrateStateFromRoute', 'updateURIFromState', 'setSelectedPost', 'setPage', 'findPosts']),
             ...mapLocationActions(['setSelectedRadius', 'setAlternateRadius']),
             openPost(id: string): void {
-                        this.postMapToggle = 'post';
-                        const postIndex = this.posts.findIndex((post) => post.id === id);
-                        this.setSelectedPost(this.posts[postIndex]);
-                        this.setPage(this.pageOfCurrentPost);
-                        this.setMapLocation();
+                this.postMapToggle = 'post';
+                this.setDetailsHeight(false);
+                const postIndex = this.posts.findIndex((post) => post.id === id);
+                this.setSelectedPost(this.posts[postIndex]);
+                this.setPage(this.pageOfCurrentPost);
+                this.setMapLocation();
+                this.setDetailsHeight(true);
             },
             openMap(): void {
                 this.postMapToggle = 'map';
@@ -415,6 +415,7 @@
                 });
             },
             closePost(): void {
+                this.setDetailsHeight(false);
                 this.setSelectedPost(null);
                 this.postMapToggle = 'map';
                 this.rerenderMap();
@@ -462,6 +463,25 @@
               const c = 2 * Math.asin(Math.sqrt(h));
 
               return RADIUS_OF_EARTH_IN_KM * c;
+            },
+            setDetailsHeight(open: boolean): void {
+              if (this.selectedPost == null) {
+                return;
+              }
+              const postIndex = this.posts.findIndex((post) => post.id === this.selectedPost.id);
+              const postDetails = this.$refs.detailsSmartphone[postIndex];
+              if (postDetails != null) {
+                const position = postIndex % this.hitsPerPage;
+                const el = this.$refs.detailsSmartphone[position].$el;
+                if (window.innerWidth > 960) {
+                  return;
+                }
+                if (open) {
+                  el.style.maxHeight = el.scrollHeight + 'px';
+                } else {
+                  el.style.maxHeight = 0;
+                }
+              }
             }
         }
     });
@@ -525,25 +545,48 @@
    .map-heigth {
      height: 70vh;
     }
-   .details-smartphone{
-     display: none;
-   }
+    .details-smartphone {
+      display: none;
+    }
+    .post-subtitle {
+      display: -webkit-box !important;
+    }
 
    @media only screen and (max-width: 960px) {
     .map-heigth {
-       height: 40vh;
+       height: 60vh;
     }
     .details-smartphone {
       display: block;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+    .details-smartphone.active {
+      max-height: 100%;
+    }
+    .details-smartphone p,
+    .details-smartphone h3{
+      color: rgba(0,0,0,.87)!important;
     }
     .details {
       display: none;
     }
     .show-map {
       display: block !important;
+      margin-bottom: 12px;
     }
     .button-details {
       display: none;
+    }
+    .v-application .headline {
+      font-size: 1.3rem !important;
+    }
+    .full-text {
+      white-space: normal;
+    }
+    .post-subtitle {
+      display: none !important;
     }
    }
    @media only screen and (max-width: 500px) {
