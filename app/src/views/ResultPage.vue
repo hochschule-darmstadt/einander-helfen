@@ -156,8 +156,12 @@
                       {{post.title}}
                     </v-list-item-title>
                     <v-list-item-subtitle :set="distance = postDistance(post)">
-                      <strong>{{post.location}} <em v-if="distance">(in {{distance}})</em></strong> &mdash;
-                       <span v-html="post.task"/>
+                      <strong>
+                        <span v-if="post.post_struct.location.country === 'Deutschland'">{{post.post_struct.location.zipcode}}</span>
+                        <span> {{post.post_struct.location.city}}</span>
+                        <span v-if="post.post_struct.location.country !== 'Deutschland'">{{post.post_struct.location.country}}</span><em v-if="distance"> (in {{distance}})</em>
+                      </strong> &mdash;
+                      <span v-html="post.task"/>
                     </v-list-item-subtitle>
                   </v-list-item-content>
                 </v-list-item>
