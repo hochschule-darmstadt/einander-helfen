@@ -36,6 +36,10 @@ class WeltwaertsScraper(Scraper):
             'location': param_box.find('li').find('span', {'class': 'parameter__value'}).decode_contents().strip() or None,
             'task': content.find('h2', text='Deine Aufgabe').findNext('div').decode_contents().strip() or None,
             'target_group': None,
+            'prerequisites': content.find('h2', text='Anforderungen an dich').findNext(
+                'div').p.decode_contents().strip() or None,
+            'language_skills': param_box.find('li').findNext('li').find('span', {
+                'class': 'parameter__value'}).decode_contents().strip() or None,
             'timing': param_box.find('li').findNext('li').findNext('li').find('span', {'class': 'parameter__value'}).decode_contents().strip() or None,
             'effort': None,
             'opportunities': None,
@@ -47,8 +51,6 @@ class WeltwaertsScraper(Scraper):
                 'lat': lat,
                 'lon': lon,
             } if lat and lon else None, # If longitude and latitude are None, geo_location is set to None
-            'languages': param_box.find('li').findNext('li').find('span', {'class': 'parameter__value'}).decode_contents().strip() or None,
-            'requirements': content.find('h2', text='Anforderungen an dich').findNext('div').p.decode_contents().strip() or None,
         }
 
         contact_split = self.__extract_contact_data(contact, parsed_object['contact'])
@@ -64,6 +66,8 @@ class WeltwaertsScraper(Scraper):
             },
             'task': re.sub(r'</?p>', '', parsed_object['task']).strip(),
             'target_group': None,
+            'prerequisites': parsed_object['prerequisites'],
+            'language_skills': parsed_object['language_skills'],
             'timing': parsed_object['timing'],
             'effort': None,
             'opportunities': None,
@@ -79,8 +83,6 @@ class WeltwaertsScraper(Scraper):
             'link': parsed_object['link'],
             'source': parsed_object['source'],
             'geo_location': parsed_object['geo_location'],
-            'languages': parsed_object['languages'],
-            'requirements': parsed_object['requirements'],
         }
 
         return parsed_object

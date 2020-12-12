@@ -41,6 +41,7 @@ class GuteTatBerlinScraper(Scraper):
             'location': project_address_str or None,
             'task': response.find('strong', text='Projektbeschreibung:').parent.parent.find_all('td')[1].text or None,
             'target_group': None,
+            'prerequisites': response.find('strong', text='Voraussetzungen/Vorkenntnisse:').parent.parent.find_all('td')[1].text or None,
             'timing': response.find('strong', text='Zeitraum:').parent.parent.find_all('td')[1].text or None,
             'effort': response.find('strong', text='Zeitbedarf:').parent.parent.find_all('td')[1].text or None,
             'opportunities': None,
@@ -71,6 +72,8 @@ class GuteTatBerlinScraper(Scraper):
             },
             'task': self.clean_string(parsed_object['task']) or None,
             'target_group': None,
+            'prerequisites': self.remove_unnecessary_whitespaces(
+                self.clean_string(parsed_object['prerequisites'], ' ')) or None,
             'timing': self.clean_string(parsed_object['timing']) or None,
             'effort': self.clean_string(parsed_object['effort']) or None,
             'opportunities': None,
