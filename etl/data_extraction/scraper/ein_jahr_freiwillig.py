@@ -16,7 +16,7 @@ class EinJahrFreiwillig(Scraper):
         content = response.find('div', {'class': 'node__content'})
 
         location = content.find('p', {'class': 'address'})
-        task = content.find('div', {'class ': 'clearfix text-formatted field field--name-body field--type-text-with-summary field--label-hidden field__item'})
+        task = content.find('div', {'class': 'clearfix text-formatted field field--name-body field--type-text-with-summary field--label-hidden field__item'})
         timing = content.find('div', {'class': 'field field--name-field-field-verfuegbar-ab field--type-string field--label-above'})
         effort = content.find('div', {'class': 'field field--name-field-laenge-dienstzeit field--type-string field--label-above'})
         organization = content.find('div', {'class': 'field field--name-field-traeger field--type-entity-reference field--label-above'})
