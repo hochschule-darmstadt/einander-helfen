@@ -1,27 +1,27 @@
 <template>
   <v-row justify="center">
-            <v-autocomplete
-              prepend-inner-icon="place"
-              label="Ort oder PLZ"
-              :filter="filterLocations"
-              :items="showLocations"
-              item-text="title"
-              item-value="title"
-              v-bind:value="selectedLocation"
-              @input="newSelectedLocation = $event"
-              style="margin-left: 10px; margin-right: 10px;"
-              v-on:keyup.self="locationOnKeyUp"
-              auto-select-first
-              v-on:keyup.enter="emitInput"
-              :dark="dark"
-              v-bind:hide-no-data="true"
-              v-on:focus="clearOnFocus"
-              v-bind:append-icon="(showLocations.length > 0) ? '$dropdown' : ''"
-              @keydown.enter="$emit('enter')"
-              >
-            </v-autocomplete>
+    <v-autocomplete
+      prepend-inner-icon="place"
+      label="Ort oder PLZ"
+      :filter="filterLocations"
+      :items="showLocations"
+      item-text="title"
+      item-value="title"
+      v-bind:value="selectedLocation"
+      @input="newSelectedLocation = $event"
+      style="margin-left: 10px; margin-right: 10px;"
+      v-on:keyup.self="locationOnKeyUp"
+      auto-select-first
+      v-on:keyup.enter="emitInput"
+      :dark="dark"
+      v-bind:hide-no-data="true"
+      v-on:focus="clearOnFocus"
+      v-bind:append-icon="(showLocations.length > 0) ? '$dropdown' : ''"
+      @keydown.enter="$emit('enter')"
+      :attach="attachTo"
+    >
+    </v-autocomplete>
   </v-row>
-
 </template>
 
 <script lang="ts">
@@ -36,6 +36,10 @@
       dark: {
         type: Boolean,
         default: false
+      },
+      attachTo: {
+        type: String,
+        default: ''
       },
     },
       data(): {
