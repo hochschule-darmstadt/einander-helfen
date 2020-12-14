@@ -133,7 +133,7 @@ class Scraper:
 
         if value is None:
             return None
-        if len(optional_replacement_argument) is 0:
+        if len(optional_replacement_argument) == 0:
             replace_with = ''
         else:
             if optional_replacement_argument[0] is not None:
