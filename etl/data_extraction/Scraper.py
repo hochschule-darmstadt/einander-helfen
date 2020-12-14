@@ -121,13 +121,28 @@ class Scraper:
         self.urls.append(self.base_url)
 
     @staticmethod
-    def clean_string(value):
-        """Removes all line breaks, tabs and leading or trailing whitespaces from a string."""
+    def remove_unnecessary_whitespaces(value):
+        """Removes duplicate and leading or trailing whitespaces in a string"""
+        if value is None:
+            return None
+        return ' '.join(value.split())
+
+    @staticmethod
+    def clean_string(value, *optional_replacement_argument):
+        """Removes all line breaks, tabs and leading or trailing whitespaces from a string. The optional argument
+        optional_replacement_argument lets you specify a string to substitute the replaced tags"""
 
         if value is None:
             return None
+        if len(optional_replacement_argument) == 0:
+            replace_with = ''
+        else:
+            if optional_replacement_argument[0] is not None:
+                replace_with = optional_replacement_argument[0]
+            else:
+                replace_with = ''
 
-        return value.replace('\n', '').replace('\r', '').replace('\t', '').strip()
+        return value.replace('\n', replace_with).replace('\r', replace_with).replace('\t', replace_with).strip()
 
     @staticmethod
     def clean_html_tags(value):
