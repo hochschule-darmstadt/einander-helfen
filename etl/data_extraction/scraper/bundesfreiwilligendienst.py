@@ -170,7 +170,4 @@ class BundesFreiwilligendienst(Scraper):
 
             index += 1
 
-            if index > 1:
-                break
-
             time.sleep(self.delay)
