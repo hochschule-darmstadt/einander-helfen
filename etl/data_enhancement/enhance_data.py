@@ -22,6 +22,8 @@ class Enhancer:
             'gutetat_berlin': self.__enhance_gute_tat,
             'gutetat_hamburg': self.__enhance_gute_tat,
             'gutetat_munich': self.__enhance_gute_tat,
+            'ein_jahr_freiwillig': self.__enhance_ein_jahr_freiwillig,
+
         }
 
     def run(self):
@@ -52,3 +54,7 @@ class Enhancer:
     def __enhance_gute_tat(self):
         """ domain specific enhancement for gute-tat website group"""
         pass
+
+    def __enhance_ein_jahr_freiwillig(self):
+        """ domain specific enhancement for ein-jahr-freiwillig """
+        e_tags.run(self.__data, self.__domain_name)
