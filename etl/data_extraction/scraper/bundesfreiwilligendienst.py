@@ -73,6 +73,7 @@ class BundesFreiwilligendienst(Scraper):
             object_name = contact_entry.find('strong').decode_contents().strip()
             if 'Name' in object_name:
                 contact_name = contact_entry.find('div', {'class': 'span10'})
+                contact_name = ' '.join(contact_name.decode_contents().strip().split()) if contact_name is not None else None
             if 'Telefon' in object_name:
                 contact_phone = contact_entry.find('span', {'class': 'span10'})
             if 'Mail' in object_name:
@@ -103,7 +104,7 @@ class BundesFreiwilligendienst(Scraper):
                 'email': None,
             },
             'contact': {
-                'name': self.clean_string(contact_name.decode_contents().strip()) if contact_name is not None else None,
+                'name': self.clean_string(contact_name) if len(contact_name) > 0 else None,
                 'zipcode': None,
                 'city': None,
                 'street': None,
@@ -168,5 +169,8 @@ class BundesFreiwilligendienst(Scraper):
                 next_page_url = self.base_url + '/' + next_page_url.parent['href']
 
             index += 1
+
+            if index > 1:
+                break
 
             time.sleep(self.delay)
