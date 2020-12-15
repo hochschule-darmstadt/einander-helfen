@@ -80,14 +80,14 @@ class BundesFreiwilligendienst(Scraper):
 
         parsed_object['post_struct'] = {
             'title': self.clean_string(parsed_object['title']) or None,
-            'categories': parsed_object['categories'] or None,
+            'categories': parsed_object['categories'],
             'location': {
                 'country': None,
                 'zipcode': self.clean_string(location_zipcode.decode_contents()) if location_zipcode is not None else None,
                 'city': self.clean_string(location_city.decode_contents()) if location_city is not None else None,
                 'street': self.clean_string(location_street.decode_contents()) if location_street is not None else None,
             },
-            'task': self.clean_string(parsed_object['task']) or None,
+            'task': self.clean_string(self.clean_html_tags(parsed_object['task'])) or None,
             'target_group': None,
             'prerequisites': None,
             'language_skills': None,
@@ -108,7 +108,7 @@ class BundesFreiwilligendienst(Scraper):
                 'city': None,
                 'street': None,
                 'phone': self.clean_string(contact_phone.decode_contents().strip()) if contact_phone is not None else None,
-                'email': self.clean_string(contact_email.decode_contents().strip()) if contact_email is not None else None,
+                'email': self.clean_string(contact_email.decode_contents().strip().replace('[at]', '@')) if contact_email is not None else None,
             },
             'link': self.clean_string(parsed_object['link']) or None,
             'source': self.clean_string(parsed_object['source']) or None,
@@ -121,14 +121,17 @@ class BundesFreiwilligendienst(Scraper):
 
         import time
 
-        search_page_url = f'{self.base_url}/bundesfreiwilligendienst/platz-einsatzstellensuche/einsatzstelle-suchen.html?tx_bfdeinsatzstellensuche_einsatzstellensuche%5Bseite%5D=1&tx_bfdeinsatzstellensuche_einsatzstellensuche%5Baction%5D=blaettern&tx_bfdeinsatzstellensuche_einsatzstellensuche%5Bcontroller%5D=Suchen%5CEinsatzstellensuche&cHash=094683ada8eb8c80aab0c200e3aa89f1'
+        search_page_url = f'{self.base_url}/bundesfreiwilligendienst/platz-einsatzstellensuche/einsatzstelle-suchen.html?tx_bfdeinsatzstellensuche_einsatzstellensuche%5Baction%5D=filter&tx_bfdeinsatzstellensuche_einsatzstellensuche%5Bcontroller%5D=Suchen%5CEinsatzstellensuche&cHash=e5b52d4a17e46f7278157d2c526cecc5'
         next_page_url = search_page_url
 
         index = 1
         index_max = -1
+        session = None
 
         while next_page_url:
-            response = self.soupify(next_page_url)
+            response, session = self.soupify_post_session(next_page_url, {
+                'tx_bfdeinsatzstellensuche_einsatzstellensuche[ergebnisseProSeite]': 100
+            }, session)
 
             detail_link_tags = [x.find('a') for x in response.find_all('td', {'class': 'row5'})]
 
