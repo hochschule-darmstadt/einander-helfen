@@ -2,20 +2,26 @@ import csv
 import os
 
 from shared.utils import write_data_to_json
+from shared.LoggerFactory import LoggerFactory
 
 ROOT_DIR = os.environ['ROOT_DIR']
+logger = LoggerFactory.get_enhancement_logger()
 
 
 def run(data, domain):
     """ calls functions for extracting and ranking tags """
+    logger.debug("run()")
+
     find_new_tags(data, domain)
     rank_tags(data, domain)
 
 
 def load_tags_from_file():
     """loads given tags from csv file and returns them in a dict"""
+    logger.debug("load_tags_from_file()")
+
     loaded_tags = {}
-    print("load_tags_from_file - path: ",os.path.join(ROOT_DIR,'data_enhancement', 'Tags-einander-helfen.csv'))
+    logger.info(f"load_tags_from_file - path: {os.path.join(ROOT_DIR,'data_enhancement', 'Tags-einander-helfen.csv')}")
     with open(os.path.join(ROOT_DIR, 'data_enhancement','Tags-einander-helfen.csv'), newline='',
               encoding='utf-8') as csvfile:
         reader = csv.DictReader(csvfile, delimiter=';')
@@ -26,6 +32,8 @@ def load_tags_from_file():
 
 def get_synonyms_as_list(values):
     """converts the synonyms to a list"""
+    logger.debug("get_synonyms_as_list()")
+
     synonyms = []
     for val in values:
         for syn in val:
@@ -36,6 +44,8 @@ def get_synonyms_as_list(values):
 def find_new_tags(file,domain):
     """scans categories of crawled data to find tags not existing in the given csv
     writes new found tags to output directory as new_tags.json"""
+    logger.debug("find_new_tags()")
+
     loaded_tags = load_tags_from_file()
     synonyms = get_synonyms_as_list(loaded_tags.values())
 
@@ -53,6 +63,8 @@ def rank_tags(file, domain):
     # todo: find occurrences of synonyms and add to label count,
     #       print to json file in the same format like the tag ontology csv file,
     #       make a new index for the ranked tag ontology for frontend access
+    logger.debug("rank_tags()")
+
     loaded_tags = load_tags_from_file()
     labels = loaded_tags.keys()
     synonyms = get_synonyms_as_list(loaded_tags.values())

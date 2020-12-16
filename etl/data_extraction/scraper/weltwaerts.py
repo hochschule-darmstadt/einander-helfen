@@ -111,22 +111,25 @@ class WeltwaertsScraper(Scraper):
             index_max = response.find('div', {'class': 'result__pagination'}).nav.p.decode_contents().strip()
             index_max = index_max.split(" von ", 1)[1]
 
-            if self.debug:
-                print(f'Fetched {len(detail_link_tags)} URLs from {next_page_url} [{index}/{index_max}]')
+            self.logger.info(f'Fetched {len(detail_link_tags)} URLs from {next_page_url} [{index}/{index_max}]')
 
             # Iterate links and add, if not already found
             for link_tag in detail_link_tags:
                 current_link = self.base_url + '/' + link_tag['href']
                 if current_link in self.urls:
-                    self.add_error({
-                        'func': 'add_urls',
-                        'body': {
-                            'page_index': index,
-                            'search_page': next_page_url,
-                            'duplicate_link': current_link,
-                            'duplicate_index': self.urls.index(current_link)
-                        }
-                    })
+                    self.logger.warning(f"func: add_urls, 'body:'page_index: {index},"
+                                        f" search_page: {search_page_url}, "
+                                        f"duplicate_index: {current_link}, "
+                                        f"duplicate_index: {self.urls.index(current_link)}")
+                    #self.add_error({
+                    #    'func': 'add_urls',
+                    #    'body': {
+                    #        'page_index': index,
+                    #        'search_page': next_page_url,
+                    #        'duplicate_link': current_link,
+                    #        'duplicate_index': self.urls.index(current_link)
+                    #    }
+                    #})
                 else:
                     self.urls.append(current_link)
 
@@ -153,7 +156,7 @@ class WeltwaertsScraper(Scraper):
 
         # Removing HTML-Tags
         contact_raw = re.sub(r'<br/?>', '\n', contact_raw)
-        contact_raw = Scraper.clean_html_tags(contact_raw)
+        contact_raw = self.clean_html_tags(contact_raw)
 
         contact_split = list(filter(lambda s: 'E-mail' not in s, filter(None, re.split('\n|,', contact_raw))))
 
