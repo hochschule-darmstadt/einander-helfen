@@ -37,6 +37,8 @@ class BundesFreiwilligendienst(Scraper):
             'location': location.decode_contents().strip() if location is not None else None,
             'task': task.decode_contents().strip() if task is not None else None,
             'target_group': None,
+            'prerequisites': None,
+            'language_skills': None,
             'timing': None,
             'effort': None,
             'opportunities': None,
@@ -48,8 +50,6 @@ class BundesFreiwilligendienst(Scraper):
                 'lat': lat,
                 'lon': lon,
             } if lat and lon else None, # If longitude and latitude are None, geo_location is set to None,
-            'languages': None,
-            'requirements': None,
 
         }
         location_street = None
