@@ -6,6 +6,8 @@ from bs4 import BeautifulSoup
 
 from shared.utils import append_data_to_json, write_data_to_json
 from shared.LoggerFactory import LoggerFactory
+from shared.ProgressBar import ProgressBar
+
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -38,7 +40,11 @@ class Scraper:
         Step 1: Adding URLs
         Step 2: Clearing output data file
         Step 3: Crawl each URL in the urls-array"""
+        self.logger.debug("run()")
         self.logger.info(f'Scraper {self.name} started')
+
+        # register progress bar
+        ProgressBar.register_crawler(self.name)
 
         self.start = time.time()
 
@@ -57,12 +63,13 @@ class Scraper:
             time.sleep(self.delay)
             self.crawl(url, i + 1)
 
-        self.logger.info(f"[{self.name}] took {(time.time() - self.start):0.2f} seconds to crawl {len(self.urls)} pages from {self.base_url}")
-        self.logger.info(f'Scraper {self.name} ended')
+        self.logger.info(f"[{self.name}] took {(time.time() - self.start):0.2f} seconds to crawl {len(self.urls)}"
+                         f" pages from {self.base_url}")
 
     def crawl(self, url, index):
         """Crawls page, runs the parse function over the GET-result and appends it to the existing data output file."""
-        self.logger.info(f'[{self.name}] Scraping page #{index} [{index}/{len(self.urls)}]')
+        self.logger.debug("crawl()")
+        self.logger.debug(f'[{self.name}] Scraping page #{index} [{index}/{len(self.urls)}]')
 
         try:
             detail_page = self.soupify(url)
@@ -74,18 +81,7 @@ class Scraper:
             self.logger.exception(f'fn : parse, body {str(err)}, index: {index}, url:{url}')
 
         self.logger.debug(f'[{self.name}] Scraping page #{index} ended')
-
-    def get_errors(self):
-        """Returns errors of scraping process."""
-        self.logger.debug("get_errors")
-
-        return self.errors
-
-    def add_error(self, err: dict):
-        """Adds error to the error object (used for logging)."""
-        self.logger.error(f'Error [{self.name}]:{err}')
-
-        self.errors.append(err)
+        LoggerFactory.get_general_logger().info("\n" + ProgressBar.get_progress_data(self.name, index, len(self.urls)))
 
     def soupify(self, url):
         """Executes GET-request with the given url, transforms it to a BeautifulSoup object and returns it."""

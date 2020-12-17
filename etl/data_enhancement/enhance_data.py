@@ -1,7 +1,7 @@
-from .enhancement_duplicates import enhancement_exact_duplicates as e_exact_duplicates
-from .enhancement_tags import enhancement_tags as e_tags
-from .enhancement_location import enhancement_location as e_location
-from .enhancement_location.lat_lon_enhancer import add_lat_lon
+from data_enhancement.enhancement_duplicates import enhancement_exact_duplicates as e_exact_duplicates
+from data_enhancement.enhancement_tags import enhancement_tags as e_tags
+from data_enhancement.enhancement_location import enhancement_location as e_location
+from data_enhancement.enhancement_location.lat_lon_enhancer import add_lat_lon
 from shared.LoggerFactory import LoggerFactory
 
 
@@ -41,12 +41,13 @@ class Enhancer:
 
     def __run_for_domain(self, domain):
         """ run domainspecific enhancement. """
-        self.logger.debug(f"Run domain specific enhancement enhancement for {domain}")
+        self.logger.debug("__run_for_domain()")
+        self.logger.info(f"Run domain specific enhancement enhancement for {domain}")
 
         if domain in self.__function_map:
             self.__function_map[domain]()
         else:
-            self.logger.error(f"Error [enhance_data.py]: No function set for '{domain}'")
+            self.logger.error(f"No function set for '{domain}'")
 
     def __enhance_ehrenamt_hessen(self):
         """ domain specific enhancement for ehrenamtsuche hessen """

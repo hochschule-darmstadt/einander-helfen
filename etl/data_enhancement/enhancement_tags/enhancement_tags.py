@@ -41,7 +41,7 @@ def get_synonyms_as_list(values):
     return synonyms
 
 
-def find_new_tags(file,domain):
+def find_new_tags(file, domain):
     """scans categories of crawled data to find tags not existing in the given csv
     writes new found tags to output directory as new_tags.json"""
     logger.debug("find_new_tags()")

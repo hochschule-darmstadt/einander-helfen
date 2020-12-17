@@ -10,7 +10,7 @@ class EhrenamtHessenScraper(Scraper):
 
     def parse(self, response, url):
         """Handles the soupified response of a detail page in the predefined way and returns it."""
-        self.logger.debug("parse() for {url}")
+        self.logger.debug("parse()")
 
         tab = response.find('a', {'href': '?param&searchTab=jobentries&entryTypeId=5&showEntryTypeFilterSelect=false'})
         tab_parent_div = tab.parent
@@ -127,7 +127,7 @@ class EhrenamtHessenScraper(Scraper):
 
     def add_urls(self):
         """Adds all URLs of detail pages, found on the search pages, for the crawl function to scrape."""
-        self.logger.debug("add_urls")
+        self.logger.debug("add_urls()")
 
         end_page = self.fetch_end_page()
 
@@ -144,26 +144,17 @@ class EhrenamtHessenScraper(Scraper):
             for detail_link in detail_links:
                 current_link = self.base_url + detail_link['href']
                 if current_link in self.urls:
-                    self.logger.warning(f"func: add_urls, 'body:'page_index: {index},"
+                    self.logger.debug(f"func: add_urls, 'body:'page_index: {index},"
                                         f" search_page: {search_page_url}, "
                                         f"duplicate_index: {current_link}, "
                                         f"duplicate_index: {self.urls.index(current_link)}")
-                    #self.add_error({
-                    #    'func': 'add_urls',
-                    #    'body': {
-                    #        'page_index': index,
-                    #        'search_page': search_page_url,
-                    #        'duplicate_link': current_link,
-                    #        'duplicate_index': self.urls.index(current_link)
-                    #    }
-                    #})
                 else:
                     self.urls.append(current_link)
 
     def fetch_end_page(self):
         """Domain-specific Function.
         Fetches the number of pages from the search result page for the add_urls function."""
-        self.logger.debug("fetch_end_page")
+        self.logger.debug("fetch_end_page()")
 
         search_page_url = f'{self.base_url}/entry_search_result.cfm?locationId=0&entryTypeId=5'
         search_page = self.soupify(search_page_url)
