@@ -164,7 +164,7 @@
                     :src="post.image"
                   ></v-img>
                 </v-list-item>
-                <v-card ref="detailsSmartphone"  class="details-smartphone" :class="{ 'active' : currentPostId === post.id }">
+                <v-card ref="detailsSmartphone"  class="details-smartphone" :class="{ 'details-smartphone-visible' : currentPostId === post.id, 'details-smartphone-hidden' : currentPostId !== post.id }">
                   <v-card-text>
                     <div v-if="post.location">
                     <h3>Einsatzort</h3>
@@ -393,12 +393,10 @@
             ...mapLocationActions(['setSelectedRadius', 'setAlternateRadius']),
             openPost(id: string): void {
                 this.postMapToggle = 'post';
-                this.setDetailsHeight(false);
                 const postIndex = this.posts.findIndex((post) => post.id === id);
                 this.setSelectedPost(this.posts[postIndex]);
                 this.setPage(this.pageOfCurrentPost);
                 this.setMapLocation();
-                this.setDetailsHeight(true);
             },
             openMap(): void {
                 this.postMapToggle = 'map';
@@ -415,7 +413,6 @@
                 });
             },
             closePost(): void {
-                this.setDetailsHeight(false);
                 this.setSelectedPost(null);
                 this.postMapToggle = 'map';
                 this.rerenderMap();
@@ -463,25 +460,6 @@
               const c = 2 * Math.asin(Math.sqrt(h));
 
               return RADIUS_OF_EARTH_IN_KM * c;
-            },
-            setDetailsHeight(open: boolean): void {
-              if (this.selectedPost == null) {
-                return;
-              }
-              const postIndex = this.posts.findIndex((post) => post.id === this.selectedPost.id);
-              const position = postIndex % this.hitsPerPage;
-              const postDetails = this.$refs.detailsSmartphone[position];
-              if (postDetails != null) {
-                const el = postDetails.$el;
-                if (window.innerWidth > 960) {
-                  return;
-                }
-                if (open) {
-                  el.style.maxHeight = el.scrollHeight + 'px';
-                } else {
-                  el.style.maxHeight = 0;
-                }
-              }
             }
         }
     });
@@ -558,12 +536,15 @@
     }
     .details-smartphone {
       display: block;
-      max-height: 0;
       overflow: hidden;
+    }
+    .details-smartphone-visible {
+      max-height: 10000px;
       transition: max-height 0.4s ease;
     }
-    .details-smartphone.active {
-      max-height: 100%;
+    .details-smartphone-hidden {
+      max-height: 0;
+      transition: max-height 0.4s ease;
     }
     .details-smartphone p,
     .details-smartphone h3{
