@@ -50,7 +50,7 @@ class EinJahrFreiwillig(Scraper):
             'organization': organization.find("a").decode_contents().strip() if organization is not None else None,
             'contact': None,
             'link': url or None,
-            'source': self.base_url,
+            'source': "www.ein-jahr-freiwillig.de",
             'geo_location':  None,
         }
 

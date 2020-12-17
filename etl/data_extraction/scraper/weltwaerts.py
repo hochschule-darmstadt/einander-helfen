@@ -47,7 +47,7 @@ class WeltwaertsScraper(Scraper):
             'organization': content.find('h2', text='Die Aufnahmeorganisation vor Ort').findNext('div').p.decode_contents().strip() or None,
             'contact': contact.decode_contents().strip() or None,
             'link': url or None,
-            'source': self.base_url,
+            'source': "www.weltwaerts.de",
             'geo_location': {
                 'lat': lat,
                 'lon': lon,
