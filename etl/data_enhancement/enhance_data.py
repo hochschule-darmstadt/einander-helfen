@@ -23,7 +23,7 @@ class Enhancer:
             'gutetat_hamburg': self.__enhance_gute_tat,
             'gutetat_munich': self.__enhance_gute_tat,
             'ein_jahr_freiwillig': self.__enhance_ein_jahr_freiwillig,
-
+            'bundesfreiwilligendienst': self.__enhance_bundesfreiwilligendienst,
         }
 
     def run(self):
@@ -58,3 +58,8 @@ class Enhancer:
     def __enhance_ein_jahr_freiwillig(self):
         """ domain specific enhancement for ein-jahr-freiwillig """
         e_tags.run(self.__data, self.__domain_name)
+
+    def __enhance_bundesfreiwilligendienst(self):
+        """ domain specific enhancement for bundesfreiwilligendienst """
+        e_tags.run(self.__data, self.__domain_name)
+

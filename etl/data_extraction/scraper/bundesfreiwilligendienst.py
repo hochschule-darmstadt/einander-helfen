@@ -2,11 +2,14 @@ from data_extraction.Scraper import Scraper
 
 
 class BundesFreiwilligendienst(Scraper):
+    """Scrapes the website bundesfreiwilligendienst.de."""
 
     base_url = "https://www.bundesfreiwilligendienst.de"
     debug = True
 
     def parse(self, response, url):
+        """Handles the soupified response of a detail page in the predefined way and returns it."""
+
         content = response.find('div', {'class': 'single_view_entry clearfix'})
 
         title = content.find('h1')
@@ -50,8 +53,8 @@ class BundesFreiwilligendienst(Scraper):
                 'lat': lat,
                 'lon': lon,
             } if lat and lon else None, # If longitude and latitude are None, geo_location is set to None,
-
         }
+
         location_street = None
         location_zipcode = None
         location_city = None
@@ -73,6 +76,7 @@ class BundesFreiwilligendienst(Scraper):
             object_name = contact_entry.find('strong').decode_contents().strip()
             if 'Name' in object_name:
                 contact_name = contact_entry.find('div', {'class': 'span10'})
+                # Due to the contact name containing lots of spaces, they are being removed using split and join
                 contact_name = ' '.join(contact_name.decode_contents().strip().split()) if contact_name is not None else None
             if 'Telefon' in object_name:
                 contact_phone = contact_entry.find('span', {'class': 'span10'})
@@ -113,12 +117,14 @@ class BundesFreiwilligendienst(Scraper):
             },
             'link': self.clean_string(parsed_object['link']) or None,
             'source': self.clean_string(parsed_object['source']) or None,
-            'geo_location': None,
+            'geo_location': parsed_object['geo_location'],
+            'map_address': None,
         }
 
         return parsed_object
 
     def add_urls(self):
+        """Adds all URLs of detail pages, found on the search pages, for the crawl function to scrape."""
 
         import time
 
@@ -169,5 +175,8 @@ class BundesFreiwilligendienst(Scraper):
                 next_page_url = self.base_url + '/' + next_page_url.parent['href']
 
             index += 1
+
+            if index > 10:
+                break
 
             time.sleep(self.delay)
