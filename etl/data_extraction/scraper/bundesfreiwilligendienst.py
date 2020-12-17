@@ -48,7 +48,7 @@ class BundesFreiwilligendienst(Scraper):
             'organization': None,
             'contact': contact.decode_contents().strip() if contact is not None else None,
             'link': url or None,
-            'source': self.base_url,
+            'source': 'www.bundesfreiwilligendienst.de',
             'geo_location':  {
                 'lat': lat,
                 'lon': lon,
