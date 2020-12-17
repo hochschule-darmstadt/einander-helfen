@@ -99,9 +99,10 @@ class Scraper:
         page = BeautifulSoup(res.text, 'html.parser')
         return page
 
-    @staticmethod
-    def soupify_post_session(url, form_data, session):
+
+    def soupify_post_session(self, url, form_data, session):
         """Executes POST-request with the given url, form data and session, transforms it to a BeautifulSoup object and returns it."""
+        self.logger.debug("soupify_post_session()")
 
         if session is None:
             session = requests.Session()

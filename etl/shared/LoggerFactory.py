@@ -64,3 +64,8 @@ class LoggerFactory:
     def get_enhancement_logger():
         """Returns general logger for enhancement modules"""
         return LoggerFactory.get_logger('enhancement')
+
+    @staticmethod
+    def get_elastic_logger():
+        """Returns general logger for enhancement modules"""
+        return LoggerFactory.get_logger('elastic')

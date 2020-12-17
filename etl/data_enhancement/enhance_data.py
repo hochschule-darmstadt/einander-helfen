@@ -75,5 +75,7 @@ class Enhancer:
 
     def __enhance_bundesfreiwilligendienst(self):
         """ domain specific enhancement for bundesfreiwilligendienst """
+        self.logger.debug("__enhance_bundesfreiwilligendienst()")
+
         e_tags.run(self.__data, self.__domain_name)
 

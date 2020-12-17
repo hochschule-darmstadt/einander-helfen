@@ -5,11 +5,10 @@ class BundesFreiwilligendienst(Scraper):
     """Scrapes the website bundesfreiwilligendienst.de."""
 
     base_url = "https://www.bundesfreiwilligendienst.de"
-    debug = True
 
     def parse(self, response, url):
         """Handles the soupified response of a detail page in the predefined way and returns it."""
-
+        self.logger.debug("parse()")
         content = response.find('div', {'class': 'single_view_entry clearfix'})
 
         title = content.find('h1')
@@ -125,6 +124,7 @@ class BundesFreiwilligendienst(Scraper):
 
     def add_urls(self):
         """Adds all URLs of detail pages, found on the search pages, for the crawl function to scrape."""
+        self.logger.debug("add_urls()")
 
         import time
 
@@ -149,8 +149,7 @@ class BundesFreiwilligendienst(Scraper):
             if index_max == -1 and next_page_tag is not None:
                 index_max = next_page_tag.parent.parent.find_previous_sibling('li').a.decode_contents().strip()
 
-            if self.debug:
-                print(f'Fetched {len(detail_link_tags)} URLs from {self.base_url} [{index}/{index_max}]')
+            self.logger.debug(f'Fetched {len(detail_link_tags)} URLs from {self.base_url} [{index}/{index_max}]')
 
             # Iterate links and add, if not already found
             for link_tag in detail_link_tags:
