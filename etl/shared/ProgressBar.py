@@ -31,15 +31,21 @@ class ProgressBar:
     @staticmethod
     def __generate_progress_bar(name, current, total):
         ProgressBar.logger.debug("__generate_progress_bar()")
+        description = ""
         if total == 0:
             percentage = 0
+            description = "(still fetching pages)"
         else:
             percentage = int(100 * current / total)
-        bar = ''.join(['X' * int(percentage / 2)])
+            if percentage == 100:
+                description = "(finished)"
+            else:
+                description = f"{percentage}% ({current}/{total})"
+        bar = ''.join(['#' * int(percentage / 2)])
         size_bar_missing = 50 - len(bar)
         bar_missing = ''.join(["-" * size_bar_missing])
         bar = bar + bar_missing
-        return f"{name}\t [{bar}] {percentage}% ({current}/{total})"
+        return f"{name}\t [{bar}] {description}"
 
     @staticmethod
     def get_progress_data(name, current, total):

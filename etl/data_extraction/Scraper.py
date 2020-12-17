@@ -81,7 +81,7 @@ class Scraper:
             self.logger.exception(f'fn : parse, body {str(err)}, index: {index}, url:{url}')
 
         self.logger.debug(f'[{self.name}] Scraping page #{index} ended')
-        LoggerFactory.get_general_logger().info("\n" + ProgressBar.get_progress_data(self.name, index, len(self.urls)))
+        print("\n" + ProgressBar.get_progress_data(self.name, index, len(self.urls)))
 
     def soupify(self, url):
         """Executes GET-request with the given url, transforms it to a BeautifulSoup object and returns it."""
