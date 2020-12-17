@@ -146,12 +146,12 @@
                     :key="post.id"
                     class="mb-3"
             >
-                <v-list-item three-line :class="{ activeListItem: currentPostId === post.id }" @click="currentPostId === post.id ? closePost() : openPost(post.id)">
+                <v-list-item :ripple="false" three-line :class="{ activeListItem: currentPostId === post.id }" @click="currentPostId === post.id ? closePost() : openPost(post.id)">
                   <v-list-item-content>
                     <v-list-item-title class="headline mb-1" :class="{'full-text': currentPostId === post.id}">
                       {{post.title}}
                     </v-list-item-title>
-                    <v-list-item-subtitle :set="distance = postDistance(post)" :class="{ 'post-subtitle': currentPostId === post.id }">
+                    <v-list-item-subtitle :set="distance = postDistance(post)" :class="{ 'post-subtitle-hidden': currentPostId === post.id, 'post-subtitle': currentPostId !== post.id  }">
                       <strong>{{post.location}} <em v-if="distance">(in {{distance}})</em></strong> &mdash;
                        <span v-html="post.task"/>
                     </v-list-item-subtitle>
@@ -469,10 +469,10 @@
                 return;
               }
               const postIndex = this.posts.findIndex((post) => post.id === this.selectedPost.id);
-              const postDetails = this.$refs.detailsSmartphone[postIndex];
+              const position = postIndex % this.hitsPerPage;
+              const postDetails = this.$refs.detailsSmartphone[position];
               if (postDetails != null) {
-                const position = postIndex % this.hitsPerPage;
-                const el = this.$refs.detailsSmartphone[position].$el;
+                const el = postDetails.$el;
                 if (window.innerWidth > 960) {
                   return;
                 }
@@ -585,8 +585,15 @@
     .full-text {
       white-space: normal;
     }
+    .post-subtitle-hidden {
+      max-height: 0;
+      opacity: 0;
+      position: absolute;
+    }
     .post-subtitle {
-      display: none !important;
+      max-height: 40px;
+      opacity: 1;
+      transition: all 0.4s 0.2s;
     }
    }
    @media only screen and (max-width: 500px) {
