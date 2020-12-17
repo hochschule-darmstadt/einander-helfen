@@ -50,8 +50,6 @@ def run():
     """Starts a thread with the execute_scraper function for all overridden scraper subclasses in /data_extraction/scraper."""
 
     for file_entry in os.scandir(os.path.join(ROOT_DIR, 'data_extraction/scraper')):
-        if file_entry.name != 'bundesfreiwilligendienst.py':
-            continue
 
         if file_entry.is_file():
             scraper_module_name = os.path.splitext(
