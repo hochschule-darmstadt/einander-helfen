@@ -140,6 +140,7 @@ class EhrenamtHessenScraper(Scraper):
             detail_links = [x.find('a') for x in search_page.find_all('div', {'class': 'easSearchResultTitle'})]
 
             self.logger.debug(f'Fetched {len(detail_links)} URLs from {search_page_url} [{index}/{end_page}]')
+            self.get_progress_data_fetching(index, end_page)
 
             for detail_link in detail_links:
                 current_link = self.base_url + detail_link['href']

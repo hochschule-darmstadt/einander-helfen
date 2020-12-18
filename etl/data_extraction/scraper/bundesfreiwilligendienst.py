@@ -150,6 +150,7 @@ class BundesFreiwilligendienst(Scraper):
                 index_max = next_page_tag.parent.parent.find_previous_sibling('li').a.decode_contents().strip()
 
             self.logger.debug(f'Fetched {len(detail_link_tags)} URLs from {self.base_url} [{index}/{index_max}]')
+            self.get_progress_data_fetching(index, index_max)
 
             # Iterate links and add, if not already found
             for link_tag in detail_link_tags:

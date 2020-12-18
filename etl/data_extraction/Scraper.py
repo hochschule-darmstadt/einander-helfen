@@ -63,7 +63,10 @@ class Scraper:
             time.sleep(self.delay)
             self.crawl(url, i + 1)
 
-        self.logger.info(f"[{self.name}] took {(time.time() - self.start):0.2f} seconds to crawl {len(self.urls)}"
+        crawling_time = str((time.time() - self.start))
+        crawling_time = "{:.2f}".format((time.time() - self.start))
+        ProgressBar.add_time(self.name, crawling_time)
+        self.logger.info(f"[{self.name}] took {crawling_time} seconds to crawl {len(self.urls)}"
                          f" pages from {self.base_url}")
 
     def crawl(self, url, index):
@@ -81,7 +84,8 @@ class Scraper:
             self.logger.exception(f'fn : parse, body {str(err)}, index: {index}, url:{url}')
 
         self.logger.debug(f'[{self.name}] Scraping page #{index} ended')
-        ProgressBar.get_progress_data(self.name, index, len(self.urls))
+        #ProgressBar.get_progress_data(self.name, index, len(self.urls), ProgressBar.MODE_CRAWLING)
+        self.get_progress_data_crawling(index, len(self.urls))
 
     def soupify(self, url):
         """Executes GET-request with the given url, transforms it to a BeautifulSoup object and returns it."""
@@ -158,3 +162,15 @@ class Scraper:
             return None
 
         return BeautifulSoup(value, 'lxml').text
+
+    def get_progress_data_fetching(self, current, total):
+        """ Updates progress data of fetching process for crawler and triggers print of progeess bar"""
+        self.logger.debug("get_progress_data_fetching()")
+
+        ProgressBar.get_progress_data(self.name, current, total, ProgressBar.MODE_FETCHING)
+
+    def get_progress_data_crawling(self, current, total):
+        """ Updates progress data of crawling for crawler and triggers print of progeess bar"""
+        self.logger.debug("get_progress_data_fetching()")
+
+        ProgressBar.get_progress_data(self.name, current, total, ProgressBar.MODE_CRAWLING)
