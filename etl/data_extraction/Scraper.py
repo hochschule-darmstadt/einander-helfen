@@ -66,8 +66,8 @@ class Scraper:
         crawling_time = str((time.time() - self.start))
         crawling_time = "{:.2f}".format((time.time() - self.start))
         ProgressBar.add_time(self.name, crawling_time)
-        self.logger.info(f"[{self.name}] took {crawling_time} seconds to crawl {len(self.urls)}"
-                         f" pages from {self.base_url}")
+        self.logger.debug(f"[{self.name}] took {crawling_time} seconds to crawl {len(self.urls)}"
+                          f" pages from {self.base_url}")
 
     def crawl(self, url, index):
         """Crawls page, runs the parse function over the GET-result and appends it to the existing data output file."""
