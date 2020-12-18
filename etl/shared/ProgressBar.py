@@ -3,11 +3,12 @@ from shared.LoggerFactory import LoggerFactory
 
 
 class ProgressBar:
+    """ This class stores the progress data of all crawlers and displays it"""
     lock = Lock()
     progress_data = dict()
     logger = LoggerFactory.get_general_logger()
     MODE_FETCHING = "fetching pages"
-    MODE_CRAWLING = "crawling"
+    MODE_CRAWLING = "crawling pages"
     MODE_INITIALISING = "initialising"
     PADLENGTH = 25
 

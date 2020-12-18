@@ -84,7 +84,6 @@ class Scraper:
             self.logger.exception(f'fn : parse, body {str(err)}, index: {index}, url:{url}')
 
         self.logger.debug(f'[{self.name}] Scraping page #{index} ended')
-        #ProgressBar.get_progress_data(self.name, index, len(self.urls), ProgressBar.MODE_CRAWLING)
         self.get_progress_data_crawling(index, len(self.urls))
 
     def soupify(self, url):
