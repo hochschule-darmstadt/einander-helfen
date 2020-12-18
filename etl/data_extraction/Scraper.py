@@ -81,7 +81,7 @@ class Scraper:
             self.logger.exception(f'fn : parse, body {str(err)}, index: {index}, url:{url}')
 
         self.logger.debug(f'[{self.name}] Scraping page #{index} ended')
-        print("\n" + ProgressBar.get_progress_data(self.name, index, len(self.urls)))
+        ProgressBar.get_progress_data(self.name, index, len(self.urls))
 
     def soupify(self, url):
         """Executes GET-request with the given url, transforms it to a BeautifulSoup object and returns it."""
@@ -115,13 +115,13 @@ class Scraper:
 
     def parse(self, response, url):
         """Transforms the soupified response of a detail page in a predefined way and returns it."""
-        self.logger.info("parse()")
+        self.logger.debug("parse()")
 
         return response.text
 
     def add_urls(self):
         """Adds URLs to an array which is later iterated over and scraped each."""
-        self.logger.info("add_urls()")
+        self.logger.debug("add_urls()")
 
         self.urls.append(self.base_url)
 

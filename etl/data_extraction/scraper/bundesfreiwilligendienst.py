@@ -155,15 +155,10 @@ class BundesFreiwilligendienst(Scraper):
             for link_tag in detail_link_tags:
                 current_link = self.base_url + "/" + link_tag['href']
                 if current_link in self.urls:
-                    self.add_error({
-                        'func': 'add_urls',
-                        'body': {
-                            'page_index': index,
-                            'search_page': next_page_url,
-                            'duplicate_link': current_link,
-                            'duplicate_index': self.urls.index(current_link),
-                        }
-                    })
+                    self.logger.debug(f"func: add_urls, 'body:'page_index: {index},"
+                                      f" search_page: {search_page_url}, "
+                                      f"duplicate_index: {current_link}, "
+                                      f"duplicate_index: {self.urls.index(current_link)}")
                 else:
                     self.urls.append(current_link)
 

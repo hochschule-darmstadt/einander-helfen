@@ -22,15 +22,15 @@ class LoggerFactory:
         """Returns logger with the set name if it exists, otherwise sets up logger with the requested name.
         default: only WARNING messages or above get displayed, DEBUG-level and above is written to logfile"""
 
-        if name in LoggerFactory.logger_dict:
-            return LoggerFactory.logger_dict[name]
-
         if not os.path.exists(os.path.join(ROOT_DIR, 'logs')):
             os.makedirs(os.path.join(ROOT_DIR, 'logs'))
 
-        # set up general formatting for log messages
+        if name in LoggerFactory.logger_dict:
+            return LoggerFactory.logger_dict[name]
+
+        # set up general formatting for displayed log messages
         formatter_display = logging.Formatter('%(asctime)s [%(levelname)s]:\t %(message)s', "%Y-%m-%d %H:%M:%S")
-        # prettier print and module information for logfile
+        # prettier 2 line print and module information for logfile
         formatter_logfile = logging.Formatter('%(asctime)s [%(levelname)s]\n\t\t\t\t\t[%(module)s]:\t %(message)s',
                                               "%Y-%m-%d %H:%M:%S")
 
@@ -67,5 +67,5 @@ class LoggerFactory:
 
     @staticmethod
     def get_elastic_logger():
-        """Returns general logger for enhancement modules"""
+        """Returns general logger for elastic"""
         return LoggerFactory.get_logger('elastic')

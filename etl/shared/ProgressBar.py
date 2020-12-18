@@ -73,4 +73,4 @@ class ProgressBar:
         progress_bar = bars[0]
         for index in range(1, len(bars)):
             progress_bar = progress_bar + "\n" + bars[index]
-        return progress_bar
+        print("\n"+progress_bar)

@@ -120,9 +120,9 @@ class WeltwaertsScraper(Scraper):
                 current_link = self.base_url + '/' + link_tag['href']
                 if current_link in self.urls:
                     self.logger.debug(f"func: add_urls, 'body:'page_index: {index},"
-                                        f" search_page: {search_page_url}, "
-                                        f"duplicate_index: {current_link}, "
-                                        f"duplicate_index: {self.urls.index(current_link)}")
+                                      f" search_page: {search_page_url}, "
+                                      f"duplicate_index: {current_link}, "
+                                      f"duplicate_index: {self.urls.index(current_link)}")
 
                 else:
                     self.urls.append(current_link)
