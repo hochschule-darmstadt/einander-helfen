@@ -59,13 +59,13 @@ class Enhancer:
         """ domain specific enhancement for weltwaerst """
         self.logger.debug("__enhance_weltwaerts()")
 
-        pass
+        self.logger.info("no specific enhancement for weltwaerst required")
 
     def __enhance_gute_tat(self):
         """ domain specific enhancement for gute-tat website group"""
         self.logger.debug("__enhance_gute_tat()")
 
-        pass
+        self.logger.info("no specific enhancement for gute-tat required")
 
     def __enhance_ein_jahr_freiwillig(self):
         """ domain specific enhancement for ein-jahr-freiwillig """
