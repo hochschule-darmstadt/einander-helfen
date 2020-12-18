@@ -1,30 +1,30 @@
 <template>
   <div>
     <Header />
-      <v-layout row wrap no-gutters ma-2>
+      <v-container sitecontent row wrap no-gutters>
         <!-- Map -->
         <v-flex xs12 md6 order-md2 class="show-map" v-show="postMapToggle === 'map'">
            <div class="map">
-                <v-card tile id="mapcard" class="map-heigth">
-                    <div id="map" :style="{height: map.height, width: map.width}">
-                        <v-btn v-if="currentPostId.length > 0" @click="postMapToggle = 'post'"
-                               class="button-details" dark><v-icon>info</v-icon> Details
-                        </v-btn>
-                        <l-map ref="map" :center="map.center" :zoom="map.zoom" :options="{gestureHandling: true}">
-                            <l-tile-layer :url="map.url" :attribution="map.attribution"></l-tile-layer>
-                            <v-marker-cluster>
-                              <v-marker
-                                      v-for="post in posts"
-                                      :key="post.id"
-                                      :icon="post.id === currentPostId ? map.markerRed: map.markerBlue"
-                                      :lat-lng="[post.geo_location.lat, post.geo_location.lon]"
-                                      @click="openPost(post.id)">
-                                  <l-tooltip :content="post.title"></l-tooltip>
-                              </v-marker>
-                            </v-marker-cluster>
-                        </l-map>
-                    </div>
-                </v-card>
+              <v-card tile id="mapcard" class="map-heigth">
+                  <div id="map" :style="{height: map.height, width: map.width}">
+                    <v-btn v-if="currentPostId.length > 0" @click="postMapToggle = 'post'"
+                      class="button-details" dark><v-icon>info</v-icon> Details
+                    </v-btn>
+                    <l-map ref="map" :center="map.center" :zoom="map.zoom" :options="{gestureHandling: true}">
+                      <l-tile-layer :url="map.url" :attribution="map.attribution"></l-tile-layer>
+                      <v-marker-cluster>
+                        <v-marker
+                          v-for="post in postWithGeoLocation"
+                          :key="post.id"
+                          :icon="post.id === currentPostId ? map.markerRed: map.markerBlue"
+                          :lat-lng="[post.geo_location.lat, post.geo_location.lon]"
+                          @click="openPost(post.id)">
+                          <l-tooltip :content="post.title"></l-tooltip>
+                        </v-marker>
+                      </v-marker-cluster>
+                    </l-map>
+                  </div>
+              </v-card>
             </div>
         </v-flex>
 
@@ -33,26 +33,19 @@
           <div>
           <v-card
             tile
-            id="postopenright"
             style="height:70vh; overflow:auto"
           >
           <v-list-item three-line>
-            <v-btn dark class="mr-3 button-map" text @click="openMap()">
+            <v-btn :disabled="selectedPost.geo_location === null" dark class="mr-3 button-map" text @click="openMap()">
               <v-icon>map</v-icon> Karte
             </v-btn>
 
+
+     
             <!--display title, subtitle and image on the right side-->
             <v-list-item-content style="margin-top:2%" class="headline">
               {{selectedPost.title}}
             </v-list-item-content>
-            <div>
-            <v-img
-              style="margin-top:2%"
-              max-width="80px"
-              height="80px"
-              contain
-              :src="selectedPost.image"
-            ></v-img></div>
             <v-btn class="button-close" icon @click="closePost()">
               <v-icon>close</v-icon>
             </v-btn>
@@ -129,6 +122,7 @@
         </v-card>
           </div>
         </v-flex>
+      
 
         <!--left side content-->
         <v-flex sm12 md6 order-md1>
@@ -152,17 +146,14 @@
                       {{post.title}}
                     </v-list-item-title>
                     <v-list-item-subtitle :set="distance = postDistance(post)" :class="{ 'post-subtitle-hidden': currentPostId === post.id, 'post-subtitle': currentPostId !== post.id  }">
-                      <strong>{{post.location}} <em v-if="distance">(in {{distance}})</em></strong> &mdash;
-                       <span v-html="post.task"/>
+                      <strong>
+                        <span v-if="post.post_struct.location.country === 'Deutschland'">{{post.post_struct.location.zipcode}}</span>
+                        <span> {{post.post_struct.location.city}}</span>
+                        <span v-if="post.post_struct.location.country !== 'Deutschland'">{{post.post_struct.location.country}}</span><em v-if="distance"> (in {{distance}})</em>
+                      </strong> &mdash;
+                      <span v-html="post.task"/>
                     </v-list-item-subtitle>
                   </v-list-item-content>
-
-                  <v-img
-                    max-width="80px"
-                    height="55px"
-                    contain
-                    :src="post.image"
-                  ></v-img>
                 </v-list-item>
                 <v-card ref="detailsSmartphone"  class="details-smartphone" :class="{ 'details-smartphone-visible' : currentPostId === post.id, 'details-smartphone-hidden' : currentPostId !== post.id }">
                   <v-card-text>
@@ -238,8 +229,8 @@
             </div>
           </div>
         </v-flex>
-
-      </v-layout>
+        
+      </v-container>
                        <!--pageination-->
           <div class="text-center" style="margin-top:2%; margin-bottom:1%">
             <v-pagination @input="setPage($event)" :value="page" :length="numberOfPages" total-visible="7" color="#054C66"></v-pagination>
@@ -315,6 +306,9 @@
             },
             postIsOpen(): boolean {
                 return !!this.selectedPost;
+            },
+            postWithGeoLocation(): any {
+              return this.posts.filter((post) => post.geo_location !== null);
             }
         },
         created(): void {
@@ -419,7 +413,8 @@
                 this.fitMapBounds(this.posts);
             },
             fitMapBounds(posts: Post[]): void {
-                const markers = posts.map((post) => [post.geo_location.lat, post.geo_location.lon] as LatLngTuple);
+                const markers = posts.filter((post) => post.geo_location !== null )
+                  .map((post) => [post.geo_location.lat, post.geo_location.lon] as LatLngTuple);
                 (this.$refs.map as LMap).fitBounds(markers);
             },
             rerenderMap(): void {
@@ -592,66 +587,68 @@
     }
    }
 
-   @media (min-width:1025px){
-    #postbox {
-      width:80%;
-      margin-top:5%; 
-      margin-left: 15%;
-      margin-right: 1%;
+   @media (min-width:960px){
+    .sitecontent {
+      width: 960px;
+      margin: auto;
+      max-width: none;
+      margin-top: 2%;
     }
 
-    #mapcard {
-      width:80%; 
-      margin-top: 5%; 
-      margin-right:15%;
-    }
-
-    #postopenright {
-      width:80%; 
-      margin-top: 5%; 
-      margin-right:15%; 
+   #postbox {
+      margin-right: 2%;
     }
 
     .list-item {
-      width:80%;
       margin-top:5%; 
-      margin-left: 15%;
-      margin-right: 1px
-    }
-   }
-
-      /* Landscape iPad (Pro)*/
-   @media only screen 
-   and (min-width: 1024px) 
-   and (max-height: 1366px) 
-   and (orientation: landscape){
-
-    #postbox {
-      width:82%;
-      margin-top:5%; 
-      margin-left: 15%;
       margin-right: 1px;
     }
+   }
 
-    #mapcard {
-      width:83%; 
-      margin-top: 5%; 
-      margin-right:15%;
+   @media (min-width: 1100px){
+    .sitecontent {
+      width: 1100px;
+      margin: auto;
+      margin-top: 2%;
     }
 
-    #postopenright {
-      width:83%; 
-      margin-top: 5%; 
-      margin-right:15%; 
-    }
-
-    .list-item {
-      width:82%;
-      margin-top:5%; 
-      margin-left: 15%;
-      margin-right: 1px
+    #postbox {
+      margin-right: 2%;
     }
    }
 
+   @media (min-width: 1300px){
+    .sitecontent {
+      width: 1300px;
+      margin: auto;
+      margin-top: 2%; 
+    }
 
+    #postbox {
+      margin-right: 2%;
+    }
+   }
+
+   @media (min-width: 1618px){
+    .sitecontent {
+      width: 1618px;
+      margin-top: 2%; 
+    }
+
+    #postbox {
+      margin-right: 2%;
+    }
+  }
+
+   @media (min-width: 1904px){
+    .sitecontent {
+      width: 85%;
+      margin: auto;
+      margin-top: 2%; 
+    }
+
+    #postbox {
+      margin-right: 2%;
+    }
+  }
 </style>

@@ -16,6 +16,13 @@ interface Post {
     lat: number;
     lon: number;
   };
+  post_struct: {
+    location: {
+      zipcode: string;
+      city: string;
+      country: string;
+    }
+  };
 }
 
 export {Post};

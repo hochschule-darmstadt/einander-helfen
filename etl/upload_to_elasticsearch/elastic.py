@@ -11,17 +11,8 @@ client = Elasticsearch([{'host': '127.0.0.1', 'port': 9200}])
 
 
 def run_elastic_upload():
-    for file in os.scandir(os.path.join(ROOT_DIR, 'data_enhancement/data')):
-        # read enhanced data for indexing
-        data = read_data_from_json(file.path)
-
-        # Write enhanced data to Elastic Search
-        print('Starting Index Process!')
-        write_to_elastic(data, 'posts')
-        print('Finished Indexing!')
-
-
-def write_to_elastic(posts, index):
+    print('[INFO]\tStarting Index Process!')
+    index = 'posts'
     if client.indices.exists(index=index):
         client.indices.delete(index=index, ignore=[400, 404])
 
@@ -33,6 +24,19 @@ def write_to_elastic(posts, index):
     }
 
     client.indices.create(index=index, body=request_body)
+    print('[INFO]\tFinished Indexing!')
+
+    for file in os.scandir(os.path.join(ROOT_DIR, 'data_enhancement/data')):
+        print(f'[INFO]\t{file.name}: Starting data upload')
+        # read enhanced data for indexing
+        data = read_data_from_json(file.path)
+
+        # Write enhanced data to Elastic Search
+        write_to_elastic(data, index)
+        print(f'[INFO]\t{file.name}: Finished data upload')
+
+
+def write_to_elastic(posts, index):
     ids = []
     for post in posts:
         if post is not None:

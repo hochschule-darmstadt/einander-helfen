@@ -58,7 +58,7 @@
       </v-menu>
 
       <v-flex xs12 sm5 md2>
-        <location-search-bar @input="updateResults" :dark="true" />
+        <location-search-bar @input="updateResults" id="headerLocation" :dark="true" />
       </v-flex>
 
       <v-flex xs12 sm4 md1>
@@ -79,7 +79,7 @@
             style="margin-top: 1vh"
             icon
           >
-            <v-icon>more_vert</v-icon>
+            <v-icon>menu</v-icon>
           </v-btn>
         </template>
         <v-list>
@@ -161,5 +161,19 @@
 <style>
 .v-menu__content {
   z-index: 9999 !important;
+}
+
+@media (min-width: 315px) and (max-width: 382px) {
+  #headerLocation .v-autocomplete__content.v-menu__content{ 
+    max-height: 225px !important;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+}
+
+#headerLocation .v-autocomplete__content.v-menu__content{ 
+  top: auto !important;
+  left: auto !important;
+  margin-top: 33px;
 }
 </style>
