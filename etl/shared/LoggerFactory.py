@@ -5,7 +5,7 @@ ROOT_DIR = os.environ['ROOT_DIR']
 
 
 class LoggerFactory:
-
+    """ This class handles the different loggers according to a singleton factory pattern """
     logger_dict = dict()
     # Set levels for display / writing to logfile. Levels are in ascending order:
     # NOTSET
