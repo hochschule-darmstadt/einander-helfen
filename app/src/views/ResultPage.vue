@@ -3,11 +3,14 @@
     <Header />
       <v-container sitecontent row wrap no-gutters>
         <!-- Map -->
-        <v-flex xs12 md6 order-md2 class="show-map" v-show="postMapToggle === 'map'">
+        <v-btn id="mapButton" class="mb-2 button-map-smartphone" dark @click="toggleMapVisibility()">
+          <v-icon>map</v-icon> {{mapButtonText}}
+        </v-btn>
+        <v-flex xs12 md6 order-md2 class="map-smartphone" v-show="showMap">
            <div class="map">
               <v-card tile id="mapcard" class="map-heigth">
                   <div id="map" :style="{height: map.height, width: map.width}">
-                    <v-btn v-if="currentPostId.length > 0" @click="postMapToggle = 'post'"
+                    <v-btn v-if="currentPostId.length > 0" @click="toggleMapVisibility()"
                       class="button-details" dark><v-icon>info</v-icon> Details
                     </v-btn>
                     <l-map ref="map" :center="map.center" :zoom="map.zoom" :options="{gestureHandling: true}">
@@ -29,7 +32,7 @@
         </v-flex>
 
         <!-- right side content-->
-        <v-flex sm12 md6 order-md2 class="details" v-if="postMapToggle === 'post'">
+        <v-flex sm12 md6 order-md2 class="details" v-if="!showMap && !smartphone">
           <div>
           <v-card
             tile
@@ -268,12 +271,16 @@
         },
         data(): {
             map: any;
-            postMapToggle: 'post' | 'map';
+            mapButtonText: string;
+            showMap: boolean;
+            smartphone: boolean;
             radiusExtendedFrom: '';
             showRadiusExtendedMessage: boolean;
         } {
             return {
-                postMapToggle: 'map',
+                mapButtonText: 'Karte anzeigen',
+                showMap: true,
+                smartphone: false,
                 map: {
                     url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
@@ -313,9 +320,14 @@
         },
         created(): void {
             this.hydrateStateFromRoute(this.$route).then(() => {
-              if (this.postIsOpen) {
-                this.postMapToggle = 'post';
+              if (window.matchMedia('(max-width: 960px)').matches) {
+                this.showMap = false;
+                this.smartphone = true;
               }
+              if (this.postIsOpen) {
+                this.showMap = false;
+              }
+              window.addEventListener('resize', this.onResize);
             });
         },
         mounted(): void {
@@ -386,20 +398,22 @@
             ...mapActions(['hydrateStateFromRoute', 'updateURIFromState', 'setSelectedPost', 'setPage', 'findPosts']),
             ...mapLocationActions(['setSelectedRadius', 'setAlternateRadius']),
             openPost(id: string): void {
-                this.postMapToggle = 'post';
+                if (!this.smartphone) {
+                  this.showMap = false;
+                }
                 const postIndex = this.posts.findIndex((post) => post.id === id);
                 this.setSelectedPost(this.posts[postIndex]);
                 this.setPage(this.pageOfCurrentPost);
                 this.setMapLocation();
             },
             openMap(): void {
-                this.postMapToggle = 'map';
+                this.showMap = true;
                 this.setMapLocation();
             },
             setMapLocation(): void {
                 const currentPost = this.selectedPost as Post;
                 const location = [currentPost.geo_location.lat, currentPost.geo_location.lon] as LatLngTuple;
-                if (this.postMapToggle === 'map') {
+                if (this.showMap) {
                     this.rerenderMap();
                 }
                 this.$nextTick(() => {
@@ -408,7 +422,9 @@
             },
             closePost(): void {
                 this.setSelectedPost(null);
-                this.postMapToggle = 'map';
+                if (!this.smartphone) {
+                  this.showMap = true;
+                }
                 this.rerenderMap();
                 this.fitMapBounds(this.posts);
             },
@@ -419,8 +435,22 @@
             },
             rerenderMap(): void {
               this.$nextTick(() => {
-                (this.$refs.map as LMap).mapObject.invalidateSize();
+                if (this.showMap) {
+                  (this.$refs.map as LMap).mapObject.invalidateSize();
+                }
               });
+            },
+            toggleMapVisibility(): void {
+              this.showMap = !this.showMap;
+              this.mapButtonText = (this.showMap) ? 'Karte ausblenden' : 'Karte anzeigen';
+              if (this.showMap) {
+                if (this.selectedPost !== null) {
+                  this.setMapLocation();
+                } else {
+                  this.fitMapBounds(this.posts);
+                  this.rerenderMap();
+                }
+              }
             },
             postDistance(post: Post): string {
               if (!this.selectedLocationObject) {
@@ -455,6 +485,18 @@
               const c = 2 * Math.asin(Math.sqrt(h));
 
               return RADIUS_OF_EARTH_IN_KM * c;
+            },
+            onResize(): void {
+              if (window.innerWidth < 960 ) {
+                this.smartphone = true;
+                this.showMap = false;
+                this.mapButtonText = 'Karte anzeigen';
+              } else {
+                this.smartphone = false;
+                if (this.selectedPost === null) {
+                  this.showMap = true;
+                }
+              }
             }
         }
     });
@@ -499,7 +541,7 @@
      display: none;
    }
    .button-map-smartphone {
-     background-color: rgb(5, 76, 102);
+     display: none;
    }
    .button-close-smartphone {
      position: absolute;
@@ -526,6 +568,11 @@
     }
 
    @media only screen and (max-width: 960px) {
+     .button-map-smartphone {
+      display: block;
+      width: 100%;
+      background-color: rgb(5, 76, 102) !important;
+    }
     .map-heigth {
        height: 60vh;
     }
@@ -548,8 +595,7 @@
     .details {
       display: none;
     }
-    .show-map {
-      display: block !important;
+    .map-smartphone {
       margin-bottom: 12px;
     }
     .button-details {
