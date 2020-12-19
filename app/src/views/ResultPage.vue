@@ -508,73 +508,79 @@
   @import "~leaflet.markercluster/dist/MarkerCluster.Default.css";
   @import "~leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
 
-   .copyright, .copy, .cpy, strong[class^="copyright"], strong[class^="cpy"], strong[class^="copy"] {
+  .copyright, .copy, .cpy, strong[class^="copyright"], strong[class^="cpy"], strong[class^="copy"] {
     clear: both;
     padding: 10px 0px;
     display: none;
-   }
-   .activeListItem {
-     background-color: #c4e0ff !important;
-   }
-   .no-border tr:not(:last-child) td:not(.v-data-table__mobile-row) {
+  }
+  .activeListItem {
+    background-color: #c4e0ff !important;
+  }
+  .no-border tr:not(:last-child) td:not(.v-data-table__mobile-row) {
     border: 0 !important;
-   }
-   .detail-table table {
-     border-spacing: 0 20px !important;
-   }
-   .detail-table td {
-     height:unset !important;
-   }
-   .detail-table tr:hover {
+  }
+  .detail-table table {
+    border-spacing: 0 20px !important;
+  }
+  .detail-table td {
+    height:unset !important;
+  }
+  .detail-table tr:hover {
     background: unset !important;
-   }
-   .detail-table tr td {
-     vertical-align: top;
-   }
-   .button-map {
-     margin-top: 21px;
-     margin-left: 35px;
-     background-color: rgb(5, 76, 102);
-     align-self: flex-start;
-   }
-   .button-smartphone {
-     display: none;
-   }
-   .button-map-smartphone {
-     display: none;
-   }
-   .button-close-smartphone {
-     position: absolute;
-     right: 0;
-   }
-   .button-details {
-     position: absolute;
-     z-index: 9999;
-     margin-left: 50px;
-     margin-top: 20px;
-     background-color: rgb(5, 76, 102) !important;
-   }
-   .button-close {
-     align-self: flex-start;
-   }
-   .map-heigth {
-     height: 70vh;
-    }
-    .details-smartphone {
-      display: none;
-    }
-    .post-subtitle {
-      display: -webkit-box !important;
-    }
+  }
+  .detail-table tr td {
+    vertical-align: top;
+  }
+  .map-heigth {
+    height: 70vh;
+  }
+  .button-map {
+    margin-top: 21px;
+    margin-left: 35px;
+    background-color: rgb(5, 76, 102);
+    align-self: flex-start;
+  }
+  .button-smartphone {
+    display: none;
+  }
+  .button-map-smartphone {
+    display: none;
+  }
+  .button-close {
+    align-self: flex-start;
+  }
+  .button-close-smartphone {
+    position: absolute;
+    right: 0;
+  }
+  .button-details {
+    position: absolute;
+    z-index: 9999;
+    margin-left: 50px;
+    margin-top: 20px;
+    background-color: rgb(5, 76, 102) !important;
+  }
+  .details-smartphone {
+    display: none;
+  }
+  .post-subtitle {
+    display: -webkit-box !important;
+  }
 
-   @media only screen and (max-width: 960px) {
-     .button-map-smartphone {
+  @media only screen and (max-width: 960px) {
+    .map-heigth {
+      height: 60vh;
+    }
+    .map-smartphone {
+      margin-bottom: 12px;
+    }
+    .button-map-smartphone {
       display: block;
       width: 100%;
       background-color: rgb(5, 76, 102) !important;
     }
-    .map-heigth {
-       height: 60vh;
+    .details {
+      display: none;
     }
     .details-smartphone {
       display: block;
@@ -591,12 +597,6 @@
     .details-smartphone p,
     .details-smartphone h3{
       color: rgba(0,0,0,.87)!important;
-    }
-    .details {
-      display: none;
-    }
-    .map-smartphone {
-      margin-bottom: 12px;
     }
     .button-details {
       display: none;
@@ -617,23 +617,23 @@
       opacity: 1;
       transition: all 0.4s 0.2s;
     }
-   }
-   @media only screen and (max-width: 500px) {
+  }
+  @media only screen and (max-width: 500px) {
     .button-map, .button-close {
       display: none;
     }
     .button-smartphone {
       display: block;
     }
-   }
+  }
 
-   @media (max-width: 480px){
+  @media (max-width: 480px){
     .card {
       max-width: 75vh
     }
-   }
+  }
 
-   @media (min-width:960px){
+  @media (min-width:960px){
     .sitecontent {
       width: 960px;
       margin: auto;
@@ -641,7 +641,7 @@
       margin-top: 2%;
     }
 
-   #postbox {
+    #postbox {
       margin-right: 2%;
     }
 
@@ -649,9 +649,9 @@
       margin-top:5%; 
       margin-right: 1px;
     }
-   }
+    }
 
-   @media (min-width: 1100px){
+    @media (min-width: 1100px){
     .sitecontent {
       width: 1100px;
       margin: auto;
@@ -661,9 +661,9 @@
     #postbox {
       margin-right: 2%;
     }
-   }
+  }
 
-   @media (min-width: 1300px){
+  @media (min-width: 1300px){
     .sitecontent {
       width: 1300px;
       margin: auto;
@@ -673,9 +673,9 @@
     #postbox {
       margin-right: 2%;
     }
-   }
+  }
 
-   @media (min-width: 1618px){
+  @media (min-width: 1618px){
     .sitecontent {
       width: 1618px;
       margin-top: 2%; 
@@ -684,9 +684,9 @@
     #postbox {
       margin-right: 2%;
     }
-  }
+}
 
-   @media (min-width: 1904px){
+  @media (min-width: 1904px){
     .sitecontent {
       width: 85%;
       margin: auto;
