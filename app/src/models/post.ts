@@ -16,6 +16,8 @@ interface Post {
     lat: number;
     lon: number;
   };
+  prerequisites: string;
+  language_skills: string;
   post_struct: {
     location: {
       zipcode: string;

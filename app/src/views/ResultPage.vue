@@ -87,6 +87,14 @@
                 <td>Möglichkeiten</td>
                 <td v-html="selectedPost.opportunities"></td>
               </tr>
+              <tr class="pt-1" v-if="selectedPost.prerequisites">
+                <td>Anforderungen</td>
+                <td v-html="selectedPost.prerequisites"></td>
+              </tr>
+              <tr class="pt-1" v-if="selectedPost.language_skills">
+                <td>Sprachen</td>
+                <td v-html="selectedPost.language_skills"></td>
+              </tr>
               <tr class="pt-1" v-if="selectedPost.link">
                 <td>Quelle</td>
                 <td><a :href="selectedPost.link" target="_blank">{{ selectedPost.source }}</a></td>
@@ -158,44 +166,52 @@
                 <v-card ref="detailsSmartphone"  class="details-smartphone" :class="{ 'details-smartphone-visible' : currentPostId === post.id, 'details-smartphone-hidden' : currentPostId !== post.id }">
                   <v-card-text>
                     <div v-if="post.location">
-                    <h3>Einsatzort</h3>
-                    <p v-html="post.location"></p>
+                      <h3>Einsatzort</h3>
+                      <p v-html="post.location"></p>
                     </div>
                     <div v-if="post.task">
-                    <h3>Aufgabe</h3>
-                    <p v-html="post.task"></p>
+                      <h3>Aufgabe</h3>
+                      <p v-html="post.task"></p>
                     </div>
                     <div v-if="post.contact">
-                    <h3>Ansprechpartner</h3>
-                    <p v-html="post.contact"></p>
+                      <h3>Ansprechpartner</h3>
+                      <p v-html="post.contact"></p>
                     </div>
                     <div v-if="post.organization">
-                    <h3>Organisation</h3>
-                    <p v-html="post.organization"></p>
+                      <h3>Organisation</h3>
+                      <p v-html="post.organization"></p>
                     </div>
                     <div v-if="post.target_group">
-                    <h3>Zielgruppe</h3>
-                    <p v-html="post.target_group"></p>
+                      <h3>Zielgruppe</h3>
+                      <p v-html="post.target_group"></p>
                     </div>
                     <div v-if="post.timing">
-                    <h3>Einstiegsdatum / Beginn</h3>
-                    <p v-html="post.timing"></p>
+                      <h3>Einstiegsdatum / Beginn</h3>
+                      <p v-html="post.timing"></p>
                     </div>
                     <div v-if="post.effort">
-                    <h3>Zeitaufwand</h3>
-                    <p v-html="post.effort"></p>
+                      <h3>Zeitaufwand</h3>
+                      <p v-html="post.effort"></p>
                     </div>
                     <div v-if="post.opportunities">
-                    <h3>Möglichkeiten</h3>
-                    <p v-html="post.opportunities"></p>
+                      <h3>Möglichkeiten</h3>
+                      <p v-html="post.opportunities"></p>
+                    </div>
+                    <div v-if="post.prerequisites">
+                      <h3>Anforderungen</h3>
+                      <p v-html="post.prerequisites"></p>
+                    </div>
+                    <div v-if="post.language_skills">
+                      <h3>Sprachen</h3>
+                      <p v-html="post.language_skills"></p>
                     </div>
                     <div v-if="post.link">
-                    <h3>Quelle</h3>
-                    <p>
-                      <a :href="post.link" target="_blank">{{
-                      post.source
-                      }}</a>
-                    </p>
+                      <h3>Quelle</h3>
+                      <p>
+                        <a :href="post.link" target="_blank">{{
+                        post.source
+                        }}</a>
+                      </p>
                     </div>
                   </v-card-text>
                   <v-card-actions>
