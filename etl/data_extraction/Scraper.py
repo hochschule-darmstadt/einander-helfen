@@ -5,6 +5,8 @@ import requests
 from bs4 import BeautifulSoup
 
 from shared.utils import append_data_to_json, write_data_to_json
+from shared.LoggerFactory import LoggerFactory
+from shared.ProgressBar import ProgressBar
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -14,9 +16,6 @@ class Scraper:
 
     # Domain to be scraped on
     base_url = 'http://example.com'
-
-    # Show debug information
-    debug = False
 
     # Delay between requests
     delay = 0.5
@@ -33,14 +32,19 @@ class Scraper:
         # An error object to keep track of error occurences (which is used for logging)
         self.errors = []
 
+        # logger for Scraper
+        self.logger = LoggerFactory.get_logger(name)
+
     def run(self):
         """Runs the Scraper.
         Step 1: Adding URLs
         Step 2: Clearing output data file
         Step 3: Crawl each URL in the urls-array"""
+        self.logger.debug("run()")
+        self.logger.info(f'Scraper {self.name} started')
 
-        if self.debug:
-            print(f'Scraper {self.name} started')
+        # register progress bar
+        ProgressBar.register_crawler(self.name)
 
         self.start = time.time()
 
@@ -49,7 +53,7 @@ class Scraper:
             self.add_urls()
 
         except Exception as err:
-            self.add_error({'fn': 'add_urls', 'body': str(err)})
+            self.logger.exception(f"fn : add_urls, body {str(err)}")
 
         # Clean existing results
         write_data_to_json(os.path.join(ROOT_DIR, 'data_extraction/data', f'{self.name}.json'), [])
@@ -59,16 +63,16 @@ class Scraper:
             time.sleep(self.delay)
             self.crawl(url, i + 1)
 
-        if self.debug:
-            print(
-                f"[{self.name}] took {(time.time() - self.start):0.2f} seconds to crawl {len(self.urls)} pages from {self.base_url}")
-            print(f'Scraper {self.name} ended')
+        crawling_time = str((time.time() - self.start))
+        crawling_time = "{:.2f}".format((time.time() - self.start))
+        ProgressBar.add_time(self.name, crawling_time)
+        self.logger.debug(f"[{self.name}] took {crawling_time} seconds to crawl {len(self.urls)}"
+                          f" pages from {self.base_url}")
 
     def crawl(self, url, index):
         """Crawls page, runs the parse function over the GET-result and appends it to the existing data output file."""
-
-        if self.debug:
-            print(f'[{self.name}] Scraping page #{index} [{index}/{len(self.urls)}]')
+        self.logger.debug("crawl()")
+        self.logger.debug(f'[{self.name}] Scraping page #{index} [{index}/{len(self.urls)}]')
 
         try:
             detail_page = self.soupify(url)
@@ -77,42 +81,31 @@ class Scraper:
                 append_data_to_json(os.path.join(ROOT_DIR, 'data_extraction/data', f'{self.name}.json'), parsed_data)
 
         except Exception as err:
-            self.add_error({'fn': 'parse', 'body': str(err), 'index': index, 'url': url})
+            self.logger.exception(f'fn : parse, body {str(err)}, index: {index}, url:{url}')
 
-        if self.debug:
-            print(f'[{self.name}] Scraping page #{index} ended')
+        self.logger.debug(f'[{self.name}] Scraping page #{index} ended')
+        self.get_progress_data_crawling(index, len(self.urls))
 
-    def get_errors(self):
-        """Returns errors of scraping process."""
-        return self.errors
-
-    def add_error(self, err: dict):
-        """Adds error to the error object (used for logging)."""
-
-        if self.debug:
-            print(f'Error [{self.name}]:', err)
-        self.errors.append(err)
-
-    @staticmethod
-    def soupify(url):
+    def soupify(self, url):
         """Executes GET-request with the given url, transforms it to a BeautifulSoup object and returns it."""
+        self.logger.debug("soupify()")
 
         res = requests.get(url)
         page = BeautifulSoup(res.text, 'html.parser')
         return page
 
-    @staticmethod
-    def soupify_post(url, form_data):
+    def soupify_post(self, url, form_data):
         """Executes POST-request with the given url and form data, transforms it to a BeautifulSoup object and returns it."""
+        self.logger.debug("soupify_post()")
 
         res = requests.post(url, data=form_data)
-
         page = BeautifulSoup(res.text, 'html.parser')
         return page
 
-    @staticmethod
-    def soupify_post_session(url, form_data, session):
+
+    def soupify_post_session(self, url, form_data, session):
         """Executes POST-request with the given url, form data and session, transforms it to a BeautifulSoup object and returns it."""
+        self.logger.debug("soupify_post_session()")
 
         if session is None:
             session = requests.Session()
@@ -122,28 +115,31 @@ class Scraper:
         page = BeautifulSoup(res.text, 'html.parser')
         return page, session
 
-    @staticmethod
-    def parse(response, url):
+
+    def parse(self, response, url):
         """Transforms the soupified response of a detail page in a predefined way and returns it."""
+        self.logger.debug("parse()")
 
         return response.text
 
     def add_urls(self):
         """Adds URLs to an array which is later iterated over and scraped each."""
+        self.logger.debug("add_urls()")
 
         self.urls.append(self.base_url)
 
-    @staticmethod
-    def remove_unnecessary_whitespaces(value):
+    def remove_unnecessary_whitespaces(self, value):
         """Removes duplicate and leading or trailing whitespaces in a string"""
+        self.logger.debug("remove_unnecessary_whitespaces()")
+
         if value is None:
             return None
         return ' '.join(value.split())
 
-    @staticmethod
-    def clean_string(value, *optional_replacement_argument):
+    def clean_string(self, value, *optional_replacement_argument):
         """Removes all line breaks, tabs and leading or trailing whitespaces from a string. The optional argument
         optional_replacement_argument lets you specify a string to substitute the replaced tags"""
+        self.logger.debug("clean_string()")
 
         if value is None:
             return None
@@ -157,11 +153,23 @@ class Scraper:
 
         return value.replace('\n', replace_with).replace('\r', replace_with).replace('\t', replace_with).strip()
 
-    @staticmethod
-    def clean_html_tags(value):
+    def clean_html_tags(self, value):
         """Removes all html tags."""
+        self.logger.debug("clean_html_tags()")
 
         if value is None:
             return None
 
         return BeautifulSoup(value, 'lxml').text
+
+    def get_progress_data_fetching(self, current, total):
+        """ Updates progress data of fetching process for crawler and triggers print of progeess bar"""
+        self.logger.debug("get_progress_data_fetching()")
+
+        ProgressBar.get_progress_data(self.name, current, total, ProgressBar.MODE_FETCHING)
+
+    def get_progress_data_crawling(self, current, total):
+        """ Updates progress data of crawling for crawler and triggers print of progeess bar"""
+        self.logger.debug("get_progress_data_fetching()")
+
+        ProgressBar.get_progress_data(self.name, current, total, ProgressBar.MODE_CRAWLING)

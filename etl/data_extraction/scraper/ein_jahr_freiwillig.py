@@ -1,4 +1,5 @@
 from data_extraction.Scraper import Scraper
+from shared.ProgressBar import ProgressBar
 
 import re
 import math
@@ -103,7 +104,7 @@ class EinJahrFreiwillig(Scraper):
 
     def add_urls(self):
         """Adds all URLs of detail pages, found on the search pages, for the crawl function to scrape"""
-
+        self.logger.debug("add_urls()")
         import time
 
         search_page_url = f'{self.base_url}/de/suche/ort?geo%5Bvalue%5D=10&geo%5Bsource_configuration%5D%5Borigin_address%5D=&last_minute=All&unterkunft=All&anbieter=&page=0'
@@ -121,22 +122,17 @@ class EinJahrFreiwillig(Scraper):
             index_max = float(re.search('([0-9]+) Treffer', response.find('div', {'class': 'field-result-count'}).decode_contents().strip()).group(1))
             index_max = math.ceil(index_max / 20)
 
-            if self.debug:
-                print(f'Fetched {len(detail_link_tags)} URLs from {next_page_url} [{index}/{index_max}]')
+            self.logger.debug(f'Fetched {len(detail_link_tags)} URLs from {next_page_url} [{index}/{index_max}]')
+            self.get_progress_data_fetching(index, index_max)
 
             # Iterate links and add, if not already found
             for link_tag in detail_link_tags:
                 current_link = self.base_url + link_tag['href']
                 if current_link in self.urls:
-                    self.add_error({
-                        'func': 'add_urls',
-                        'body': {
-                            'page_index': index,
-                            'search_page': next_page_url,
-                            'duplicate_link': current_link,
-                            'duplicate_index': self.urls.index(current_link),
-                        }
-                    })
+                    self.logger.debug(f"func: add_urls, 'body:'page_index: {index},"
+                                      f" search_page: {search_page_url}, "
+                                      f"duplicate_index: {current_link}, "
+                                      f"duplicate_index: {self.urls.index(current_link)}")
                 else:
                     self.urls.append(current_link)
 
