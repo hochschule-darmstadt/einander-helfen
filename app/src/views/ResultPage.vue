@@ -36,11 +36,20 @@
             style="height:70vh; overflow:auto"
           >
           <v-list-item three-line>
-            <v-btn :disabled="selectedPost.geo_location === null" dark class="mr-3 button-map" text @click="openMap()">
+            <v-tooltip top v-if="selectedPost.geo_location === null">
+              <template v-slot:activator="{ on }">
+                <div id="divWithDisabledButton" v-on="on" class="d-inline-block">
+                 <v-btn id="disabledMapButton" :disabled="selectedPost.geo_location === null" dark class="mr-3" text>
+                    <v-icon>map</v-icon> Karte
+                  </v-btn>
+                </div>
+              </template>
+              <span>Der Pin für dieses Angebot kann auf der Karte nicht angezeigt werden, da keine Geodaten hinterlegt sind.</span>
+            </v-tooltip>
+            
+            <v-btn :disabled="selectedPost.geo_location === null" dark class="mr-3 button-map" text @click="openMap()" v-if="selectedPost.geo_location !== null">
               <v-icon>map</v-icon> Karte
             </v-btn>
-
-
      
             <!--display title, subtitle and image on the right side-->
             <v-list-item-content style="margin-top:2%" class="headline">
@@ -488,6 +497,14 @@
    }
    .detail-table tr td {
      vertical-align: top;
+   }
+   #divWithDisabledButton{
+      padding-top: 21px;
+      align-self: flex-start;
+    }
+   #disabledMapButton{
+     margin-left: 35px;
+     background-color: rgb(5, 76, 102);
    }
    .button-map {
      margin-top: 21px;
