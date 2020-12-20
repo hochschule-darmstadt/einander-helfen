@@ -47,7 +47,7 @@
               <span>Der Pin für dieses Angebot kann auf der Karte nicht angezeigt werden, da keine Geodaten hinterlegt sind.</span>
             </v-tooltip>
             
-            <v-btn :disabled="selectedPost.geo_location === null" dark class="mr-3 button-map" text @click="openMap()" v-if="selectedPost.geo_location !== null">
+            <v-btn dark class="mr-3 button-map" text @click="openMap()" v-if="selectedPost.geo_location !== null">
               <v-icon>map</v-icon> Karte
             </v-btn>
      
