@@ -426,7 +426,6 @@
                   this.showMap = true;
                 }
                 this.rerenderMap();
-                this.fitMapBounds(this.posts);
             },
             fitMapBounds(posts: Post[]): void {
                 const markers = posts.filter((post) => post.geo_location !== null )
