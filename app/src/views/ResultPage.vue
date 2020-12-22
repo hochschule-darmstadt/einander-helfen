@@ -498,13 +498,17 @@
    .detail-table tr td {
      vertical-align: top;
    }
-   #divWithDisabledButton{
+   #divWithDisabledButton {
       padding-top: 21px;
       align-self: flex-start;
-    }
-   #disabledMapButton{
+   }
+   #disabledMapButton {
      margin-left: 35px;
-     background-color: rgb(5, 76, 102);
+     background-color: #e0e0e0;
+     color: rgb(174, 168, 168) !important;
+   }
+   #disabledMapButton .v-icon {
+     color: rgb(174, 168, 168) !important;
    }
    .button-map {
      margin-top: 21px;
