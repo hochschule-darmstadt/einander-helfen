@@ -411,14 +411,15 @@
                 this.setMapLocation();
             },
             setMapLocation(): void {
-                const currentPost = this.selectedPost as Post;
-                const location = [currentPost.geo_location.lat, currentPost.geo_location.lon] as LatLngTuple;
-                if (this.showMap) {
-                    this.rerenderMap();
-                }
-                this.$nextTick(() => {
-                    (this.$refs.map as LMap).setCenter(location);
-                });
+              if (!this.showMap) {
+                return;
+              }
+              const currentPost = this.selectedPost as Post;
+              const location = [currentPost.geo_location.lat, currentPost.geo_location.lon] as LatLngTuple;
+              this.rerenderMap();
+              this.$nextTick(() => {
+                  (this.$refs.map as LMap).setCenter(location);
+              });
             },
             closePost(): void {
                 this.setSelectedPost(null);
@@ -426,30 +427,38 @@
                   this.showMap = true;
                 }
                 this.rerenderMap();
+                this.$nextTick(() => {
+                  this.fitMapBounds(this.posts);
+                });
             },
             fitMapBounds(posts: Post[]): void {
-                const markers = posts.filter((post) => post.geo_location !== null )
-                  .map((post) => [post.geo_location.lat, post.geo_location.lon] as LatLngTuple);
-                (this.$refs.map as LMap).fitBounds(markers);
+              if (!this.showMap) {
+                return;
+              }
+              const markers = posts.filter((post) => post.geo_location !== null )
+                .map((post) => [post.geo_location.lat, post.geo_location.lon] as LatLngTuple);
+              (this.$refs.map as LMap).fitBounds(markers);
             },
             rerenderMap(): void {
+              if (!this.showMap) {
+                return;
+              }
               this.$nextTick(() => {
-                if (this.showMap) {
-                  (this.$refs.map as LMap).mapObject.invalidateSize();
-                }
+                (this.$refs.map as LMap).mapObject.invalidateSize();
               });
             },
             toggleMapVisibility(): void {
               this.showMap = !this.showMap;
               this.mapButtonText = (this.showMap) ? 'Karte ausblenden' : 'Karte anzeigen';
-              if (this.showMap) {
-                if (this.selectedPost !== null) {
-                  this.setMapLocation();
-                } else {
-                  this.fitMapBounds(this.posts);
-                  this.rerenderMap();
+              this.$nextTick(() => {
+                if (this.showMap) {
+                  if (this.selectedPost !== null) {
+                    this.setMapLocation();
+                  } else {
+                    this.rerenderMap();
+                  }
                 }
-              }
+              });
             },
             postDistance(post: Post): string {
               if (!this.selectedLocationObject) {
