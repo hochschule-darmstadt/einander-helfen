@@ -1,4 +1,8 @@
+import os
 import unittest
+
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+os.environ['ROOT_DIR'] = ROOT_DIR
 
 from data_enhancement.enhancement_location.lat_lon_enhancer import LatLonEnhancer
 

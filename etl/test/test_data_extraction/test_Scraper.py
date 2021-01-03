@@ -1,6 +1,10 @@
+import os
 import unittest
 
-from Scraper import Scraper
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+os.environ['ROOT_DIR'] = ROOT_DIR
+
+from data_extraction.Scraper import Scraper
 
 
 class TestScraper(unittest.TestCase):
