@@ -22,14 +22,14 @@ def run_elastic_upload():
     request_body = {
         'mappings': {
             'properties': {
-                'geo_location': {'type': 'geo_point'},
+               'geo_location': {'type': 'geo_point'},
             }}
     }
 
     client.indices.create(index=index, body=request_body)
     logger.info("Finished Indexing!")
 
-    for file in os.scandir(os.path.join(ROOT_DIR, 'data_enhancement/data')):
+    for file in os.scandir(os.path.join(ROOT_DIR, 'data_management/upload')):
         logger.info(f'{file.name}: Starting data upload')
         # read enhanced data for indexing
         data = read_data_from_json(file.path)
