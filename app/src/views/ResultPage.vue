@@ -495,11 +495,11 @@
               return RADIUS_OF_EARTH_IN_KM * c;
             },
             onResize(): void {
-              if (window.innerWidth < 960 ) {
+              if (!this.smartphone && window.innerWidth <= 960 ) {
                 this.smartphone = true;
                 this.showMap = false;
                 this.mapButtonText = 'Karte anzeigen';
-              } else {
+              } else if (this.smartphone && window.innerWidth > 960) {
                 this.smartphone = false;
                 if (this.selectedPost === null) {
                   this.showMap = true;
