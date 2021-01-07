@@ -131,7 +131,6 @@ class DataManager:
 
         if len(DataManager.get_sorted_list_of_backups()) < DataManager.fallback_depth:
             DataManager.fallback_depth = len(DataManager.get_sorted_list_of_backups())
-
         return DataManager.get_sorted_list_of_backups()[-DataManager.fallback_depth-1:]
 
     @staticmethod
@@ -141,7 +140,7 @@ class DataManager:
         from older backups within fallback range."""
         DataManager.logger.debug("initialise_upload_data()")
 
-        for backup_folder in backups[-DataManager.fallback_depth:]:
+        for backup_folder in backups[-DataManager.fallback_depth-1:]:
             DataManager.copy_from_backup(backup_folder)
 
     @staticmethod
@@ -155,7 +154,8 @@ class DataManager:
                 max_length = len(entry)
         string_data_origin = ""
         for entry in DataManager.data_origin:
-            string_data_origin = string_data_origin+"\n" + f"{entry.rjust(max_length)} : {DataManager.data_origin[entry]}"
+            string_data_origin = string_data_origin+"\n" + \
+                                 f"{entry.rjust(max_length)} : {DataManager.data_origin[entry]}"
         return string_data_origin
 
     @staticmethod
@@ -176,9 +176,10 @@ class DataManager:
                                                                       upload_file))
 
                     if len(data_in_upload) < DataManager.threshold*len(data_in_backup):
-                        DataManager.logger.info(f"{upload_file} contains less than 75% of the posts in backup '{backup}'"
-                                                f"({len(data_in_upload)} posts vs {len(data_in_backup)} posts). "
-                                                f"Current data for {upload_file} will be replaced with backup data")
+                        DataManager.logger.info(f"{upload_file} contains less than 75% of the posts in backup "
+                                                f"'{backup}' ({len(data_in_upload)} posts vs {len(data_in_backup)} "
+                                                f"posts). Current data for {upload_file} will be replaced with backup "
+                                                f"data")
                         write_data_to_json(os.path.join(DataManager.upload_directory, upload_file), data_in_backup)
                         DataManager.data_origin[upload_file] = backup
 
