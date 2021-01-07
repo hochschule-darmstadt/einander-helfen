@@ -35,7 +35,7 @@ class DataManager:
     # data from the backup is selected for upload instead
     threshold = 0.75
 
-    enhanced_data_location = os.path.join(ROOT_DIR, ROOT_DIR, 'data_enhancement/data')
+    enhanced_data_location = os.path.join(ROOT_DIR, 'data_enhancement/data')
     backup_directory = os.path.join(ROOT_DIR, 'data_management', 'backups')
     upload_directory = os.path.join(ROOT_DIR, 'data_management', 'upload')
 
