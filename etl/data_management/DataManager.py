@@ -41,7 +41,7 @@ class DataManager:
 
     mask_timestamp = '%d.%m.%Y'
 
-    logger = LoggerFactory.get_general_logger()
+    logger = LoggerFactory.get_datamanagement_logger()
 
     data_origin = dict()
 

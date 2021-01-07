@@ -69,3 +69,8 @@ class LoggerFactory:
     def get_elastic_logger():
         """Returns general logger for elastic"""
         return LoggerFactory.get_logger('elastic')
+
+    @staticmethod
+    def get_datamanagement_logger():
+        """Returns general logger for the datamanagement"""
+        return LoggerFactory.get_logger('datamanagement')
