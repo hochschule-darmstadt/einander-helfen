@@ -155,7 +155,7 @@ class DataManager:
                 max_length = len(entry)
         string_data_origin = ""
         for entry in DataManager.data_origin:
-            string_data_origin = string_data_origin+"\n" +f"{entry.rjust(max_length)} : {DataManager.data_origin[entry]}"
+            string_data_origin = string_data_origin+"\n" + f"{entry.rjust(max_length)} : {DataManager.data_origin[entry]}"
         return string_data_origin
 
     @staticmethod
