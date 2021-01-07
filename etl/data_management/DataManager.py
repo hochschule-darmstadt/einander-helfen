@@ -167,7 +167,7 @@ class DataManager:
         eligible_backups = DataManager.get_eligible_backups()
         DataManager.initialise_upload_data(eligible_backups)
         eligible_backups = eligible_backups[:-1]  # ignore most recent backup
-        print(eligible_backups)
+
         for backup in eligible_backups:
             for upload_file in os.listdir(DataManager.upload_directory):
                 if os.path.isfile(os.path.join(DataManager.backup_directory, backup, upload_file)):
@@ -197,8 +197,8 @@ class DataManager:
             os.makedirs(DataManager.upload_directory)
 
         if DataManager.fallback_depth > DataManager.max_number_of_backups:
-            DataManager.logger.warning(f"fallback depth exceeds number of backups ("
-                                       f"{DataManager.fallback_depth} > {DataManager.max_number_of_backups})\n "
+            DataManager.logger.warning(f"fallback depth exceeds maximal number of backups ("
+                                       f"{DataManager.fallback_depth} > {DataManager.max_number_of_backups}), "
                                        f"fallback depth will be limited to number of backups")
             DataManager.fallback_depth = DataManager.max_number_of_backups
 
