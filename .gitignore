@@ -16,3 +16,6 @@ etl/**/*.json
 etl/**/*.csv
 etl/**/*.log
 etl/logs
+etl/test/**/logs
+/etl/data_management/upload/
+/etl/data_management/backups/
