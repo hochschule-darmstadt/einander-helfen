@@ -39,11 +39,20 @@
             style="height:70vh; overflow:auto"
           >
           <v-list-item three-line>
-            <v-btn :disabled="selectedPost.geo_location === null" dark class="mr-3 button-map" text @click="openMap()">
+            <v-tooltip top v-if="selectedPost.geo_location === null">
+              <template v-slot:activator="{ on }">
+                <div id="divWithDisabledButton" v-on="on" class="d-inline-block">
+                 <v-btn id="disabledMapButton" :disabled="selectedPost.geo_location === null" dark class="mr-3" text>
+                    <v-icon>map</v-icon> Karte
+                  </v-btn>
+                </div>
+              </template>
+              <span>Der Pin für dieses Angebot kann auf der Karte nicht angezeigt werden, da keine Geodaten hinterlegt sind.</span>
+            </v-tooltip>
+            
+            <v-btn dark class="mr-3 button-map" text @click="openMap()" v-if="selectedPost.geo_location !== null">
               <v-icon>map</v-icon> Karte
             </v-btn>
-
-
      
             <!--display title, subtitle and image on the right side-->
             <v-list-item-content style="margin-top:2%" class="headline">
@@ -89,6 +98,14 @@
               <tr class="pt-1" v-if="selectedPost.opportunities">
                 <td>Möglichkeiten</td>
                 <td v-html="selectedPost.opportunities"></td>
+              </tr>
+              <tr class="pt-1" v-if="selectedPost.prerequisites">
+                <td>Anforderungen</td>
+                <td v-html="selectedPost.prerequisites"></td>
+              </tr>
+              <tr class="pt-1" v-if="selectedPost.language_skills">
+                <td>Sprachen</td>
+                <td v-html="selectedPost.language_skills"></td>
               </tr>
               <tr class="pt-1" v-if="selectedPost.link">
                 <td>Quelle</td>
@@ -161,44 +178,52 @@
                 <v-card ref="detailsSmartphone"  class="details-smartphone" :class="{ 'details-smartphone-visible' : currentPostId === post.id, 'details-smartphone-hidden' : currentPostId !== post.id }">
                   <v-card-text>
                     <div v-if="post.location">
-                    <h3>Einsatzort</h3>
-                    <p v-html="post.location"></p>
+                      <h3>Einsatzort</h3>
+                      <p v-html="post.location"></p>
                     </div>
                     <div v-if="post.task">
-                    <h3>Aufgabe</h3>
-                    <p v-html="post.task"></p>
+                      <h3>Aufgabe</h3>
+                      <p v-html="post.task"></p>
                     </div>
                     <div v-if="post.contact">
-                    <h3>Ansprechpartner</h3>
-                    <p v-html="post.contact"></p>
+                      <h3>Ansprechpartner</h3>
+                      <p v-html="post.contact"></p>
                     </div>
                     <div v-if="post.organization">
-                    <h3>Organisation</h3>
-                    <p v-html="post.organization"></p>
+                      <h3>Organisation</h3>
+                      <p v-html="post.organization"></p>
                     </div>
                     <div v-if="post.target_group">
-                    <h3>Zielgruppe</h3>
-                    <p v-html="post.target_group"></p>
+                      <h3>Zielgruppe</h3>
+                      <p v-html="post.target_group"></p>
                     </div>
                     <div v-if="post.timing">
-                    <h3>Einstiegsdatum / Beginn</h3>
-                    <p v-html="post.timing"></p>
+                      <h3>Einstiegsdatum / Beginn</h3>
+                      <p v-html="post.timing"></p>
                     </div>
                     <div v-if="post.effort">
-                    <h3>Zeitaufwand</h3>
-                    <p v-html="post.effort"></p>
+                      <h3>Zeitaufwand</h3>
+                      <p v-html="post.effort"></p>
                     </div>
                     <div v-if="post.opportunities">
-                    <h3>Möglichkeiten</h3>
-                    <p v-html="post.opportunities"></p>
+                      <h3>Möglichkeiten</h3>
+                      <p v-html="post.opportunities"></p>
+                    </div>
+                    <div v-if="post.prerequisites">
+                      <h3>Anforderungen</h3>
+                      <p v-html="post.prerequisites"></p>
+                    </div>
+                    <div v-if="post.language_skills">
+                      <h3>Sprachen</h3>
+                      <p v-html="post.language_skills"></p>
                     </div>
                     <div v-if="post.link">
-                    <h3>Quelle</h3>
-                    <p>
-                      <a :href="post.link" target="_blank">{{
-                      post.source
-                      }}</a>
-                    </p>
+                      <h3>Quelle</h3>
+                      <p>
+                        <a :href="post.link" target="_blank">{{
+                        post.source
+                        }}</a>
+                      </p>
                     </div>
                   </v-card-text>
                   <v-card-actions>
@@ -539,8 +564,17 @@
   .detail-table tr td {
     vertical-align: top;
   }
-  .map-heigth {
-    height: 70vh;
+  #divWithDisabledButton {
+    padding-top: 21px;
+    align-self: flex-start;
+  }
+  #disabledMapButton {
+    margin-left: 35px;
+    background-color: #e0e0e0;
+    color: rgb(174, 168, 168) !important;
+  }
+  #disabledMapButton .v-icon {
+    color: rgb(174, 168, 168) !important;
   }
   .button-map {
     margin-top: 21px;
@@ -573,6 +607,9 @@
   }
   .post-subtitle {
     display: -webkit-box !important;
+  }
+  .map-heigth {
+    height: 70vh;
   }
 
   @media only screen and (max-width: 960px) {

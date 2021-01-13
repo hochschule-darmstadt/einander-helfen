@@ -1,8 +1,11 @@
 from copy import deepcopy
+from shared.LoggerFactory import LoggerFactory
 
 
 class JsonPost:
     """Handles the data to find duplicates."""
+
+    logger = LoggerFactory.get_enhancement_logger()
 
     def __init__(self, json):
         """Constructor of JsonPost."""
@@ -14,6 +17,7 @@ class JsonPost:
     @staticmethod
     def __remove_not_needed_data(json):
         """Removes data from json which should not be use in the comparison."""
+        JsonPost.logger.debug("__remove_not_needed_data()")
 
         if 'link' in json:
             del json['link']

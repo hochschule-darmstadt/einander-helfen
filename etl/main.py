@@ -11,13 +11,16 @@ sys.path.extend([f'{ROOT_DIR}/data_extraction', f'{ROOT_DIR}/shared'])
 from data_enhancement import enhance_data as enhance_data
 from data_extraction.scrape_data import run as run_extraction
 from shared.utils import write_data_to_json, read_data_from_json
+from shared.LoggerFactory import LoggerFactory
+from data_management.DataManager import DataManager
 
+
+logger = LoggerFactory.get_general_logger()
 # Runs the extraction process and writes the scraped data to data_extraction/data directory
 run_extraction()
 
 for file in os.scandir(os.path.join(ROOT_DIR, 'data_extraction/data')):
     file_name = os.path.splitext(file.name)[0]
-
     # read scraped data for enhancement
     data = read_data_from_json(file.path)
 
@@ -26,3 +29,5 @@ for file in os.scandir(os.path.join(ROOT_DIR, 'data_extraction/data')):
 
     # Write enhanced data to files
     write_data_to_json(os.path.join(ROOT_DIR, 'data_enhancement/data', f'{file_name}.json'), enhanced_data)
+
+DataManager.run()

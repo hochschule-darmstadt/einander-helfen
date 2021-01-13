@@ -1,7 +1,11 @@
 import json
+import os
 import unittest
 
-from enhancement_duplicates.enhancement_exact_duplicates import remove_duplicates
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+os.environ['ROOT_DIR'] = ROOT_DIR
+
+from data_enhancement.enhancement_duplicates.enhancement_exact_duplicates import remove_duplicates
 
 
 class TestEnhancementExactDuplicates(unittest.TestCase):
