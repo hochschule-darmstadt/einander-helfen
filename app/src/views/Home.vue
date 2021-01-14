@@ -106,20 +106,20 @@ export default Vue.extend({
     return {
       volunteerTags: [
         {
-          title: 'Soziale',
-          img: require('../../public/images/sozial.jpeg')
+          title: 'Kinder',
+          img: require('../../public/images/macherIN.jpeg')
         },
         {
-          title: 'Kreative',
+          title: 'Jugend',
           img: require('../../public/images/denkerIN.jpeg')
         },
         {
-          title: 'Kommunikative',
-          img: require('../../public/images/jugend.jpeg')
+          title: 'Senioren',
+          img: require('../../public/images/sozial.jpeg')
         },
         {
-          title: 'Macher/in',
-          img: require('../../public/images/macherIN.jpeg')
+          title: 'Betreuung',
+          img: require('../../public/images/jugend.jpeg')
         }
       ],
       selectedInput: '',
