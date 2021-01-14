@@ -2,11 +2,12 @@ from geopy.geocoders import Nominatim
 import csv
 import time
 import os
-
+from shared.LoggerFactory import LoggerFactory
 
 class LatLonEnhancer:
     """Class handling the enhancement of posts by adding geo data."""
 
+    logger = LoggerFactory.get_enhancement_logger()
     dict_file = os.path.join(os.getenv('ROOT_DIR'), 'data_enhancement',
                              'enhancement_location', 'geocoder_lat_lon.csv')
     lat_lon_dict = {}
@@ -18,12 +19,15 @@ class LatLonEnhancer:
         self.__load_local_storage()
 
     def __setup(self):
+        LatLonEnhancer.logger.debug("__setup()")
+
         if not os.path.exists(self.dict_file):
-            print("Create missing geocoder_lat_lon.csv as", self.dict_file)
+            LatLonEnhancer.logger.warn(f"Create missing geocoder_lat_lon.csv as {self.dict_file}")
             open(self.dict_file, "x")
 
     def enhance(self, post):
         """Adds latitude and longitude to a given post, if both are missing. Returns the enhanced post."""
+        LatLonEnhancer.logger.debug("enhance()")
 
         # If object has lat lon: return object
         if None is post['geo_location']:
@@ -42,6 +46,7 @@ class LatLonEnhancer:
     def __check_local_storage(self, request_string):
         """Already read local storage file?"""
         """return: None if object was not found in local storage, geo_location object otherwise"""
+        LatLonEnhancer.logger.debug("__check_local_storage()")
 
         if request_string in self.lat_lon_dict:
             return self.lat_lon_dict[request_string]
@@ -49,6 +54,7 @@ class LatLonEnhancer:
 
     def __load_local_storage(self):
         """Reads local storage file (.csv) into class attribute"""
+        LatLonEnhancer.logger.debug("__load_local_storage()")
 
         # Initialize the file, if it is not
         with open(self.dict_file, 'a', newline='') as csvfile:
@@ -67,16 +73,18 @@ class LatLonEnhancer:
 
     def __add_new_entry(self, request_string, geo_location):
         """Adds new entry to local storage"""
+        LatLonEnhancer.logger.debug("__add_new_entry()")
 
         self.lat_lon_dict[request_string] = geo_location
         with open(self.dict_file, 'a', newline='') as csvfile:
             writer = csv.writer(csvfile)
             writer.writerow([request_string, str(geo_location['lat']), str(geo_location['lon'])])
 
-        print(f'Added geo location of \'{request_string}\' to the dictionary')
+        LatLonEnhancer.logger.info(f'Added geo location of \'{request_string}\' to the dictionary')
 
     def __handle_api_requests(self, request_string):
         """Executes the API request"""
+        LatLonEnhancer.logger.debug(f"__handle_api_requests({request_string})")
 
         if request_string != "":
             location = self.geo_locator.geocode(request_string)
@@ -90,6 +98,7 @@ class LatLonEnhancer:
     @staticmethod
     def get_api_request_string(post):
         """Build the API request string"""
+        LatLonEnhancer.logger.debug("get_api_request_string()")
 
         struct_data = post['post_struct']
         request_string = ""
@@ -109,6 +118,8 @@ class LatLonEnhancer:
 
 def add_lat_lon(data):
     """ sets up LatLon Enhancer and runs it for data """
+    LatLonEnhancer.logger.debug("add_lat_lon()")
+
     enhancer = LatLonEnhancer()
     for post in data:
         enhancer.enhance(post)

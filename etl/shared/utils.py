@@ -1,10 +1,13 @@
 from datetime import datetime
+from shared.LoggerFactory import LoggerFactory
 import json
 import os
 
+logger = LoggerFactory.get_general_logger()
 
 def write_data_to_json(path, data):
     """Writes the given data to the given json file."""
+    logger.debug("write_data_to_json()")
 
     dir_name = os.path.dirname(path)
     if not os.path.exists(dir_name):
@@ -16,6 +19,7 @@ def write_data_to_json(path, data):
 
 def read_data_from_json(path):
     """Reads the given json file."""
+    logger.debug("read_data_from_json()")
 
     if not os.path.exists(path):
         print(f'Enhanced data file does not exist! [{path}]')
@@ -26,6 +30,7 @@ def read_data_from_json(path):
 
 def append_data_to_json(path, data):
     """Appends json data to the given json file."""
+    logger.debug("append_data_to_json()")
 
     if data is not None:
         json_load = read_data_from_json(path)
@@ -35,6 +40,7 @@ def append_data_to_json(path, data):
 
 def get_current_timestamp():
     """Get's the current timestamp in a specific format."""
+    logger.debug("get_current_timestamp()")
 
     now = datetime.now()
 

@@ -1,12 +1,13 @@
 from data_enhancement.enhancement_duplicates.JsonPost import JsonPost
+from shared.LoggerFactory import LoggerFactory
 
-
-debug = False
+logger = LoggerFactory.get_enhancement_logger()
 
 
 def remove_duplicates(data):
     """Removes exact duplicates from the json list.
     The URL is ignored in the comparison."""
+    logger.debug("remove_duplicates()")
 
     posts_by_title = {}
     duplicates = []
@@ -23,18 +24,18 @@ def remove_duplicates(data):
             continue
         __one_to_one_comparison(posts, duplicates)
 
-    print(f'[INFO]\tFound {len(duplicates)} duplicates')
+    logger.info(f'Found {len(duplicates)} duplicates')
 
     for duplicate in duplicates:
-        if debug:
-            print(f'[DEBUG]\t\'{duplicate["title"]}\' is a duplicate')
+        logger.debug(f'\'{duplicate["title"]}\' is a duplicate')
         data.remove(duplicate)
 
-    print(f'[INFO]\tRemoved {len(duplicates)} duplicates')
+    logger.info(f'Removed {len(duplicates)} duplicates')
 
 
 def __one_to_one_comparison(posts, duplicates):
     """Makes a one to one comparison between all JsonPosts in a list."""
+    logger.debug("__one_to_one_comparison()")
 
     for i in range(0, len(posts)):
         for j in range(i + 1, len(posts)):

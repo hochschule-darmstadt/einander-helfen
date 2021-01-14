@@ -2,23 +2,21 @@ import math
 import time
 
 from bs4 import BeautifulSoup
-
 from data_extraction.Scraper import Scraper
 
 
 class EhrenamtHessenScraper(Scraper):
     base_url = 'https://www.ehrenamtssuche-hessen.de'
-    debug = True
 
     def parse(self, response, url):
         """Handles the soupified response of a detail page in the predefined way and returns it."""
+        self.logger.debug("parse()")
 
         tab = response.find('a', {'href': '?param&searchTab=jobentries&entryTypeId=5&showEntryTypeFilterSelect=false'})
         tab_parent_div = tab.parent
         tab_classes = tab_parent_div['class']
         if 'active' not in tab_classes:
-            if self.debug:
-                print(f'[INFO]\t\'{url}\' is not volunteering work')
+            self.logger.debug(f"\'{url}\' is not volunteering work'")
             return None
 
         location_of = response.find('div', {'class': 'legendLeft'}, text='Ort Ihres Ehrenamts')
@@ -112,23 +110,24 @@ class EhrenamtHessenScraper(Scraper):
             organization = parsed_object['organization']
             organization = organization.replace('_self', '_blank')
             organization = organization.replace('/index.cfm', 'https://www.ehrenamtssuche-hessen.de/index.cfm')
-            organization = EhrenamtHessenScraper.__fix_mail_to_links(organization)
+            organization = self.__fix_mail_to_links(organization)
             parsed_object['organization'] = organization
 
         if parsed_object['contact'] is not None:
             contact = parsed_object['contact']
-            contact = EhrenamtHessenScraper.__fix_target_blank(contact)
+            contact = self.__fix_target_blank(contact)
             parsed_object['contact'] = contact
 
         if parsed_object['task'] is not None:
             task = parsed_object['task']
-            task = EhrenamtHessenScraper.__fix_target_blank(task)
+            task = self.__fix_target_blank(task)
             parsed_object['task'] = task
 
         return parsed_object
 
     def add_urls(self):
         """Adds all URLs of detail pages, found on the search pages, for the crawl function to scrape."""
+        self.logger.debug("add_urls()")
 
         end_page = self.fetch_end_page()
 
@@ -140,26 +139,23 @@ class EhrenamtHessenScraper(Scraper):
             search_page = self.soupify(search_page_url)
             detail_links = [x.find('a') for x in search_page.find_all('div', {'class': 'easSearchResultTitle'})]
 
-            if self.debug:
-                print(f'Fetched {len(detail_links)} URLs from {search_page_url} [{index}/{end_page}]')
+            self.logger.debug(f'Fetched {len(detail_links)} URLs from {search_page_url} [{index}/{end_page}]')
+            self.get_progress_data_fetching(index, end_page)
+
             for detail_link in detail_links:
                 current_link = self.base_url + detail_link['href']
                 if current_link in self.urls:
-                    self.add_error({
-                        'func': 'add_urls',
-                        'body': {
-                            'page_index': index,
-                            'search_page': search_page_url,
-                            'duplicate_link': current_link,
-                            'duplicate_index': self.urls.index(current_link)
-                        }
-                    })
+                    self.logger.debug(f"func: add_urls, 'body:'page_index: {index},"
+                                      f" search_page: {search_page_url}, "
+                                      f"duplicate_index: {current_link}, "
+                                      f"duplicate_index: {self.urls.index(current_link)}")
                 else:
                     self.urls.append(current_link)
 
     def fetch_end_page(self):
         """Domain-specific Function.
         Fetches the number of pages from the search result page for the add_urls function."""
+        self.logger.debug("fetch_end_page()")
 
         search_page_url = f'{self.base_url}/entry_search_result.cfm?locationId=0&entryTypeId=5'
         search_page = self.soupify(search_page_url)
@@ -167,14 +163,13 @@ class EhrenamtHessenScraper(Scraper):
         formatted_entry_number = int(total_entries_as_string.replace('.', ''))
         end_page = math.ceil(formatted_entry_number / 15)
 
-        if self.debug:
-            print(f'Crawling {end_page} pages with 15 entries each.')
+        self.logger.debug(f'Crawling {end_page} pages with 15 entries each.')
 
         return end_page
 
-    @staticmethod
-    def __extract_categories(response):
+    def __extract_categories(self, response):
         """Extracts the categories from corresponding field."""
+        self.logger.debug("__extract_categories()")
 
         cat_list = []
         categories_html = response.find('div', {'class': 'legendLeft'}, text='Kategorien')
@@ -193,6 +188,7 @@ class EhrenamtHessenScraper(Scraper):
 
     def __extract_sub_data(self, value):
         """Extracts name, street, zipcode, city, phone and email from a given string."""
+        self.logger.debug("__extract_sub_data()")
 
         if value is None:
             return {
@@ -261,9 +257,10 @@ class EhrenamtHessenScraper(Scraper):
             'email': email or None,
         }
 
-    @staticmethod
-    def __fix_mail_to_links(data):
+    def __fix_mail_to_links(self, data):
         """ implements ehrenamtsuche specific fixes for mailto links in organisation field """
+        self.logger.debug("__fix_mail_to_links()")
+
         soup = BeautifulSoup(data, 'html.parser')
         links = soup.findAll('a')
         for link in links:
@@ -272,9 +269,10 @@ class EhrenamtHessenScraper(Scraper):
         data = soup.decode()
         return data
 
-    @staticmethod
-    def __fix_target_blank(data):
+    def __fix_target_blank(self, data):
         """ implements ehrenamtsuche specific fixes for mailto links in task and contact field """
+        self.logger.debug("__fix_target_blank()")
+
         soup = BeautifulSoup(data, 'html.parser')
         links = soup.findAll('a')
         for link in links:

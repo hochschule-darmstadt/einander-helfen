@@ -14,13 +14,13 @@ class GuteTatBerlinScraper(Scraper):
         super().__init__(name)
         self.base_url = 'https://ehrenamtsmanager.gute-tat.de/oberflaeche/'
         self.website_url = 'www.gute-tat.de'
-        self.debug = True
 
         # user id 14 leads to berlin
         self.user_id = 14
 
     def parse(self, response, url):
         """Transforms the soupified response of a detail page in a predefined way and returns it."""
+        self.logger.debug("parse()")
 
         main_table = response.find('table')
         project_address_attr = main_table.find_all('tr')[23:30]
@@ -103,6 +103,7 @@ class GuteTatBerlinScraper(Scraper):
 
     def add_urls(self):
         """Adds URLs to an array which is later iterated over and scraped each."""
+        self.logger.debug("add_urls()")
 
         end_page = self.__fetch_end_page()
 
@@ -114,28 +115,22 @@ class GuteTatBerlinScraper(Scraper):
             # last link needs to be ignored
             detail_links = [x for x in search_page.find_all('a', {'class': 'links'})][:-1]
 
-            if self.debug:
-                print(f'Fetched {len(detail_links)} URLs from {search_page_url} [{index}/{end_page}]')
+            self.logger.debug(f'Fetched {len(detail_links)} URLs from {search_page_url} [{index}/{end_page}]')
+            self.get_progress_data_fetching(index, end_page)
 
             for detail_link in detail_links:
                 current_link = self.base_url + detail_link['href']
                 if current_link in self.urls:
-                    self.add_error({
-                        'func': 'add_urls',
-                        'body': {
-                            'page_index': index,
-                            'search_page': search_page_url,
-                            'duplicate_link': current_link,
-                            'duplicate_index': self.urls.index(current_link)
-                        }
-                    })
+                    self.logger.debug(f"func: add_urls, 'body:'page_index: {index},"
+                                      f" search_page: {search_page_url}, "
+                                      f"duplicate_index: {current_link}, "
+                                      f"duplicate_index: {self.urls.index(current_link)}")
                 else:
                     self.urls.append(current_link)
 
-        print(len(self.urls))
-
     def __fetch_end_page(self):
         """Fetches the number of pages from the search result page for the add_urls function."""
+        self.logger.debug("__fetch_end_page()")
 
         entries_per_page = 30
 
@@ -145,7 +140,6 @@ class GuteTatBerlinScraper(Scraper):
         formatted_entry_number = int(re.search(r'\d+', total_entries_as_string).group())
         end_page = math.ceil(formatted_entry_number / entries_per_page)
 
-        if self.debug:
-            print(f'Crawling {end_page} pages with {entries_per_page} entries each.')
+        self.logger.debug(f'Crawling {end_page} pages with {entries_per_page} entries each.')
 
         return end_page

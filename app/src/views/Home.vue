@@ -99,7 +99,7 @@ export default Vue.extend({
     SearchButton
   },
   data(): {
-    volunteerTags: Array<{ title: string; img: string }>;
+    volunteerTags: { title: string; img: string }[];
     selectedInput: string;
     currentSearchValue: string;
   } {
