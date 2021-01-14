@@ -1,53 +1,52 @@
 <template>
   <header>
-    <v-layout row wrap justify-space-around align-center no-gutters style="padding: 2vh; background: #00254f">
-      <v-btn
-        class="d-none d-sm-flex justify-center mr-5"
-        height="75px"
-        width="80px"
-        justify="left"
-        rounded
-        router
-        depressed
-        icon
-      >
-        <router-link to="/" exact>
-          <v-img
-            class="mt-1"
-            width="80px"
-            height="75px"
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Heart-hand-shake.svg/256px-Heart-hand-shake.svg.png"
-          ></v-img>
-        </router-link>
-      </v-btn>
-
-      <v-flex xs10 sm8 md6 style="background: white; border-radius: 20px; margin-right:2%">
-        <search-bar ref="searchBar"
-                    @input="addSearchValueAndUpdate"
-                    :searchInput.sync="currentSearchValue"
-                    :enable-no-data-message="true"
-        />
-        <v-spacer></v-spacer>
-        <v-chip-group
-          active-class="primary-text"
-          column
-          style="margin-left: 10px; margin-right: 10px; margin-top: -20px"
+    <v-layout id="header" row wrap align-center no-gutters style="padding: 2vh; background: #00254f">
+      <div id="headerLeft">
+        <v-btn
+          class="d-none d-sm-flex justify-center mr-5"
+          height="70px"
+          width="80px"
+          justify="left"
+          rounded
+          router
+          depressed
+          icon
         >
-          <v-chip :key="tag" @click:close="removeSearchValueAndUpdate(tag)" close v-for="tag in searchValues">{{ tag }}</v-chip>
-        </v-chip-group>
-      </v-flex>
-
-      <v-menu offset-y>
+          <router-link to="/" exact>
+            <v-img
+              class="mt-1"
+              width="80px"
+              height="75px"
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Heart-hand-shake.svg/256px-Heart-hand-shake.svg.png"
+            ></v-img>
+          </router-link>
+        </v-btn>
+        <div id="searchBar">
+          <search-bar ref="searchBar"
+                      @input="addSearchValueAndUpdate"
+                      :searchInput.sync="currentSearchValue"
+                      :enable-no-data-message="true"
+          />
+          <v-spacer></v-spacer>
+          <v-chip-group
+            active-class="primary-text"
+            column
+            style="margin-left: 10px; margin-right: 10px; margin-top: -20px"
+          >
+            <v-chip :key="tag" @click:close="removeSearchValueAndUpdate(tag)" close v-for="tag in searchValues">{{ tag }}</v-chip>
+          </v-chip-group>
+        </div>
+        <v-menu offset-y>
         <template v-slot:activator="{ on, attrs }">
           <v-btn
+            id="burgermenu_mobile"
             class="hidden-md-and-up"
             v-bind="attrs"
             v-on="on"
             dark
-            style="margin-top: 1vh"
             icon
           >
-            <v-icon>more_vert</v-icon>
+            <v-icon>menu</v-icon>
           </v-btn>
         </template>
         <v-list>
@@ -56,22 +55,21 @@
           </v-list-item>
         </v-list>
       </v-menu>
+      </div>
+     
 
-      <v-flex xs12 sm5 md2>
-        <location-search-bar @input="updateResults" id="headerLocation" :dark="true" />
-      </v-flex>
-
-      <v-flex xs12 sm4 md1>
-        <radius @input="updateResults" :dark="true" />
-      </v-flex>
-
-      <v-flex xs12 sm4 md1>
-        <search-button @click="updateSearchValueFromCurrentInputAndUpdateResults" />
-      </v-flex>
-
+      <div id="headerRight">
+          <location-search-bar @input="updateResults" id="location" :dark="true" />
+          <div id="radiusSearchBtn">
+            <radius @input="updateResults" id="radius" :dark="true" />
+            <search-button id="searchButton" @click="updateSearchValueFromCurrentInputAndUpdateResults" />
+          </div>
+      </div>
+       
       <v-menu offset-y>
         <template v-slot:activator="{ on, attrs }">
           <v-btn
+            id="burgermenu_web"
             class="hidden-sm-and-down"
             v-bind="attrs"
             v-on="on"
@@ -158,10 +156,241 @@
 });
 </script>
 
-<style>
+<style scoped>
 .v-menu__content {
   z-index: 9999 !important;
 }
+
+#searchBar{
+  background: white; 
+  border-radius: 20px; 
+  margin-right: 2%;
+  width: inherit;
+}
+
+#location{
+  margin-right: 0px;
+}
+
+#headerLeft{
+  display: contents;
+  width: 43%;
+}
+
+#headerRight{
+  display: inherit;
+  width: 40%
+}
+
+/*Mobile Layout*/
+@media (min-width: 280px) and (max-width: 599px){
+  #header{
+    display: block;
+  }
+
+  #headerLeft{
+    width: 100%;
+    margin-bottom: 20px;
+    display: flex;
+  }
+
+  #headerRight{
+    width: 100%;
+    display: block;
+  }
+  
+  #searchBar{ 
+    margin-right: 30px;
+  }
+
+  #location{
+    width: 100%;
+    margin-left: -10px;
+    margin-right: 0px;
+  }
+
+  #radiusSearchBtn{
+    display: flex;
+  }
+
+  #searchButton{
+    margin-right: 0px!important;
+  }
+
+  #burgermenu_mobile{
+    display: flex;
+    margin-top: 19.5px;
+    margin-right: 15px;
+  }
+}
+
+
+/*Tablet Layout*/
+@media (min-width:600px){
+  #header{
+    display: block;
+  }
+
+  #headerLeft{
+    width: 100%;
+    margin-bottom: 20px;
+    display: flex;
+  }
+
+  #headerRight{
+    width: 100%;
+    display: flex;
+  }
+
+  #location{
+    margin-left: 90px;
+    width: 70%;
+  }
+
+  #searchBar{ 
+    margin-right: 30px;
+  }
+  
+  #radiusSearchBtn{
+    display: flex;
+  }
+
+  #searchButton{
+    margin-right: 80px!important;
+  }
+
+  #burgermenu_mobile{
+    display: flex;
+    margin-top: 19.5px;
+    margin-right: 15px;
+  }
+}
+
+/*Web Layout*/
+@media (min-width: 960px) and (max-width: 3000px) {
+  #header{
+    display: flex;
+  }
+
+  #headerLeft{
+    display: contents;
+  }
+
+  #headerRight{
+    display: inherit;
+  }
+
+  #radiusSearchBtn{
+    display: flex;
+  }
+  
+  #searchButton{
+    margin-right: 0px!important;
+  }
+
+  #location{
+    margin-left: 0px;
+  }
+
+  #location{
+    width: 100%;
+  }
+
+  #radius{
+    width: 30%;
+  }
+}
+
+@media (min-width:960px){
+  #headerLeft{
+    width: 38.5%;
+  }
+
+  #headerRight{
+    width: 45%;
+  }
+
+  #searchBar{ 
+    margin-right: 1.2%;
+  }
+
+  #burgermenu_web{
+    margin-left: 0.4%;
+  }
+}
+
+@media (min-width:1100px){
+  #headerLeft{
+    width: 41%;
+  }
+
+  #headerRight{
+    width: 43.5%
+  }
+
+  #searchBar{ 
+    margin-right: 1.2%;
+  }
+
+  #burgermenu_web{
+    margin-left: 1.3%;
+  }
+}
+
+@media (min-width:1300px){
+  #headerLeft{
+    width: 42.5%;
+  }
+
+  #headerRight{
+    width: 42.5%
+  }
+
+  #searchBar{ 
+    margin-right: 1.2%;
+  }
+
+  #burgermenu_web{
+    margin-left: 2.5%;
+  }
+}
+
+@media (min-width:1618px){
+  #headerLeft{
+    width: 43%;
+  }
+
+  #headerRight{
+    width: 44.5%
+  }
+
+  #searchBar{ 
+    margin-right: 1.5%;
+  }
+
+  #burgermenu_web{
+    margin-left: 2%;
+  }
+}
+
+@media (min-width:1904px){
+  #headerLeft{
+    width: 45%;
+  }
+
+  #headerRight{
+    width: 42.5%
+  }
+
+  #searchBar{ 
+    margin-right: 1.5%;
+  }
+
+  #burgermenu_web{
+    margin-left: 3%;
+  }
+}
+
 
 @media (min-width: 315px) and (max-width: 382px) {
   #headerLocation .v-autocomplete__content.v-menu__content{ 

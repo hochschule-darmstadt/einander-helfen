@@ -182,7 +182,7 @@ export default Vue.extend({
 });
 </script>
 
-<style>
+<style scoped>
 .v-input__slot {
   margin-bottom: 0;
 }
