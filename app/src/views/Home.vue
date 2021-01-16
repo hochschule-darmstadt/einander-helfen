@@ -46,7 +46,7 @@
               <v-card class="mx-auto" :elevation="hover ? 12 : 2" :class="{ 'on-hover': hover }">
                 <router-link
                   style="text-decoration: none; color: inherit;"
-                  :to="{ name: 'resultPage', query: { q: tag.title } }"
+                  :to="{ name: 'resultPage', query: { q: tag.to } }"
                 >
                   <v-img
                     class="white--text align-end mt-10"
@@ -99,26 +99,30 @@ export default Vue.extend({
     SearchButton
   },
   data(): {
-    volunteerTags: Array<{ title: string; img: string }>;
+    volunteerTags: Array<{ title: string; to: string; img: string }>;
     selectedInput: string;
     currentSearchValue: string;
   } {
     return {
       volunteerTags: [
         {
-          title: 'Kinder',
+          title: 'Arbeit mit Kindern',
+          to: 'Kinder',
           img: require('../../public/images/macherIN.jpeg')
         },
         {
-          title: 'Jugend',
+          title: 'Arbeit mit Jugendlichen',
+          to: 'Jugend',
           img: require('../../public/images/denkerIN.jpeg')
         },
         {
-          title: 'Senioren',
+          title: 'Arbeit mit Senioren',
+          to: 'Senioren',
           img: require('../../public/images/sozial.jpeg')
         },
         {
           title: 'Betreuung',
+          to: 'Betreuung',
           img: require('../../public/images/jugend.jpeg')
         }
       ],
