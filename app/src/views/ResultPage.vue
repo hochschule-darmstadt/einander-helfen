@@ -486,7 +486,7 @@
               });
             },
             postDistance(post: Post): string {
-              if (!this.selectedLocationObject) {
+              if (!this.selectedLocationObject || !post.geo_location) {
                 return '';
               }
 
