@@ -11,11 +11,19 @@ interface Post {
   organization: string;
   contact: string;
   link: string;
-  image: string;
   map_address: [];
   geo_location: {
     lat: number;
     lon: number;
+  };
+  prerequisites: string;
+  language_skills: string;
+  post_struct: {
+    location: {
+      zipcode: string;
+      city: string;
+      country: string;
+    }
   };
 }
 

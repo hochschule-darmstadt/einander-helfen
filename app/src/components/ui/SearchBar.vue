@@ -3,14 +3,15 @@
     style="background: white"
     rounded
     color="black"
-    placeholder="z.B.Jugendarbeit"
+    placeholder="z. B. Jugendarbeit"
     item-text="tag"
     autocomplete="off"
     :items="mySearchProposals"
     @input="addSearchTag"
-    append-icon="none"
+    append-icon=""
     :search-input.sync="mySearchValue"
     @keydown.enter="$emit('enter')"
+    :attach="attachTo"
   >
     <template v-slot:no-data v-if="showNoData">
       <v-list-item>
@@ -39,7 +40,11 @@ export default Vue.extend({
     enableNoDataMessage: {
       type: Boolean,
       default: false
-    }
+    },
+  attachTo: {
+      type: String,
+      default: ''
+    },
   },
   data(): {
     mySearchValue: string;

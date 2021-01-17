@@ -16,39 +16,37 @@
       </picture>
     </VueSlickCarousel>
 
-    <v-container>
+    <v-container id="container">
       <v-form>
-        <v-row justify="center">
-          <v-col cols="12" md="8">
-            <v-layout row justify-center no-gutters class="mt-8 mb-9">
-              <v-flex>
-                <v-form>
-                  <v-row>
-                    <v-col cols="12">
-                      <search-bar :searchInput.sync="currentSearchValue" v-model="selectedInput" @enter="onSearchEnter" tabindex="1" />
-                    </v-col>
-                  </v-row>
+        <v-row id="searchbox" justify="center" lg="2">
+          <v-layout row justify-center no-gutters class="mt-8 mb-9">
+            <v-flex>
+              <v-form>
+                <v-row>
+                  <v-col id=searchCol cols="12">
+                    <search-bar :searchInput.sync="currentSearchValue" id="search" :attachTo="'#search'" @click.native="focussearch" v-model="selectedInput" @enter="onSearchEnter" tabindex="1" />
+                  </v-col>
+                </v-row>
 
-                  <v-row class="flex-grow-1 ps-4">
-                      <location-search-bar ref="locationSearchBar" @enter="onLocationEnter" tabindex="2" />
-                      <div><radius @enter="onRadiusEnter" tabindex="3" /></div>
-                      <search-button @click="executeSearch" tabindex="4" />
-                  </v-row>
-                </v-form>
-              </v-flex>
-            </v-layout>
-          </v-col>
+                <v-row class="flex-grow-1 ps-4" id="locationDiv">
+                    <location-search-bar @click.native="focussearch" id="location" :attachTo="'#location'" ref="locationSearchBar" @enter="onLocationEnter" tabindex="2" />
+                    <radius id="radius" @enter="onRadiusEnter" tabindex="3" />
+                    <search-button id="searchButton" @click="executeSearch" tabindex="4" />
+                </v-row>
+              </v-form>
+             </v-flex>
+          </v-layout>
         </v-row>
       </v-form>
 
-      <v-row justify="center">
+      <v-row justify="center" lg="3">
         <template v-for="tag in volunteerTags">
-          <v-col cols="12" md="2" :key="tag.title">
+          <v-col md="3" xl="3" :key="tag.title">
             <v-hover v-slot:default="{ hover }">
               <v-card class="mx-auto" :elevation="hover ? 12 : 2" :class="{ 'on-hover': hover }">
                 <router-link
                   style="text-decoration: none; color: inherit;"
-                  :to="{ name: 'resultPage', query: { q: tag.title } }"
+                  :to="{ name: 'resultPage', query: { q: tag.to } }"
                 >
                   <v-img
                     class="white--text align-end mt-10"
@@ -101,27 +99,31 @@ export default Vue.extend({
     SearchButton
   },
   data(): {
-    volunteerTags: Array<{ title: string; img: string }>;
+    volunteerTags: { title: string; to: string; img: string }[];
     selectedInput: string;
     currentSearchValue: string;
   } {
     return {
       volunteerTags: [
         {
-          title: 'Soziale',
-          img: require('../../public/images/sozial.jpeg')
+          title: 'Arbeit mit Kindern',
+          to: 'Kinder',
+          img: require('../../public/images/macherIN.jpeg')
         },
         {
-          title: 'Kreative',
+          title: 'Arbeit mit Jugendlichen',
+          to: 'Jugend',
           img: require('../../public/images/denkerIN.jpeg')
         },
         {
-          title: 'Kommunikative',
-          img: require('../../public/images/jugend.jpeg')
+          title: 'Arbeit mit Senioren',
+          to: 'Senioren',
+          img: require('../../public/images/sozial.jpeg')
         },
         {
-          title: 'Macher/in',
-          img: require('../../public/images/macherIN.jpeg')
+          title: 'Betreuung',
+          to: 'Betreuung',
+          img: require('../../public/images/jugend.jpeg')
         }
       ],
       selectedInput: '',
@@ -166,6 +168,19 @@ export default Vue.extend({
       if (this.selectedRadius) {
        this.executeSearch();
       }
+    },
+
+    focussearch(): void {
+      const isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
+               navigator.userAgent &&
+               navigator.userAgent.indexOf('CriOS') === -1 &&
+               navigator.userAgent.indexOf('FxiOS') === -1;
+
+      const focussearch = document.getElementById('searchCol');
+
+      if (isSafari === false && focussearch !== null && window.matchMedia('(max-width: 420px)').matches) {
+        focussearch.scrollIntoView(true);
+      }
     }
   }
 });
@@ -185,4 +200,141 @@ img {
   height: 100%;
   object-fit: contain;
 }
+
+.slick-arrow {
+  display: none !important ;
+  visibility: hidden;
+}
+
+#searchButton {
+  margin-right: 12px !important;
+}
+
+#searchbox {
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+#container{
+  margin: auto;
+}
+
+#locationDiv {
+  padding-left: 12px !important;
+}
+
+@media (max-width: 329px) {
+  #location{
+    max-width: 98vw;
+  }
+
+  #radius{
+    margin-left: 0 !important;
+    width: 60%;
+  }
+
+  #location .v-input__slot {
+    margin-left: 2px;
+  }
+}
+
+@media (min-width: 330px) and (max-width: 382px) {
+  #location {
+    max-width: 98vw;
+  }
+
+  #radius {
+    margin-left: 0 !important;
+    width: 70%;
+  }
+
+  #location .v-autocomplete__content.v-menu__content { 
+    max-height: 225px !important;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+
+  #location .v-input__slot {
+    margin-left: 2px;
+  }
+}
+
+#location .v-autocomplete__content.v-menu__content { 
+  top: auto !important;
+  left: auto !important;
+  margin-top: 50px;
+}
+
+@media (min-width: 383px) {
+  #location {
+    width: 85vw;
+    max-width: 98vw;
+    
+  }
+  #location .v-input__slot {
+    margin-left: 2px;
+  }
+
+  #radius {
+    margin-left: 0 !important;
+    max-width: 80vw;
+  } 
+}
+
+@media (min-width: 513px) {
+  #location {
+    width: auto;
+    max-width: none;
+  }
+
+  #radius {
+    max-width: 20%;
+    min-width: none;
+    margin-left: 10px !important;
+  }
+}
+
+@media (min-width: 613px) {
+  #radius {
+    width: 200px;
+  }
+}
+
+@media (min-width: 800px) {
+  #container {
+    max-width:1450px;
+  }
+}
+
+@media (min-width: 960px) {
+  #container {
+    width: 960px;
+    max-width: none;
+  }
+}
+
+@media (min-width: 1100px) {
+  #container {
+    width: 1100px;
+  }
+}
+
+@media (min-width: 1300px) {
+  #container {
+    width: 1300px;
+  }
+}
+
+@media (min-width: 1618px) {
+  #container {
+    width: 1618px;
+  }
+}
+
+@media (min-width: 1904px) {
+  #container {
+    width: 85%;
+  }
+}
+
 </style>
