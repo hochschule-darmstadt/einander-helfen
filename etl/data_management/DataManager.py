@@ -38,6 +38,7 @@ class DataManager:
     enhanced_data_location = os.path.join(ROOT_DIR, 'data_enhancement/data')
     backup_directory = os.path.join(ROOT_DIR, 'data_management', 'backups')
     upload_directory = os.path.join(ROOT_DIR, 'data_management', 'upload')
+    file_upload_data_origin = os.path.join(ROOT_DIR, 'data_management','upload_origin.txt')
 
     mask_timestamp = '%d.%m.%Y'
 
@@ -58,6 +59,15 @@ class DataManager:
         DataManager.logger.debug("datestring_to_timestamp()")
 
         return time.mktime(datetime.datetime.strptime(datestring, DataManager.mask_timestamp).timetuple())
+
+    @staticmethod
+    def save_upload_data_origin(upload_data_origin):
+        """Saves the information about the origin of the data inside the upload folder into a text file"""
+        file = open(DataManager.file_upload_data_origin, 'w')
+        file.write(f"last upload: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+        file.write(f"Source for upload data:")
+        file.write(upload_data_origin)
+        file.close()
 
     @staticmethod
     def copy_from_backup(backup):
@@ -182,8 +192,9 @@ class DataManager:
                                                 f"data")
                         write_data_to_json(os.path.join(DataManager.upload_directory, upload_file), data_in_backup)
                         DataManager.data_origin[upload_file] = backup
-
-        DataManager.logger.info(f"Source for upload data: {DataManager.build_string_data_origin()}")
+        upload_data_origin = DataManager.build_string_data_origin()
+        DataManager.save_upload_data_origin(upload_data_origin)
+        DataManager.logger.info(f"Source for upload data: {upload_data_origin}")
 
     @staticmethod
     def init():
@@ -204,11 +215,18 @@ class DataManager:
             DataManager.fallback_depth = DataManager.max_number_of_backups
 
     @staticmethod
-    def run():
-        """Runs the datamangement process"""
-        DataManager.logger.debug("run()")
+    def run_backup_process():
+        """Runs the datamangement process for creating backups"""
+        DataManager.logger.debug("run_backup_process()")
 
         DataManager.init()
         DataManager.backup_current_data()
         DataManager.remove_old_backups()
+
+    @staticmethod
+    def run_compose_upload_process():
+        """Runs the datamangement process for composing the upload"""
+        DataManager.logger.debug("run_compose_upload_process()")
+
+        DataManager.init()
         DataManager.compose_upload()
