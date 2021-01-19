@@ -19,3 +19,4 @@ etl/logs
 etl/test/**/logs
 /etl/data_management/upload/
 /etl/data_management/backups/
+/etl/data_management/upload_origin.txt
