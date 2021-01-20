@@ -38,7 +38,7 @@ class DataManager:
     enhanced_data_location = os.path.join(ROOT_DIR, 'data_enhancement/data')
     backup_directory = os.path.join(ROOT_DIR, 'data_management', 'backups')
     upload_directory = os.path.join(ROOT_DIR, 'data_management', 'upload')
-    file_upload_data_origin = os.path.join(ROOT_DIR, 'data_management','upload_origin.txt')
+    file_upload_data_origin = os.path.join(ROOT_DIR, 'data_management', 'upload_data_origin.log')
 
     mask_timestamp = '%d.%m.%Y'
 
