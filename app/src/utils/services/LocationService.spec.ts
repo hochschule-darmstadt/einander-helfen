@@ -12,7 +12,8 @@ describe('LocationService.vue', () => {
                 state: 'Hessen',
                 lat: 1,
                 lon: 2,
-                rank: 3
+                rank: 3,
+                country: 'Deutschland'
             },
             {
                 name: 'Darmstadt',
@@ -21,7 +22,8 @@ describe('LocationService.vue', () => {
                 state: 'Hessen',
                 lat: 3,
                 lon: 1,
-                rank: 2
+                rank: 2,
+                country: 'Deutschland'
             },
             {
                 name: 'Berlin',
@@ -30,7 +32,8 @@ describe('LocationService.vue', () => {
                 state: 'Berlin',
                 lat: 2,
                 lon: 3,
-                rank: 1
+                rank: 1,
+                country: 'Deutschland'
             },
             {
                 name: 'Berlin',
@@ -39,7 +42,8 @@ describe('LocationService.vue', () => {
                 state: 'Berlin',
                 lat: 2,
                 lon: 3,
-                rank: 4
+                rank: 4,
+                country: 'Deutschland'
             },
             {
                 name: 'Berlin',
@@ -48,7 +52,8 @@ describe('LocationService.vue', () => {
                 state: 'Berlin',
                 lat: 2,
                 lon: 3,
-                rank: 5
+                rank: 5,
+                country: 'Deutschland'
             },
             {
                 name: 'Bochum',
@@ -57,7 +62,8 @@ describe('LocationService.vue', () => {
                 state: 'Nordrhein-Westfalen',
                 lat: 2,
                 lon: 3,
-                rank: 6
+                rank: 6,
+                country: 'Deutschland'
             }];
         LocationService.selectedLocationAmount = 2;
     });
@@ -72,7 +78,8 @@ describe('LocationService.vue', () => {
                 state: 'Berlin',
                 lat: 2,
                 lon: 3,
-                rank: 1
+                rank: 1,
+                country: 'Deutschland'
             },
             {
                 name: 'Darmstadt',
@@ -81,7 +88,8 @@ describe('LocationService.vue', () => {
                 state: 'Hessen',
                 lat: 3,
                 lon: 1,
-                rank: 2
+                rank: 2,
+                country: 'Deutschland'
             }
         ]);
     });
@@ -95,7 +103,8 @@ describe('LocationService.vue', () => {
                 state: 'Berlin',
                 lat: 2,
                 lon: 3,
-                rank: 1
+                rank: 1,
+                country: 'Deutschland'
             },
             {
                 name: 'Darmstadt',
@@ -104,7 +113,8 @@ describe('LocationService.vue', () => {
                 state: 'Hessen',
                 lat: 3,
                 lon: 1,
-                rank: 2
+                rank: 2,
+                country: 'Deutschland'
             }
         ]);
     });
@@ -118,7 +128,8 @@ describe('LocationService.vue', () => {
                 state: 'Hessen',
                 lat: 3,
                 lon: 1,
-                rank: 2
+                rank: 2,
+                country: 'Deutschland'
             },
             {
                 name: 'Frankfurt',
@@ -127,7 +138,8 @@ describe('LocationService.vue', () => {
                 state: 'Hessen',
                 lat: 1,
                 lon: 2,
-                rank: 3
+                rank: 3,
+                country: 'Deutschland'
             }
         ]);
     });
@@ -145,7 +157,8 @@ describe('LocationService.vue', () => {
                 state: 'Hessen',
                 lat: 1,
                 lon: 2,
-                rank: 3
+                rank: 3,
+                country: 'Deutschland'
             }
         ]);
     });
@@ -159,7 +172,8 @@ describe('LocationService.vue', () => {
                 state: 'Berlin',
                 lat: 2,
                 lon: 3,
-                rank: 1
+                rank: 1,
+                country: 'Deutschland'
             },
             {
                 name: 'Berlin',
@@ -168,7 +182,8 @@ describe('LocationService.vue', () => {
                 state: 'Berlin',
                 lat: 2,
                 lon: 3,
-                rank: 4
+                rank: 4,
+                country: 'Deutschland'
             }
         ]);
     });
@@ -186,7 +201,8 @@ describe('LocationService.vue', () => {
                 state: 'Hessen',
                 lat: 3,
                 lon: 1,
-                rank: 2
+                rank: 2,
+                country: 'Deutschland'
             }
         ]);
     });
@@ -202,7 +218,8 @@ describe('LocationService.vue', () => {
                 state: 'Berlin',
                 lat: 2,
                 lon: 3,
-                rank: 1
+                rank: 1,
+                country: 'Deutschland'
             },
             {
                 name: 'Bochum',
@@ -211,7 +228,8 @@ describe('LocationService.vue', () => {
                 state: 'Nordrhein-Westfalen',
                 lat: 2,
                 lon: 3,
-                rank: 6
+                rank: 6,
+                country: 'Deutschland'
             },
             {
                 name: 'Berlin',
@@ -220,7 +238,8 @@ describe('LocationService.vue', () => {
                 state: 'Berlin',
                 lat: 2,
                 lon: 3,
-                rank: 4
+                rank: 4,
+                country: 'Deutschland'
             }
         ]);
     });
@@ -236,7 +255,8 @@ describe('LocationService.vue', () => {
                 state: 'Berlin',
                 lat: 2,
                 lon: 3,
-                rank: 1
+                rank: 1,
+                country: 'Deutschland'
             },
             {
                 name: 'Bochum',
@@ -245,7 +265,8 @@ describe('LocationService.vue', () => {
                 state: 'Nordrhein-Westfalen',
                 lat: 2,
                 lon: 3,
-                rank: 6
+                rank: 6,
+                country: 'Deutschland'
             },
             {
                 name: 'Berlin',
@@ -254,7 +275,8 @@ describe('LocationService.vue', () => {
                 state: 'Berlin',
                 lat: 2,
                 lon: 3,
-                rank: 4
+                rank: 4,
+                country: 'Deutschland'
             },
             {
                 name: 'Berlin',
@@ -263,7 +285,8 @@ describe('LocationService.vue', () => {
                 state: 'Berlin',
                 lat: 2,
                 lon: 3,
-                rank: 5
+                rank: 5,
+                country: 'Deutschland'
             }
         ]);
     });

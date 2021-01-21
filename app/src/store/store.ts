@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Vuex, {StoreOptions} from 'vuex';
 import DataService, {PaginatedResponse} from '../utils/services/DataService';
-import LocationService from '@/utils/services/LocationService';
 import router from '@/router';
 import Post from '@/models/post';
 import textSearchModule from './TextSearch';
@@ -21,7 +20,8 @@ const store: StoreOptions<RootState> = {
     resultSetSize: 100,
     totalResultSize: 0,
     resultsFrom: 0,
-    hitsPerPage: 10 // must be a divider of resultSetSize, or the chunk loading gets complexer
+    hitsPerPage: 10, // must be a divider of resultSetSize, or the chunk loading gets complexer
+    international: true
   } as RootState,
   mutations: {
 
@@ -61,20 +61,22 @@ const store: StoreOptions<RootState> = {
 
       const from = state.resultsFrom;
       const size = state.resultSetSize;
+      const international = state.international;
+
       return new Promise((resolve) => {
         DataService.findBySelection({
           searchValues,
           location,
           radius,
           from,
-          size
+          size,
+          international
         }).then((result: PaginatedResponse<Post>) => {
           commit('setTotalResultSize', result.meta.total);
           commit('setPosts', result.data);
           resolve(result.data);
         });
       });
-
     },
     setPage({ commit, dispatch, state, getters }, page: number): void {
         if (page < 1) {
