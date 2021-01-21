@@ -400,7 +400,6 @@
   }
 }
 
-
 @media (min-width: 315px) and (max-width: 382px) {
   #headerLocation .v-autocomplete__content.v-menu__content{ 
     max-height: 225px !important;

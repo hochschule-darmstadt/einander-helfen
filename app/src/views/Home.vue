@@ -186,10 +186,11 @@ export default Vue.extend({
 });
 </script>
 
-<style scoped>
-
-.v-menu__content {
-  z-index: 9999 !important;
+<style>
+#location .v-autocomplete__content.v-menu__content { 
+  top: auto !important;
+  left: auto !important;
+  margin-top: 50px;
 }
 
 .v-input__slot {
@@ -228,6 +229,10 @@ img {
   padding-left: 12px !important;
 }
 
+</style>
+
+<style scoped>
+
 @media (max-width: 329px) {
   #location{
     max-width: 98vw;
@@ -264,11 +269,7 @@ img {
   }
 }
 
-#location .v-autocomplete__content.v-menu__content { 
-  top: auto !important;
-  left: auto !important;
-  margin-top: 50px;
-}
+
 
 @media (min-width: 383px) {
   #location {
@@ -341,5 +342,6 @@ img {
     width: 85%;
   }
 }
+
 
 </style>
