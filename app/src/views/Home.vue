@@ -187,6 +187,11 @@ export default Vue.extend({
 </script>
 
 <style scoped>
+
+.v-menu__content {
+  z-index: 9999 !important;
+}
+
 .v-input__slot {
   margin-bottom: 0;
 }

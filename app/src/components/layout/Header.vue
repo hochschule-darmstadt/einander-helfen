@@ -3,7 +3,8 @@
     <v-layout id="header" row wrap align-center no-gutters style="padding: 2vh; background: #00254f">
       <div id="headerLeft">
         <v-btn
-          class="d-none d-sm-flex justify-center mr-5"
+          id="headerLogo"
+          class="d-none d-sm-flex justify-center mr-4"
           height="70px"
           width="80px"
           justify="left"
@@ -66,26 +67,29 @@
           </div>
       </div>
        
-      <v-menu offset-y>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            id="burgermenu_web"
-            class="hidden-sm-and-down"
-            v-bind="attrs"
-            v-on="on"
-            dark
-            style="margin-top: 1vh"
-            icon
-          >
-            <v-icon>menu</v-icon>
-          </v-btn>
-        </template>
-        <v-list>
-          <v-list-item v-for="(link, index) in links" :key="index" router :to="link.route">
-            <v-list-item-title>{{ link.text }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
+      <v-col class="column menuCol hidden-sm-and-down">
+        <div align="right">
+          <v-menu offset-y>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                id="burgermenu_web"
+                class="hidden-sm-and-down"
+                v-bind="attrs"
+                v-on="on"
+                dark
+                icon
+              >
+                <v-icon>menu</v-icon>
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item v-for="(link, index) in links" :key="index" router :to="link.route">
+                <v-list-item-title>{{ link.text }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </div>
+      </v-col>
     </v-layout>
   </header>
 </template>
@@ -181,6 +185,14 @@
   display: inherit;
   width: 40%
 }
+ 
+/* #burgermenu_mobile{
+    margin-right: 5px;
+} */
+
+/* #burgermenu_web{
+    margin-right: 8px;
+} */
 
 /*Mobile Layout*/
 @media (min-width: 280px) and (max-width: 599px){
@@ -219,14 +231,14 @@
 
   #burgermenu_mobile{
     display: flex;
-    margin-top: 19.5px;
-    margin-right: 15px;
+    margin-top: 19px;
+    margin-right: 8px;
   }
 }
 
 
 /*Tablet Layout*/
-@media (min-width:600px){
+@media (min-width:600px) and (max-width: 959px){
   #header{
     display: block;
   }
@@ -256,15 +268,22 @@
   }
 
   #searchButton{
-    margin-right: 80px!important;
+    margin-right: 73px!important;
   }
 
   #burgermenu_mobile{
     display: flex;
     margin-top: 19.5px;
-    margin-right: 15px;
+    margin-right: 8px;
   }
 }
+
+@media (min-width: 600px) and (max-width: 765px) {
+  #burgermenu_mobile{ 
+    margin-top: 19px;
+  }
+}
+
 
 /*Web Layout*/
 @media (min-width: 960px) and (max-width: 3000px) {
@@ -279,6 +298,11 @@
   #headerRight{
     display: inherit;
   }
+
+/*   #headerLogo{
+    margin-left: 2px;
+    margin-top: -3px;
+  } */
 
   #radiusSearchBtn{
     display: flex;
@@ -299,23 +323,24 @@
   #radius{
     width: 30%;
   }
+
+  /* #burgermenu_web{
+    margin-right: 3px;
+    margin-top: -9px;
+  } */
 }
 
-@media (min-width:960px){
+@media (min-width:960px) and (max-width:1099px){
   #headerLeft{
     width: 38.5%;
   }
 
   #headerRight{
-    width: 45%;
+    width: 44%;
   }
 
   #searchBar{ 
     margin-right: 1.2%;
-  }
-
-  #burgermenu_web{
-    margin-left: 0.4%;
   }
 }
 
@@ -331,10 +356,6 @@
   #searchBar{ 
     margin-right: 1.2%;
   }
-
-  #burgermenu_web{
-    margin-left: 1.3%;
-  }
 }
 
 @media (min-width:1300px){
@@ -348,10 +369,6 @@
 
   #searchBar{ 
     margin-right: 1.2%;
-  }
-
-  #burgermenu_web{
-    margin-left: 2.5%;
   }
 }
 
@@ -367,10 +384,6 @@
   #searchBar{ 
     margin-right: 1.5%;
   }
-
-  #burgermenu_web{
-    margin-left: 2%;
-  }
 }
 
 @media (min-width:1904px){
@@ -384,10 +397,6 @@
 
   #searchBar{ 
     margin-right: 1.5%;
-  }
-
-  #burgermenu_web{
-    margin-left: 3%;
   }
 }
 
