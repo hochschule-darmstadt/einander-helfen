@@ -187,7 +187,7 @@ export default Vue.extend({
 </script>
 
 <style>
-#location .v-autocomplete__content.v-menu__content { 
+#location .v-autocomplete__content.v-menu__content{ 
   top: auto !important;
   left: auto !important;
   margin-top: 50px;
@@ -229,9 +229,7 @@ img {
   padding-left: 12px !important;
 }
 
-</style>
 
-<style scoped>
 
 @media (max-width: 329px) {
   #location{
@@ -275,7 +273,6 @@ img {
   #location {
     width: 85vw;
     max-width: 98vw;
-    
   }
   #location .v-input__slot {
     margin-left: 2px;

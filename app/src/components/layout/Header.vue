@@ -60,10 +60,10 @@
      
 
       <div id="headerRight">
-          <location-search-bar @input="updateResults" id="location" :dark="true" />
+          <location-search-bar @input="updateResults" id="headerLocation" :dark="true" />
           <div id="radiusSearchBtn">
-            <radius @input="updateResults" id="radius" :dark="true" />
-            <search-button id="searchButton" @click="updateSearchValueFromCurrentInputAndUpdateResults" />
+            <radius @input="updateResults" id="headerRadius" :dark="true" />
+            <search-button id="headerSearchButton" @click="updateSearchValueFromCurrentInputAndUpdateResults" />
           </div>
       </div>
        
@@ -160,7 +160,7 @@
 });
 </script>
 
-<style scoped>
+<style>
 .v-menu__content {
   z-index: 9999 !important;
 }
@@ -172,7 +172,7 @@
   width: inherit;
 }
 
-#location{
+#headerLocation{
   margin-right: 0px;
 }
 
@@ -185,14 +185,6 @@
   display: inherit;
   width: 40%
 }
- 
-/* #burgermenu_mobile{
-    margin-right: 5px;
-} */
-
-/* #burgermenu_web{
-    margin-right: 8px;
-} */
 
 /*Mobile Layout*/
 @media (min-width: 280px) and (max-width: 599px){
@@ -215,7 +207,7 @@
     margin-right: 30px;
   }
 
-  #location{
+  #headerLocation{
     width: 100%;
     margin-left: -10px;
     margin-right: 0px;
@@ -225,7 +217,7 @@
     display: flex;
   }
 
-  #searchButton{
+  #headerSearchButton{
     margin-right: 0px!important;
   }
 
@@ -254,7 +246,7 @@
     display: flex;
   }
 
-  #location{
+  #headerLocation{
     margin-left: 90px;
     width: 70%;
   }
@@ -267,7 +259,7 @@
     display: flex;
   }
 
-  #searchButton{
+  #headerSearchButton{
     margin-right: 73px!important;
   }
 
@@ -299,35 +291,22 @@
     display: inherit;
   }
 
-/*   #headerLogo{
-    margin-left: 2px;
-    margin-top: -3px;
-  } */
-
   #radiusSearchBtn{
     display: flex;
   }
   
-  #searchButton{
+  #headerSearchButton{
     margin-right: 0px!important;
   }
 
-  #location{
+  #headerLocation{
     margin-left: 0px;
-  }
-
-  #location{
     width: 100%;
   }
 
-  #radius{
+  #headerRadius{
     width: 30%;
   }
-
-  /* #burgermenu_web{
-    margin-right: 3px;
-    margin-top: -9px;
-  } */
 }
 
 @media (min-width:960px) and (max-width:1099px){
