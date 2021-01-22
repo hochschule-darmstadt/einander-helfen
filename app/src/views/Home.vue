@@ -29,9 +29,10 @@
                 </v-row>
 
                 <v-row class="flex-grow-1 ps-4" id="locationDiv">
-                    <location-search-bar @click.native="focussearch" id="location" :attachTo="'#location'" ref="locationSearchBar" @enter="onLocationEnter" tabindex="2" />
-                    <radius id="radius" @enter="onRadiusEnter" tabindex="3" />
-                    <search-button id="searchButton" @click="executeSearch" tabindex="4" />
+                    <area-select id="areaSelect" ref="areaSelect" @change="switcharea" tabindex="2" />
+                    <location-search-bar @click.native="focussearch" id="location" :attachTo="'#location'" ref="locationSearchBar" @enter="onLocationEnter" tabindex="3" />
+                    <radius ref="radius" id="radius" @enter="onRadiusEnter" tabindex="4" />
+                    <search-button id="searchButton" @click="executeSearch" tabindex="5" />
                 </v-row>
               </v-form>
              </v-flex>
@@ -84,6 +85,7 @@ import Toolbar from '@/components/layout/Toolbar.vue';
 import VueSlickCarousel from 'vue-slick-carousel';
 import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css';
 import 'vue-slick-carousel/dist/vue-slick-carousel.css';
+import AreaSelect from '@/components/ui/AreaSelect.vue';
 import LocationSearchBar from '@/components/ui/LocationSearchBar.vue';
 import Radius from '@/components/ui/Radius.vue';
 import SearchBar from '@/components/ui/SearchBar.vue';
@@ -93,6 +95,7 @@ export default Vue.extend({
   components: {
     SearchBar,
     VueSlickCarousel,
+    AreaSelect,
     LocationSearchBar,
     Radius,
     Toolbar,
@@ -177,6 +180,21 @@ export default Vue.extend({
       if (isSafari === false && focussearch !== null && window.matchMedia('(max-width: 420px)').matches) {
         focussearch.scrollIntoView(true);
       }
+    },
+    switchArea(): void {
+      // @ts-ignore
+      const area = this.$refs.areaSelect.selection;
+      if (area === 'Deutschland') {
+        // @ts-ignore
+        this.$refs.locationSearchBar.setHintText(false);
+        // @ts-ignore
+        this.$refs.radius.disabled = false;
+      } else {
+        // @ts-ignore
+        this.$refs.locationSearchBar.setHintText(true);
+        // @ts-ignore
+        this.$refs.radius.disabled = true;
+      }
     }
   }
 });
@@ -185,6 +203,16 @@ export default Vue.extend({
 <style>
 .v-input__slot {
   margin-bottom: 0;
+}
+
+#areaSelect {
+  max-width: fit-content;
+  margin-right: 8px;
+  margin-left: 0;
+}
+
+#areaSelect .v-input__slot {
+  width: max-content;
 }
 
 .no-radius {
@@ -203,7 +231,7 @@ img {
 }
 
 #searchButton {
-  margin-right: 12px !important;
+  margin-right: 0 !important;
 }
 
 #searchbox {
@@ -217,6 +245,7 @@ img {
 
 #locationDiv {
   padding-left: 12px !important;
+  padding-right: 12px !important;
 }
 
 @media (max-width: 329px) {
@@ -263,7 +292,6 @@ img {
 
 @media (min-width: 383px) {
   #location {
-    width: 85vw;
     max-width: 98vw;
     
   }

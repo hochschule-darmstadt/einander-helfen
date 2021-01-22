@@ -2,7 +2,7 @@
   <v-row justify="center">
     <v-autocomplete
       prepend-inner-icon="place"
-      label="Ort oder PLZ"
+      :label="hintText"
       :filter="filterLocations"
       :items="showLocations"
       item-text="title"
@@ -44,11 +44,13 @@
     },
       data(): {
         newSelectedLocation: string,
-        isSearching: boolean
+        isSearching: boolean,
+        hintText: string
       } {
         return {
           isSearching: false,
-          newSelectedLocation: ''
+          newSelectedLocation: '',
+          hintText: 'Ort oder PLZ' || 'Land'
         };
       },
       computed: {
@@ -122,15 +124,24 @@
             }
             this.$emit('input', data);
         },
-          clearInput(): void {
-            this.$nextTick(() => {
-                this.setLocationSearchValue('');
-            });
+        clearInput(): void {
+          this.$nextTick(() => {
+              this.setLocationSearchValue('');
+          });
+        },
+        setHintText(international: boolean): void {
+          if (international) {
+            this.hintText = 'Land';
+          } else {
+            this.hintText = 'Ort oder PLZ';
           }
+        }
       },
     }
   );
 </script>
+<style>
+</style>
 
 
 

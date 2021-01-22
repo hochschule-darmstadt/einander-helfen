@@ -1,0 +1,70 @@
+<template>
+  <v-row justify="center">
+    <v-select 
+      id="areaSelect" 
+      :items="items" 
+      v-model="selection"
+      label="" 
+      item-text="title" 
+      item-value="title"
+      :dark="dark"
+      @change="$emit('change')">
+      <template v-slot:item="{ item }">
+        <img id="areaImage" :src="item.img">
+        <v-space></v-space>
+        <span>{{item.title}}</span>
+      </template>
+      <template v-slot:selection="{ item }">
+        <img id="areaImageSelected" :src="item.img">
+      </template>
+    </v-select>
+  </v-row>
+</template>
+
+<script lang="ts">
+  import { createNamespacedHelpers } from 'vuex';
+
+  const { mapState, mapActions, mapGetters } = createNamespacedHelpers('locationSearchModule');
+  import Vue from 'vue';
+
+  export default Vue.extend({
+    props: {
+      dark: {
+        type: Boolean,
+        default: false
+      },
+      attachTo: {
+        type: String,
+        default: ''
+      },
+    },
+      data(): {
+        items: any,
+        selection: any,
+      } {
+        return {
+          items: [
+            {title: 'Deutschland', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Flag_of_Germany.svg/320px-Flag_of_Germany.svg.png'},
+            {title: 'International', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Earth_icon_2.png/240px-Earth_icon_2.png'}],
+          selection: {title: 'Deutschland', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Flag_of_Germany.svg/320px-Flag_of_Germany.svg.png'}
+        };
+      }
+    }
+  );
+</script>
+<style>
+#areaImage, #areaImageSelected {
+  height: 1.5em;
+  width: 1.5em;
+  border-radius: 50%;
+}
+
+#areaImage {
+  margin-right: 1em;
+}
+</style>
+
+
+
+
+

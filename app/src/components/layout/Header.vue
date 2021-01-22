@@ -57,12 +57,15 @@
         </v-list>
       </v-menu>
 
+      <v-flex>
+        <area-select id="areaSelect" ref="areaSelect" @change="switchArea" :dark="true" />
+      </v-flex>
       <v-flex xs12 sm5 md2>
-        <location-search-bar @input="updateResults" id="headerLocation" :dark="true" />
+        <location-search-bar ref="locationSearchBar" @input="updateResults" id="headerLocation" :dark="true" />
       </v-flex>
 
       <v-flex xs12 sm4 md1>
-        <radius @input="updateResults" :dark="true" />
+        <radius ref="radius" @input="updateResults" :dark="true" />
       </v-flex>
 
       <v-flex xs12 sm4 md1>
@@ -96,6 +99,7 @@
     import Vue from 'vue';
     import { createNamespacedHelpers, mapActions as mapStateActions } from 'vuex';
     const { mapActions, mapState } = createNamespacedHelpers('textSearchModule');
+    import AreaSelect from '@/components/ui/AreaSelect.vue';
     import LocationSearchBar from '@/components/ui/LocationSearchBar.vue';
     import Radius from '@/components/ui/Radius.vue';
     import SearchBar from '@/components/ui/SearchBar.vue';
@@ -103,6 +107,7 @@
 
     export default Vue.extend({
   components: {
+    AreaSelect,
     LocationSearchBar,
     Radius,
     SearchBar,
@@ -150,6 +155,21 @@
       } else {
         this.updateResults();
       }
+    },
+    switchArea(): void {
+      // @ts-ignore
+      const area = this.$refs.areaSelect.selection;
+      if (area === 'Deutschland') {
+        // @ts-ignore
+        this.$refs.locationSearchBar.setHintText(false);
+        // @ts-ignore
+        this.$refs.radius.disabled = false;
+      } else {
+        // @ts-ignore
+        this.$refs.locationSearchBar.setHintText(true);
+        // @ts-ignore
+        this.$refs.radius.disabled = true;
+      }
     }
   },
   computed: {
@@ -161,6 +181,16 @@
 <style>
 .v-menu__content {
   z-index: 9999 !important;
+}
+
+#areaSelect {
+  max-width: fit-content;
+  margin-right: 8px;
+  margin-left: 0;
+}
+
+#areaSelect .v-input__slot {
+  width: max-content;
 }
 
 @media (min-width: 315px) and (max-width: 382px) {

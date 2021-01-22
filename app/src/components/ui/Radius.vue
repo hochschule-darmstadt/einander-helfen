@@ -7,6 +7,7 @@
             v-bind:value="selectedRadius"
             @keydown.enter="$emit('enter')"
             :dark="dark"
+            :disabled="disabled"
             style="margin-left: 10px; margin-right: 10px;">
     </v-select>
 </template>
@@ -28,11 +29,13 @@
         },
         data(): {
             newSelectedRadius: string|null,
-            radii: Radius[]
+            radii: Radius[],
+            disabled: boolean
         } {
             return {
                 newSelectedRadius: null,
-                radii
+                radii,
+                disabled: false
             };
         },
         watch: {
@@ -48,7 +51,7 @@
             ...mapState(['selectedRadius'])
         },
         methods: {
-            ...mapActions(['setSelectedRadius']),
+            ...mapActions(['setSelectedRadius'])
         }
     });
 </script>
