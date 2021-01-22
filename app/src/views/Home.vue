@@ -29,7 +29,7 @@
                 </v-row>
 
                 <v-row class="flex-grow-1 ps-4" id="locationDiv">
-                    <area-select id="areaSelect" ref="areaSelect" @change="switcharea" tabindex="2" />
+                    <area-select id="areaSelect" ref="areaSelect" @change="switchArea" tabindex="2" />
                     <location-search-bar @click.native="focussearch" id="location" :attachTo="'#location'" ref="locationSearchBar" @enter="onLocationEnter" tabindex="3" />
                     <radius ref="radius" id="radius" @enter="onRadiusEnter" tabindex="4" />
                     <search-button id="searchButton" @click="executeSearch" tabindex="5" />
@@ -85,11 +85,12 @@ import Toolbar from '@/components/layout/Toolbar.vue';
 import VueSlickCarousel from 'vue-slick-carousel';
 import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css';
 import 'vue-slick-carousel/dist/vue-slick-carousel.css';
-import AreaSelect from '@/components/ui/AreaSelect.vue';
+// import AreaSelect from '@/components/ui/AreaSelect.vue';
 import LocationSearchBar from '@/components/ui/LocationSearchBar.vue';
 import Radius from '@/components/ui/Radius.vue';
 import SearchBar from '@/components/ui/SearchBar.vue';
 import SearchButton from '@/components/ui/SearchButton.vue';
+import AreaSelect from '../components/ui/AreaSelect.vue';
 
 export default Vue.extend({
   components: {
@@ -182,18 +183,13 @@ export default Vue.extend({
       }
     },
     switchArea(): void {
-      // @ts-ignore
-      const area = this.$refs.areaSelect.selection;
-      if (area === 'Deutschland') {
-        // @ts-ignore
-        this.$refs.locationSearchBar.setHintText(false);
-        // @ts-ignore
-        this.$refs.radius.disabled = false;
+      const selectionTitle = (this.$refs.areaSelect as AreaSelect).selection.title;
+      if (selectionTitle === 'Deutschland') {
+        (this.$refs.locationSearchBar as any).setHintText(false);
+        (this.$refs.radius as any).disabled = false;
       } else {
-        // @ts-ignore
-        this.$refs.locationSearchBar.setHintText(true);
-        // @ts-ignore
-        this.$refs.radius.disabled = true;
+        (this.$refs.locationSearchBar as any).setHintText(true);
+        (this.$refs.radius as any).disabled = true;
       }
     }
   }

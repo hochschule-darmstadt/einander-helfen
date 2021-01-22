@@ -157,18 +157,13 @@
       }
     },
     switchArea(): void {
-      // @ts-ignore
-      const area = this.$refs.areaSelect.selection;
-      if (area === 'Deutschland') {
-        // @ts-ignore
-        this.$refs.locationSearchBar.setHintText(false);
-        // @ts-ignore
-        this.$refs.radius.disabled = false;
+      const selectionTitle = (this.$refs.areaSelect as AreaSelect).selection.title;
+      if (selectionTitle === 'Deutschland') {
+        (this.$refs.locationSearchBar as any).setHintText(false);
+        (this.$refs.radius as any).disabled = false;
       } else {
-        // @ts-ignore
-        this.$refs.locationSearchBar.setHintText(true);
-        // @ts-ignore
-        this.$refs.radius.disabled = true;
+        (this.$refs.locationSearchBar as any).setHintText(true);
+        (this.$refs.radius as any).disabled = true;
       }
     }
   },

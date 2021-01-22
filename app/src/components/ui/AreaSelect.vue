@@ -26,31 +26,34 @@
 
   const { mapState, mapActions, mapGetters } = createNamespacedHelpers('locationSearchModule');
   import Vue from 'vue';
+  import Component from 'vue-class-component';
+  import { Prop } from 'vue-property-decorator';
 
-  export default Vue.extend({
-    props: {
-      dark: {
-        type: Boolean,
-        default: false
+  @Component
+  export default class AreaSelect extends Vue {
+    @Prop({default: false})
+    public dark!: boolean;
+
+    @Prop({default: ''})
+    public attachTo!: string;
+
+    public items = [
+      {
+        title: 'Deutschland',
+        img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Flag_of_Germany.svg/320px-Flag_of_Germany.svg.png'
       },
-      attachTo: {
-        type: String,
-        default: ''
-      },
-    },
-      data(): {
-        items: any,
-        selection: any,
-      } {
-        return {
-          items: [
-            {title: 'Deutschland', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Flag_of_Germany.svg/320px-Flag_of_Germany.svg.png'},
-            {title: 'International', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Earth_icon_2.png/240px-Earth_icon_2.png'}],
-          selection: {title: 'Deutschland', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Flag_of_Germany.svg/320px-Flag_of_Germany.svg.png'}
-        };
+      {
+        title: 'International',
+        img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Earth_icon_2.png/240px-Earth_icon_2.png'
       }
-    }
-  );
+    ];
+
+    public selection = {
+      title: 'Deutschland',
+      img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Flag_of_Germany.svg/320px-Flag_of_Germany.svg.png'
+    };
+  }
+  
 </script>
 <style>
 #areaImage, #areaImageSelected {
