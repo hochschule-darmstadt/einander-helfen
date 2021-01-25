@@ -277,7 +277,7 @@
 
 
 /*Web Layout*/
-@media (min-width: 960px) and (max-width: 3000px) {
+@media (min-width: 960px) {
   #header{
     display: flex;
   }
