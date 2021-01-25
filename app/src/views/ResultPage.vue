@@ -612,6 +612,10 @@
     height: 70vh;
   }
 
+  html, body {
+    overflow-x: hidden;
+  }
+
   @media only screen and (max-width: 960px) {
     .map-heigth {
       height: 60vh;

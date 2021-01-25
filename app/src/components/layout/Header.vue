@@ -60,7 +60,7 @@
      
 
       <div id="headerRight">
-          <location-search-bar @input="updateResults" id="headerLocation" :dark="true" />
+          <location-search-bar class="xs" @input="updateResults" id="headerLocation" :dark="true" />
           <div id="radiusSearchBtn">
             <radius @input="updateResults" id="headerRadius" :dark="true" />
             <search-button id="headerSearchButton" @click="updateSearchValueFromCurrentInputAndUpdateResults" />
@@ -208,7 +208,6 @@
   }
 
   #headerLocation{
-    width: 100%;
     margin-left: -10px;
     margin-right: 0px;
   }
@@ -392,4 +391,6 @@
   left: auto !important;
   margin-top: 33px;
 }
+
+
 </style>
