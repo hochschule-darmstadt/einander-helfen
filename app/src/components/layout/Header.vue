@@ -1,6 +1,6 @@
 <template>
   <header>
-    <v-layout id="header" row wrap align-center no-gutters style="padding: 2vh; background: #00254f">
+    <v-layout id="header" row wrap align-center no-gutters style="padding: 12px; background: #00254f">
       <div id="headerLeft">
         <v-btn
           id="headerLogo"
