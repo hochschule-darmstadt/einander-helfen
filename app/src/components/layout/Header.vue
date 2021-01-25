@@ -378,6 +378,34 @@
   }
 }
 
+@media (min-width: 3000px){
+  #headerLeft{
+    width: 46.5%;
+  }
+
+  #headerRight{
+    width: 42%
+  }
+
+  #searchBar{ 
+    margin-right: 1.5%;
+  }
+}
+
+@media (min-width: 4000px){
+  #headerLeft{
+    width: 47%;
+  }
+
+  #headerRight{
+    width: 41.5%
+  }
+
+  #searchBar{ 
+    margin-right: 1.5%;
+  }
+}
+
 @media (min-width: 315px) and (max-width: 382px) {
   #headerLocation .v-autocomplete__content.v-menu__content{ 
     max-height: 225px !important;
