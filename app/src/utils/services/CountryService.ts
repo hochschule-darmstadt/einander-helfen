@@ -1,8 +1,9 @@
 import axios from 'axios';
+import Location from '@/models/location';
 
 class CountryService {
     private baseUrl = searchURI;
-    public countries: string[] = [];
+    public countries: Location[] = [];
 
     /**
      * The constructor initializes the `country` list.
@@ -37,7 +38,16 @@ class CountryService {
                 .then(({ data }) => {
                     data.aggregations.country.buckets.map((elem: any) => {
                         if (elem.key !== "Deutschland") {
-                            this.countries.push(elem.key);
+                            this.countries.push({
+                                name: "",
+                                plz: "",
+                                title: elem.key,
+                                state: "",
+                                lat: 0,
+                                lon: 0,
+                                rank: 0,
+                                country: elem.key
+                            });
                         }
                     });
                 })
