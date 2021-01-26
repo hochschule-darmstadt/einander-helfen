@@ -6,6 +6,7 @@ interface Location {
     lat: number;
     lon: number;
     rank: number;
+    country: string;
 }
 
 export { Location };

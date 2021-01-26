@@ -12,4 +12,5 @@ export interface RootState {
   resultSetSize: number;
   resultsFrom: number;
   hitsPerPage: number;
+  international: boolean;
 }

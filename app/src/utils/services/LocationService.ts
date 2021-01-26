@@ -149,7 +149,8 @@ class LocationService {
                 lat: +location.lat,
                 lon: +location.lon,
                 rank: +location.rank,
-                title: location.plz + ' ' + location.name
+                title: location.plz + ' ' + location.name,
+                country: 'Deutschland'
             });
         });
     }
