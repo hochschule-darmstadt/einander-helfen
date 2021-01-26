@@ -26,7 +26,6 @@ export const actions: ActionTree<LocationSearchState, RootState> = {
     if (selectedLocationObject === undefined) {
       selectedLocationObject = null;
     }
-    console.log(selectedLocationObject);
 
     commit('setSelectedLocation', selectedLocation);
     commit('setSelectedLocationObject', selectedLocationObject);

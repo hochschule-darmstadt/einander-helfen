@@ -106,7 +106,6 @@ class DataService {
             }
         };
 
-        console.log(location);
         if (location) {
             if (location.country) {
                 queryObject.query.bool.must.push({

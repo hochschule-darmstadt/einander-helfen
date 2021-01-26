@@ -66,8 +66,6 @@ const store: StoreOptions<RootState> = {
       const size = state.resultSetSize;
       const international = state.international;
 
-      console.log(location);
-
       return new Promise((resolve) => {
         DataService.findBySelection({
           searchValues,
