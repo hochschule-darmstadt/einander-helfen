@@ -47,7 +47,7 @@
               <v-card class="mx-auto" :elevation="hover ? 12 : 2" :class="{ 'on-hover': hover }">
                 <router-link
                   style="text-decoration: none; color: inherit;"
-                  :to="{ name: 'resultPage', query: { q: tag.title } }"
+                  :to="{ name: 'resultPage', query: { q: tag.to } }"
                 >
                   <v-img
                     class="white--text align-end mt-10"
@@ -103,27 +103,31 @@ export default Vue.extend({
     SearchButton
   },
   data(): {
-    volunteerTags: Array<{ title: string; img: string }>;
+    volunteerTags: { title: string; to: string; img: string }[];
     selectedInput: string;
     currentSearchValue: string;
   } {
     return {
       volunteerTags: [
         {
-          title: 'Soziale',
-          img: require('../../public/images/sozial.jpeg')
+          title: 'Arbeit mit Kindern',
+          to: 'Kinder',
+          img: require('../../public/images/macherIN.jpeg')
         },
         {
-          title: 'Kreative',
+          title: 'Arbeit mit Jugendlichen',
+          to: 'Jugend',
           img: require('../../public/images/denkerIN.jpeg')
         },
         {
-          title: 'Kommunikative',
-          img: require('../../public/images/jugend.jpeg')
+          title: 'Arbeit mit Senioren',
+          to: 'Senioren',
+          img: require('../../public/images/sozial.jpeg')
         },
         {
-          title: 'Macher/in',
-          img: require('../../public/images/macherIN.jpeg')
+          title: 'Betreuung',
+          to: 'Betreuung',
+          img: require('../../public/images/jugend.jpeg')
         }
       ],
       selectedInput: '',
@@ -197,6 +201,12 @@ export default Vue.extend({
 </script>
 
 <style>
+#location .v-autocomplete__content.v-menu__content{ 
+  top: auto !important;
+  left: auto !important;
+  margin-top: 50px;
+}
+
 .v-input__slot {
   margin-bottom: 0;
 }
@@ -244,6 +254,8 @@ img {
   padding-right: 12px !important;
 }
 
+
+
 @media (max-width: 329px) {
   #location{
     max-width: 98vw;
@@ -280,16 +292,11 @@ img {
   }
 }
 
-#location .v-autocomplete__content.v-menu__content { 
-  top: auto !important;
-  left: auto !important;
-  margin-top: 50px;
-}
+
 
 @media (min-width: 383px) {
   #location {
     max-width: 98vw;
-    
   }
   #location .v-input__slot {
     margin-left: 2px;
@@ -356,5 +363,6 @@ img {
     width: 85%;
   }
 }
+
 
 </style>

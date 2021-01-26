@@ -3,11 +3,14 @@
     <Header />
       <v-container sitecontent row wrap no-gutters>
         <!-- Map -->
-        <v-flex xs12 md6 order-md2 class="show-map" v-show="postMapToggle === 'map'">
+        <v-btn id="mapButton" class="mb-2 button-map-smartphone" dark @click="toggleMapVisibility()">
+          <v-icon>map</v-icon> {{mapButtonText}}
+        </v-btn>
+        <v-flex xs12 md6 order-md2 class="map-smartphone" v-show="showMap">
            <div class="map">
               <v-card tile id="mapcard" class="map-heigth">
                   <div id="map" :style="{height: map.height, width: map.width}">
-                    <v-btn v-if="currentPostId.length > 0" @click="postMapToggle = 'post'"
+                    <v-btn v-if="currentPostId.length > 0" @click="toggleMapVisibility()"
                       class="button-details" dark><v-icon>info</v-icon> Details
                     </v-btn>
                     <l-map ref="map" :center="map.center" :zoom="map.zoom" :options="{gestureHandling: true}">
@@ -29,7 +32,7 @@
         </v-flex>
 
         <!-- right side content-->
-        <v-flex sm12 md6 order-md2 class="details" v-if="postMapToggle === 'post'">
+        <v-flex sm12 md6 order-md2 class="details" v-if="!showMap && !smartphone">
           <div>
           <v-card
             tile
@@ -293,12 +296,16 @@
         },
         data(): {
             map: any;
-            postMapToggle: 'post' | 'map';
+            mapButtonText: string;
+            showMap: boolean;
+            smartphone: boolean;
             radiusExtendedFrom: '';
             showRadiusExtendedMessage: boolean;
         } {
             return {
-                postMapToggle: 'map',
+                mapButtonText: 'Karte anzeigen',
+                showMap: true,
+                smartphone: false,
                 map: {
                     url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
@@ -338,9 +345,14 @@
         },
         created(): void {
             this.hydrateStateFromRoute(this.$route).then(() => {
-              if (this.postIsOpen) {
-                this.postMapToggle = 'post';
+              if (window.matchMedia('(max-width: 960px)').matches) {
+                this.showMap = false;
+                this.smartphone = true;
               }
+              if (this.postIsOpen) {
+                this.showMap = false;
+              }
+              window.addEventListener('resize', this.onResize);
             });
         },
         mounted(): void {
@@ -411,44 +423,70 @@
             ...mapActions(['hydrateStateFromRoute', 'updateURIFromState', 'setSelectedPost', 'setPage', 'findPosts']),
             ...mapLocationActions(['setSelectedRadius', 'setAlternateRadius']),
             openPost(id: string): void {
-                this.postMapToggle = 'post';
+                if (!this.smartphone) {
+                  this.showMap = false;
+                }
                 const postIndex = this.posts.findIndex((post) => post.id === id);
                 this.setSelectedPost(this.posts[postIndex]);
                 this.setPage(this.pageOfCurrentPost);
                 this.setMapLocation();
             },
             openMap(): void {
-                this.postMapToggle = 'map';
+                this.showMap = true;
                 this.setMapLocation();
             },
             setMapLocation(): void {
-                const currentPost = this.selectedPost as Post;
-                const location = [currentPost.geo_location.lat, currentPost.geo_location.lon] as LatLngTuple;
-                if (this.postMapToggle === 'map') {
-                    this.rerenderMap();
-                }
-                this.$nextTick(() => {
-                    (this.$refs.map as LMap).setCenter(location);
-                });
+              if (!this.showMap) {
+                return;
+              }
+              const currentPost = this.selectedPost as Post;
+              const location = [currentPost.geo_location.lat, currentPost.geo_location.lon] as LatLngTuple;
+              this.rerenderMap();
+              this.$nextTick(() => {
+                  (this.$refs.map as LMap).setCenter(location);
+              });
             },
             closePost(): void {
                 this.setSelectedPost(null);
-                this.postMapToggle = 'map';
+                if (!this.smartphone) {
+                  this.showMap = true;
+                }
                 this.rerenderMap();
-                this.fitMapBounds(this.posts);
+                this.$nextTick(() => {
+                  this.fitMapBounds(this.posts);
+                });
             },
             fitMapBounds(posts: Post[]): void {
-                const markers = posts.filter((post) => post.geo_location !== null )
-                  .map((post) => [post.geo_location.lat, post.geo_location.lon] as LatLngTuple);
-                (this.$refs.map as LMap).fitBounds(markers);
+              if (!this.showMap) {
+                return;
+              }
+              const markers = posts.filter((post) => post.geo_location !== null )
+                .map((post) => [post.geo_location.lat, post.geo_location.lon] as LatLngTuple);
+              (this.$refs.map as LMap).fitBounds(markers);
             },
             rerenderMap(): void {
+              if (!this.showMap) {
+                return;
+              }
               this.$nextTick(() => {
                 (this.$refs.map as LMap).mapObject.invalidateSize();
               });
             },
+            toggleMapVisibility(): void {
+              this.showMap = !this.showMap;
+              this.mapButtonText = (this.showMap) ? 'Karte ausblenden' : 'Karte anzeigen';
+              this.$nextTick(() => {
+                if (this.showMap) {
+                  if (this.selectedPost !== null) {
+                    this.setMapLocation();
+                  } else {
+                    this.rerenderMap();
+                  }
+                }
+              });
+            },
             postDistance(post: Post): string {
-              if (!this.selectedLocationObject) {
+              if (!this.selectedLocationObject || !post.geo_location) {
                 return '';
               }
 
@@ -480,6 +518,18 @@
               const c = 2 * Math.asin(Math.sqrt(h));
 
               return RADIUS_OF_EARTH_IN_KM * c;
+            },
+            onResize(): void {
+              if (!this.smartphone && window.innerWidth <= 960 ) {
+                this.smartphone = true;
+                this.showMap = false;
+                this.mapButtonText = 'Karte anzeigen';
+              } else if (this.smartphone && window.innerWidth > 960) {
+                this.smartphone = false;
+                if (this.selectedPost === null) {
+                  this.showMap = true;
+                }
+              }
             }
         }
     });
@@ -491,80 +541,95 @@
   @import "~leaflet.markercluster/dist/MarkerCluster.Default.css";
   @import "~leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
 
-   .copyright, .copy, .cpy, strong[class^="copyright"], strong[class^="cpy"], strong[class^="copy"] {
+  .copyright, .copy, .cpy, strong[class^="copyright"], strong[class^="cpy"], strong[class^="copy"] {
     clear: both;
     padding: 10px 0px;
     display: none;
-   }
-   .activeListItem {
-     background-color: #c4e0ff !important;
-   }
-   .no-border tr:not(:last-child) td:not(.v-data-table__mobile-row) {
+  }
+  .activeListItem {
+    background-color: #c4e0ff !important;
+  }
+  .no-border tr:not(:last-child) td:not(.v-data-table__mobile-row) {
     border: 0 !important;
-   }
-   .detail-table table {
-     border-spacing: 0 20px !important;
-   }
-   .detail-table td {
-     height:unset !important;
-   }
-   .detail-table tr:hover {
+  }
+  .detail-table table {
+    border-spacing: 0 20px !important;
+  }
+  .detail-table td {
+    height:unset !important;
+  }
+  .detail-table tr:hover {
     background: unset !important;
-   }
-   .detail-table tr td {
-     vertical-align: top;
-   }
-   #divWithDisabledButton {
-      padding-top: 21px;
-      align-self: flex-start;
-   }
-   #disabledMapButton {
-     margin-left: 35px;
-     background-color: #e0e0e0;
-     color: rgb(174, 168, 168) !important;
-   }
-   #disabledMapButton .v-icon {
-     color: rgb(174, 168, 168) !important;
-   }
-   .button-map {
-     margin-top: 21px;
-     margin-left: 35px;
-     background-color: rgb(5, 76, 102);
-     align-self: flex-start;
-   }
-   .button-smartphone {
-     display: none;
-   }
-   .button-map-smartphone {
-     background-color: rgb(5, 76, 102);
-   }
-   .button-close-smartphone {
-     position: absolute;
-     right: 0;
-   }
-   .button-details {
-     position: absolute;
-     z-index: 9999;
-     margin-left: 50px;
-     margin-top: 20px;
-     background-color: rgb(5, 76, 102) !important;
-   }
-   .button-close {
-     align-self: flex-start;
-   }
-   .map-heigth {
-     height: 70vh;
-    }
-    .details-smartphone {
-      display: none;
-    }
-    .post-subtitle {
-      display: -webkit-box !important;
-    }
+  }
+  .detail-table tr td {
+    vertical-align: top;
+  }
+  #divWithDisabledButton {
+    padding-top: 21px;
+    align-self: flex-start;
+  }
+  #disabledMapButton {
+    margin-left: 35px;
+    background-color: #e0e0e0;
+    color: rgb(174, 168, 168) !important;
+  }
+  #disabledMapButton .v-icon {
+    color: rgb(174, 168, 168) !important;
+  }
+  .button-map {
+    margin-top: 21px;
+    margin-left: 35px;
+    background-color: rgb(5, 76, 102);
+    align-self: flex-start;
+  }
+  .button-smartphone {
+    display: none;
+  }
+  .button-map-smartphone {
+    display: none;
+  }
+  .button-close {
+    align-self: flex-start;
+  }
+  .button-close-smartphone {
+    position: absolute;
+    right: 0;
+  }
+  .button-details {
+    position: absolute;
+    z-index: 9999;
+    margin-left: 50px;
+    margin-top: 20px;
+    background-color: rgb(5, 76, 102) !important;
+  }
+  .details-smartphone {
+    display: none;
+  }
+  .post-subtitle {
+    display: -webkit-box !important;
+  }
+  .map-heigth {
+    height: 70vh;
+  }
 
-   @media only screen and (max-width: 960px) {
+  html, body {
+    overflow-x: hidden;
+  }
+
+  @media only screen and (max-width: 960px) {
     .map-heigth {
-       height: 60vh;
+      height: 60vh;
+    }
+    .map-smartphone {
+      margin-bottom: 12px;
+    }
+    .button-map-smartphone {
+      display: block;
+      width: 100%;
+      background-color: rgb(5, 76, 102) !important;
+    }
+    .details {
+      display: none;
     }
     .details-smartphone {
       display: block;
@@ -581,13 +646,6 @@
     .details-smartphone p,
     .details-smartphone h3{
       color: rgba(0,0,0,.87)!important;
-    }
-    .details {
-      display: none;
-    }
-    .show-map {
-      display: block !important;
-      margin-bottom: 12px;
     }
     .button-details {
       display: none;
@@ -608,23 +666,23 @@
       opacity: 1;
       transition: all 0.4s 0.2s;
     }
-   }
-   @media only screen and (max-width: 500px) {
+  }
+  @media only screen and (max-width: 500px) {
     .button-map, .button-close {
       display: none;
     }
     .button-smartphone {
       display: block;
     }
-   }
+  }
 
-   @media (max-width: 480px){
+  @media (max-width: 480px){
     .card {
       max-width: 75vh
     }
-   }
+  }
 
-   @media (min-width:960px){
+  @media (min-width:960px){
     .sitecontent {
       width: 960px;
       margin: auto;
@@ -632,7 +690,7 @@
       margin-top: 2%;
     }
 
-   #postbox {
+    #postbox {
       margin-right: 2%;
     }
 
@@ -640,9 +698,9 @@
       margin-top:5%; 
       margin-right: 1px;
     }
-   }
+    }
 
-   @media (min-width: 1100px){
+    @media (min-width: 1100px){
     .sitecontent {
       width: 1100px;
       margin: auto;
@@ -652,9 +710,9 @@
     #postbox {
       margin-right: 2%;
     }
-   }
+  }
 
-   @media (min-width: 1300px){
+  @media (min-width: 1300px){
     .sitecontent {
       width: 1300px;
       margin: auto;
@@ -664,9 +722,9 @@
     #postbox {
       margin-right: 2%;
     }
-   }
+  }
 
-   @media (min-width: 1618px){
+  @media (min-width: 1618px){
     .sitecontent {
       width: 1618px;
       margin-top: 2%; 
@@ -675,9 +733,9 @@
     #postbox {
       margin-right: 2%;
     }
-  }
+}
 
-   @media (min-width: 1904px){
+  @media (min-width: 1904px){
     .sitecontent {
       width: 85%;
       margin: auto;

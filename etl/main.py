@@ -30,4 +30,4 @@ for file in os.scandir(os.path.join(ROOT_DIR, 'data_extraction/data')):
     # Write enhanced data to files
     write_data_to_json(os.path.join(ROOT_DIR, 'data_enhancement/data', f'{file_name}.json'), enhanced_data)
 
-DataManager.run()
+DataManager.run_backup_process()

@@ -21,12 +21,15 @@ def load_tags_from_file():
     logger.debug("load_tags_from_file()")
 
     loaded_tags = {}
-    logger.info(f"load_tags_from_file - path: {os.path.join(ROOT_DIR,'data_enhancement', 'Tags-einander-helfen.csv')}")
-    with open(os.path.join(ROOT_DIR, 'data_enhancement','Tags-einander-helfen.csv'), newline='',
+    logger.debug(f"load_tags_from_file - path: {os.path.join(ROOT_DIR,'data_enhancement', 'Tags-einander-helfen.csv')}")
+    with open(os.path.join(ROOT_DIR, 'data_enhancement', 'Tags-einander-helfen.csv'), newline='',
               encoding='utf-8') as csvfile:
         reader = csv.DictReader(csvfile, delimiter=';')
         for row in reader:
-            loaded_tags[row['label']] = row['synonyms'].split(',')
+            if row['synonyms'] is not None:
+                loaded_tags[row['label']] = row['synonyms'].split(',')
+            else:
+                loaded_tags[row['label']] = []
     return loaded_tags
 
 
@@ -55,7 +58,9 @@ def find_new_tags(file, domain):
             if category not in loaded_tags.keys() and category not in synonyms:
                 new_tags.append(category)
     new_tags = list(set(new_tags))
-    write_data_to_json(os.path.join(ROOT_DIR, 'data_enhancement/output', f"new_tags_{domain}{'.json'}"), new_tags)
+    output_path = os.path.join(ROOT_DIR, 'data_enhancement/output', f"new_tags_{domain}{'.json'}")
+    write_data_to_json(output_path, new_tags)
+    logger.info("Wrote new tags to '" + output_path + "'")
 
 
 def rank_tags(file, domain):
@@ -82,5 +87,6 @@ def rank_tags(file, domain):
                         tag_ranking.update({tag: new_value})
     sorted_tags = sorted(tag_ranking.items(), key=lambda x: x[1], reverse=True)
     tag_ranking = dict(sorted_tags)
-    write_data_to_json(os.path.join(ROOT_DIR, 'data_enhancement', 'output',
-                       f"ranked_tags_{domain}{'.json'}"), tag_ranking)
+    output_path = os.path.join(ROOT_DIR, 'data_enhancement', 'output', f"ranked_tags_{domain}{'.json'}")
+    write_data_to_json(output_path, tag_ranking)
+    logger.info("Wrote ranked tags to '" + output_path + "'")
