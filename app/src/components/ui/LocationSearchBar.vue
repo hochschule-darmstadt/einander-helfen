@@ -90,9 +90,14 @@
           if (queryText) {
             this.isSearching = true;
             const search = queryText.toLowerCase();
-            const plz = item.plz;
+
             const name = item.name.toLowerCase();
-            const displayString = plz + ' '  + name;
+            let plz = '';
+            let displayString = name;
+            if (item.plz) {
+              plz = item.plz;
+              displayString = plz + ' ' + displayString;
+            }
             return name.includes(search) ||
                 plz.includes(search) ||
                 displayString.includes(search) ||
@@ -134,10 +139,10 @@
             });
           },
         switchInternational(parameter): void {
-            if (parameter == "national")
-              this.setInternational(false)
+            if (parameter === 'national')
+              this.setInternational(false);
             else
-              this.setInternational(true)
+              this.setInternational(true);
         }
       },
     }

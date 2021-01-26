@@ -66,6 +66,8 @@ const store: StoreOptions<RootState> = {
       const size = state.resultSetSize;
       const international = state.international;
 
+      console.log(location);
+
       return new Promise((resolve) => {
         DataService.findBySelection({
           searchValues,
@@ -102,7 +104,7 @@ const store: StoreOptions<RootState> = {
         dispatch('updateURIFromState');
     },
     setInternational({commit}, international: boolean): void{
-        commit('setInternational', international)
+        commit('setInternational', international);
     },
     setSelectedPost({ commit }, value: Post|null): void {
       commit('setSelectedPost', value);
