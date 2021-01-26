@@ -187,7 +187,7 @@ export default Vue.extend({
       }
     },
     switchArea(): void {
-      const selectionTitle = (this.$refs.areaSelect as AreaSelect).selection.title;
+      const selectionTitle = (this.$refs.areaSelect as AreaSelect).selection;
       if (selectionTitle === 'Deutschland') {
         (this.$refs.locationSearchBar as any).setHintText(false);
         (this.$refs.radius as any).disabled = false;

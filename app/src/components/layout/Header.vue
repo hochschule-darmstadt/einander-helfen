@@ -157,7 +157,8 @@
       }
     },
     switchArea(): void {
-      const selectionTitle = (this.$refs.areaSelect as AreaSelect).selection.title;
+      const areaSelect = (this.$refs.areaSelect as AreaSelect);
+      const selectionTitle = areaSelect.selection;
       if (selectionTitle === 'Deutschland') {
         (this.$refs.locationSearchBar as any).setHintText(false);
         (this.$refs.radius as any).disabled = false;

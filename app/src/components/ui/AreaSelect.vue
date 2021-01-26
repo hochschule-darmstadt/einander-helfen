@@ -27,7 +27,12 @@
   const { mapState, mapActions, mapGetters } = createNamespacedHelpers('locationSearchModule');
   import Vue from 'vue';
   import Component from 'vue-class-component';
-  import { Prop } from 'vue-property-decorator';
+import { Prop } from 'vue-property-decorator';
+
+  type Item = {
+    title: string;
+    img: string;
+  };
 
   @Component
   export default class AreaSelect extends Vue {
@@ -37,7 +42,7 @@
     @Prop({default: ''})
     public attachTo!: string;
 
-    public items = [
+    public items: Item[] = [
       {
         title: 'Deutschland',
         img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Flag_of_Germany.svg/320px-Flag_of_Germany.svg.png'
@@ -48,13 +53,10 @@
       }
     ];
 
-    public selection = {
-      title: 'Deutschland',
-      img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Flag_of_Germany.svg/320px-Flag_of_Germany.svg.png'
-    };
+    public selection: string = 'Deutschland';
   }
-  
 </script>
+
 <style>
 #areaImage, #areaImageSelected {
   height: 1.5em;
