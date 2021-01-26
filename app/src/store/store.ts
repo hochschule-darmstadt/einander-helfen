@@ -21,7 +21,7 @@ const store: StoreOptions<RootState> = {
     totalResultSize: 0,
     resultsFrom: 0,
     hitsPerPage: 10, // must be a divider of resultSetSize, or the chunk loading gets complexer
-    international: true
+    international: false
   } as RootState,
   mutations: {
 
@@ -46,6 +46,9 @@ const store: StoreOptions<RootState> = {
     },
     setPage(state, value: number): void {
       state.page = value;
+    },
+    setInternational(state, value: boolean): void {
+      state.international = value;
     }
   },
   actions: {
@@ -97,6 +100,9 @@ const store: StoreOptions<RootState> = {
 
         commit('setPage', page);
         dispatch('updateURIFromState');
+    },
+    setInternational({commit}, international: boolean): void{
+        commit('setInternational', international)
     },
     setSelectedPost({ commit }, value: Post|null): void {
       commit('setSelectedPost', value);

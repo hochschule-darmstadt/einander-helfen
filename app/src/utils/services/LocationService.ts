@@ -48,6 +48,11 @@ class LocationService {
 
         return this.diversitySplice(selectedLocations);
     }
+
+    public findCountryByName(searchValue: string): Location[] {
+        return [{title:'Brasilien',country: 'Brasilien',name:'Brasilien'},{title:'Indien',country: 'Indien',name:'Indien'}] as Location[];
+    }
+
     /**
      * This method executes a wildcard query on the locations.
      * @returns A list of the top `this.selectedLocationAmount` `Location`s

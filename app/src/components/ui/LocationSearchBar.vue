@@ -21,11 +21,14 @@
       :attach="attachTo"
     >
     </v-autocomplete>
+      <v-select :items="country"  v-on:change="switchInternational">
+    switch</v-select>
   </v-row>
+
 </template>
 
 <script lang="ts">
-  import { createNamespacedHelpers } from 'vuex';
+  import { createNamespacedHelpers, mapActions as mapStateActions } from 'vuex';
   import Location from '@/models/location';
 
   const { mapState, mapActions, mapGetters } = createNamespacedHelpers('locationSearchModule');
@@ -43,10 +46,12 @@
       },
     },
       data(): {
+        country: string [],
         newSelectedLocation: string,
         isSearching: boolean
       } {
         return {
+          country: ['international','national'],
           isSearching: false,
           newSelectedLocation: ''
         };
@@ -80,6 +85,7 @@
       methods: {
         ...mapActions(['setLocationSearchValue', 'setSelectedLocation']),
         ...mapGetters(['getLocations']),
+        ...mapStateActions(['setInternational']),
         filterLocations(item: any, queryText: string, itemText: string): boolean {
           if (queryText) {
             this.isSearching = true;
@@ -122,11 +128,17 @@
             }
             this.$emit('input', data);
         },
-          clearInput(): void {
+        clearInput(): void {
             this.$nextTick(() => {
                 this.setLocationSearchValue('');
             });
-          }
+          },
+        switchInternational(parameter): void {
+            if (parameter == "national")
+              this.setInternational(false)
+            else
+              this.setInternational(true)
+        }
       },
     }
   );
