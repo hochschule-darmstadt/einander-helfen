@@ -7,7 +7,7 @@
             v-bind:value="selectedRadius"
             @keydown.enter="$emit('enter')"
             :dark="dark"
-            style="margin-left: 10px; margin-right: 10px;">
+            style="margin-right: 10px;">
     </v-select>
 </template>
 

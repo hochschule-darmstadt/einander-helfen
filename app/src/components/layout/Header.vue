@@ -1,82 +1,50 @@
 <template>
   <header>
-    <v-layout row wrap justify-space-around align-center no-gutters style="padding: 2vh; background: #00254f">
-      <v-btn
-        class="d-none d-sm-flex justify-center mr-5"
-        height="75px"
-        width="80px"
-        justify="left"
-        rounded
-        router
-        depressed
-        icon
-      >
-        <router-link to="/" exact>
-          <v-img
-            class="mt-1"
-            width="80px"
-            height="75px"
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Heart-hand-shake.svg/256px-Heart-hand-shake.svg.png"
-          ></v-img>
-        </router-link>
-      </v-btn>
-
-      <v-flex xs10 sm8 md6 style="background: white; border-radius: 20px; margin-right:2%">
-        <search-bar ref="searchBar"
-                    @input="addSearchValueAndUpdate"
-                    :searchInput.sync="currentSearchValue"
-                    :enable-no-data-message="true"
-        />
-        <v-spacer></v-spacer>
-        <v-chip-group
-          active-class="primary-text"
-          column
-          style="margin-left: 10px; margin-right: 10px; margin-top: -20px"
+    <v-layout id="header" row wrap align-center no-gutters style="padding: 12px; background: #00254f">
+      <div id="headerLeft">
+        <v-btn
+          id="headerLogo"
+          class="d-none d-sm-flex justify-center mr-4"
+          height="70px"
+          width="80px"
+          justify="left"
+          rounded
+          router
+          depressed
+          icon
         >
-          <v-chip :key="tag" @click:close="removeSearchValueAndUpdate(tag)" close v-for="tag in searchValues">{{ tag }}</v-chip>
-        </v-chip-group>
-      </v-flex>
-
-      <v-menu offset-y>
+          <router-link to="/" exact>
+            <v-img
+              class="mt-1"
+              width="80px"
+              height="75px"
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Heart-hand-shake.svg/256px-Heart-hand-shake.svg.png"
+            ></v-img>
+          </router-link>
+        </v-btn>
+        <div id="searchBar">
+          <search-bar ref="searchBar"
+                      @input="addSearchValueAndUpdate"
+                      :searchInput.sync="currentSearchValue"
+                      :enable-no-data-message="true"
+          />
+          <v-spacer></v-spacer>
+          <v-chip-group
+            active-class="primary-text"
+            column
+            style="margin-left: 10px; margin-right: 10px; margin-top: -20px"
+          >
+            <v-chip :key="tag" @click:close="removeSearchValueAndUpdate(tag)" close v-for="tag in searchValues">{{ tag }}</v-chip>
+          </v-chip-group>
+        </div>
+        <v-menu offset-y>
         <template v-slot:activator="{ on, attrs }">
           <v-btn
+            id="burgermenu_mobile"
             class="hidden-md-and-up"
             v-bind="attrs"
             v-on="on"
             dark
-            style="margin-top: 1vh"
-            icon
-          >
-            <v-icon>more_vert</v-icon>
-          </v-btn>
-        </template>
-        <v-list>
-          <v-list-item v-for="(link, index) in links" :key="index" router :to="link.route">
-            <v-list-item-title>{{ link.text }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-
-      <v-flex xs12 sm5 md2>
-        <location-search-bar @input="updateResults" id="headerLocation" :dark="true" />
-      </v-flex>
-
-      <v-flex xs12 sm4 md1>
-        <radius @input="updateResults" :dark="true" />
-      </v-flex>
-
-      <v-flex xs12 sm4 md1>
-        <search-button @click="updateSearchValueFromCurrentInputAndUpdateResults" />
-      </v-flex>
-
-      <v-menu offset-y>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            class="hidden-sm-and-down"
-            v-bind="attrs"
-            v-on="on"
-            dark
-            style="margin-top: 1vh"
             icon
           >
             <v-icon>menu</v-icon>
@@ -88,6 +56,40 @@
           </v-list-item>
         </v-list>
       </v-menu>
+      </div>
+     
+
+      <div id="headerRight">
+          <location-search-bar class="xs" @input="updateResults" id="headerLocation" :dark="true" />
+          <div id="radiusSearchBtn">
+            <radius @input="updateResults" id="headerRadius" :dark="true" />
+            <search-button id="headerSearchButton" @click="updateSearchValueFromCurrentInputAndUpdateResults" />
+          </div>
+      </div>
+       
+      <v-col class="column menuCol hidden-sm-and-down">
+        <div align="right">
+          <v-menu offset-y>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                id="burgermenu_web"
+                class="hidden-sm-and-down"
+                v-bind="attrs"
+                v-on="on"
+                dark
+                icon
+              >
+                <v-icon>menu</v-icon>
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item v-for="(link, index) in links" :key="index" router :to="link.route">
+                <v-list-item-title>{{ link.text }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </div>
+      </v-col>
     </v-layout>
   </header>
 </template>
@@ -163,6 +165,247 @@
   z-index: 9999 !important;
 }
 
+#searchBar{
+  background: white; 
+  border-radius: 20px; 
+  margin-right: 2%;
+  width: inherit;
+}
+
+#headerLocation{
+  margin-right: 0px;
+}
+
+#headerLeft{
+  display: contents;
+  width: 43%;
+}
+
+#headerRight{
+  display: inherit;
+  width: 40%
+}
+
+/*Mobile Layout*/
+@media (min-width: 280px) and (max-width: 599px){
+  #header{
+    display: block;
+  }
+
+  #headerLeft{
+    width: 100%;
+    margin-bottom: 20px;
+    display: flex;
+  }
+
+  #headerRight{
+    width: 100%;
+    display: block;
+  }
+  
+  #searchBar{ 
+    margin-right: 30px;
+  }
+
+  #headerLocation{
+    margin-left: -10px;
+    margin-right: 0px;
+  }
+
+  #radiusSearchBtn{
+    display: flex;
+  }
+
+  #headerSearchButton{
+    margin-right: 0px!important;
+  }
+
+  #burgermenu_mobile{
+    display: flex;
+    margin-top: 19px;
+    margin-right: 8px;
+  }
+}
+
+
+/*Tablet Layout*/
+@media (min-width:600px) and (max-width: 959px){
+  #header{
+    display: block;
+  }
+
+  #headerLeft{
+    width: 100%;
+    margin-bottom: 20px;
+    display: flex;
+  }
+
+  #headerRight{
+    width: 100%;
+    display: flex;
+  }
+
+  #headerLocation{
+    margin-left: 90px;
+    width: 70%;
+  }
+
+  #searchBar{ 
+    margin-right: 30px;
+  }
+  
+  #radiusSearchBtn{
+    display: flex;
+  }
+
+  #headerSearchButton{
+    margin-right: 73px!important;
+  }
+
+  #burgermenu_mobile{
+    display: flex;
+    margin-top: 19.5px;
+    margin-right: 8px;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 765px) {
+  #burgermenu_mobile{ 
+    margin-top: 19px;
+  }
+}
+
+
+/*Web Layout*/
+@media (min-width: 960px) {
+  #header{
+    display: flex;
+  }
+
+  #headerLeft{
+    display: contents;
+  }
+
+  #headerRight{
+    display: inherit;
+  }
+
+  #radiusSearchBtn{
+    display: flex;
+  }
+  
+  #headerSearchButton{
+    margin-right: 0px!important;
+  }
+
+  #headerLocation{
+    margin-left: 0px;
+    width: 100%;
+  }
+
+  #headerRadius{
+    width: 30%;
+  }
+}
+
+@media (min-width:960px) and (max-width:1099px){
+  #headerLeft{
+    width: 38.5%;
+  }
+
+  #headerRight{
+    width: 44%;
+  }
+
+  #searchBar{ 
+    margin-right: 1.2%;
+  }
+}
+
+@media (min-width:1100px){
+  #headerLeft{
+    width: 41%;
+  }
+
+  #headerRight{
+    width: 43.5%
+  }
+
+  #searchBar{ 
+    margin-right: 1.2%;
+  }
+}
+
+@media (min-width:1300px){
+  #headerLeft{
+    width: 42.5%;
+  }
+
+  #headerRight{
+    width: 42.5%
+  }
+
+  #searchBar{ 
+    margin-right: 1.2%;
+  }
+}
+
+@media (min-width:1618px){
+  #headerLeft{
+    width: 43%;
+  }
+
+  #headerRight{
+    width: 44.5%
+  }
+
+  #searchBar{ 
+    margin-right: 1.5%;
+  }
+}
+
+@media (min-width:1904px){
+  #headerLeft{
+    width: 45%;
+  }
+
+  #headerRight{
+    width: 42.5%
+  }
+
+  #searchBar{ 
+    margin-right: 1.5%;
+  }
+}
+
+@media (min-width: 3000px){
+  #headerLeft{
+    width: 46.5%;
+  }
+
+  #headerRight{
+    width: 42%
+  }
+
+  #searchBar{ 
+    margin-right: 1.5%;
+  }
+}
+
+@media (min-width: 4000px){
+  #headerLeft{
+    width: 47%;
+  }
+
+  #headerRight{
+    width: 41.5%
+  }
+
+  #searchBar{ 
+    margin-right: 1.5%;
+  }
+}
+
 @media (min-width: 315px) and (max-width: 382px) {
   #headerLocation .v-autocomplete__content.v-menu__content{ 
     max-height: 225px !important;
@@ -176,4 +419,6 @@
   left: auto !important;
   margin-top: 33px;
 }
+
+
 </style>
