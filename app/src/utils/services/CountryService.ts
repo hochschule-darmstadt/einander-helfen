@@ -17,13 +17,13 @@ class CountryService {
      */
     public findCountries():void {
         const query = {
-            "size": 0,
-            "aggs": {
-                "country": {
-                    "terms": { "field": "post_struct.location.country.keyword" }
+            'size': 0,
+            'aggs': {
+                'country': {
+                    'terms': { 'field': 'post_struct.location.country.keyword' }
                 }
             }
-        }
+        };
 
         this.performQuery(query);
     }
@@ -37,12 +37,12 @@ class CountryService {
             axios.post(this.baseUrl, query)
                 .then(({ data }) => {
                     data.aggregations.country.buckets.map((elem: any) => {
-                        if (elem.key !== "Deutschland") {
+                        if (elem.key !== 'Deutschland') {
                             this.countries.push({
-                                name: "",
-                                plz: "",
+                                name: '',
+                                plz: '',
                                 title: elem.key,
-                                state: "",
+                                state: '',
                                 lat: 0,
                                 lon: 0,
                                 rank: 0,
