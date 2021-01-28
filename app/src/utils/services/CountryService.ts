@@ -20,7 +20,10 @@ class CountryService {
             'size': 0,
             'aggs': {
                 'country': {
-                    'terms': { 'field': 'post_struct.location.country.keyword' }
+                    'terms': {
+                        'field': 'post_struct.location.country.keyword',
+                        'size': 1000
+                    }
                 }
             }
         };
