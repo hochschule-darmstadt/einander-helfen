@@ -1,8 +1,10 @@
 import Location from '@/models/location';
 import locationArray from '@/resources/locations/index';
+import CountryService from '@/utils/services/CountryService';
 
 class LocationService {
     public locations: Location[] = [];
+    public countries: Location[] = [];
     public selectedLocationAmount = 10;
     public diversityValue = 5;
 
@@ -11,6 +13,7 @@ class LocationService {
      */
     constructor() {
         this.loadLocationCsv();
+        this.countries = CountryService.countries;
     }
 
     /**
@@ -48,6 +51,35 @@ class LocationService {
 
         return this.diversitySplice(selectedLocations);
     }
+
+    /**
+     * This method executes a query on the countries specified by a string.
+     * If there is no input an empty array is returned.
+     * Otherwise it searches for countries where the name starts with the input string.
+     * @param searchValue   The input string for the query.
+     * @returns A list of the top `this.selectedLocationAmount` `Location`s
+     *          which have a diversity of `this.diversityValue` ordered by country.
+     */
+    public findCountryByName(searchValue: string): Location[] {
+        // return empty on null
+        if (!searchValue) {
+            return [];
+        }
+
+        // get countries which start with the searchValue string
+        const selectedCounties = [] as Location[];
+
+        this.countries.forEach((location) => {
+            if (location.country.toLowerCase().startsWith(searchValue.toLowerCase())) {
+                selectedCounties.push(location);
+            }
+        });
+
+        selectedCounties.sort(this.dynamicSort('country'));
+
+        return this.diversitySplice(selectedCounties);
+    }
+
     /**
      * This method executes a wildcard query on the locations.
      * @returns A list of the top `this.selectedLocationAmount` `Location`s
@@ -149,7 +181,8 @@ class LocationService {
                 lat: +location.lat,
                 lon: +location.lon,
                 rank: +location.rank,
-                title: location.plz + ' ' + location.name
+                title: location.plz + ' ' + location.name,
+                country: 'Deutschland'
             });
         });
     }
