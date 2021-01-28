@@ -99,12 +99,12 @@ class DataService {
 
     private static findInternationalBySelection(queryObject: QueryObject, location: Location|null) : void {
         // only national posts (default)
-        // @ts-ignore
-        queryObject.query.bool.must_not = {
-            match: {
-                'post_struct.location.country': 'Deutschland'
+        queryObject.query.bool.must = [{
+                'term': {
+                    'categories': 'international'
+                }
             }
-        };
+        ];
 
         if (location) {
             if (location.country) {
