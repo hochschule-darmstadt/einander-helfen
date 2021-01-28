@@ -129,7 +129,7 @@
   },
   methods: {
     ...mapActions(['addSearchValue', 'removeSearchValue']),
-    ...mapStateActions(['updateURIFromState', 'findPosts', 'setPage', 'setSelectedPost']),
+    ...mapStateActions(['updateURIFromState', 'findPosts', 'setPage', 'setSelectedPost', 'setInternational']),
     updateResults(): void {
         // After changing the query we want to begin on page 1
         this.setPage(1);
@@ -162,9 +162,11 @@
       if (selectionTitle === 'Deutschland') {
         (this.$refs.locationSearchBar as any).setHintText(false);
         (this.$refs.radius as any).disabled = false;
+        this.setInternational(false);
       } else {
         (this.$refs.locationSearchBar as any).setHintText(true);
         (this.$refs.radius as any).disabled = true;
+        this.setInternational(true);
       }
     }
   },

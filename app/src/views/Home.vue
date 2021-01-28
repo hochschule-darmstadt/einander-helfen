@@ -85,7 +85,6 @@ import Toolbar from '@/components/layout/Toolbar.vue';
 import VueSlickCarousel from 'vue-slick-carousel';
 import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css';
 import 'vue-slick-carousel/dist/vue-slick-carousel.css';
-// import AreaSelect from '@/components/ui/AreaSelect.vue';
 import LocationSearchBar from '@/components/ui/LocationSearchBar.vue';
 import Radius from '@/components/ui/Radius.vue';
 import SearchBar from '@/components/ui/SearchBar.vue';
@@ -143,7 +142,7 @@ export default Vue.extend({
   },
   methods: {
     ...mapTextSearchActions(['addSearchValue']),
-    ...mapActions(['updateURIFromState', 'clearSearchParams']),
+    ...mapActions(['updateURIFromState', 'clearSearchParams', 'setInternational']),
     executeSearch(): void {
       if (this.selectedInput) {
         this.addSearchValue(this.selectedInput);
@@ -191,9 +190,11 @@ export default Vue.extend({
       if (selectionTitle === 'Deutschland') {
         (this.$refs.locationSearchBar as any).setHintText(false);
         (this.$refs.radius as any).disabled = false;
+        this.setInternational(false);
       } else {
         (this.$refs.locationSearchBar as any).setHintText(true);
         (this.$refs.radius as any).disabled = true;
+        this.setInternational(true);
       }
     }
   }
