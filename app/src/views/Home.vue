@@ -202,6 +202,7 @@ export default Vue.extend({
       } else {
         (this.$refs.locationSearchBar as any).setHintText(true);
         (this.$refs.radius as any).disabled = true;
+        (this.$refs.radius as any).setSelectedRadius('');
         this.setInternational(true);
       }
     }
