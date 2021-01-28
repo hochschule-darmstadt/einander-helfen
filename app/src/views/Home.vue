@@ -194,15 +194,20 @@ export default Vue.extend({
       }
     },
     switchArea(): void {
-      const selectionTitle = (this.$refs.areaSelect as AreaSelect).selection;
-      if (selectionTitle === 'Deutschland') {
-        (this.$refs.locationSearchBar as any).setHintText(false);
-        (this.$refs.radius as any).disabled = false;
+      const areaSelect = (this.$refs.areaSelect as AreaSelect);
+      const areaSelection = (this.$refs.areaSelect as AreaSelect).selection;
+      const radius = (this.$refs.radius as any);
+      const locationSearchBar = (this.$refs.locationSearchBar as any);
+      if (areaSelection === areaSelect.items[0].title) {
+        locationSearchBar.setHintText(false);
+        locationSearchBar.setSelectedLocation(null);
+        radius.disabled = false;
         this.setInternational(false);
       } else {
-        (this.$refs.locationSearchBar as any).setHintText(true);
-        (this.$refs.radius as any).disabled = true;
-        (this.$refs.radius as any).setSelectedRadius('');
+        locationSearchBar.setHintText(true);
+        locationSearchBar.setSelectedLocation(null);
+        radius.disabled = true;
+        radius.setSelectedRadius('');
         this.setInternational(true);
       }
     }
