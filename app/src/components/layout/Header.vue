@@ -97,7 +97,7 @@
 
 <script lang="ts">
     import Vue from 'vue';
-    import { createNamespacedHelpers, mapActions as mapStateActions } from 'vuex';
+    import { createNamespacedHelpers, mapActions as mapStateActions, mapGetters } from 'vuex';
     const { mapActions, mapState } = createNamespacedHelpers('textSearchModule');
     import AreaSelect from '@/components/ui/AreaSelect.vue';
     import LocationSearchBar from '@/components/ui/LocationSearchBar.vue';
@@ -171,7 +171,15 @@
     }
   },
   computed: {
-    ...mapState(['searchValues', 'searchProposals'])
+    ...mapState(['searchValues', 'searchProposals']),
+    ...mapGetters(['getInternational']),
+    getSelect(): boolean {
+      return this.getInternational;
+    }
+  },
+  mounted(): void {
+    const areaSelect = (this.$refs.areaSelect as AreaSelect);
+    areaSelect.setSelection(this.getSelect);
   }
 });
 </script>

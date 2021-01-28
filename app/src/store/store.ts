@@ -172,6 +172,9 @@ const store: StoreOptions<RootState> = {
       }
       const pageOffset = state.resultsFrom / state.hitsPerPage + 1; // pages are 1 indexed...
       return Math.floor(postIndex / state.hitsPerPage) + pageOffset;
+    },
+    getInternational(state): boolean {
+      return state.international;
     }
   }
 };

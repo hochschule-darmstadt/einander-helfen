@@ -53,7 +53,15 @@ import { Prop } from 'vue-property-decorator';
       }
     ];
 
-    public selection: string = 'Deutschland';
+    public selection: string = this.items[0].title;
+
+    public setSelection(international: boolean): void {
+      if(international) {
+        this.selection = this.items[1].title;
+      } else {
+        this.selection = this.items[0].title;
+      }
+    }
   }
 </script>
 

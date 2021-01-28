@@ -70,7 +70,7 @@
 </template>
 
 <script lang="ts">
-import { createNamespacedHelpers, mapActions } from 'vuex';
+import { createNamespacedHelpers, mapActions, mapGetters } from 'vuex';
 const { mapActions: mapTextSearchActions } = createNamespacedHelpers(
   'textSearchModule'
 );
@@ -138,7 +138,15 @@ export default Vue.extend({
     this.clearLocationSearchValue();
   },
   computed: {
-    ...mapLocationSearchState(['selectedRadius', 'selectedLocation'])
+    ...mapLocationSearchState(['selectedRadius', 'selectedLocation']),
+    ...mapGetters(['getInternational']),
+    getSelect(): boolean {
+      return this.getInternational;
+    }
+  },
+  mounted(): void {
+    const areaSelect = (this.$refs.areaSelect as AreaSelect);
+    areaSelect.setSelection(this.getSelect);
   },
   methods: {
     ...mapTextSearchActions(['addSearchValue']),
