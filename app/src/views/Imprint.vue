@@ -113,6 +113,18 @@
             license: 'The copyright holder of this file, IIT Bombay, allows anyone to use it for any purpose, provided that the copyright holder is properly attributed. Redistribution, derivative work, commercial use, and all other use is permitted.'
           },
           {
+            position: 'Germen flag in the area selection',
+            author: 'SKopp, Madden',
+            source: 'https://commons.wikimedia.org/wiki/File:Flag_of_Germany.svg',
+            license: 'This image of simple geometry is ineligible for copyright and therefore in the public domain, because it consists entirely of information that is common property and contains no original authorship.'
+          },
+          {
+            position: 'Earth icon in the area selection',
+            author: 'Tommaso.sansone91',
+            source: 'https://commons.wikimedia.org/wiki/File:Earth_icon_2.png',
+            license: 'This file is made available under the Creative Commons CC0 1.0 Universal Public Domain Dedication. The person who associated a work with this deed has dedicated the work to the public domain by waiving all of their rights to the work worldwide under copyright law, including all related and neighboring rights, to the extent allowed by law. You can copy, modify, distribute and perform the work, even for commercial purposes, all without asking permission.'
+          },
+          {
             position: 'Auf der Startseite erstes Bild im Karussel',
             author: 'truthseeker08',
             source: 'https://pixabay.com/de/photos/hospiz-pflege-krankenpflege-1797305/',
