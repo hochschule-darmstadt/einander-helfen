@@ -90,15 +90,16 @@ class DataService {
         }
 
         // only national posts
-        queryObject.query.bool.must.push({
-            match: {
-                'post_struct.location.country': 'Deutschland'
+        // @ts-ignore
+        queryObject.query.bool.must_not = [{
+            'term': {
+                'categories': 'international'
             }
-        });
+        }];
     }
 
     private static findInternationalBySelection(queryObject: QueryObject, location: Location|null) : void {
-        // only national posts (default)
+        // only international posts (default)
         queryObject.query.bool.must = [{
                 'term': {
                     'categories': 'international'
@@ -107,7 +108,7 @@ class DataService {
         ];
 
         if (location) {
-            if (location.country) {
+            if (location.country && location.country !== 'Deutschland') {
                 queryObject.query.bool.must.push({
                     match: {
                         'post_struct.location.country': location.country
