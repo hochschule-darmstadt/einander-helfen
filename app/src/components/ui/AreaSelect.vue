@@ -11,7 +11,7 @@
       @change="$emit('change')">
       <template v-slot:item="{ item }">
         <img id="areaImage" :src="item.img">
-        <v-space></v-space>
+        <v-spacer></v-spacer>
         <span>{{item.title}}</span>
       </template>
       <template v-slot:selection="{ item }">
