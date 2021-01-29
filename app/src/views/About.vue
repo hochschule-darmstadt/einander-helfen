@@ -2,7 +2,7 @@
   <div>
     <Header />
     <div class="about">
-      <v-container justify="center" class="containerwithcontent">
+      <v-container justify="center" class="containerWithContent">
         <div>
           <h1>einander-helfen.org</h1>
           <p>
@@ -59,5 +59,5 @@ export default class About extends Vue {}
 </script>
 
 <style>
-  @import './../styles/containerwithcontent.css';
+  @import './../styles/ContainerWithContent.css';
 </style>
