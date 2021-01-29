@@ -97,7 +97,7 @@
 
 <script lang="ts">
     import Vue from 'vue';
-    import { createNamespacedHelpers, mapActions as mapStateActions } from 'vuex';
+    import { createNamespacedHelpers, mapActions as mapStateActions, mapGetters } from 'vuex';
     const { mapActions, mapState } = createNamespacedHelpers('textSearchModule');
     import AreaSelect from '@/components/ui/AreaSelect.vue';
     import LocationSearchBar from '@/components/ui/LocationSearchBar.vue';
@@ -129,7 +129,8 @@
   },
   methods: {
     ...mapActions(['addSearchValue', 'removeSearchValue']),
-    ...mapStateActions(['updateURIFromState', 'findPosts', 'setPage', 'setSelectedPost']),
+    ...mapStateActions(['updateURIFromState', 'findPosts', 'setPage', 'setSelectedPost', 'setInternational']),
+    ...mapGetters(['getInternational']),
     updateResults(): void {
         // After changing the query we want to begin on page 1
         this.setPage(1);
@@ -164,11 +165,16 @@
       (this.$refs.radius as any).disableRadius(international);
       (this.$refs.locationSearchBar as any).setSelectedLocation(null);
 
+      if (international !== this.getInternational) {
+        this.setInternational(international);
+        this.updateResults();
+      }
     }
   },
   computed: {
     ...mapState(['searchValues', 'searchProposals']),
-  }
+    ...mapGetters(['getInternational']),
+  },
 });
 </script>
 
