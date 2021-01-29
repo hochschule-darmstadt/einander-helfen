@@ -150,7 +150,6 @@
         },
         setLocationSearchBar(international: boolean): void {
           this.setHintText(international);
-          this.setSelectedLocation(null);
         }
       },
     }

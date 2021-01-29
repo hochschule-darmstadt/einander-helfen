@@ -191,6 +191,7 @@ export default Vue.extend({
       const international = (areaSelection === areaSelect.items[0].title)? false : true;
       (this.$refs.locationSearchBar as any).setLocationSearchBar(international);
       (this.$refs.radius as any).disableRadius(international);
+      (this.$refs.locationSearchBar as any).setSelectedLocation(null);
     }
   }
 });
