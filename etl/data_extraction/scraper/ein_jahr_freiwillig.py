@@ -100,6 +100,11 @@ class EinJahrFreiwillig(Scraper):
             'geo_location': None,
         }
 
+        # Set category to international, if country is set to a value that is not 'Deutschland'
+        if parsed_object['post_struct']['location']['country'] is not None \
+                and parsed_object['post_struct']['location']['country'] != 'Deutschland':
+            parsed_object['categories'].append('International')
+
         return parsed_object
 
     def add_urls(self):
