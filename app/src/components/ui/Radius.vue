@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts">
-    import { createNamespacedHelpers } from 'vuex';
+    import { createNamespacedHelpers, mapGetters } from 'vuex';
     const { mapActions, mapState } = createNamespacedHelpers('locationSearchModule');
 
     import Vue from 'vue';
@@ -48,10 +48,25 @@
             },
         },
         computed: {
-            ...mapState(['selectedRadius'])
+            ...mapState(['selectedRadius']),
+            ...mapGetters(['getInternational']),
+            getInternationalSelect(): boolean {
+                return this.getInternational;
+            }
+        },
+        mounted(): void {
+            this.disableRadius(this.getInternationalSelect);
         },
         methods: {
-            ...mapActions(['setSelectedRadius'])
+            ...mapActions(['setSelectedRadius']),
+            disableRadius(disable: boolean): void {
+                if(disable) {
+                    this.disabled = true;
+                    this.setSelectedRadius('');
+                } else {
+                    this.disabled = false;
+                }
+            }
         }
     });
 </script>

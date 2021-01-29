@@ -26,10 +26,9 @@
 </template>
 
 <script lang="ts">
-  import { createNamespacedHelpers } from 'vuex';
-  import Location from '@/models/location';
-
+  import { createNamespacedHelpers, mapGetters as mapStateGetters} from 'vuex';
   const { mapState, mapActions, mapGetters } = createNamespacedHelpers('locationSearchModule');
+  import Location from '@/models/location';
   import Vue from 'vue';
 
   export default Vue.extend({
@@ -56,9 +55,16 @@
       },
       computed: {
         ...mapState(['selectedLocation']),
+        ...mapStateGetters(['getInternational']),
         showLocations(): Location[] {
           return this.getLocations();
+        },
+        getInternationalSelect(): boolean {
+          return this.getInternational;
         }
+      },
+      mounted(): void {
+        this.setLocationSearchBar(this.getInternationalSelect);
       },
       watch: {
         newSelectedLocation(newValue, oldValue): void {
@@ -141,6 +147,10 @@
           } else {
             this.hintText = 'Ort oder PLZ';
           }
+        },
+        setLocationSearchBar(international: boolean): void {
+          this.setHintText(international);
+          this.setSelectedLocation(null);
         }
       },
     }

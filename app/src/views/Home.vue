@@ -70,7 +70,7 @@
 </template>
 
 <script lang="ts">
-import { createNamespacedHelpers, mapActions, mapGetters } from 'vuex';
+import { createNamespacedHelpers, mapActions } from 'vuex';
 const { mapActions: mapTextSearchActions } = createNamespacedHelpers(
   'textSearchModule'
 );
@@ -138,19 +138,11 @@ export default Vue.extend({
     this.clearLocationSearchValue();
   },
   computed: {
-    ...mapLocationSearchState(['selectedRadius', 'selectedLocation']),
-    ...mapGetters(['getInternational']),
-    getSelect(): boolean {
-      return this.getInternational;
-    }
-  },
-  mounted(): void {
-    const areaSelect = (this.$refs.areaSelect as AreaSelect);
-    areaSelect.setSelection(this.getSelect);
+    ...mapLocationSearchState(['selectedRadius', 'selectedLocation'])
   },
   methods: {
     ...mapTextSearchActions(['addSearchValue']),
-    ...mapActions(['updateURIFromState', 'clearSearchParams', 'setInternational']),
+    ...mapActions(['updateURIFromState', 'clearSearchParams']),
     executeSearch(): void {
       if (this.selectedInput) {
         this.addSearchValue(this.selectedInput);
@@ -196,20 +188,9 @@ export default Vue.extend({
     switchArea(): void {
       const areaSelect = (this.$refs.areaSelect as AreaSelect);
       const areaSelection = (this.$refs.areaSelect as AreaSelect).selection;
-      const radius = (this.$refs.radius as any);
-      const locationSearchBar = (this.$refs.locationSearchBar as any);
-      if (areaSelection === areaSelect.items[0].title) {
-        locationSearchBar.setHintText(false);
-        locationSearchBar.setSelectedLocation(null);
-        radius.disabled = false;
-        this.setInternational(false);
-      } else {
-        locationSearchBar.setHintText(true);
-        locationSearchBar.setSelectedLocation(null);
-        radius.disabled = true;
-        radius.setSelectedRadius('');
-        this.setInternational(true);
-      }
+      const international = (areaSelection === areaSelect.items[0].title)? false : true;
+      (this.$refs.locationSearchBar as any).setLocationSearchBar(international);
+      (this.$refs.radius as any).disableRadius(international);
     }
   }
 });

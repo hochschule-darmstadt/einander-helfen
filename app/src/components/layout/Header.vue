@@ -97,7 +97,7 @@
 
 <script lang="ts">
     import Vue from 'vue';
-    import { createNamespacedHelpers, mapActions as mapStateActions, mapGetters } from 'vuex';
+    import { createNamespacedHelpers, mapActions as mapStateActions } from 'vuex';
     const { mapActions, mapState } = createNamespacedHelpers('textSearchModule');
     import AreaSelect from '@/components/ui/AreaSelect.vue';
     import LocationSearchBar from '@/components/ui/LocationSearchBar.vue';
@@ -129,7 +129,7 @@
   },
   methods: {
     ...mapActions(['addSearchValue', 'removeSearchValue']),
-    ...mapStateActions(['updateURIFromState', 'findPosts', 'setPage', 'setSelectedPost', 'setInternational']),
+    ...mapStateActions(['updateURIFromState', 'findPosts', 'setPage', 'setSelectedPost']),
     updateResults(): void {
         // After changing the query we want to begin on page 1
         this.setPage(1);
@@ -159,32 +159,13 @@
     switchArea(): void {
       const areaSelect = (this.$refs.areaSelect as AreaSelect);
       const areaSelection = (this.$refs.areaSelect as AreaSelect).selection;
-      const radius = (this.$refs.radius as any);
-      const locationSearchBar = (this.$refs.locationSearchBar as any);
-      if (areaSelection === areaSelect.items[0].title) {
-        locationSearchBar.setHintText(false);
-        locationSearchBar.setSelectedLocation(null);
-        radius.disabled = false;
-        this.setInternational(false);
-      } else {
-        locationSearchBar.setHintText(true);
-        locationSearchBar.setSelectedLocation(null);
-        radius.disabled = true;
-        radius.setSelectedRadius('');
-        this.setInternational(true);
-      }
+      const international = (areaSelection === areaSelect.items[0].title)? false : true;
+      (this.$refs.locationSearchBar as any).setLocationSearchBar(international);
+      (this.$refs.radius as any).disableRadius(international);
     }
   },
   computed: {
     ...mapState(['searchValues', 'searchProposals']),
-    ...mapGetters(['getInternational']),
-    getSelect(): boolean {
-      return this.getInternational;
-    }
-  },
-  mounted(): void {
-    const areaSelect = (this.$refs.areaSelect as AreaSelect);
-    areaSelect.setSelection(this.getSelect);
   }
 });
 </script>

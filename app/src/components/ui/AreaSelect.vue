@@ -22,12 +22,12 @@
 </template>
 
 <script lang="ts">
-  import { createNamespacedHelpers } from 'vuex';
-
-  const { mapState, mapActions, mapGetters } = createNamespacedHelpers('locationSearchModule');
+  import { createNamespacedHelpers, mapActions as mapStateActions, mapGetters } from 'vuex';
+  const { mapState, mapActions } = createNamespacedHelpers('locationSearchModule');
   import Vue from 'vue';
   import Component from 'vue-class-component';
-import { Prop } from 'vue-property-decorator';
+  import { Prop, Watch } from 'vue-property-decorator';
+  import { Getter, Mutation } from 'vuex-class';
 
   type Item = {
     title: string;
@@ -36,6 +36,26 @@ import { Prop } from 'vue-property-decorator';
 
   @Component
   export default class AreaSelect extends Vue {
+    @Getter('getInternational') getInternational;
+    @Mutation('setInternational') setInternational;
+
+    @Watch('selection')
+    onPropertyChanged(newValue: string): void {
+      if (newValue === this.items[0].title) {
+        this.setInternational(false);
+      } else {
+        this.setInternational(true);
+      }
+    }
+
+    get international(): boolean {
+      return this.getInternational;
+    }
+
+    mounted(): void {
+      this.setSelection(this.international);
+    }
+
     @Prop({default: false})
     public dark!: boolean;
 
