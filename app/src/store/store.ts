@@ -116,6 +116,9 @@ const store: StoreOptions<RootState> = {
       if ('q' in queryParams && queryParams.q) {
         dispatch('textSearchModule/addSearchValues', queryParams.q.split(','));
       }
+      if ('area' in queryParams && queryParams.area) {
+        dispatch('setInternational', queryParams.area.toLowerCase() === 'international');
+      }
       if ('location' in queryParams && queryParams.location) {
         dispatch('locationSearchModule/setSelectedLocation', queryParams.location);
       }
@@ -138,6 +141,7 @@ const store: StoreOptions<RootState> = {
       const query = {
         ...router.currentRoute.query,
         q: state.textSearchModule.searchValues.join(','),
+        area: state.international ? 'international' : 'national',
         location: state.locationSearchModule.selectedLocation,
         radius: state.locationSearchModule.selectedRadius,
         page: state.page.toString()
