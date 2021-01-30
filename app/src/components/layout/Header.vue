@@ -60,8 +60,10 @@
      
 
       <div id="headerRight">
-          <area-select id="areaSelect" ref="areaSelect" @change="switchArea" :dark="true" />
-          <location-search-bar class="xs" @input="updateResults" id="headerLocation" ref="locationSearchBar" :dark="true" />
+          <div id="headerAreaLocation">
+            <area-select id="areaSelect" ref="areaSelect" @change="switchArea" :dark="true" />
+            <location-search-bar class="xs" @input="updateResults" id="headerLocation" ref="locationSearchBar" :dark="true" />
+          </div>
           <div id="radiusSearchBtn">
             <radius @input="updateResults" id="headerRadius" ref="radius" :dark="true" />
             <search-button id="headerSearchButton" @click="updateSearchValueFromCurrentInputAndUpdateResults" />
@@ -190,10 +192,6 @@
   width: inherit;
 }
 
-#headerLocation{
-  margin-right: 0px;
-}
-
 #headerLeft{
   display: contents;
   width: 43%;
@@ -202,6 +200,10 @@
 #headerRight{
   display: inherit;
   width: 40%
+}
+
+#headerAreaLocation{
+  display: flex;
 }
 
 /*Mobile Layout*/
@@ -227,11 +229,15 @@
 
   #headerLocation{
     margin-left: -10px;
-    margin-right: 0px;
+    margin-right: -10px !important;
   }
 
   #radiusSearchBtn{
     display: flex;
+  }
+
+  #headerRadius{
+    margin-left: 0px!important;
   }
 
   #headerSearchButton{
@@ -263,13 +269,22 @@
     display: flex;
   }
 
-  #headerLocation{
-    margin-left: 90px;
+  #headerAreaLocation{
+    margin-left: 95px;
     width: 70%;
+  }
+
+  #headerLocation{
+    margin-left: -9px;
+    margin-right: 0;
   }
 
   #searchBar{ 
     margin-right: 30px;
+  }
+
+  #headerRadius{
+    margin-left: 0px !important;
   }
   
   #radiusSearchBtn{
@@ -316,13 +331,16 @@
     margin-right: 0px!important;
   }
 
-  #headerLocation{
-    margin-left: 0px;
+  #headerAreaLocation{
     width: 100%;
   }
 
-  #headerRadius{
-    width: 30%;
+  #headerLocation{
+    margin-left: 0px;
+  }
+
+  #areaSelect{
+    margin-right: 0;
   }
 }
 
