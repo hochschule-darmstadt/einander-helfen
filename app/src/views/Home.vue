@@ -242,27 +242,7 @@ img {
 }
 
 
-@media (min-width: 280px) and (max-width: 310px) {
-  #location {
-    max-width: 75vw;
-  }
-
-  #radius{
-    margin-left: 0 !important;
-    width: 60%;
-  }
-
-  #location .v-input__slot {
-    margin-left: 2px;
-  }
-  
-  #location .v-text-field {
-    padding-right: 0px !important;
-}
-}
-
-
-@media (min-width: 310px) and (max-width: 344px) {
+@media (min-width: 280px) and (max-width: 305px) {
   #location {
     max-width: 77vw;
   }
@@ -279,11 +259,31 @@ img {
   #location .v-text-field {
     padding-right: 0px !important;
 }
+}
+
+
+@media (min-width: 305px) and (max-width: 342px) {
+  #location {
+    max-width: 79.5vw;
+  }
+
+  #radius{
+    margin-left: 0 !important;
+    width: 60%;
+  }
+
+  #location .v-input__slot {
+    margin-left: 2px;
+  }
+  
+  #location .v-text-field {
+    padding-right: 0px !important;
+}
 
 }
 
 
-@media (min-width: 344px) and (max-width: 383px) {
+@media (min-width: 342px) and (max-width: 383px) {
   #location {
     max-width: 98vw;
   }
@@ -317,7 +317,22 @@ img {
 
   #radius {
     margin-left: 0 !important;
-    max-width: 72.5vw;
+    max-width: 77.5%;
+  } 
+}
+
+@media (min-width: 410px) {
+  #location {
+    max-width: 98vw;
+  }
+
+  #location .v-input__slot {
+    margin-left: 2px;
+  }
+
+  #radius {
+    margin-left: 0 !important;
+    max-width: 90%;
   } 
 }
 
