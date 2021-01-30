@@ -130,7 +130,6 @@
   methods: {
     ...mapActions(['addSearchValue', 'removeSearchValue']),
     ...mapStateActions(['updateURIFromState', 'findPosts', 'setPage', 'setSelectedPost', 'setInternational']),
-    ...mapGetters(['getInternational']),
     updateResults(): void {
         // After changing the query we want to begin on page 1
         this.setPage(1);
