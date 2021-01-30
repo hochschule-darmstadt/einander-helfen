@@ -96,6 +96,19 @@
 #areaImage {
   margin-right: 1em;
 }
+
+#areaSelect .v-select__selections input {
+  display: none;
+  visibility: hidden;
+}
+
+#areaSelect{
+  margin-top: 4px;
+  max-width: fit-content;
+  margin-right: 8px;
+  margin-left: 0;
+}
+
 </style>
 
 

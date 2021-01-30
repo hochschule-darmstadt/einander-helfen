@@ -183,15 +183,6 @@
   z-index: 9999 !important;
 }
 
-#areaSelect {
-  max-width: fit-content;
-  margin-right: 8px;
-  margin-left: 0;
-}
-
-#areaSelect .v-input__slot {
-  width: max-content;
-}
 #searchBar{
   background: white; 
   border-radius: 20px; 

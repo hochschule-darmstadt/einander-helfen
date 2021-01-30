@@ -208,16 +208,6 @@ export default Vue.extend({
   margin-bottom: 0;
 }
 
-#areaSelect {
-  max-width: fit-content;
-  margin-right: 8px;
-  margin-left: 0;
-}
-
-#areaSelect .v-input__slot {
-  width: max-content;
-}
-
 .no-radius {
   border-radius: 0 !important;
 }
@@ -252,10 +242,9 @@ img {
 }
 
 
-
-@media (max-width: 329px) {
-  #location{
-    max-width: 98vw;
+@media (min-width: 280px) and (max-width: 310px) {
+  #location {
+    max-width: 75vw;
   }
 
   #radius{
@@ -266,9 +255,35 @@ img {
   #location .v-input__slot {
     margin-left: 2px;
   }
+  
+  #location .v-text-field {
+    padding-right: 0px !important;
+}
 }
 
-@media (min-width: 330px) and (max-width: 382px) {
+
+@media (min-width: 310px) and (max-width: 344px) {
+  #location {
+    max-width: 77vw;
+  }
+
+  #radius{
+    margin-left: 0 !important;
+    width: 60%;
+  }
+
+  #location .v-input__slot {
+    margin-left: 2px;
+  }
+  
+  #location .v-text-field {
+    padding-right: 0px !important;
+}
+
+}
+
+
+@media (min-width: 344px) and (max-width: 383px) {
   #location {
     max-width: 98vw;
   }
@@ -284,28 +299,29 @@ img {
     overflow-x: hidden;
   }
 
-  #location .v-input__slot {
-    margin-left: 2px;
-  }
 }
 
+#location .v-text-field {
+  padding-right: 5px;
+}
 
 
 @media (min-width: 383px) {
   #location {
     max-width: 98vw;
   }
+
   #location .v-input__slot {
     margin-left: 2px;
   }
 
   #radius {
     margin-left: 0 !important;
-    max-width: 80vw;
+    max-width: 72.5vw;
   } 
 }
 
-@media (min-width: 513px) {
+@media (min-width: 535px) {
   #location {
     width: auto;
     max-width: none;
@@ -315,6 +331,10 @@ img {
     max-width: 20%;
     min-width: none;
     margin-left: 10px !important;
+  }
+
+  #location .v-text-field {
+    padding-right: 0px;
   }
 }
 
