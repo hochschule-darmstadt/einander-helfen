@@ -11,6 +11,7 @@ ROOT_DIR = os.environ['ROOT_DIR']
 client = Elasticsearch([{'host': '127.0.0.1', 'port': 9200}])
 logger = LoggerFactory.get_elastic_logger()
 
+
 def run_elastic_upload():
     logger.debug("run_elastic_upload")
     logger.info("Starting Index Process!")
