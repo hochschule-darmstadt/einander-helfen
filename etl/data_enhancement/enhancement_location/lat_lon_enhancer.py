@@ -4,6 +4,7 @@ import time
 import os
 from shared.LoggerFactory import LoggerFactory
 
+
 class LatLonEnhancer:
     """Class handling the enhancement of posts by adding geo data."""
 
@@ -107,10 +108,14 @@ class LatLonEnhancer:
         # 1. structured location 2. structured address of contact 3. structured address of organisation
         for field in ['location', 'contact', 'organization']:
             if len(request_string) < 1 and field in struct_data and struct_data[field] and len(struct_data[field]) > 0:
-                request_string += struct_data[field]['street'] + ' ' if 'street' in struct_data[field] and struct_data[field]['street'] else ''
-                request_string += struct_data[field]['zipcode'] + ' ' if 'zipcode' in struct_data[field] and struct_data[field]['zipcode'] else ''
-                request_string += struct_data[field]['city'] + ' ' if 'city' in struct_data[field] and struct_data[field]['city'] else ''
-                request_string += struct_data[field]['country'] + ' ' if 'country' in struct_data[field] and struct_data[field]['country'] else ''
+                request_string += struct_data[field]['street'] + ' ' if 'street' in struct_data[field] and \
+                                                                        struct_data[field]['street'] else ''
+                request_string += struct_data[field]['zipcode'] + ' ' if 'zipcode' in struct_data[field] and \
+                                                                         struct_data[field]['zipcode'] else ''
+                request_string += struct_data[field]['city'] + ' ' if 'city' in struct_data[field] and \
+                                                                      struct_data[field]['city'] else ''
+                request_string += struct_data[field]['country'] + ' ' if 'country' in struct_data[field] and \
+                                                                         struct_data[field]['country'] else ''
                 request_string = request_string.strip()
 
         return request_string
