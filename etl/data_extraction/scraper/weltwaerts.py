@@ -157,7 +157,7 @@ class WeltwaertsScraper(Scraper):
         contact_raw = re.sub(r'<br/?>', '\n', contact_raw)
         contact_raw = self.clean_html_tags(contact_raw)
 
-        contact_split = list(filter(lambda s: 'E-mail' not in s, filter(None, re.split('\n|,', contact_raw))))
+        contact_split = list(filter(lambda s: 'E-mail' not in s, filter(None, re.split('[\n,]', contact_raw))))
 
         contact_split = ', '.join(contact_split).split(',')
 
