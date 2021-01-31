@@ -5,6 +5,7 @@ import os
 
 logger = LoggerFactory.get_general_logger()
 
+
 def write_data_to_json(path, data):
     """Writes the given data to the given json file."""
     logger.debug("write_data_to_json()")
