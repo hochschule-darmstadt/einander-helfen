@@ -41,7 +41,9 @@ class GuteTatBerlinScraper(Scraper):
             'location': project_address_str or None,
             'task': response.find('strong', text='Projektbeschreibung:').parent.parent.find_all('td')[1].text or None,
             'target_group': None,
-            'prerequisites': response.find('strong', text='Voraussetzungen/Vorkenntnisse:').parent.parent.find_all('td')[1].text or None,
+            'prerequisites':
+                response.find('strong', text='Voraussetzungen/Vorkenntnisse:').parent.parent.find_all('td')[
+                    1].text or None,
             'timing': response.find('strong', text='Zeitraum:').parent.parent.find_all('td')[1].text or None,
             'effort': response.find('strong', text='Zeitbedarf:').parent.parent.find_all('td')[1].text or None,
             'opportunities': None,
@@ -53,11 +55,13 @@ class GuteTatBerlinScraper(Scraper):
         }
 
         location_street = response.find_all('strong', text='Straße:')[0].parent.parent.find_all('td')[1].text or None
-        location_plzort = response.find_all('strong', text='PLZ, Ort:')[0].parent.parent.find_all('td')[1].text.split(', ') or None
+        location_plzort = response.find_all('strong', text='PLZ, Ort:')[0].parent.parent.find_all('td')[1].text.split(
+            ', ') or None
 
         contact_name = response.find('strong', text='Ansprechperson:').parent.parent.find_all('td')[1].text or None
         contact_street = response.find_all('strong', text='Straße:')[1].parent.parent.find_all('td')[1].text or None
-        contact_plzort = response.find_all('strong', text='PLZ, Ort:')[1].parent.parent.find_all('td')[1].text.split(', ') or None
+        contact_plzort = response.find_all('strong', text='PLZ, Ort:')[1].parent.parent.find_all('td')[1].text.split(
+            ', ') or None
         contact_phone = response.find('strong', text='Telefon:').parent.parent.find_all('td')[1].text or None
         contact_email = response.find('strong', text='E-Mail:').parent.parent.find_all('td')[1].text or None
 
@@ -110,7 +114,14 @@ class GuteTatBerlinScraper(Scraper):
         for index in range(1, end_page + 1):
             time.sleep(self.delay)
 
-            search_page_url = f'{self.base_url}index.cfm?dateiname=ehrenamt_suche_ergebnis.cfm&anwender_id={self.user_id}&seite={str(index)}&ehrenamt_id=0&ea_projekt=0&stichwort=&kiez=&kiez_fk=0&bezirk=&bezirk_fk=0&ort=&ort_fk=0&zielgruppe=0&taetigkeit=0&merkmale=0&einsatzbereiche=0&plz=&organisation_fk=0&rl=0'
+            search_page_url = f'{self.base_url}index.cfm?dateiname=ehrenamt_suche_ergebnis.cfm' \
+                              f'&anwender_id={self.user_id}&seite={str(index)}' \
+                              f'&ehrenamt_id=0' \
+                              f'&ea_projekt=0' \
+                              f'&stichwort=&kiez=&kiez_fk=0' \
+                              f'&bezirk=&bezirk_fk=0' \
+                              f'&ort=&ort_fk=0&zielgruppe=0' \
+                              f'&taetigkeit=0&merkmale=0&einsatzbereiche=0&plz=&organisation_fk=0&rl=0'
             search_page = self.soupify(search_page_url)
             # last link needs to be ignored
             detail_links = [x for x in search_page.find_all('a', {'class': 'links'})][:-1]
@@ -134,7 +145,10 @@ class GuteTatBerlinScraper(Scraper):
 
         entries_per_page = 30
 
-        search_page_url = f'{self.base_url}index.cfm?dateiname=ehrenamt_suche_ergebnis.cfm&anwender_id={self.user_id}&seite=1&ehrenamt_id=0&ea_projekt=0&stichwort=&kiez=&kiez_fk=0&bezirk=&bezirk_fk=0&ort=&ort_fk=0&zielgruppe=0&taetigkeit=0&merkmale=0&einsatzbereiche=0&plz=&organisation_fk=0&rl=0'
+        search_page_url = f'{self.base_url}index.cfm?dateiname=ehrenamt_suche_ergebnis.cfm&anwender_id={self.user_id}' \
+                          f'&seite=1&ehrenamt_id=0&ea_projekt=0&stichwort=&kiez=&kiez_fk=0&bezirk=&bezirk_fk=0' \
+                          f'&ort=&ort_fk=0&zielgruppe=0&taetigkeit=0&merkmale=0&einsatzbereiche=0' \
+                          f'&plz=&organisation_fk=0&rl=0'
         search_page = self.soupify(search_page_url)
         total_entries_as_string = search_page.find('td', {'class': 'ueberschrift'}).next.strip()
         formatted_entry_number = int(re.search(r'\d+', total_entries_as_string).group())
