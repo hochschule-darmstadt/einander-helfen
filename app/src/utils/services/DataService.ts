@@ -100,12 +100,11 @@ class DataService {
 
     private static findInternationalBySelection(queryObject: QueryObject, location: Location|null) : void {
         // only international posts (default)
-        queryObject.query.bool.must = [{
-                'term': {
-                    'categories': 'international'
-                }
+        queryObject.query.bool.must.push({
+            'term': {
+                'categories': 'international'
             }
-        ];
+        });
 
         if (location) {
             if (location.country && location.country !== 'Deutschland') {
