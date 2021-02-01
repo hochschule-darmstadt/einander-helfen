@@ -338,10 +338,8 @@
     margin-left: 0px;
   }
 
-  #areaSelect{
-    margin-right: 0;
-  }
 }
+
 
 @media (min-width:960px) and (max-width:1099px){
   #headerLeft{
@@ -456,4 +454,14 @@
 }
 
 
+</style>
+
+
+<style scoped>
+
+@media (min-width: 960px) {
+  #areaSelect{
+    margin-right: 0;
+  }
+}
 </style>
