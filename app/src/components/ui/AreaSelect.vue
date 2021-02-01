@@ -65,11 +65,11 @@
     public items: Item[] = [
       {
         title: 'Deutschland',
-        img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Flag_of_Germany.svg/320px-Flag_of_Germany.svg.png'
+        img: '/images/240px-Flag_of_Germany.png'
       },
       {
         title: 'International',
-        img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Earth_icon_2.png/240px-Earth_icon_2.png'
+        img: '/images/240px-Earth_icon_2.png'
       }
     ];
 
