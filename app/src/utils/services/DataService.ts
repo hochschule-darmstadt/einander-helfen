@@ -26,9 +26,11 @@ class DataService {
     public findBySelection(params: SearchParameters): Promise<PaginatedResponse<Post>> {
         const {
             searchValues,
-            size,
+            location,
+            radius,
             from,
-            international
+            size,
+            international,
         } = params;
 
         const query = new QueryBuilder();
@@ -51,9 +53,9 @@ class DataService {
             });
 
         if (international) {
-            DataService.findInternationalBySelection(queryObject, params.location);
+            DataService.findInternationalBySelection(queryObject, location);
         } else {
-            DataService.findNationalBySelection(queryObject, params.location, params.radius);
+            DataService.findNationalBySelection(queryObject, location, radius);
         }
 
         return this.performQuery<Post>(new QueryBuilder(queryObject));

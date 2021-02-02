@@ -29,6 +29,7 @@ const store: StoreOptions<RootState> = {
       state.textSearchModule.searchValues = [];
       state.locationSearchModule.selectedRadius = '';
       state.locationSearchModule.selectedLocation = '';
+      state.locationSearchModule.selectedLocationObject = null;
       state.page = 1;
       state.selectedPost = null;
     },
