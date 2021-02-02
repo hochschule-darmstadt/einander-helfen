@@ -2,7 +2,7 @@
   <v-row justify="center">
     <v-autocomplete
       prepend-inner-icon="place"
-      label="Ort oder PLZ"
+      :label="hintText"
       :filter="filterLocations"
       :items="showLocations"
       item-text="title"
@@ -22,13 +22,13 @@
     >
     </v-autocomplete>
   </v-row>
+
 </template>
 
 <script lang="ts">
-  import { createNamespacedHelpers } from 'vuex';
-  import Location from '@/models/location';
-
+  import { createNamespacedHelpers, mapGetters as mapStateGetters} from 'vuex';
   const { mapState, mapActions, mapGetters } = createNamespacedHelpers('locationSearchModule');
+  import Location from '@/models/location';
   import Vue from 'vue';
 
   export default Vue.extend({
@@ -44,18 +44,27 @@
     },
       data(): {
         newSelectedLocation: string,
-        isSearching: boolean
+        isSearching: boolean,
+        hintText: string
       } {
         return {
           isSearching: false,
-          newSelectedLocation: ''
+          newSelectedLocation: '',
+          hintText: 'Ort oder PLZ' || 'Land'
         };
       },
       computed: {
         ...mapState(['selectedLocation']),
+        ...mapStateGetters(['getInternational']),
         showLocations(): Location[] {
           return this.getLocations();
+        },
+        getInternationalSelect(): boolean {
+          return this.getInternational;
         }
+      },
+      mounted(): void {
+        this.setLocationSearchBar(this.getInternationalSelect);
       },
       watch: {
         newSelectedLocation(newValue, oldValue): void {
@@ -84,9 +93,14 @@
           if (queryText) {
             this.isSearching = true;
             const search = queryText.toLowerCase();
-            const plz = item.plz;
+
             const name = item.name.toLowerCase();
-            const displayString = plz + ' '  + name;
+            let plz = '';
+            let displayString = name;
+            if (item.plz) {
+              plz = item.plz;
+              displayString = plz + ' ' + displayString;
+            }
             return name.includes(search) ||
                 plz.includes(search) ||
                 displayString.includes(search) ||
@@ -122,15 +136,27 @@
             }
             this.$emit('input', data);
         },
-          clearInput(): void {
-            this.$nextTick(() => {
-                this.setLocationSearchValue('');
-            });
+        clearInput(): void {
+          this.$nextTick(() => {
+              this.setLocationSearchValue('');
+          });
+        },
+        setHintText(international: boolean): void {
+          if (international) {
+            this.hintText = 'Land';
+          } else {
+            this.hintText = 'Ort oder PLZ';
           }
+        },
+        setLocationSearchBar(international: boolean): void {
+          this.setHintText(international);
+        }
       },
     }
   );
 </script>
+<style>
+</style>
 
 <style>
 

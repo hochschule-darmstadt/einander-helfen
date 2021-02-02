@@ -7,12 +7,13 @@
             v-bind:value="selectedRadius"
             @keydown.enter="$emit('enter')"
             :dark="dark"
-            style="margin-right: 10px;">
+            :disabled="disabled"
+            style="margin-left: 10px; margin-right: 10px;">
     </v-select>
 </template>
 
 <script lang="ts">
-    import { createNamespacedHelpers } from 'vuex';
+    import { createNamespacedHelpers, mapGetters } from 'vuex';
     const { mapActions, mapState } = createNamespacedHelpers('locationSearchModule');
 
     import Vue from 'vue';
@@ -28,11 +29,13 @@
         },
         data(): {
             newSelectedRadius: string|null,
-            radii: Radius[]
+            radii: Radius[],
+            disabled: boolean
         } {
             return {
                 newSelectedRadius: null,
-                radii
+                radii,
+                disabled: false
             };
         },
         watch: {
@@ -45,10 +48,25 @@
             },
         },
         computed: {
-            ...mapState(['selectedRadius'])
+            ...mapState(['selectedRadius']),
+            ...mapGetters(['getInternational']),
+            getInternationalSelect(): boolean {
+                return this.getInternational;
+            }
+        },
+        mounted(): void {
+            this.disableRadius(this.getInternationalSelect);
         },
         methods: {
             ...mapActions(['setSelectedRadius']),
+            disableRadius(disable: boolean): void {
+                if(disable) {
+                    this.disabled = true;
+                    this.setSelectedRadius('');
+                } else {
+                    this.disabled = false;
+                }
+            }
         }
     });
 </script>

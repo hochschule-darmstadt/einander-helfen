@@ -96,7 +96,7 @@ export default {
     }
 }
 
-@media (min-width: 301px) and (max-width:423px) {
+@media (min-width: 301px) and (max-width:424px) {
     .column {
         padding-bottom: 19px !important;
     }
@@ -160,6 +160,7 @@ export default {
 
     #logo {
         margin-top: 6px !important;
+        max-width: 60%;
     }    
 
     #sloganCol{
@@ -188,7 +189,7 @@ export default {
 }
 
 
-@media (min-width: 1391px) {
+@media (min-width: 1393px) {
     #logo {
         margin-top: 24px !important;
     }

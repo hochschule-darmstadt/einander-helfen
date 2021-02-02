@@ -2,18 +2,19 @@
   <div>
     <Header />
     <div class="about">
-      <v-container justify="center" class="containerwithcontent">
+      <v-container justify="center" class="containerWithContent">
         <div>
           <h1>einander-helfen.org</h1>
           <p>
-            <strong>einander-helfen.org</strong> ist das schnelle Suchportal für Freiwilligenarbeit und ehrenamtliche Tätigkeiten: Mit einer Fülle von unterschiedlichen Angeboten im deutschsprachigen Raum.
+            <strong>einander-helfen.org</strong> ist das schnelle Suchportal für Freiwilligenarbeit und ehrenamtliche Tätigkeiten: Mit einer Fülle von unterschiedlichen Angeboten auf der ganzen Welt.
           </p>
         </div>
         <div>
           <h2>Und so funktioniert's:</h2>
-          <p>Einfach die Postleitzahl des eigenen Standorts und Umkreis in km eingeben und dann ein Stichwort im Suchen-Feld. Sofort werden alle Angebote in der Karte (rechts) und in der Liste (links) angezeigt. Ein Angebot auswählen (in der Liste oder auf der Karte) und schon werden Details angezeigt. Mit einem weiteren Klick ist man auf der Seite des Anbieters - mit weiteren Informationen.</p>
+          <p>Sie suchen ein Ehrenamtangebot innerhalb Deutschlands? Dann tragen Sie ein Stichwort im Suchen-Feld ein und geben die Postleitzahl oder den Ortsnamen des eigenen Standorts an. Vergessen Sie dabei nicht den Umkreis einzuschränken! Sofort werden alle Angebote in der Karte und in der Liste angezeigt. Ein Angebot auswählen (in der Liste oder auf der Karte) und schon werden die dazughörigen Details angezeigt. Mit einem weiteren Klick ist man auf der Seite des Anbieters - mit weiteren Informationen.</p>
+          <p>Sie suchen ein Ehrenamtangebot im internationalen Raum? Dann klicken Sie auf die Deutschlandflagge und wählen stattdessen "International" aus. Geben Sie nun Ihr gewünschtes Land an und tragen ein Stichwort im Suchen-Feld ein. Sofort werden alle Angebote in der Karte und in der Liste angezeigt. Ein Angebot auswählen (in der Liste oder auf der Karte) und schon werden die dazughörigen Details angezeigt. Mit einem weiteren Klick ist man auf der Seite des Anbieters - mit weiteren Informationen.</p>
           <p>
-            <strong>einander-helfen.org</strong> fasst Angebote von mehreren Anbietern im deutschsprachigen Raum zusammen und erlaubt es, bequem über alle zu suchen. Aktuell werden folgende Anbieter abgedeckt:
+            <strong>einander-helfen.org</strong> fasst Angebote von mehreren Anbietern auf der ganzen Welt zusammen und erlaubt es, bequem über alle zu suchen. Aktuell werden folgende Anbieter abgedeckt:
           </p>
           <ul>
             <li><a href="https://www.ehrenamtssuche-hessen.de/" target="_blank" rel="noopener">www.ehrenamtssuche-hessen.de</a></li>
@@ -59,5 +60,5 @@ export default class About extends Vue {}
 </script>
 
 <style>
-  @import './../styles/containerwithcontent.css';
+  @import './../styles/ContainerWithContent.css';
 </style>

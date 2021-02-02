@@ -38,31 +38,34 @@
           </v-chip-group>
         </div>
         <v-menu offset-y>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            id="burgermenu_mobile"
-            class="hidden-md-and-up"
-            v-bind="attrs"
-            v-on="on"
-            dark
-            icon
-          >
-            <v-icon>menu</v-icon>
-          </v-btn>
-        </template>
-        <v-list>
-          <v-list-item v-for="(link, index) in links" :key="index" router :to="link.route">
-            <v-list-item-title>{{ link.text }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              id="burgermenu_mobile"
+              class="hidden-md-and-up"
+              v-bind="attrs"
+              v-on="on"
+              dark
+              icon
+            >
+              <v-icon>menu</v-icon>
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item v-for="(link, index) in links" :key="index" router :to="link.route">
+              <v-list-item-title>{{ link.text }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
       </div>
      
 
       <div id="headerRight">
-          <location-search-bar class="xs" @input="updateResults" id="headerLocation" :dark="true" />
+          <div id="headerAreaLocation">
+            <area-select id="areaSelect" ref="areaSelect" @change="switchArea" :dark="true" />
+            <location-search-bar class="xs" @input="updateResults" id="headerLocation" ref="locationSearchBar" :dark="true" />
+          </div>
           <div id="radiusSearchBtn">
-            <radius @input="updateResults" id="headerRadius" :dark="true" />
+            <radius @input="updateResults" id="headerRadius" ref="radius" :dark="true" />
             <search-button id="headerSearchButton" @click="updateSearchValueFromCurrentInputAndUpdateResults" />
           </div>
       </div>
@@ -96,8 +99,9 @@
 
 <script lang="ts">
     import Vue from 'vue';
-    import { createNamespacedHelpers, mapActions as mapStateActions } from 'vuex';
+    import { createNamespacedHelpers, mapActions as mapStateActions, mapGetters } from 'vuex';
     const { mapActions, mapState } = createNamespacedHelpers('textSearchModule');
+    import AreaSelect from '@/components/ui/AreaSelect.vue';
     import LocationSearchBar from '@/components/ui/LocationSearchBar.vue';
     import Radius from '@/components/ui/Radius.vue';
     import SearchBar from '@/components/ui/SearchBar.vue';
@@ -105,6 +109,7 @@
 
     export default Vue.extend({
   components: {
+    AreaSelect,
     LocationSearchBar,
     Radius,
     SearchBar,
@@ -126,7 +131,7 @@
   },
   methods: {
     ...mapActions(['addSearchValue', 'removeSearchValue']),
-    ...mapStateActions(['updateURIFromState', 'findPosts', 'setPage', 'setSelectedPost']),
+    ...mapStateActions(['updateURIFromState', 'findPosts', 'setPage', 'setSelectedPost', 'setInternational']),
     updateResults(): void {
         // After changing the query we want to begin on page 1
         this.setPage(1);
@@ -152,11 +157,25 @@
       } else {
         this.updateResults();
       }
+    },
+    switchArea(): void {
+      const areaSelect = (this.$refs.areaSelect as AreaSelect);
+      const areaSelection = (this.$refs.areaSelect as AreaSelect).selection;
+      const international = (areaSelection === areaSelect.items[0].title)? false : true;
+      (this.$refs.locationSearchBar as any).setLocationSearchBar(international);
+      (this.$refs.radius as any).disableRadius(international);
+      (this.$refs.locationSearchBar as any).setSelectedLocation(null);
+
+      if (international !== this.getInternational) {
+        this.setInternational(international);
+        this.updateResults();
+      }
     }
   },
   computed: {
-    ...mapState(['searchValues', 'searchProposals'])
-  }
+    ...mapState(['searchValues', 'searchProposals']),
+    ...mapGetters(['getInternational']),
+  },
 });
 </script>
 
@@ -172,10 +191,6 @@
   width: inherit;
 }
 
-#headerLocation{
-  margin-right: 0px;
-}
-
 #headerLeft{
   display: contents;
   width: 43%;
@@ -184,6 +199,10 @@
 #headerRight{
   display: inherit;
   width: 40%
+}
+
+#headerAreaLocation{
+  display: flex;
 }
 
 /*Mobile Layout*/
@@ -209,11 +228,15 @@
 
   #headerLocation{
     margin-left: -10px;
-    margin-right: 0px;
+    margin-right: -10px !important;
   }
 
   #radiusSearchBtn{
     display: flex;
+  }
+
+  #headerRadius{
+    margin-left: 0px!important;
   }
 
   #headerSearchButton{
@@ -245,13 +268,22 @@
     display: flex;
   }
 
-  #headerLocation{
-    margin-left: 90px;
+  #headerAreaLocation{
+    margin-left: 95px;
     width: 70%;
+  }
+
+  #headerLocation{
+    margin-left: -9px;
+    margin-right: 0;
   }
 
   #searchBar{ 
     margin-right: 30px;
+  }
+
+  #headerRadius{
+    margin-left: 0px !important;
   }
   
   #radiusSearchBtn{
@@ -298,15 +330,16 @@
     margin-right: 0px!important;
   }
 
-  #headerLocation{
-    margin-left: 0px;
+  #headerAreaLocation{
     width: 100%;
   }
 
-  #headerRadius{
-    width: 30%;
+  #headerLocation{
+    margin-left: 0px;
   }
+
 }
+
 
 @media (min-width:960px) and (max-width:1099px){
   #headerLeft{
@@ -421,4 +454,14 @@
 }
 
 
+</style>
+
+
+<style scoped>
+
+@media (min-width: 960px) {
+  #areaSelect{
+    margin-right: 0;
+  }
+}
 </style>

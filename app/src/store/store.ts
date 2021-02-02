@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Vuex, {StoreOptions} from 'vuex';
 import DataService, {PaginatedResponse} from '../utils/services/DataService';
-import LocationService from '@/utils/services/LocationService';
 import router from '@/router';
 import Post from '@/models/post';
 import textSearchModule from './TextSearch';
@@ -21,7 +20,8 @@ const store: StoreOptions<RootState> = {
     resultSetSize: 100,
     totalResultSize: 0,
     resultsFrom: 0,
-    hitsPerPage: 10 // must be a divider of resultSetSize, or the chunk loading gets complexer
+    hitsPerPage: 10, // must be a divider of resultSetSize, or the chunk loading gets complexer
+    international: false
   } as RootState,
   mutations: {
 
@@ -29,6 +29,7 @@ const store: StoreOptions<RootState> = {
       state.textSearchModule.searchValues = [];
       state.locationSearchModule.selectedRadius = '';
       state.locationSearchModule.selectedLocation = '';
+      state.locationSearchModule.selectedLocationObject = null;
       state.page = 1;
       state.selectedPost = null;
     },
@@ -46,6 +47,9 @@ const store: StoreOptions<RootState> = {
     },
     setPage(state, value: number): void {
       state.page = value;
+    },
+    setInternational(state, value: boolean): void {
+      state.international = value;
     }
   },
   actions: {
@@ -61,20 +65,22 @@ const store: StoreOptions<RootState> = {
 
       const from = state.resultsFrom;
       const size = state.resultSetSize;
+      const international = state.international;
+
       return new Promise((resolve) => {
         DataService.findBySelection({
           searchValues,
           location,
           radius,
           from,
-          size
+          size,
+          international
         }).then((result: PaginatedResponse<Post>) => {
           commit('setTotalResultSize', result.meta.total);
           commit('setPosts', result.data);
           resolve(result.data);
         });
       });
-
     },
     setPage({ commit, dispatch, state, getters }, page: number): void {
         if (page < 1) {
@@ -96,6 +102,9 @@ const store: StoreOptions<RootState> = {
         commit('setPage', page);
         dispatch('updateURIFromState');
     },
+    setInternational({commit}, international: boolean): void{
+        commit('setInternational', international);
+    },
     setSelectedPost({ commit }, value: Post|null): void {
       commit('setSelectedPost', value);
     },
@@ -107,6 +116,9 @@ const store: StoreOptions<RootState> = {
       commit('clearSearchParams');
       if ('q' in queryParams && queryParams.q) {
         dispatch('textSearchModule/addSearchValues', queryParams.q.split(','));
+      }
+      if ('area' in queryParams && queryParams.area) {
+        dispatch('setInternational', queryParams.area.toLowerCase() === 'international');
       }
       if ('location' in queryParams && queryParams.location) {
         dispatch('locationSearchModule/setSelectedLocation', queryParams.location);
@@ -130,6 +142,7 @@ const store: StoreOptions<RootState> = {
       const query = {
         ...router.currentRoute.query,
         q: state.textSearchModule.searchValues.join(','),
+        area: state.international ? 'international' : 'national',
         location: state.locationSearchModule.selectedLocation,
         radius: state.locationSearchModule.selectedRadius,
         page: state.page.toString()
@@ -164,6 +177,9 @@ const store: StoreOptions<RootState> = {
       }
       const pageOffset = state.resultsFrom / state.hitsPerPage + 1; // pages are 1 indexed...
       return Math.floor(postIndex / state.hitsPerPage) + pageOffset;
+    },
+    getInternational(state): boolean {
+      return state.international;
     }
   }
 };
