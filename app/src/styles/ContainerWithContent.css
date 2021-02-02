@@ -1,17 +1,17 @@
-@media (max-width: 370px) {
+@media (max-width: 500px) {
   .wordbreak{
     overflow-wrap: break-word;
   }
 }
 
 @media (min-width: 800px) {
-  .containerwithcontent {
+  .containerWithContent {
     max-width:1450px;
   }
 }
 
 @media (min-width:960px) {
-  .containerwithcontent{
+  .containerWithContent{
     width: 960px;
     margin: auto;
     max-width: none;
@@ -19,28 +19,28 @@
 }
 
 @media (min-width:1100px) {
-  .containerwithcontent{
+  .containerWithContent{
     width: 1100px;
     margin: auto;
   }
 }
 
 @media (min-width:1300px) {
-  .containerwithcontent{
+  .containerWithContent{
     width: 1300px;
     margin: auto;
   }
 }
 
 @media (min-width:1618px) {
-  .containerwithcontent{
+  .containerWithContent{
     width: 1618px;
     margin: auto;
   }
 }
 
 @media (min-width:1904px) {
-  .containerwithcontent{
+  .containerWithContent{
     width: 85%;
     margin: auto;
   }

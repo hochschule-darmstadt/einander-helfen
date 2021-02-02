@@ -2,7 +2,7 @@
   <div>
     <Header />
     <div class="privacy">
-      <v-container justify="center" class="containerwithcontent">
+      <v-container justify="center" class="containerWithContent">
         <h1 class="wordbreak">Datenschutzerklärung (Data protection declaration, in German)</h1>
 
         <h2>1. Datenschutz auf einen Blick</h2>
@@ -310,5 +310,5 @@ export default class Privacy extends Vue {}
 </script>
 
 <style>
-  @import './../styles/containerwithcontent.css';
+  @import './../styles/ContainerWithContent.css';
 </style>
