@@ -98,16 +98,16 @@
 </template>
 
 <script lang="ts">
-    import Vue from 'vue';
-    import { createNamespacedHelpers, mapActions as mapStateActions, mapGetters } from 'vuex';
-    const { mapActions, mapState } = createNamespacedHelpers('textSearchModule');
-    import AreaSelect from '@/components/ui/AreaSelect.vue';
-    import LocationSearchBar from '@/components/ui/LocationSearchBar.vue';
-    import Radius from '@/components/ui/Radius.vue';
-    import SearchBar from '@/components/ui/SearchBar.vue';
-    import SearchButton from '@/components/ui/SearchButton.vue';
+import Vue from 'vue';
+import { createNamespacedHelpers, mapActions as mapStateActions, mapGetters } from 'vuex';
+const { mapActions, mapState } = createNamespacedHelpers('textSearchModule');
+import AreaSelect from '@/components/ui/AreaSelect.vue';
+import LocationSearchBar from '@/components/ui/LocationSearchBar.vue';
+import Radius from '@/components/ui/Radius.vue';
+import SearchBar from '@/components/ui/SearchBar.vue';
+import SearchButton from '@/components/ui/SearchButton.vue';
 
-    export default Vue.extend({
+export default Vue.extend({
   components: {
     AreaSelect,
     LocationSearchBar,
@@ -161,7 +161,7 @@
     switchArea(): void {
       const areaSelect = (this.$refs.areaSelect as AreaSelect);
       const areaSelection = (this.$refs.areaSelect as AreaSelect).selection;
-      const international = (areaSelection === areaSelect.items[0].title)? false : true;
+      const international = (areaSelection === areaSelect.items[0].title) ? false : true;
       (this.$refs.locationSearchBar as any).setLocationSearchBar(international);
       (this.$refs.radius as any).disableRadius(international);
       (this.$refs.locationSearchBar as any).setSelectedLocation(null);

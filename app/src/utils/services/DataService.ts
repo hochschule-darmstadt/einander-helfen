@@ -21,6 +21,64 @@ export interface SearchParameters {
 }
 
 class DataService {
+
+    private static findNationalBySelection(queryObject: QueryObject, location: Location|null, radius: string): void {
+        if (location) {
+            queryObject.sort.push({
+                _geo_distance : {
+                    geo_location : {
+                        lat: location.lat,
+                        lon: location.lon
+                    },
+                    order : 'asc',
+                    unit : 'km',
+                    mode : 'min',
+                    distance_type : 'arc',
+                    ignore_unmapped: true
+                }
+            });
+        }
+
+        if (location && radius) {
+            // @ts-ignore
+            queryObject.query.bool.filter = {
+                geo_distance: {
+                    distance: radius,
+                    geo_location: {
+                        lat: location.lat,
+                        lon: location.lon
+                    }
+                }
+            };
+        }
+
+        // only national posts
+        // @ts-ignore
+        queryObject.query.bool.must_not = [{
+            term: {
+                categories: 'international'
+            }
+        }];
+    }
+
+    private static findInternationalBySelection(queryObject: QueryObject, location: Location|null): void {
+        // only international posts (default)
+        queryObject.query.bool.must.push({
+            term: {
+                categories: 'international'
+            }
+        });
+
+        if (location) {
+            if (location.country && location.country !== 'Deutschland') {
+                queryObject.query.bool.must.push({
+                    match: {
+                        'post_struct.location.country': location.country
+                    }
+                });
+            }
+        }
+    }
     private baseUrl = searchURI;
 
     public findBySelection(params: SearchParameters): Promise<PaginatedResponse<Post>> {
@@ -59,64 +117,6 @@ class DataService {
         }
 
         return this.performQuery<Post>(new QueryBuilder(queryObject));
-    }
-
-    private static findNationalBySelection(queryObject: QueryObject, location: Location|null, radius: string) : void {
-        if (location) {
-            queryObject.sort.push({
-                _geo_distance : {
-                    geo_location : {
-                        lat: location.lat,
-                        lon: location.lon
-                    },
-                    order : 'asc',
-                    unit : 'km',
-                    mode : 'min',
-                    distance_type : 'arc',
-                    ignore_unmapped: true
-                }
-            });
-        }
-
-        if (location && radius) {
-            // @ts-ignore
-            queryObject.query.bool.filter = {
-                geo_distance: {
-                    distance: radius,
-                    geo_location: {
-                        lat: location.lat,
-                        lon: location.lon
-                    }
-                }
-            };
-        }
-
-        // only national posts
-        // @ts-ignore
-        queryObject.query.bool.must_not = [{
-            'term': {
-                'categories': 'international'
-            }
-        }];
-    }
-
-    private static findInternationalBySelection(queryObject: QueryObject, location: Location|null) : void {
-        // only international posts (default)
-        queryObject.query.bool.must.push({
-            'term': {
-                'categories': 'international'
-            }
-        });
-
-        if (location) {
-            if (location.country && location.country !== 'Deutschland') {
-                queryObject.query.bool.must.push({
-                    match: {
-                        'post_struct.location.country': location.country
-                    }
-                });
-            }
-        }
     }
 
     private performQuery<T>(query: QueryBuilder): Promise<PaginatedResponse<T>> {
