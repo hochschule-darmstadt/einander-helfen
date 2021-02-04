@@ -174,7 +174,7 @@ for named_place in placeNameArray:
     alreadySearchedPlaces.append([named_place.place_name, named_place.state])
 
 # save all places to csv
-with open(fileName, mode='w', encoding='utf-8') as csvfile:
+with open(fileName, mode='w', newline='', encoding='utf-8') as csvfile:
     places_writer = csv.writer(csvfile, delimiter=',')
     places_writer.writerow(['name', 'plz', 'state', 'lat', 'lon', 'rank'])
     for named_postcode_place in placeNamePostcodeArray:
