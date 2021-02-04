@@ -37,7 +37,8 @@ class TestScraper(unittest.TestCase):
     def test_clean_html_tags(self):
         html_string = '<p>brotZeit e.V.<br/></p>' \
                       '<p>' \
-                      '<a class=\"\" href=\"/index.cfm?searchTab=organization_detail&amp;organizationId=69040&amp;\" target=\"_self\" title=\"zur Organisation\">' \
+                      '<a class=\"\" href=\"/index.cfm?searchTab=organization_detail&amp;organizationId=69040&amp;\" ' \
+                      'target=\"_self\" title=\"zur Organisation\">' \
                       '<strong class=\"copy35 c7744 shameOnYouIfYouRemove\"> Ehrenamtssuche Hessen  - <br/><br/>' \
                       '</strong>Zur Detailansicht der Organisation' \
                       '</a>' \
@@ -50,7 +51,8 @@ class TestScraper(unittest.TestCase):
         self.assertIsNone(output)
 
     def test_remove_unnecessary_whitespaces(self):
-        output = self.scraper.remove_unnecessary_whitespaces(" [leading ws]  [duplicate middle ws]     [trailing ws]      ")
+        output = self.scraper.remove_unnecessary_whitespaces(" [leading ws]  [duplicate middle ws]"
+                                                             "     [trailing ws]      ")
         self.assertEqual("[leading ws] [duplicate middle ws] [trailing ws]", output)
 
     def test_remove_unnecessary_whitespaces_none(self):

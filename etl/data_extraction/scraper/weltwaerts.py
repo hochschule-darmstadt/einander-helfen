@@ -34,24 +34,27 @@ class WeltwaertsScraper(Scraper):
         parsed_object = {
             'title': param_box.find("h1").decode_contents().strip() or None,
             'categories': ['International'],
-            'location': param_box.find('li').find('span', {'class': 'parameter__value'}).decode_contents().strip() or None,
+            'location': param_box.find('li').find('span',
+                                                  {'class': 'parameter__value'}).decode_contents().strip() or None,
             'task': content.find('h2', text='Deine Aufgabe').findNext('div').decode_contents().strip() or None,
             'target_group': None,
             'prerequisites': content.find('h2', text='Anforderungen an dich').findNext(
                 'div').p.decode_contents().strip() or None,
             'language_skills': param_box.find('li').findNext('li').find('span', {
                 'class': 'parameter__value'}).decode_contents().strip() or None,
-            'timing': param_box.find('li').findNext('li').findNext('li').find('span', {'class': 'parameter__value'}).decode_contents().strip() or None,
+            'timing': param_box.find('li').findNext('li').findNext('li').find('span', {
+                'class': 'parameter__value'}).decode_contents().strip() or None,
             'effort': None,
             'opportunities': None,
-            'organization': content.find('h2', text='Die Aufnahmeorganisation vor Ort').findNext('div').p.decode_contents().strip() or None,
+            'organization': content.find('h2', text='Die Aufnahmeorganisation vor Ort').findNext(
+                'div').p.decode_contents().strip() or None,
             'contact': contact.decode_contents().strip() or None,
             'link': url or None,
             'source': "www.weltwaerts.de",
             'geo_location': {
                 'lat': lat,
                 'lon': lon,
-            } if lat and lon else None, # If longitude and latitude are None, geo_location is set to None
+            } if lat and lon else None,  # If longitude and latitude are None, geo_location is set to None
         }
 
         contact_split = self.__extract_contact_data(contact, parsed_object['contact'])
@@ -154,13 +157,13 @@ class WeltwaertsScraper(Scraper):
         contact_raw = re.sub(r'<br/?>', '\n', contact_raw)
         contact_raw = self.clean_html_tags(contact_raw)
 
-        contact_split = list(filter(lambda s: 'E-mail' not in s, filter(None, re.split('\n|,', contact_raw))))
+        contact_split = list(filter(lambda s: 'E-mail' not in s, filter(None, re.split('[\n,]', contact_raw))))
 
         contact_split = ', '.join(contact_split).split(',')
 
         if re.search('[0-9]{4,5}', contact_raw):
             if len(contact_split) > 3:
-                names_split = contact_split[:(len(contact_split)-2)]
+                names_split = contact_split[:(len(contact_split) - 2)]
                 names_raw = ', '.join(names_split)
                 contact_split = [names_raw, contact_split[-2], contact_split[-1]]
 

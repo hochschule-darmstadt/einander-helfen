@@ -5,7 +5,6 @@ from importlib import import_module
 from inspect import getmembers, isclass
 
 from data_extraction.Scraper import Scraper
-from shared.utils import write_data_to_json, get_current_timestamp
 from shared.LoggerFactory import LoggerFactory
 
 # Root Directory (/etl)

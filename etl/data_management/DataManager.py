@@ -63,7 +63,7 @@ class DataManager:
     @staticmethod
     def save_upload_data_origin(upload_data_origin):
         """Saves the information about the origin of the data inside the upload folder into a text file"""
-        file = open(DataManager.file_upload_data_origin, 'w')
+        file = open(DataManager.file_upload_data_origin, 'w', encoding='utf-8')
         file.write(f"last upload: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
         file.write(f"Source for upload data:")
         file.write(upload_data_origin)

@@ -2,8 +2,8 @@ import axios from 'axios';
 import Location from '@/models/location';
 
 class CountryService {
-    private baseUrl = searchURI;
     public countries: Location[] = [];
+    private baseUrl = searchURI;
 
     /**
      * The constructor initializes the `country` list.
@@ -15,14 +15,14 @@ class CountryService {
     /**
      * This method finds all unique countries.
      */
-    public findCountries():void {
+    public findCountries(): void {
         const query = {
-            'size': 0,
-            'aggs': {
-                'country': {
-                    'terms': {
-                        'field': 'post_struct.location.country.keyword',
-                        'size': 1000
+            size: 0,
+            aggs: {
+                country: {
+                    terms: {
+                        field: 'post_struct.location.country.keyword',
+                        size: 1000
                     }
                 }
             }

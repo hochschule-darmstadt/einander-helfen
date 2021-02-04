@@ -102,7 +102,7 @@ const store: StoreOptions<RootState> = {
         commit('setPage', page);
         dispatch('updateURIFromState');
     },
-    setInternational({commit}, international: boolean): void{
+    setInternational({commit}, international: boolean): void {
         commit('setInternational', international);
     },
     setSelectedPost({ commit }, value: Post|null): void {

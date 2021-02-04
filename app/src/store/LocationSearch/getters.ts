@@ -6,9 +6,10 @@ import {GetterTree} from 'vuex';
 export const getters: GetterTree<LocationSearchState, RootState> = {
   getLocations: (state, gettersValue, rootState) => {
     const p = state.locationSearchValue || state.selectedLocation;
-    if (rootState.international)
+    if (rootState.international) {
         return LocationService.findCountryByName(p);
-    else
+    } else {
         return LocationService.findLocationByPlzOrName(p);
+    }
   }
 };
