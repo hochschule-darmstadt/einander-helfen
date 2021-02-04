@@ -8,5 +8,7 @@ from shared.LoggerFactory import LoggerFactory
 from data_management.DataManager import DataManager
 
 LoggerFactory.get_elastic_logger().info("running elastic upload")
+# starts the process of selecting the files to upload to elastic search
 DataManager.run_compose_upload_process()
+# execute the upload to elastic search
 run_elastic_upload()
