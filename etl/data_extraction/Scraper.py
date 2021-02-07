@@ -35,6 +35,9 @@ class Scraper:
         # logger for Scraper
         self.logger = LoggerFactory.get_logger(name)
 
+        # start time of logger
+        self.start = None
+
     def run(self):
         """Runs the Scraper.
         Step 1: Adding URLs
@@ -63,7 +66,6 @@ class Scraper:
             time.sleep(self.delay)
             self.crawl(url, i + 1)
 
-        crawling_time = str((time.time() - self.start))
         crawling_time = "{:.2f}".format((time.time() - self.start))
         ProgressBar.add_time(self.name, crawling_time)
         self.logger.debug(f"[{self.name}] took {crawling_time} seconds to crawl {len(self.urls)}"
@@ -95,16 +97,17 @@ class Scraper:
         return page
 
     def soupify_post(self, url, form_data):
-        """Executes POST-request with the given url and form data, transforms it to a BeautifulSoup object and returns it."""
+        """Executes POST-request with the given url and form data, transforms it to a BeautifulSoup object and returns
+           it."""
         self.logger.debug("soupify_post()")
 
         res = requests.post(url, data=form_data)
         page = BeautifulSoup(res.text, 'html.parser')
         return page
 
-
     def soupify_post_session(self, url, form_data, session):
-        """Executes POST-request with the given url, form data and session, transforms it to a BeautifulSoup object and returns it."""
+        """Executes POST-request with the given url, form data and session, transforms it to a BeautifulSoup object and
+           returns it."""
         self.logger.debug("soupify_post_session()")
 
         if session is None:
@@ -114,7 +117,6 @@ class Scraper:
 
         page = BeautifulSoup(res.text, 'html.parser')
         return page, session
-
 
     def parse(self, response, url):
         """Transforms the soupified response of a detail page in a predefined way and returns it."""

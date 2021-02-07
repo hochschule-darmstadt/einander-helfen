@@ -12,9 +12,20 @@ export const actions: ActionTree<LocationSearchState, RootState> = {
       ? LocationService.findByTitle(selectedLocation)
       : null;
     if (selectedLocationObject === undefined) {
+      selectedLocationObject = {
+        name: '',
+        plz: '',
+        title: '',
+        state: '',
+        lat: 0,
+        lon: 0,
+        rank: 0,
+        country: selectedLocation
+      };
+    }
+    if (selectedLocationObject === undefined) {
       selectedLocationObject = null;
     }
-
 
     commit('setSelectedLocation', selectedLocation);
     commit('setSelectedLocationObject', selectedLocationObject);

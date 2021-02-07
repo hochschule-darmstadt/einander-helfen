@@ -9,6 +9,7 @@ class Enhancer:
     """ Class handling the enhancement steps for crawled data based on its origin """
 
     def __init__(self, data, domain_name):
+        """Constructor of Enhancer."""
         self.__data = data
         self.__domain_name = domain_name
         self.logger = LoggerFactory.get_enhancement_logger()

@@ -22,20 +22,23 @@ class BundesFreiwilligendienst(Scraper):
 
         location = content.find('div', {'class': 'span5'}).find_all('div', {'class': 'box white-bg'})[0]
         task = content.find('div', {'class': 'description'})
-        contact = content.find('div', {'class': 'span5'}).find_all('div', {'class': 'box white-bg'})[1].find('div', {'class': 'box-content'})
+        contact = content.find('div', {'class': 'span5'}).find_all('div', {'class': 'box white-bg'})[1] \
+            .find('div', {'class': 'box-content'})
 
         lat = None
         lon = None
 
         try:
-            lat = float(response.find('span', {'class': 'coordLat'}).decode_contents().strip()) if response.find('span', {'class': 'coordLat'}) else None
-            lon = float(response.find('span', {'class': 'coordLong'}).decode_contents().strip()) if response.find('span', {'class': 'coordLong'}) else None
+            lat = float(response.find('span', {'class': 'coordLat'}).decode_contents().strip()) if response.find(
+                'span', {'class': 'coordLat'}) else None
+            lon = float(response.find('span', {'class': 'coordLong'}).decode_contents().strip()) if response.find(
+                'span', {'class': 'coordLong'}) else None
         except (TypeError, ValueError):
             pass
 
         parsed_object = {
             'title': title.decode_contents().strip() if title is not None else None,
-            'categories':  categories,
+            'categories': categories,
             'location': location.decode_contents().strip() if location is not None else None,
             'task': task.decode_contents().strip() if task is not None else None,
             'target_group': None,
@@ -48,10 +51,10 @@ class BundesFreiwilligendienst(Scraper):
             'contact': contact.decode_contents().strip() if contact is not None else None,
             'link': url or None,
             'source': 'www.bundesfreiwilligendienst.de',
-            'geo_location':  {
+            'geo_location': {
                 'lat': lat,
                 'lon': lon,
-            } if lat and lon else None, # If longitude and latitude are None, geo_location is set to None,
+            } if lat and lon else None,  # If longitude and latitude are None, geo_location is set to None,
         }
 
         location_street = None
@@ -76,7 +79,8 @@ class BundesFreiwilligendienst(Scraper):
             if 'Name' in object_name:
                 contact_name = contact_entry.find('div', {'class': 'span10'})
                 # Due to the contact name containing lots of spaces, they are being removed using split and join
-                contact_name = ' '.join(contact_name.decode_contents().strip().split()) if contact_name is not None else None
+                contact_name = ' '.join(
+                    contact_name.decode_contents().strip().split()) if contact_name is not None else None
             if 'Telefon' in object_name:
                 contact_phone = contact_entry.find('span', {'class': 'span10'})
             if 'Mail' in object_name:
@@ -87,7 +91,8 @@ class BundesFreiwilligendienst(Scraper):
             'categories': parsed_object['categories'],
             'location': {
                 'country': None,
-                'zipcode': self.clean_string(location_zipcode.decode_contents()) if location_zipcode is not None else None,
+                'zipcode': self.clean_string(
+                    location_zipcode.decode_contents()) if location_zipcode is not None else None,
                 'city': self.clean_string(location_city.decode_contents()) if location_city is not None else None,
                 'street': self.clean_string(location_street.decode_contents()) if location_street is not None else None,
             },
@@ -99,7 +104,7 @@ class BundesFreiwilligendienst(Scraper):
             'effort': None,
             'opportunities': None,
             'organization': {
-                'name':  None,
+                'name': None,
                 'zipcode': None,
                 'city': None,
                 'street': None,
@@ -111,8 +116,11 @@ class BundesFreiwilligendienst(Scraper):
                 'zipcode': None,
                 'city': None,
                 'street': None,
-                'phone': self.clean_string(contact_phone.decode_contents().strip()) if contact_phone is not None else None,
-                'email': self.clean_string(contact_email.decode_contents().strip().replace('[at]', '@')) if contact_email is not None else None,
+                'phone': self.clean_string(
+                    contact_phone.decode_contents().strip()) if contact_phone is not None else None,
+                'email': self.clean_string(
+                    contact_email.decode_contents().strip().replace(
+                        '[at]', '@')) if contact_email is not None else None,
             },
             'link': self.clean_string(parsed_object['link']) or None,
             'source': self.clean_string(parsed_object['source']) or None,
@@ -128,7 +136,10 @@ class BundesFreiwilligendienst(Scraper):
 
         import time
 
-        search_page_url = f'{self.base_url}/bundesfreiwilligendienst/platz-einsatzstellensuche/einsatzstelle-suchen.html?tx_bfdeinsatzstellensuche_einsatzstellensuche%5Baction%5D=filter&tx_bfdeinsatzstellensuche_einsatzstellensuche%5Bcontroller%5D=Suchen%5CEinsatzstellensuche&cHash=e5b52d4a17e46f7278157d2c526cecc5'
+        search_page_url = f'{self.base_url}/bundesfreiwilligendienst/platz-einsatzstellensuche/' \
+                          f'einsatzstelle-suchen.html?tx_bfdeinsatzstellensuche_einsatzstellensuche%5Baction' \
+                          f'%5D=filter&tx_bfdeinsatzstellensuche_einsatzstellensuche%5Bcontroller%5D=Suchen' \
+                          f'%5CEinsatzstellensuche&cHash=e5b52d4a17e46f7278157d2c526cecc5'
         next_page_url = search_page_url
 
         index = 1

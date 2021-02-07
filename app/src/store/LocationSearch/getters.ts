@@ -4,9 +4,12 @@ import {RootState} from '../types';
 import {GetterTree} from 'vuex';
 
 export const getters: GetterTree<LocationSearchState, RootState> = {
-  getLocations: (state) => {
+  getLocations: (state, gettersValue, rootState) => {
     const p = state.locationSearchValue || state.selectedLocation;
-    return LocationService
-      .findLocationByPlzOrName(p);
+    if (rootState.international) {
+        return LocationService.findCountryByName(p);
+    } else {
+        return LocationService.findLocationByPlzOrName(p);
+    }
   }
 };

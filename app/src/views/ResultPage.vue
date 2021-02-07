@@ -169,7 +169,8 @@
                       <strong>
                         <span v-if="post.post_struct.location.country === 'Deutschland'">{{post.post_struct.location.zipcode}}</span>
                         <span> {{post.post_struct.location.city}}</span>
-                        <span v-if="post.post_struct.location.country !== 'Deutschland'">{{post.post_struct.location.country}}</span><em v-if="distance"> (in {{distance}})</em>
+                        <span v-if="post.post_struct.location.country !== 'Deutschland'">{{post.post_struct.location.country}}</span>
+                        <em v-if="distance && post.post_struct.location.country === 'Deutschland'"> (in {{distance}})</em>
                       </strong> &mdash;
                       <span v-html="post.task"/>
                     </v-list-item-subtitle>
@@ -610,6 +611,10 @@
   }
   .map-heigth {
     height: 70vh;
+  }
+
+  html, body {
+    overflow-x: hidden;
   }
 
   @media only screen and (max-width: 960px) {

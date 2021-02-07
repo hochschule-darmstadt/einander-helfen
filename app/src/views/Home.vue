@@ -29,9 +29,10 @@
                 </v-row>
 
                 <v-row class="flex-grow-1 ps-4" id="locationDiv">
-                    <location-search-bar @click.native="focussearch" id="location" :attachTo="'#location'" ref="locationSearchBar" @enter="onLocationEnter" tabindex="2" />
-                    <radius id="radius" @enter="onRadiusEnter" tabindex="3" />
-                    <search-button id="searchButton" @click="executeSearch" tabindex="4" />
+                    <area-select id="areaSelect" ref="areaSelect" @change="switchArea" tabindex="2" />
+                    <location-search-bar @click.native="focussearch" id="location" :attachTo="'#location'" ref="locationSearchBar" @enter="onLocationEnter" tabindex="3" />
+                    <radius ref="radius" id="radius" @enter="onRadiusEnter" tabindex="4" />
+                    <search-button id="searchButton" @click="executeSearch" tabindex="5" />
                 </v-row>
               </v-form>
              </v-flex>
@@ -88,11 +89,13 @@ import LocationSearchBar from '@/components/ui/LocationSearchBar.vue';
 import Radius from '@/components/ui/Radius.vue';
 import SearchBar from '@/components/ui/SearchBar.vue';
 import SearchButton from '@/components/ui/SearchButton.vue';
+import AreaSelect from '../components/ui/AreaSelect.vue';
 
 export default Vue.extend({
   components: {
     SearchBar,
     VueSlickCarousel,
+    AreaSelect,
     LocationSearchBar,
     Radius,
     Toolbar,
@@ -181,12 +184,26 @@ export default Vue.extend({
       if (isSafari === false && focussearch !== null && window.matchMedia('(max-width: 420px)').matches) {
         focussearch.scrollIntoView(true);
       }
+    },
+    switchArea(): void {
+      const areaSelect = (this.$refs.areaSelect as AreaSelect);
+      const areaSelection = (this.$refs.areaSelect as AreaSelect).selection;
+      const international = (areaSelection === areaSelect.items[0].title) ? false : true;
+      (this.$refs.locationSearchBar as any).setLocationSearchBar(international);
+      (this.$refs.radius as any).disableRadius(international);
+      (this.$refs.locationSearchBar as any).setSelectedLocation(null);
     }
   }
 });
 </script>
 
 <style>
+#location .v-autocomplete__content.v-menu__content{ 
+  top: auto !important;
+  left: auto !important;
+  margin-top: 50px;
+}
+
 .v-input__slot {
   margin-bottom: 0;
 }
@@ -207,7 +224,7 @@ img {
 }
 
 #searchButton {
-  margin-right: 12px !important;
+  margin-right: 0 !important;
 }
 
 #searchbox {
@@ -221,11 +238,13 @@ img {
 
 #locationDiv {
   padding-left: 12px !important;
+  padding-right: 12px !important;
 }
 
-@media (max-width: 329px) {
-  #location{
-    max-width: 98vw;
+
+@media (min-width: 280px) and (max-width: 305px) {
+  #location {
+    max-width: 77vw;
   }
 
   #radius{
@@ -236,9 +255,35 @@ img {
   #location .v-input__slot {
     margin-left: 2px;
   }
+  
+  #location .v-text-field {
+    padding-right: 0px !important;
+}
 }
 
-@media (min-width: 330px) and (max-width: 382px) {
+
+@media (min-width: 305px) and (max-width: 342px) {
+  #location {
+    max-width: 79.5vw;
+  }
+
+  #radius{
+    margin-left: 0 !important;
+    width: 60%;
+  }
+
+  #location .v-input__slot {
+    margin-left: 2px;
+  }
+  
+  #location .v-text-field {
+    padding-right: 0px !important;
+}
+
+}
+
+
+@media (min-width: 342px) and (max-width: 383px) {
   #location {
     max-width: 98vw;
   }
@@ -254,34 +299,44 @@ img {
     overflow-x: hidden;
   }
 
-  #location .v-input__slot {
-    margin-left: 2px;
-  }
 }
 
-#location .v-autocomplete__content.v-menu__content { 
-  top: auto !important;
-  left: auto !important;
-  margin-top: 50px;
+#location .v-text-field {
+  padding-right: 5px;
 }
+
 
 @media (min-width: 383px) {
   #location {
-    width: 85vw;
     max-width: 98vw;
-    
   }
+
   #location .v-input__slot {
     margin-left: 2px;
   }
 
   #radius {
     margin-left: 0 !important;
-    max-width: 80vw;
+    max-width: 77.5%;
   } 
 }
 
-@media (min-width: 513px) {
+@media (min-width: 410px) {
+  #location {
+    max-width: 98vw;
+  }
+
+  #location .v-input__slot {
+    margin-left: 2px;
+  }
+
+  #radius {
+    margin-left: 0 !important;
+    max-width: 90%;
+  } 
+}
+
+@media (min-width: 535px) {
   #location {
     width: auto;
     max-width: none;
@@ -291,6 +346,10 @@ img {
     max-width: 20%;
     min-width: none;
     margin-left: 10px !important;
+  }
+
+  #location .v-text-field {
+    padding-right: 0px;
   }
 }
 
@@ -336,5 +395,6 @@ img {
     width: 85%;
   }
 }
+
 
 </style>
