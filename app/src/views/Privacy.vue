@@ -303,15 +303,15 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import Vue from "vue";
 import Header from "@/components/layout/Header.vue";
 
-@Component({
+export default Vue.extend({
+  name: "Privacy",
   components: {
     Header,
   },
-})
-export default class Privacy extends Vue {}
+});
 </script>
 
 <style>
