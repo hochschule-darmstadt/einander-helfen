@@ -1,17 +1,31 @@
 <template>
   <div class="home">
     <Toolbar />
-    <VueSlickCarousel :dots="true" :infinite="true" :autoplay="true" :autoplaySpeed="30000">
+    <VueSlickCarousel
+      :dots="true"
+      :infinite="true"
+      :autoplay="true"
+      :autoplaySpeed="30000"
+    >
       <picture>
-        <source media="(max-width: 768px)" srcset="/images/header/1_phone.jpg" />
+        <source
+          media="(max-width: 768px)"
+          srcset="/images/header/1_phone.jpg"
+        />
         <img src="/images/header/1.jpg" />
       </picture>
       <picture>
-        <source media="(max-width: 768px)" srcset="/images/header/2_phone.jpg" />
+        <source
+          media="(max-width: 768px)"
+          srcset="/images/header/2_phone.jpg"
+        />
         <img src="/images/header/2.jpg" />
       </picture>
       <picture>
-        <source media="(max-width: 768px)" srcset="/images/header/3_phone.jpg" />
+        <source
+          media="(max-width: 768px)"
+          srcset="/images/header/3_phone.jpg"
+        />
         <img src="/images/header/3.jpg" />
       </picture>
     </VueSlickCarousel>
@@ -23,19 +37,48 @@
             <v-flex>
               <v-form>
                 <v-row>
-                  <v-col id=searchCol cols="12">
-                    <search-bar :searchInput.sync="currentSearchValue" id="search" :attachTo="'#search'" @click.native="focussearch" v-model="selectedInput" @enter="onSearchEnter" tabindex="1" />
+                  <v-col id="searchCol" cols="12">
+                    <search-bar
+                      :searchInput.sync="currentSearchValue"
+                      id="search"
+                      :attachTo="'#search'"
+                      @click.native="focussearch"
+                      v-model="selectedInput"
+                      @enter="onSearchEnter"
+                      tabindex="1"
+                    />
                   </v-col>
                 </v-row>
 
                 <v-row class="flex-grow-1 ps-4" id="locationDiv">
-                    <area-select id="areaSelect" ref="areaSelect" @change="switchArea" tabindex="2" />
-                    <location-search-bar @click.native="focussearch" id="location" :attachTo="'#location'" ref="locationSearchBar" @enter="onLocationEnter" tabindex="3" />
-                    <radius ref="radius" id="radius" @enter="onRadiusEnter" tabindex="4" />
-                    <search-button id="searchButton" @click="executeSearch" tabindex="5" />
+                  <area-select
+                    id="areaSelect"
+                    ref="areaSelect"
+                    @change="switchArea"
+                    tabindex="2"
+                  />
+                  <location-search-bar
+                    @click.native="focussearch"
+                    id="location"
+                    :attachTo="'#location'"
+                    ref="locationSearchBar"
+                    @enter="onLocationEnter"
+                    tabindex="3"
+                  />
+                  <radius
+                    ref="radius"
+                    id="radius"
+                    @enter="onRadiusEnter"
+                    tabindex="4"
+                  />
+                  <search-button
+                    id="searchButton"
+                    @click="executeSearch"
+                    tabindex="5"
+                  />
                 </v-row>
               </v-form>
-             </v-flex>
+            </v-flex>
           </v-layout>
         </v-row>
       </v-form>
@@ -44,9 +87,13 @@
         <template v-for="tag in volunteerTags">
           <v-col md="3" xl="3" :key="tag.title">
             <v-hover v-slot:default="{ hover }">
-              <v-card class="mx-auto" :elevation="hover ? 12 : 2" :class="{ 'on-hover': hover }">
+              <v-card
+                class="mx-auto"
+                :elevation="hover ? 12 : 2"
+                :class="{ 'on-hover': hover }"
+              >
                 <router-link
-                  style="text-decoration: none; color: inherit;"
+                  style="text-decoration: none; color: inherit"
                   :to="{ name: 'resultPage', query: { q: tag.to } }"
                 >
                   <v-img
@@ -56,7 +103,10 @@
                     :src="tag.img"
                   >
                     <v-card class="no-radius">
-                      <v-card-title class="justify-center black--text" v-html="tag.title"></v-card-title>
+                      <v-card-title
+                        class="justify-center black--text"
+                        v-html="tag.title"
+                      ></v-card-title>
                     </v-card>
                   </v-img>
                 </router-link>
@@ -70,26 +120,25 @@
 </template>
 
 <script lang="ts">
-import { createNamespacedHelpers, mapActions } from 'vuex';
+import { createNamespacedHelpers, mapActions } from "vuex";
 const { mapActions: mapTextSearchActions } = createNamespacedHelpers(
-  'textSearchModule'
+  "textSearchModule"
 );
 const { mapState: mapLocationSearchState } = createNamespacedHelpers(
-  'locationSearchModule'
+  "locationSearchModule"
 );
 
+import Vue from "vue";
+import Toolbar from "@/components/layout/Toolbar.vue";
 
-import Vue from 'vue';
-import Toolbar from '@/components/layout/Toolbar.vue';
-
-import VueSlickCarousel from 'vue-slick-carousel';
-import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css';
-import 'vue-slick-carousel/dist/vue-slick-carousel.css';
-import LocationSearchBar from '@/components/ui/LocationSearchBar.vue';
-import Radius from '@/components/ui/Radius.vue';
-import SearchBar from '@/components/ui/SearchBar.vue';
-import SearchButton from '@/components/ui/SearchButton.vue';
-import AreaSelect from '../components/ui/AreaSelect.vue';
+import VueSlickCarousel from "vue-slick-carousel";
+import "vue-slick-carousel/dist/vue-slick-carousel-theme.css";
+import "vue-slick-carousel/dist/vue-slick-carousel.css";
+import LocationSearchBar from "@/components/ui/LocationSearchBar.vue";
+import Radius from "@/components/ui/Radius.vue";
+import SearchBar from "@/components/ui/SearchBar.vue";
+import SearchButton from "@/components/ui/SearchButton.vue";
+import AreaSelect from "../components/ui/AreaSelect.vue";
 
 export default Vue.extend({
   components: {
@@ -99,7 +148,7 @@ export default Vue.extend({
     LocationSearchBar,
     Radius,
     Toolbar,
-    SearchButton
+    SearchButton,
   },
   data(): {
     volunteerTags: { title: string; to: string; img: string }[];
@@ -109,28 +158,28 @@ export default Vue.extend({
     return {
       volunteerTags: [
         {
-          title: 'Arbeit mit Kindern',
-          to: 'Kinder',
-          img: require('../../public/images/macherIN.jpeg')
+          title: "Arbeit mit Kindern",
+          to: "Kinder",
+          img: require("../../public/images/macherIN.jpeg"),
         },
         {
-          title: 'Arbeit mit Jugendlichen',
-          to: 'Jugend',
-          img: require('../../public/images/denkerIN.jpeg')
+          title: "Arbeit mit Jugendlichen",
+          to: "Jugend",
+          img: require("../../public/images/denkerIN.jpeg"),
         },
         {
-          title: 'Arbeit mit Senioren',
-          to: 'Senioren',
-          img: require('../../public/images/sozial.jpeg')
+          title: "Arbeit mit Senioren",
+          to: "Senioren",
+          img: require("../../public/images/sozial.jpeg"),
         },
         {
-          title: 'Betreuung',
-          to: 'Betreuung',
-          img: require('../../public/images/jugend.jpeg')
-        }
+          title: "Betreuung",
+          to: "Betreuung",
+          img: require("../../public/images/jugend.jpeg"),
+        },
       ],
-      selectedInput: '',
-      currentSearchValue: ''
+      selectedInput: "",
+      currentSearchValue: "",
     };
   },
   created(): void {
@@ -138,11 +187,11 @@ export default Vue.extend({
     this.clearLocationSearchValue();
   },
   computed: {
-    ...mapLocationSearchState(['selectedRadius', 'selectedLocation'])
+    ...mapLocationSearchState(["selectedRadius", "selectedLocation"]),
   },
   methods: {
-    ...mapTextSearchActions(['addSearchValue']),
-    ...mapActions(['updateURIFromState', 'clearSearchParams']),
+    ...mapTextSearchActions(["addSearchValue"]),
+    ...mapActions(["updateURIFromState", "clearSearchParams"]),
     executeSearch(): void {
       if (this.selectedInput) {
         this.addSearchValue(this.selectedInput);
@@ -169,36 +218,43 @@ export default Vue.extend({
     },
     onRadiusEnter(): void {
       if (this.selectedRadius) {
-       this.executeSearch();
+        this.executeSearch();
       }
     },
 
     focussearch(): void {
-      const isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
-               navigator.userAgent &&
-               navigator.userAgent.indexOf('CriOS') === -1 &&
-               navigator.userAgent.indexOf('FxiOS') === -1;
+      const isSafari =
+        navigator.vendor &&
+        navigator.vendor.indexOf("Apple") > -1 &&
+        navigator.userAgent &&
+        navigator.userAgent.indexOf("CriOS") === -1 &&
+        navigator.userAgent.indexOf("FxiOS") === -1;
 
-      const focussearch = document.getElementById('searchCol');
+      const focussearch = document.getElementById("searchCol");
 
-      if (isSafari === false && focussearch !== null && window.matchMedia('(max-width: 420px)').matches) {
+      if (
+        isSafari === false &&
+        focussearch !== null &&
+        window.matchMedia("(max-width: 420px)").matches
+      ) {
         focussearch.scrollIntoView(true);
       }
     },
     switchArea(): void {
-      const areaSelect = (this.$refs.areaSelect as AreaSelect);
+      const areaSelect = this.$refs.areaSelect as AreaSelect;
       const areaSelection = (this.$refs.areaSelect as AreaSelect).selection;
-      const international = (areaSelection === areaSelect.items[0].title) ? false : true;
+      const international =
+        areaSelection === areaSelect.items[0].title ? false : true;
       (this.$refs.locationSearchBar as any).setLocationSearchBar(international);
       (this.$refs.radius as any).disableRadius(international);
       (this.$refs.locationSearchBar as any).setSelectedLocation(null);
-    }
-  }
+    },
+  },
 });
 </script>
 
 <style>
-#location .v-autocomplete__content.v-menu__content{ 
+#location .v-autocomplete__content.v-menu__content {
   top: auto !important;
   left: auto !important;
   margin-top: 50px;
@@ -232,7 +288,7 @@ img {
   padding-right: 12px;
 }
 
-#container{
+#container {
   margin: auto;
 }
 
@@ -241,13 +297,12 @@ img {
   padding-right: 12px !important;
 }
 
-
 @media (min-width: 280px) and (max-width: 305px) {
   #location {
     max-width: 77vw;
   }
 
-  #radius{
+  #radius {
     margin-left: 0 !important;
     width: 60%;
   }
@@ -255,19 +310,18 @@ img {
   #location .v-input__slot {
     margin-left: 2px;
   }
-  
+
   #location .v-text-field {
     padding-right: 0px !important;
+  }
 }
-}
-
 
 @media (min-width: 305px) and (max-width: 342px) {
   #location {
     max-width: 79.5vw;
   }
 
-  #radius{
+  #radius {
     margin-left: 0 !important;
     width: 60%;
   }
@@ -275,13 +329,11 @@ img {
   #location .v-input__slot {
     margin-left: 2px;
   }
-  
+
   #location .v-text-field {
     padding-right: 0px !important;
+  }
 }
-
-}
-
 
 @media (min-width: 342px) and (max-width: 383px) {
   #location {
@@ -293,18 +345,16 @@ img {
     width: 70%;
   }
 
-  #location .v-autocomplete__content.v-menu__content { 
+  #location .v-autocomplete__content.v-menu__content {
     max-height: 225px !important;
     overflow-y: scroll;
     overflow-x: hidden;
   }
-
 }
 
 #location .v-text-field {
   padding-right: 5px;
 }
-
 
 @media (min-width: 383px) {
   #location {
@@ -318,7 +368,7 @@ img {
   #radius {
     margin-left: 0 !important;
     max-width: 77.5%;
-  } 
+  }
 }
 
 @media (min-width: 410px) {
@@ -333,7 +383,7 @@ img {
   #radius {
     margin-left: 0 !important;
     max-width: 90%;
-  } 
+  }
 }
 
 @media (min-width: 535px) {
@@ -361,7 +411,7 @@ img {
 
 @media (min-width: 800px) {
   #container {
-    max-width:1450px;
+    max-width: 1450px;
   }
 }
 
@@ -395,6 +445,4 @@ img {
     width: 85%;
   }
 }
-
-
 </style>

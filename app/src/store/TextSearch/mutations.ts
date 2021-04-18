@@ -1,10 +1,10 @@
-import { MutationTree } from 'vuex';
-import { TextSearchState } from './types';
-import Tag from '@/models/tag';
+import { MutationTree } from "vuex";
+import { TextSearchState } from "./types";
+import Tag from "@/models/tag";
 
 export const mutations: MutationTree<TextSearchState> = {
   addSearchValue(state, value: string): void {
-    if (! state.searchValues.includes(value)) {
+    if (!state.searchValues.includes(value)) {
       state.searchValues.push(value);
     }
   },

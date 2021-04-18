@@ -1,6 +1,13 @@
 <template>
   <header>
-    <v-layout id="header" row wrap align-center no-gutters style="padding: 12px; background: #00254f">
+    <v-layout
+      id="header"
+      row
+      wrap
+      align-center
+      no-gutters
+      style="padding: 12px; background: #00254f"
+    >
       <div id="headerLeft">
         <v-btn
           id="headerLogo"
@@ -23,10 +30,11 @@
           </router-link>
         </v-btn>
         <div id="searchBar">
-          <search-bar ref="searchBar"
-                      @input="addSearchValueAndUpdate"
-                      :searchInput.sync="currentSearchValue"
-                      :enable-no-data-message="true"
+          <search-bar
+            ref="searchBar"
+            @input="addSearchValueAndUpdate"
+            :searchInput.sync="currentSearchValue"
+            :enable-no-data-message="true"
           />
           <v-spacer></v-spacer>
           <v-chip-group
@@ -34,7 +42,13 @@
             column
             style="margin-left: 10px; margin-right: 10px; margin-top: -20px"
           >
-            <v-chip :key="tag" @click:close="removeSearchValueAndUpdate(tag)" close v-for="tag in searchValues">{{ tag }}</v-chip>
+            <v-chip
+              :key="tag"
+              @click:close="removeSearchValueAndUpdate(tag)"
+              close
+              v-for="tag in searchValues"
+              >{{ tag }}</v-chip
+            >
           </v-chip-group>
         </div>
         <v-menu offset-y>
@@ -51,25 +65,48 @@
             </v-btn>
           </template>
           <v-list>
-            <v-list-item v-for="(link, index) in links" :key="index" router :to="link.route">
+            <v-list-item
+              v-for="(link, index) in links"
+              :key="index"
+              router
+              :to="link.route"
+            >
               <v-list-item-title>{{ link.text }}</v-list-item-title>
             </v-list-item>
           </v-list>
         </v-menu>
       </div>
-     
 
       <div id="headerRight">
-          <div id="headerAreaLocation">
-            <area-select id="areaSelect" ref="areaSelect" @change="switchArea" :dark="true" />
-            <location-search-bar class="xs" @input="updateResults" id="headerLocation" ref="locationSearchBar" :dark="true" />
-          </div>
-          <div id="radiusSearchBtn">
-            <radius @input="updateResults" id="headerRadius" ref="radius" :dark="true" />
-            <search-button id="headerSearchButton" @click="updateSearchValueFromCurrentInputAndUpdateResults" />
-          </div>
+        <div id="headerAreaLocation">
+          <area-select
+            id="areaSelect"
+            ref="areaSelect"
+            @change="switchArea"
+            :dark="true"
+          />
+          <location-search-bar
+            class="xs"
+            @input="updateResults"
+            id="headerLocation"
+            ref="locationSearchBar"
+            :dark="true"
+          />
+        </div>
+        <div id="radiusSearchBtn">
+          <radius
+            @input="updateResults"
+            id="headerRadius"
+            ref="radius"
+            :dark="true"
+          />
+          <search-button
+            id="headerSearchButton"
+            @click="updateSearchValueFromCurrentInputAndUpdateResults"
+          />
+        </div>
       </div>
-       
+
       <v-col class="column menuCol hidden-sm-and-down">
         <div align="right">
           <v-menu offset-y>
@@ -86,7 +123,12 @@
               </v-btn>
             </template>
             <v-list>
-              <v-list-item v-for="(link, index) in links" :key="index" router :to="link.route">
+              <v-list-item
+                v-for="(link, index) in links"
+                :key="index"
+                router
+                :to="link.route"
+              >
                 <v-list-item-title>{{ link.text }}</v-list-item-title>
               </v-list-item>
             </v-list>
@@ -98,14 +140,18 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import { createNamespacedHelpers, mapActions as mapStateActions, mapGetters } from 'vuex';
-const { mapActions, mapState } = createNamespacedHelpers('textSearchModule');
-import AreaSelect from '@/components/ui/AreaSelect.vue';
-import LocationSearchBar from '@/components/ui/LocationSearchBar.vue';
-import Radius from '@/components/ui/Radius.vue';
-import SearchBar from '@/components/ui/SearchBar.vue';
-import SearchButton from '@/components/ui/SearchButton.vue';
+import Vue from "vue";
+import {
+  createNamespacedHelpers,
+  mapActions as mapStateActions,
+  mapGetters,
+} from "vuex";
+const { mapActions, mapState } = createNamespacedHelpers("textSearchModule");
+import AreaSelect from "@/components/ui/AreaSelect.vue";
+import LocationSearchBar from "@/components/ui/LocationSearchBar.vue";
+import Radius from "@/components/ui/Radius.vue";
+import SearchBar from "@/components/ui/SearchBar.vue";
+import SearchButton from "@/components/ui/SearchButton.vue";
 
 export default Vue.extend({
   components: {
@@ -113,7 +159,7 @@ export default Vue.extend({
     LocationSearchBar,
     Radius,
     SearchBar,
-    SearchButton
+    SearchButton,
   },
   data(): {
     links: any;
@@ -121,23 +167,29 @@ export default Vue.extend({
   } {
     return {
       links: [
-        { text: 'Home', route: '/' },
-        { text: 'Über uns', route: '/about' },
-        { text: 'Impressum', route: '/imprint' },
-        { text: 'Datenschutzerklärung', route: '/privacy' }
+        { text: "Home", route: "/" },
+        { text: "Über uns", route: "/about" },
+        { text: "Impressum", route: "/imprint" },
+        { text: "Datenschutzerklärung", route: "/privacy" },
       ],
-      currentSearchValue: ''
+      currentSearchValue: "",
     };
   },
   methods: {
-    ...mapActions(['addSearchValue', 'removeSearchValue']),
-    ...mapStateActions(['updateURIFromState', 'findPosts', 'setPage', 'setSelectedPost', 'setInternational']),
+    ...mapActions(["addSearchValue", "removeSearchValue"]),
+    ...mapStateActions([
+      "updateURIFromState",
+      "findPosts",
+      "setPage",
+      "setSelectedPost",
+      "setInternational",
+    ]),
     updateResults(): void {
-        // After changing the query we want to begin on page 1
-        this.setPage(1);
-        // We also want to deselect the current selected post!
-        this.setSelectedPost(null);
-        this.findPosts();
+      // After changing the query we want to begin on page 1
+      this.setPage(1);
+      // We also want to deselect the current selected post!
+      this.setSelectedPost(null);
+      this.findPosts();
     },
     addSearchValueAndUpdate(input): void {
       this.addSearchValue(input);
@@ -159,9 +211,10 @@ export default Vue.extend({
       }
     },
     switchArea(): void {
-      const areaSelect = (this.$refs.areaSelect as AreaSelect);
+      const areaSelect = this.$refs.areaSelect as AreaSelect;
       const areaSelection = (this.$refs.areaSelect as AreaSelect).selection;
-      const international = (areaSelection === areaSelect.items[0].title) ? false : true;
+      const international =
+        areaSelection === areaSelect.items[0].title ? false : true;
       (this.$refs.locationSearchBar as any).setLocationSearchBar(international);
       (this.$refs.radius as any).disableRadius(international);
       (this.$refs.locationSearchBar as any).setSelectedLocation(null);
@@ -170,11 +223,11 @@ export default Vue.extend({
         this.setInternational(international);
         this.updateResults();
       }
-    }
+    },
   },
   computed: {
-    ...mapState(['searchValues', 'searchProposals']),
-    ...mapGetters(['getInternational']),
+    ...mapState(["searchValues", "searchProposals"]),
+    ...mapGetters(["getInternational"]),
   },
 });
 </script>
@@ -184,117 +237,116 @@ export default Vue.extend({
   z-index: 9999 !important;
 }
 
-#searchBar{
-  background: white; 
-  border-radius: 20px; 
+#searchBar {
+  background: white;
+  border-radius: 20px;
   margin-right: 2%;
   width: inherit;
 }
 
-#headerLeft{
+#headerLeft {
   display: contents;
   width: 43%;
 }
 
-#headerRight{
+#headerRight {
   display: inherit;
-  width: 40%
+  width: 40%;
 }
 
-#headerAreaLocation{
+#headerAreaLocation {
   display: flex;
 }
 
 /*Mobile Layout*/
-@media (min-width: 280px) and (max-width: 599px){
-  #header{
+@media (min-width: 280px) and (max-width: 599px) {
+  #header {
     display: block;
   }
 
-  #headerLeft{
+  #headerLeft {
     width: 100%;
     margin-bottom: 20px;
     display: flex;
   }
 
-  #headerRight{
+  #headerRight {
     width: 100%;
     display: block;
   }
-  
-  #searchBar{ 
+
+  #searchBar {
     margin-right: 30px;
   }
 
-  #headerLocation{
+  #headerLocation {
     margin-left: -10px;
     margin-right: -10px !important;
   }
 
-  #radiusSearchBtn{
+  #radiusSearchBtn {
     display: flex;
   }
 
-  #headerRadius{
-    margin-left: 0px!important;
+  #headerRadius {
+    margin-left: 0px !important;
   }
 
-  #headerSearchButton{
-    margin-right: 0px!important;
+  #headerSearchButton {
+    margin-right: 0px !important;
   }
 
-  #burgermenu_mobile{
+  #burgermenu_mobile {
     display: flex;
     margin-top: 19px;
     margin-right: 8px;
   }
 }
 
-
 /*Tablet Layout*/
-@media (min-width:600px) and (max-width: 959px){
-  #header{
+@media (min-width: 600px) and (max-width: 959px) {
+  #header {
     display: block;
   }
 
-  #headerLeft{
+  #headerLeft {
     width: 100%;
     margin-bottom: 20px;
     display: flex;
   }
 
-  #headerRight{
+  #headerRight {
     width: 100%;
     display: flex;
   }
 
-  #headerAreaLocation{
+  #headerAreaLocation {
     margin-left: 95px;
     width: 70%;
   }
 
-  #headerLocation{
+  #headerLocation {
     margin-left: -9px;
     margin-right: 0;
   }
 
-  #searchBar{ 
+  #searchBar {
     margin-right: 30px;
   }
 
-  #headerRadius{
+  #headerRadius {
     margin-left: 0px !important;
   }
-  
-  #radiusSearchBtn{
+
+  #radiusSearchBtn {
     display: flex;
   }
 
-  #headerSearchButton{
-    margin-right: 73px!important;
+  #headerSearchButton {
+    margin-right: 73px !important;
   }
 
-  #burgermenu_mobile{
+  #burgermenu_mobile {
     display: flex;
     margin-top: 19.5px;
     margin-right: 8px;
@@ -302,165 +354,158 @@ export default Vue.extend({
 }
 
 @media (min-width: 600px) and (max-width: 765px) {
-  #burgermenu_mobile{ 
+  #burgermenu_mobile {
     margin-top: 19px;
   }
 }
 
-
 /*Web Layout*/
 @media (min-width: 960px) {
-  #header{
+  #header {
     display: flex;
   }
 
-  #headerLeft{
+  #headerLeft {
     display: contents;
   }
 
-  #headerRight{
+  #headerRight {
     display: inherit;
   }
 
-  #radiusSearchBtn{
+  #radiusSearchBtn {
     display: flex;
   }
-  
-  #headerSearchButton{
-    margin-right: 0px!important;
+
+  #headerSearchButton {
+    margin-right: 0px !important;
   }
 
-  #headerAreaLocation{
+  #headerAreaLocation {
     width: 100%;
   }
 
-  #headerLocation{
+  #headerLocation {
     margin-left: 0px;
   }
-
 }
 
-
-@media (min-width:960px) and (max-width:1099px){
-  #headerLeft{
+@media (min-width: 960px) and (max-width: 1099px) {
+  #headerLeft {
     width: 38.5%;
   }
 
-  #headerRight{
+  #headerRight {
     width: 44%;
   }
 
-  #searchBar{ 
+  #searchBar {
     margin-right: 1.2%;
   }
 }
 
-@media (min-width:1100px){
-  #headerLeft{
+@media (min-width: 1100px) {
+  #headerLeft {
     width: 41%;
   }
 
-  #headerRight{
-    width: 43.5%
+  #headerRight {
+    width: 43.5%;
   }
 
-  #searchBar{ 
+  #searchBar {
     margin-right: 1.2%;
   }
 }
 
-@media (min-width:1300px){
-  #headerLeft{
+@media (min-width: 1300px) {
+  #headerLeft {
     width: 42.5%;
   }
 
-  #headerRight{
-    width: 42.5%
+  #headerRight {
+    width: 42.5%;
   }
 
-  #searchBar{ 
+  #searchBar {
     margin-right: 1.2%;
   }
 }
 
-@media (min-width:1618px){
-  #headerLeft{
+@media (min-width: 1618px) {
+  #headerLeft {
     width: 43%;
   }
 
-  #headerRight{
-    width: 44.5%
+  #headerRight {
+    width: 44.5%;
   }
 
-  #searchBar{ 
+  #searchBar {
     margin-right: 1.5%;
   }
 }
 
-@media (min-width:1904px){
-  #headerLeft{
+@media (min-width: 1904px) {
+  #headerLeft {
     width: 45%;
   }
 
-  #headerRight{
-    width: 42.5%
+  #headerRight {
+    width: 42.5%;
   }
 
-  #searchBar{ 
+  #searchBar {
     margin-right: 1.5%;
   }
 }
 
-@media (min-width: 3000px){
-  #headerLeft{
+@media (min-width: 3000px) {
+  #headerLeft {
     width: 46.5%;
   }
 
-  #headerRight{
-    width: 42%
+  #headerRight {
+    width: 42%;
   }
 
-  #searchBar{ 
+  #searchBar {
     margin-right: 1.5%;
   }
 }
 
-@media (min-width: 4000px){
-  #headerLeft{
+@media (min-width: 4000px) {
+  #headerLeft {
     width: 47%;
   }
 
-  #headerRight{
-    width: 41.5%
+  #headerRight {
+    width: 41.5%;
   }
 
-  #searchBar{ 
+  #searchBar {
     margin-right: 1.5%;
   }
 }
 
 @media (min-width: 315px) and (max-width: 382px) {
-  #headerLocation .v-autocomplete__content.v-menu__content{ 
+  #headerLocation .v-autocomplete__content.v-menu__content {
     max-height: 225px !important;
     overflow-y: scroll;
     overflow-x: hidden;
   }
 }
 
-#headerLocation .v-autocomplete__content.v-menu__content{ 
+#headerLocation .v-autocomplete__content.v-menu__content {
   top: auto !important;
   left: auto !important;
   margin-top: 33px;
 }
-
-
 </style>
 
-
 <style scoped>
-
 @media (min-width: 960px) {
-  #areaSelect{
+  #areaSelect {
     margin-right: 0;
   }
 }
