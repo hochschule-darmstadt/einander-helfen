@@ -106,15 +106,15 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import Vue from "vue";
 import Header from "@/components/layout/Header.vue";
 
-@Component({
+export default Vue.extend({
+  name: "About",
   components: {
     Header,
   },
-})
-export default class About extends Vue {}
+});
 </script>
 
 <style>
