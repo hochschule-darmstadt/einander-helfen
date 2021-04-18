@@ -1,6 +1,6 @@
 <template>
   <v-footer color="#00254f" padless>
-    <v-row justify="center" no-gutters >
+    <v-row justify="center" no-gutters>
       <v-btn
         v-for="(link, index) in links"
         :key="index"
@@ -10,7 +10,8 @@
         class="my-2"
         router
         :to="link.route"
-      >{{ link.text }}</v-btn>
+        >{{ link.text }}</v-btn
+      >
     </v-row>
   </v-footer>
 </template>
@@ -19,10 +20,10 @@
 export default {
   data: () => ({
     links: [
-      { text: 'Über uns', route: '/about' },
-      { text: 'Impressum', route: '/imprint' },
-      { text: 'Datenschutzerklärung', route: '/privacy' }
-    ]
-  })
+      { text: "Über uns", route: "/about" },
+      { text: "Impressum", route: "/imprint" },
+      { text: "Datenschutzerklärung", route: "/privacy" },
+    ],
+  }),
 };
 </script>

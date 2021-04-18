@@ -86,7 +86,7 @@ export default Vue.extend({
         this.selection = this.items[0].title;
       }
     },
-    setInternational(obj: Boolean) {
+    setInternational(obj: boolean) {
       this.$store.commit("setInternational", obj);
     },
   },
@@ -118,8 +118,3 @@ export default Vue.extend({
   margin-left: 0;
 }
 </style>
-
-
-
-
-

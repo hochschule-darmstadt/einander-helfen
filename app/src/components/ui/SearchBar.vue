@@ -28,29 +28,29 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import TagService from '@/utils/services/TagService';
-import Tag from '@/models/tag';
-import { createNamespacedHelpers } from 'vuex';
-const { mapState, mapActions } = createNamespacedHelpers('textSearchModule');
+import Vue from "vue";
+import TagService from "@/utils/services/TagService";
+import Tag from "@/models/tag";
+import { createNamespacedHelpers } from "vuex";
+const { mapState, mapActions } = createNamespacedHelpers("textSearchModule");
 
 export default Vue.extend({
   props: {
     searchInput: String,
     enableNoDataMessage: {
       type: Boolean,
-      default: false
+      default: false,
     },
-  attachTo: {
+    attachTo: {
       type: String,
-      default: ''
+      default: "",
     },
   },
   data(): {
     mySearchValue: string;
   } {
     return {
-      mySearchValue: this.searchInput || ''
+      mySearchValue: this.searchInput || "",
     };
   },
   created(): void {
@@ -61,11 +61,11 @@ export default Vue.extend({
       this.setSelectedTag(newValue);
     },
     mySearchValue(value): void {
-      this.$emit('update:searchInput', value);
-    }
+      this.$emit("update:searchInput", value);
+    },
   },
   computed: {
-    ...mapState(['searchProposals', 'searchValues']),
+    ...mapState(["searchProposals", "searchValues"]),
     mySearchProposals(): string[] {
       if (!this.mySearchValue || this.mySearchValue.length < 1) {
         return [];
@@ -73,7 +73,7 @@ export default Vue.extend({
       const searchTerm = this.mySearchValue;
       const listOfMatchingTerms = this.matchSearchInput(
         searchTerm,
-        this.searchProposals.filter((element) => 'label' in element)
+        this.searchProposals.filter((element) => "label" in element)
       );
       const rankedListOfOrderedTerms = this.rankTerms(
         searchTerm,
@@ -83,29 +83,32 @@ export default Vue.extend({
       return rankedListOfOrderedTerms;
     },
     showNoData(): boolean {
-      return this.enableNoDataMessage
-              && this.mySearchValue !== null
-              && this.mySearchValue.length > 0;
-    }
+      return (
+        this.enableNoDataMessage &&
+        this.mySearchValue !== null &&
+        this.mySearchValue.length > 0
+      );
+    },
   },
   methods: {
-    ...mapActions(['initializeSearchProposals', 'setSelectedTag']),
+    ...mapActions(["initializeSearchProposals", "setSelectedTag"]),
     matchSearchInput(searchTerm: string, proposals: Tag[]): string[] {
       const stringArray: string[] = [];
       searchTerm = searchTerm.toLowerCase();
 
-      proposals.filter((tag) => !this.searchValues.includes(tag.label))
+      proposals
+        .filter((tag) => !this.searchValues.includes(tag.label))
         .forEach((tag) => {
-        if (tag.label.toLowerCase().match(searchTerm)) {
-          stringArray.push(tag.label);
-        } else {
-          tag.synonyms.forEach((element) => {
-            if (element.toLowerCase().match(searchTerm)) {
-              stringArray.push(tag.label + ' (' + element + ')');
-            }
-          });
-        }
-      });
+          if (tag.label.toLowerCase().match(searchTerm)) {
+            stringArray.push(tag.label);
+          } else {
+            tag.synonyms.forEach((element) => {
+              if (element.toLowerCase().match(searchTerm)) {
+                stringArray.push(tag.label + " (" + element + ")");
+              }
+            });
+          }
+        });
       return stringArray;
     },
     rankTerms(searchTerm: string, terms: string[]): string[] {
@@ -122,14 +125,14 @@ export default Vue.extend({
             : 0.5;
           return {
             label: term,
-            rank
+            rank,
           };
         })
         .sort((a, b) => Math.sign(b.rank - a.rank))
         .map((obj) => obj.label);
     },
     isSuccessiveMatch(term: string, searchTerm: string): boolean {
-      const sucArr = term.split(' ');
+      const sucArr = term.split(" ");
       if (sucArr.length < 2) {
         return false;
       }
@@ -144,19 +147,18 @@ export default Vue.extend({
       if (!tag) {
         return;
       }
-      const tagName = tag.includes(' (')
-        ? tag.substr(0, tag.indexOf(' ('))
+      const tagName = tag.includes(" (")
+        ? tag.substr(0, tag.indexOf(" ("))
         : tag;
-      this.$emit('input', tagName);
+      this.$emit("input", tagName);
     },
     clearInput(): void {
       this.$nextTick(() => {
-        this.mySearchValue = '';
+        this.mySearchValue = "";
       });
-    }
-  }
+    },
+  },
 });
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

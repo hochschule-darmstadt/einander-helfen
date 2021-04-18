@@ -1,9 +1,9 @@
-import Location from '@/models/location';
+import Location from "@/models/location";
 
 export interface LocationSearchState {
   locationSearchValue: string;
   selectedLocation: string;
-  selectedLocationObject: Location|null;
+  selectedLocationObject: Location | null;
   selectedRadius: string;
   alternateRadius: string;
 }

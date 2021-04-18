@@ -1,25 +1,24 @@
-import { Module } from 'vuex';
-import { RootState } from '../types';
-import { LocationSearchState } from './types';
-import { mutations } from './mutations';
-import { actions } from './actions';
-import { getters } from './getters';
+import { Module } from "vuex";
+import { RootState } from "../types";
+import { LocationSearchState } from "./types";
+import { mutations } from "./mutations";
+import { actions } from "./actions";
+import { getters } from "./getters";
 
 const state: LocationSearchState = {
-  locationSearchValue: '',
-  selectedLocation: '',
+  locationSearchValue: "",
+  selectedLocation: "",
   selectedLocationObject: null,
-  selectedRadius: '',
-  alternateRadius: '',
+  selectedRadius: "",
+  alternateRadius: "",
 };
-
 
 const locationSearchModule: Module<LocationSearchState, RootState> = {
   namespaced: true,
   state,
   mutations,
   actions,
-  getters
+  getters,
 };
 
 export default locationSearchModule;

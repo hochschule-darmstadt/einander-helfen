@@ -1,26 +1,22 @@
-import { Module } from 'vuex';
-import { RootState } from '../types';
-import { TextSearchState } from './types';
-import { mutations } from './mutations';
-import { actions } from './actions';
+import { Module } from "vuex";
+import { RootState } from "../types";
+import { TextSearchState } from "./types";
+import { mutations } from "./mutations";
+import { actions } from "./actions";
 
 const state: TextSearchState = {
-  searchProposals: [
-    { header: 'Vorschläge' },
-    { divider: true },
-  ],
+  searchProposals: [{ header: "Vorschläge" }, { divider: true }],
   labels: [] as string[],
   synonyms: [] as string[],
   searchValues: [] as string[],
-  selectedTag: '',
+  selectedTag: "",
 };
-
 
 const locationSearchModule: Module<TextSearchState, RootState> = {
   namespaced: true,
   state,
   mutations,
-  actions
+  actions,
 };
 
 export default locationSearchModule;
