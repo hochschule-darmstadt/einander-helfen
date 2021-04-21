@@ -6,6 +6,7 @@ import Post from "@/models/post";
 import textSearchModule from "./TextSearch";
 import locationSearchModule from "./LocationSearch";
 import { RootState } from "./types";
+
 Vue.use(Vuex);
 
 const store: StoreOptions<RootState> = {

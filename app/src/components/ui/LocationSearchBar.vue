@@ -1,38 +1,36 @@
 <template>
-  <v-row justify="center">
-    <v-autocomplete
-      prepend-inner-icon="place"
-      :label="hintText"
-      :filter="filterLocations"
-      :items="showLocations"
-      item-text="title"
-      item-value="title"
-      v-bind:value="selectedLocation"
-      @input="newSelectedLocation = $event"
-      style="margin-left: 10px; margin-right: 10px"
-      v-on:keyup.self="locationOnKeyUp"
-      auto-select-first
-      v-on:keyup.enter="emitInput"
-      :dark="dark"
-      v-bind:hide-no-data="true"
-      v-on:focus="clearOnFocus"
-      v-bind:append-icon="showLocations.length > 0 ? '$dropdown' : ''"
-      @keydown.enter="$emit('enter')"
-      :attach="attachTo"
-    >
-    </v-autocomplete>
-  </v-row>
+  <v-autocomplete
+    prepend-inner-icon="place"
+    :label="hintText"
+    :filter="filterLocations"
+    :items="showLocations"
+    item-text="title"
+    item-value="title"
+    v-bind:value="selectedLocation"
+    @input="newSelectedLocation = $event"
+    style="margin-left: 10px; margin-right: 10px"
+    v-on:keyup.self="locationOnKeyUp"
+    auto-select-first
+    v-on:keyup.enter="emitInput"
+    :dark="dark"
+    v-bind:hide-no-data="true"
+    v-on:focus="clearOnFocus"
+    v-bind:append-icon="showLocations.length > 0 ? '$dropdown' : ''"
+    @keydown.enter="$emit('enter')"
+    :attach="attachTo"
+  />
 </template>
 
 <script lang="ts">
+import Vue from "vue";
+import Location from "@/models/location";
 import { createNamespacedHelpers, mapGetters as mapStateGetters } from "vuex";
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
   "locationSearchModule"
 );
-import Location from "@/models/location";
-import Vue from "vue";
 
 export default Vue.extend({
+  name: "LocationSearchBar",
   props: {
     dark: {
       type: Boolean,
@@ -43,11 +41,7 @@ export default Vue.extend({
       default: "",
     },
   },
-  data(): {
-    newSelectedLocation: string;
-    isSearching: boolean;
-    hintText: string;
-  } {
+  data: function () {
     return {
       isSearching: false,
       newSelectedLocation: "",
@@ -165,7 +159,7 @@ export default Vue.extend({
 </script>
 <style></style>
 
-<style>
+<style lang="scss">
 .v-menu__content {
   z-index: 9999 !important;
 }

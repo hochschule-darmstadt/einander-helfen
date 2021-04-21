@@ -9,21 +9,19 @@
     :dark="dark"
     :disabled="disabled"
     style="margin-left: 10px; margin-right: 10px"
-  >
-  </v-select>
+  />
 </template>
 
 <script lang="ts">
+import Vue from "vue";
+import Radius from "@/models/radius";
 import { createNamespacedHelpers, mapGetters } from "vuex";
 const { mapActions, mapState } = createNamespacedHelpers(
   "locationSearchModule"
 );
 
-import Vue from "vue";
-import radii from "@/resources/radii";
-import Radius from "@/models/radius";
-
 export default Vue.extend({
+  name: "Radius",
   props: {
     dark: {
       type: Boolean,
@@ -69,5 +67,3 @@ export default Vue.extend({
   },
 });
 </script>
-
-<style scoped></style>

@@ -388,10 +388,10 @@ export default Vue.extend({
     Header,
     LMap,
     LTileLayer,
-    LMarker,
+    // LMarker,
     LTooltip,
     "v-marker": Vue2Leaflet.LMarker,
-    "v-popup": Vue2Leaflet.LPopup,
+    // "v-popup": Vue2Leaflet.LPopup,
     "v-marker-cluster": Vue2LeafletMarkerCluster,
   },
   data(): {

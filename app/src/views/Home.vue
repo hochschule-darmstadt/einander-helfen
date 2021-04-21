@@ -241,10 +241,14 @@ export default Vue.extend({
       }
     },
     switchArea(): void {
-      const areaSelect = this.$refs.areaSelect as AreaSelect;
-      const areaSelection = (this.$refs.areaSelect as AreaSelect).selection;
+      const areaSelect = this.$refs.areaSelect;
+      // @ts-ignore
+      const areaSelection = (areaSelect as AreaSelect).selection;
       const international =
-        areaSelection === areaSelect.items[0].title ? false : true;
+        // @ts-ignore
+        areaSelection === (areaSelect as AreaSelect).items[0].title
+          ? false
+          : true;
       (this.$refs.locationSearchBar as any).setLocationSearchBar(international);
       (this.$refs.radius as any).disableRadius(international);
       (this.$refs.locationSearchBar as any).setSelectedLocation(null);

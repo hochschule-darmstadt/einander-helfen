@@ -18,10 +18,7 @@ module.exports = {
     "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
     "comma-dangle": ["error", "only-multiline"],
     "@typescript-eslint/no-explicit-any": 0,
-<<<<<<< HEAD
-=======
     "@typescript-eslint/ban-ts-comment": 0,
     "@typescript-eslint/no-var-requires": 0,
->>>>>>> 9c451f5 (Ignore no-var-requires)
   },
 };
