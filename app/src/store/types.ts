@@ -1,5 +1,5 @@
 import Post from "@/models/post";
-import { TextSearchState } from "@/store/TextSearch/types";
+import { TextSearchState } from "@/store/TextSearch";
 import { LocationSearchState } from "@/store/LocationSearch/types";
 
 export interface RootState {

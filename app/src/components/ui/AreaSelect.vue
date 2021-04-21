@@ -1,25 +1,24 @@
 <template>
-  <v-row justify="center">
-    <v-select
-      id="areaSelect"
-      :items="items"
-      v-model="selection"
-      label=""
-      item-text="title"
-      item-value="title"
-      :dark="dark"
-      @change="$emit('change')"
-    >
-      <template v-slot:item="{ item }">
-        <img id="areaImage" :src="item.img" />
-        <v-spacer></v-spacer>
-        <span>{{ item.title }}</span>
-      </template>
-      <template v-slot:selection="{ item }">
-        <img id="areaImageSelected" :src="item.img" />
-      </template>
-    </v-select>
-  </v-row>
+  <v-select
+    class="areaSelect"
+    :items="items"
+    v-model="selection"
+    label=""
+    item-text="title"
+    item-value="value"
+    :dark="dark"
+    :attach="attachTo"
+    @change="onInputChange"
+  >
+    <template v-slot:item="{ item }">
+      <img class="areaImage" :src="item.img" />
+      <v-spacer />
+      <span>{{ item.title }}</span>
+    </template>
+    <template v-slot:selection="{ item }">
+      <img class="areaImageSelected" :src="item.img" />
+    </template>
+  </v-select>
 </template>
 
 <script lang="ts">
@@ -27,12 +26,20 @@ import Vue from "vue";
 
 interface Item {
   title: string;
+  value: string;
   img: string;
 }
 
+/**
+ * Emits @Input for v-model value
+ */
 export default Vue.extend({
   name: "AreaSelect",
   props: {
+    value: {
+      type: String,
+      required: true,
+    },
     dark: {
       type: Boolean,
       default: false,
@@ -47,74 +54,70 @@ export default Vue.extend({
       items: [
         {
           title: "Deutschland",
-          img: "/images/240px-Flag_of_Germany.png",
+          value: "germany",
+          img: require("@/assets/images/240px-Flag_of_Germany.png"),
         },
         {
           title: "International",
-          img: "/images/240px-Earth_icon_2.png",
+          value: "international",
+          img: require("@/assets/images/240px-Earth_icon_2.png"),
         },
       ] as Item[],
-      selection: "",
+      selection: "" as Item["value"],
     };
   },
   mounted(): void {
-    this.selection = this.items[0].title;
-    this.setSelection(this.international);
-  },
-  computed: {
-    getInternational(): any {
-      return this.$store.getters.getInternational;
-    },
-    international(): boolean {
-      return this.getInternational;
-    },
+    this.setSelection();
   },
   watch: {
-    selection(newValue: string): void {
-      if (newValue === this.items[0].title) {
-        this.setInternational(false);
-      } else {
-        this.setInternational(true);
-      }
+    /** change selection on value change */
+    value(): void {
+      this.setSelection();
     },
   },
   methods: {
-    setSelection(international: boolean): void {
-      if (international) {
-        this.selection = this.items[1].title;
-      } else {
+    setSelection(): void {
+      // find object to value
+      const itemToValue = this.items.find((item) => item.value == this.value);
+      // if object found
+      if (itemToValue?.title) {
+        // set selected object
+        this.selection = itemToValue.title;
+      }
+      // else set default object and emit change
+      else {
         this.selection = this.items[0].title;
+        this.onChange();
       }
     },
-    setInternational(obj: boolean) {
-      this.$store.commit("setInternational", obj);
+    onInputChange() {
+      this.$emit("input", this.selection);
     },
   },
 });
 </script>
 
-<style lang="scss">
-#areaImage,
-#areaImageSelected {
+<style lang="scss" scoped>
+.areaSelect {
+  margin-top: 4px;
+  max-width: fit-content;
+  margin-right: 8px;
+  margin-left: 0;
+}
+.areaImage,
+.areaImageSelected {
   height: 1.5em;
   width: 1.5em;
   object-fit: cover;
   border-radius: 50%;
 }
 
-#areaImage {
+.areaImage {
   margin-right: 1em;
 }
 
-#areaSelect .v-select__selections input {
+.areaSelect .v-select__selections input {
   display: none;
   visibility: hidden;
-}
-
-#areaSelect {
-  margin-top: 4px;
-  max-width: fit-content;
-  margin-right: 8px;
-  margin-left: 0;
 }
 </style>

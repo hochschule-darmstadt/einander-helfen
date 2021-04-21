@@ -1,69 +1,129 @@
 <template>
   <v-select
+    class="radius_select"
     label="Umkreis"
-    :items="radii"
     item-value="value"
-    @input="newSelectedRadius = $event"
-    v-bind:value="selectedRadius"
-    @keydown.enter="$emit('enter')"
+    :items="radii"
     :dark="dark"
     :disabled="disabled"
-    style="margin-left: 10px; margin-right: 10px"
+    :attach="attachTo"
+    v-model="radius"
+    @change="onInputChange"
+    @keydown.enter="onEnter"
   />
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import Radius from "@/models/radius";
-import { createNamespacedHelpers, mapGetters } from "vuex";
-const { mapActions, mapState } = createNamespacedHelpers(
-  "locationSearchModule"
-);
 
 export default Vue.extend({
   name: "Radius",
   props: {
+    value: {
+      type: Object as () => Radius,
+      required: true,
+    },
+    international: {
+      type: Boolean,
+      default: true,
+    },
     dark: {
       type: Boolean,
       default: false,
     },
+    attachTo: {
+      type: String,
+      default: "",
+    },
   },
   data() {
     return {
-      newSelectedRadius: null as string | null,
       radii: [] as Radius[],
-      disabled: false as boolean,
+      radius: this.value as Radius | null,
     };
   },
   watch: {
-    newSelectedRadius(newValue: string | null): void {
-      if (newValue !== null) {
-        this.setSelectedRadius(newValue);
-        this.$emit("input", newValue);
-        this.newSelectedRadius = null;
-      }
+    /** change selection on value change */
+    value(): void {
+      this.radius = this.value;
+    },
+    international(): void {
+      if (this.international) this.radius = null;
     },
   },
   computed: {
-    ...mapState(["selectedRadius"]),
-    ...mapGetters(["getInternational"]),
-    getInternationalSelect(): boolean {
-      return this.getInternational;
+    disabled(): boolean {
+      return this.international;
     },
   },
   mounted(): void {
-    this.disableRadius(this.getInternationalSelect);
+    this.radius = this.value;
   },
   methods: {
-    ...mapActions(["setSelectedRadius"]),
-    disableRadius(disable: boolean): void {
-      if (disable) {
-        this.disabled = true;
-        this.setSelectedRadius("");
-      } else {
-        this.disabled = false;
-      }
+    onInputChange(): void {
+      this.$emit("input", this.radius);
+    },
+    onEnter(): void {
+      this.$emit("input", this.radius);
+      this.$emit("enter");
     },
   },
 });
 </script>
+
+<style lang="scss" scoped>
+.radius_select {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+@media (min-width: 280px) and (max-width: 305px) {
+  .radius_select {
+    margin-left: 0 !important;
+    width: 60%;
+  }
+}
+
+@media (min-width: 305px) and (max-width: 342px) {
+  .radius_select {
+    margin-left: 0 !important;
+    width: 60%;
+  }
+}
+
+@media (min-width: 342px) and (max-width: 383px) {
+  .radius_select {
+    margin-left: 0 !important;
+    width: 70%;
+  }
+}
+
+@media (min-width: 383px) {
+  .radius_select {
+    margin-left: 0 !important;
+    max-width: 77.5%;
+  }
+}
+
+@media (min-width: 410px) {
+  .radius_select {
+    margin-left: 0 !important;
+    max-width: 90%;
+  }
+}
+
+@media (min-width: 535px) {
+  .radius_select {
+    max-width: 20%;
+    min-width: none;
+    margin-left: 10px !important;
+  }
+}
+
+@media (min-width: 613px) {
+  .radius_select {
+    width: 200px;
+  }
+}
+</style>

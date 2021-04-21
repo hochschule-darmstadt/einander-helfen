@@ -26,7 +26,7 @@
               width="80px"
               height="75px"
               src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Heart-hand-shake.svg/256px-Heart-hand-shake.svg.png"
-            ></v-img>
+            />
           </router-link>
         </v-btn>
         <div id="searchBar">

@@ -1,37 +1,41 @@
 <template>
   <v-autocomplete
+    class="location_search"
     prepend-inner-icon="place"
-    :label="hintText"
-    :filter="filterLocations"
-    :items="showLocations"
     item-text="title"
     item-value="title"
-    v-bind:value="selectedLocation"
-    @input="newSelectedLocation = $event"
-    style="margin-left: 10px; margin-right: 10px"
-    v-on:keyup.self="locationOnKeyUp"
     auto-select-first
-    v-on:keyup.enter="emitInput"
+    :label="hintText"
+    :filter="filterLocations"
+    :items="shownLocations"
     :dark="dark"
-    v-bind:hide-no-data="true"
-    v-on:focus="clearOnFocus"
-    v-bind:append-icon="showLocations.length > 0 ? '$dropdown' : ''"
-    @keydown.enter="$emit('enter')"
+    :hide-no-data="true"
+    :append-icon="shownLocations.length > 0 ? '$dropdown' : ''"
     :attach="attachTo"
+    v-model="locationSearchValue"
+    @keyup.self="locationOnKeyUp"
+    @keyup.enter="onEnter"
+    @focus="clearOnFocus"
+    @change="onInputChange"
   />
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import Location from "@/models/location";
-import { createNamespacedHelpers, mapGetters as mapStateGetters } from "vuex";
-const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
-  "locationSearchModule"
-);
+import LocationService from "@/utils/services/LocationService";
 
 export default Vue.extend({
   name: "LocationSearchBar",
   props: {
+    value: {
+      type: String,
+      required: true,
+    },
+    international: {
+      type: Boolean,
+      default: true,
+    },
     dark: {
       type: Boolean,
       default: false,
@@ -43,50 +47,37 @@ export default Vue.extend({
   },
   data: function () {
     return {
-      isSearching: false,
-      newSelectedLocation: "",
-      hintText: "Ort oder PLZ" || "Land",
+      locationSearchValue: this.value,
     };
   },
   computed: {
-    ...mapState(["selectedLocation"]),
-    ...mapStateGetters(["getInternational"]),
-    showLocations(): Location[] {
-      return this.getLocations();
+    shownLocations(): Location[] {
+      return this.international
+        ? LocationService.findCountryByName(this.locationSearchValue)
+        : LocationService.findLocationByPlzOrName(this.locationSearchValue);
     },
-    getInternationalSelect(): boolean {
-      return this.getInternational;
+    hintText(): string {
+      return this.international ? "Land" : "Ort oder PLZ";
     },
   },
   mounted(): void {
-    this.setLocationSearchBar(this.getInternationalSelect);
+    this.locationSearchValue = this.value;
   },
   watch: {
-    newSelectedLocation(newValue, oldValue): void {
-      if (newValue !== "" && newValue !== oldValue) {
-        this.isSearching = false; //
-      }
-      if (newValue) {
-        this.setLocationSearchValue(newValue.split(" ")[0]);
-      } else {
-        this.setLocationSearchValue(""); // newValue HAS to be a string
-      }
-      this.setSelectedLocation(newValue);
-      this.emitInput(newValue);
+    /** change selection on value change */
+    value(): void {
+      this.locationSearchValue = this.value;
     },
-    // Clear LocationSearchValue so that searching is not filtered to the currently selected zip-code
-    isSearching(newValue, oldValue): void {
-      if ((newValue === "true" || newValue === "1") && newValue !== oldValue) {
-        this.setLocationSearchValue();
-      }
+    international(): void {
+      this.locationSearchValue = "";
     },
   },
   methods: {
-    ...mapActions(["setLocationSearchValue", "setSelectedLocation"]),
-    ...mapGetters(["getLocations"]),
+    /**
+     * used by the autocomplete component
+     */
     filterLocations(item: any, queryText: string, itemText: string): boolean {
       if (queryText) {
-        this.isSearching = true;
         const search = queryText.toLowerCase();
 
         const name = item.name.toLowerCase();
@@ -102,9 +93,7 @@ export default Vue.extend({
           displayString.includes(search) ||
           itemText.toLowerCase().includes(search)
         );
-      } else {
-        return true;
-      }
+      } else return true;
     },
     locationOnKeyUp(evt): void {
       const handleDesktop =
@@ -119,48 +108,119 @@ export default Vue.extend({
         const curValue = evt.target.value;
         const plz = curValue.match(/^\d+/);
         if (plz) {
-          this.setLocationSearchValue(plz[0]);
+          this.locationSearchValue = plz[0];
         } else {
-          this.setLocationSearchValue(curValue);
-          if (!curValue) {
-            this.setSelectedLocation("");
-          }
+          this.locationSearchValue = curValue;
         }
       }
     },
     clearOnFocus(evt): void {
       if (!evt.target.value) {
-        this.setLocationSearchValue("");
+        this.locationSearchValue = "";
+        this.$emit("input", this.locationSearchValue);
       }
     },
-    emitInput(data = ""): void {
-      if (!data) {
-        data = this.selectedLocation;
-      }
-      this.$emit("input", data);
+    onInputChange(): void {
+      // reduce to only one word
+      this.locationSearchValue = this.locationSearchValue.split(" ")[0];
+      this.$emit("input", this.locationSearchValue);
     },
-    clearInput(): void {
-      this.$nextTick(() => {
-        this.setLocationSearchValue("");
-      });
-    },
-    setHintText(international: boolean): void {
-      if (international) {
-        this.hintText = "Land";
-      } else {
-        this.hintText = "Ort oder PLZ";
-      }
-    },
-    setLocationSearchBar(international: boolean): void {
-      this.setHintText(international);
+    onEnter(): void {
+      this.$emit("input", this.locationSearchValue);
+      this.$emit("enter");
     },
   },
 });
 </script>
-<style></style>
 
 <style lang="scss">
-.v-menu__content {
-  z-index: 9999 !important;
+.location_search {
+  margin-left: 10px;
+  margin-right: 10px;
+
+  .v-menu__content {
+    z-index: 9999 !important;
+  }
+
+  .v-autocomplete__content.v-menu__content {
+    top: auto !important;
+    left: auto !important;
+    margin-top: 50px;
+  }
+
+  .v-text-field {
+    padding-right: 5px;
+  }
+}
+
+@media (min-width: 280px) and (max-width: 305px) {
+  .location_search {
+    max-width: 77vw;
+
+    .v-input__slot {
+      margin-left: 2px;
+    }
+
+    .v-text-field {
+      padding-right: 0px !important;
+    }
+  }
+}
+
+@media (min-width: 305px) and (max-width: 342px) {
+  #location_search {
+    max-width: 79.5vw;
+
+    .v-input__slot {
+      margin-left: 2px;
+    }
+
+    .v-text-field {
+      padding-right: 0px !important;
+    }
+  }
+}
+
+@media (min-width: 342px) and (max-width: 383px) {
+  #location_search {
+    max-width: 98vw;
+
+    .v-autocomplete__content.v-menu__content {
+      max-height: 225px !important;
+      overflow-y: scroll;
+      overflow-x: hidden;
+    }
+  }
+}
+
+@media (min-width: 383px) {
+  #location_search {
+    max-width: 98vw;
+
+    .v-input__slot {
+      margin-left: 2px;
+    }
+  }
+}
+
+@media (min-width: 410px) {
+  #location_search {
+    max-width: 98vw;
+
+    .v-input__slot {
+      margin-left: 2px;
+    }
+  }
+}
+
+@media (min-width: 535px) {
+  #location_search {
+    width: auto;
+    max-width: none;
+
+    .v-text-field {
+      padding-right: 0px;
+    }
+  }
 }
 </style>

@@ -1,81 +1,103 @@
 <template>
-  <v-combobox
-    style="background: white"
-    rounded
-    color="black"
-    placeholder="z. B. Jugendarbeit"
-    item-text="tag"
-    autocomplete="off"
-    :items="mySearchProposals"
-    @input="addSearchTag"
-    append-icon=""
-    :search-input.sync="mySearchValue"
-    @keydown.enter="$emit('enter')"
-    :attach="attachTo"
-  >
-    <template v-slot:no-data v-if="showNoData">
-      <v-list-item>
-        <v-list-item-content>
-          <v-list-item-title>
-            Drücken Sie
-            <kbd>Enter</kbd> für eine Freitextsuche mit Ihrer Eingabe
-            <v-chip>"{{ mySearchValue }}"</v-chip>
-          </v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-    </template>
-  </v-combobox>
+  <div class="searchBar">
+    <v-combobox
+      style="background: white"
+      rounded
+      color="black"
+      placeholder="z. B. Jugendarbeit"
+      item-text="tag"
+      autocomplete="off"
+      append-icon=""
+      :items="searchProposals"
+      :search-input.sync="searchValue"
+      @change="onInputChange"
+      @keydown.enter="onEnter"
+      attach=".searchBar"
+    >
+      <template v-slot:no-data v-if="showNoData">
+        <v-list-item>
+          <v-list-item-content>
+            <v-list-item-title>
+              Drücken Sie
+              <kbd>Enter</kbd> für eine Freitextsuche mit Ihrer Eingabe
+              <v-chip>"{{ mySearchValue }}"</v-chip>
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </template>
+    </v-combobox>
+    <v-spacer />
+    <v-chip-group
+      active-class="primary-text"
+      column
+      style="margin-left: 10px; margin-right: 10px; margin-top: -20px"
+    >
+      <v-chip
+        v-for="tag in tags"
+        :key="tag"
+        close
+        @click:close="removeTag(tag)"
+      >
+        {{ tag }}
+      </v-chip>
+    </v-chip-group>
+  </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import TagService from "@/utils/services/TagService";
 import Tag from "@/models/tag";
-import { createNamespacedHelpers } from "vuex";
-const { mapState, mapActions } = createNamespacedHelpers("textSearchModule");
 
+/**
+ * Use v-model for input value
+ * Emits @remove for remove tag
+ * Emits @input for v-model
+ */
 export default Vue.extend({
+  name: "SearchBar",
   props: {
-    searchInput: String,
+    value: {
+      type: String,
+      required: true,
+    },
     enableNoDataMessage: {
       type: Boolean,
       default: false,
     },
-    attachTo: {
-      type: String,
-      default: "",
+    tags: {
+      type: Array as () => string[],
+      default: () => [],
     },
   },
   data: function () {
     return {
-      mySearchValue: this.searchInput || "",
+      searchValue: "",
+      allSearchProposals: [] as Tag[],
     };
   },
-  created(): void {
-    this.initializeSearchProposals(TagService.getTags());
+  mounted(): void {
+    this.searchValue = this.value;
+    this.allSearchProposals = TagService.getTags();
   },
   watch: {
-    selectedTag(newValue): void {
-      this.setSelectedTag(newValue);
-    },
-    mySearchValue(value): void {
-      this.$emit("update:searchInput", value);
+    /** change searchValue on value change */
+    value(): void {
+      this.searchValue = this.value;
     },
   },
   computed: {
-    ...mapState(["searchProposals", "searchValues"]),
-    mySearchProposals(): string[] {
-      if (!this.mySearchValue || this.mySearchValue.length < 1) {
+    searchProposals(): string[] {
+      if (!this.searchValue || this.searchValue.length < 1) {
         return [];
       }
-      const searchTerm = this.mySearchValue;
-      const listOfMatchingTerms = this.matchSearchInput(
-        searchTerm,
-        this.searchProposals.filter((element) => "label" in element)
+      const listOfMatchingTerms = this.filterProposals(
+        this.allSearchProposals.filter((el) => "label" in el),
+        this.searchValue
       );
       const rankedListOfOrderedTerms = this.rankTerms(
-        searchTerm,
-        listOfMatchingTerms
+        listOfMatchingTerms,
+        this.searchValue
       );
 
       return rankedListOfOrderedTerms;
@@ -83,19 +105,23 @@ export default Vue.extend({
     showNoData(): boolean {
       return (
         this.enableNoDataMessage &&
-        this.mySearchValue !== null &&
-        this.mySearchValue.length > 0
+        this.searchValue !== null &&
+        this.searchValue.length > 0
       );
     },
   },
   methods: {
-    ...mapActions(["initializeSearchProposals", "setSelectedTag"]),
-    matchSearchInput(searchTerm: string, proposals: Tag[]): string[] {
+    /**
+     * Filters Tags by searchTerm and return list of proposals
+     */
+    filterProposals(proposals: Tag[], searchTerm: string): string[] {
       const stringArray: string[] = [];
       searchTerm = searchTerm.toLowerCase();
 
       proposals
-        .filter((tag) => !this.searchValues.includes(tag.label))
+        // remove already defined tagas
+        .filter((tag) => !this.tags.includes(tag.label))
+        // filter proposals by tag label or one synonym matches the searchTerm
         .forEach((tag) => {
           if (tag.label.toLowerCase().match(searchTerm)) {
             stringArray.push(tag.label);
@@ -109,7 +135,10 @@ export default Vue.extend({
         });
       return stringArray;
     },
-    rankTerms(searchTerm: string, terms: string[]): string[] {
+    /**
+     * Rank terms by a searchterm
+     */
+    rankTerms(terms: string[], searchTerm: string): string[] {
       return terms
         .map((term) => {
           // 2x on start; 1x on end, 0.5x in the middle
@@ -139,19 +168,27 @@ export default Vue.extend({
         return element.startsWith(searchTerm);
       });
     },
-    addSearchTag(tag: string): void {
-      // No empty tags!
-      if (!tag) return;
-
-      const tagName = tag.includes(" (")
-        ? tag.substr(0, tag.indexOf(" ("))
-        : tag;
-      this.$emit("input", tagName);
+    /**
+     * The Input text changed
+     */
+    onInputChange(input: string): void {
+      // remove "(" icon from input
+      this.searchValue = input.includes(" (")
+        ? input.substr(0, input.indexOf(" ("))
+        : input;
+      // update v-model value
+      this.$emit("input", this.searchValue);
     },
-    clearInput(): void {
-      this.$nextTick(() => (this.mySearchValue = ""));
+    /**
+     * On searchbar enter
+     */
+    onEnter(): void {
+      this.$emit("input", this.searchValue);
+      this.$emit("enter");
+    },
+    removeTag(tag: string): void {
+      this.$emit("remove", tag);
     },
   },
 });
 </script>
-
