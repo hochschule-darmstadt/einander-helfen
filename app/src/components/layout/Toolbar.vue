@@ -10,7 +10,7 @@
                 width="80px"
                 height="75px"
                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Heart-hand-shake.svg/256px-Heart-hand-shake.svg.png"
-              ></v-img>
+              />
             </v-toolbar-side-icon>
             <div
               id="logo"
@@ -55,19 +55,24 @@
 </template>
 
 <script>
-export default {
-  data: () => ({
-    links: [
-      { text: "Home", route: "/" },
-      { text: "Über uns", route: "/about" },
-      { text: "Impressum", route: "/imprint" },
-      { text: "Datenschutzerklärung", route: "/privacy" },
-    ],
-  }),
-};
+import Vue from "vue";
+
+export default Vue.extend({
+  name: "Toolbar",
+  data: function () {
+    return {
+      links: [
+        { text: "Home", route: "/" },
+        { text: "Über uns", route: "/about" },
+        { text: "Impressum", route: "/imprint" },
+        { text: "Datenschutzerklärung", route: "/privacy" },
+      ],
+    };
+  },
+});
 </script>
 
-<style>
+<style lang="scss">
 #menu {
   margin-top: 20px;
 }

@@ -10,20 +10,26 @@
         class="my-2"
         router
         :to="link.route"
-        >{{ link.text }}</v-btn
       >
+        {{ link.text }}
+      </v-btn>
     </v-row>
   </v-footer>
 </template>
 
 <script>
-export default {
-  data: () => ({
-    links: [
-      { text: "Über uns", route: "/about" },
-      { text: "Impressum", route: "/imprint" },
-      { text: "Datenschutzerklärung", route: "/privacy" },
-    ],
-  }),
-};
+import Vue from "vue";
+
+export default Vue.extend({
+  name: "Footer",
+  data: function () {
+    return {
+      links: [
+        { text: "Über uns", route: "/about" },
+        { text: "Impressum", route: "/imprint" },
+        { text: "Datenschutzerklärung", route: "/privacy" },
+      ],
+    };
+  },
+});
 </script>

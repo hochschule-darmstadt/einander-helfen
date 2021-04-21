@@ -46,9 +46,7 @@ export default Vue.extend({
       default: "",
     },
   },
-  data(): {
-    mySearchValue: string;
-  } {
+  data: function () {
     return {
       mySearchValue: this.searchInput || "",
     };
@@ -133,9 +131,8 @@ export default Vue.extend({
     },
     isSuccessiveMatch(term: string, searchTerm: string): boolean {
       const sucArr = term.split(" ");
-      if (sucArr.length < 2) {
-        return false;
-      }
+      if (sucArr.length < 2) return false;
+
       // Remove the first term we only want to match successive terms
       sucArr.shift();
       return !!sucArr.find((element) => {
@@ -144,21 +141,17 @@ export default Vue.extend({
     },
     addSearchTag(tag: string): void {
       // No empty tags!
-      if (!tag) {
-        return;
-      }
+      if (!tag) return;
+
       const tagName = tag.includes(" (")
         ? tag.substr(0, tag.indexOf(" ("))
         : tag;
       this.$emit("input", tagName);
     },
     clearInput(): void {
-      this.$nextTick(() => {
-        this.mySearchValue = "";
-      });
+      this.$nextTick(() => (this.mySearchValue = ""));
     },
   },
 });
 </script>
 
-<style scoped></style>
