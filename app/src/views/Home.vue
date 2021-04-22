@@ -1,34 +1,7 @@
 <template>
   <div class="home">
     <Toolbar />
-    <VueSlickCarousel
-      :dots="true"
-      :infinite="true"
-      :autoplay="true"
-      :autoplaySpeed="30000"
-    >
-      <picture>
-        <source
-          media="(max-width: 768px)"
-          srcset="/images/header/1_phone.jpg"
-        />
-        <img src="/images/header/1.jpg" />
-      </picture>
-      <picture>
-        <source
-          media="(max-width: 768px)"
-          srcset="/images/header/2_phone.jpg"
-        />
-        <img src="/images/header/2.jpg" />
-      </picture>
-      <picture>
-        <source
-          media="(max-width: 768px)"
-          srcset="/images/header/3_phone.jpg"
-        />
-        <img src="/images/header/3.jpg" />
-      </picture>
-    </VueSlickCarousel>
+    <Carousel />
 
     <v-container id="container">
       <v-form>
@@ -84,36 +57,34 @@
       </v-form>
 
       <v-row justify="center" lg="3">
-        <template v-for="tag in volunteerTags">
-          <v-col md="3" xl="3" :key="tag.title">
-            <v-hover v-slot:default="{ hover }">
-              <v-card
-                class="mx-auto"
-                :elevation="hover ? 12 : 2"
-                :class="{ 'on-hover': hover }"
+        <v-col md="3" xl="3" v-for="tag in volunteerTags" :key="tag.title">
+          <v-hover v-slot:default="{ hover }">
+            <v-card
+              class="mx-auto"
+              :elevation="hover ? 12 : 2"
+              :class="{ 'on-hover': hover }"
+            >
+              <router-link
+                style="text-decoration: none; color: inherit"
+                :to="{ name: 'resultPage', query: { q: tag.to } }"
               >
-                <router-link
-                  style="text-decoration: none; color: inherit"
-                  :to="{ name: 'resultPage', query: { q: tag.to } }"
+                <v-img
+                  class="white--text align-end mt-10"
+                  height="300px"
+                  :key="tag.title"
+                  :src="tag.img"
                 >
-                  <v-img
-                    class="white--text align-end mt-10"
-                    height="300px"
-                    :key="tag.title"
-                    :src="tag.img"
-                  >
-                    <v-card class="no-radius">
-                      <v-card-title
-                        class="justify-center black--text"
-                        v-html="tag.title"
-                      ></v-card-title>
-                    </v-card>
-                  </v-img>
-                </router-link>
-              </v-card>
-            </v-hover>
-          </v-col>
-        </template>
+                  <v-card class="no-radius">
+                    <v-card-title
+                      class="justify-center black--text"
+                      v-html="tag.title"
+                    />
+                  </v-card>
+                </v-img>
+              </router-link>
+            </v-card>
+          </v-hover>
+        </v-col>
       </v-row>
     </v-container>
   </div>
@@ -127,13 +98,9 @@ const { mapActions: mapTextSearchActions } = createNamespacedHelpers(
 const { mapState: mapLocationSearchState } = createNamespacedHelpers(
   "locationSearchModule"
 );
-
 import Vue from "vue";
 import Toolbar from "@/components/layout/Toolbar.vue";
-
-import VueSlickCarousel from "vue-slick-carousel";
-import "vue-slick-carousel/dist/vue-slick-carousel-theme.css";
-import "vue-slick-carousel/dist/vue-slick-carousel.css";
+import Carousel from "@/components/layout/Carousel.vue";
 import LocationSearchBar from "@/components/ui/LocationSearchBar.vue";
 import Radius from "@/components/ui/Radius.vue";
 import SearchBar from "@/components/ui/SearchBar.vue";
@@ -143,41 +110,37 @@ import AreaSelect from "../components/ui/AreaSelect.vue";
 export default Vue.extend({
   components: {
     SearchBar,
-    VueSlickCarousel,
+    Carousel,
     AreaSelect,
     LocationSearchBar,
     Radius,
     Toolbar,
     SearchButton,
   },
-  data(): {
-    volunteerTags: { title: string; to: string; img: string }[];
-    selectedInput: string;
-    currentSearchValue: string;
-  } {
+  data: function () {
     return {
       volunteerTags: [
         {
           title: "Arbeit mit Kindern",
           to: "Kinder",
-          img: require("../../public/images/macherIN.jpeg"),
+          img: require("@/assets/images/macherIN.jpeg"),
         },
         {
           title: "Arbeit mit Jugendlichen",
           to: "Jugend",
-          img: require("../../public/images/denkerIN.jpeg"),
+          img: require("@/assets/images/denkerIN.jpeg"),
         },
         {
           title: "Arbeit mit Senioren",
           to: "Senioren",
-          img: require("../../public/images/sozial.jpeg"),
+          img: require("@/assets/images/sozial.jpeg"),
         },
         {
           title: "Betreuung",
           to: "Betreuung",
-          img: require("../../public/images/jugend.jpeg"),
+          img: require("@/assets/images/jugend.jpeg"),
         },
-      ],
+      ] as { title: string; to: string; img: string }[],
       selectedInput: "",
       currentSearchValue: "",
     };
@@ -257,7 +220,7 @@ export default Vue.extend({
 });
 </script>
 
-<style>
+<style lang="scss">
 #location .v-autocomplete__content.v-menu__content {
   top: auto !important;
   left: auto !important;
