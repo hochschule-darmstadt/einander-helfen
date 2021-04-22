@@ -82,7 +82,7 @@ const store: StoreOptions<RootState> = {
         });
       });
     },
-    setPage({ commit, dispatch, state, getters }, page: number): void {
+    setPage({ commit, dispatch, state }, page: number): void {
       if (page < 1) {
         page = 1;
       }

@@ -1,4 +1,3 @@
-import { shallowMount } from "@vue/test-utils";
 import LocationService from "@/utils/services/LocationService";
 
 describe("LocationService.vue", () => {

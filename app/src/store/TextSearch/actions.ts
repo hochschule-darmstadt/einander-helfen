@@ -7,19 +7,19 @@ export const actions: ActionTree<TextSearchState, RootState> = {
   initializeSearchProposals({ commit }, proposals: Tag[]): void {
     commit("initializeSearchProposals", proposals);
   },
-  addSearchValue({ commit, dispatch }, searchValue): void {
+  addSearchValue({ commit }, searchValue): void {
     searchValue = searchValue.trim();
     if (searchValue) {
       commit("addSearchValue", searchValue);
     }
   },
-  addSearchValues({ commit, dispatch }, searchValues: string[]): void {
+  addSearchValues({ dispatch }, searchValues: string[]): void {
     searchValues.forEach((tag) => dispatch("addSearchValue", tag));
   },
-  removeSearchValue({ commit, dispatch }, value): void {
+  removeSearchValue({ commit }, value): void {
     commit("removeSearchValue", value);
   },
-  setSelectedTag({ commit, dispatch }, selectedTag): void {
+  setSelectedTag({ commit }, selectedTag): void {
     commit("setSelectedTag", selectedTag);
   },
 };

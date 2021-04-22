@@ -4,10 +4,10 @@ import { RootState } from "@/store/types";
 import LocationService from "@/utils/services/LocationService";
 
 export const actions: ActionTree<LocationSearchState, RootState> = {
-  setLocationSearchValue({ commit, dispatch }, locationSearchValue): void {
+  setLocationSearchValue({ commit }, locationSearchValue): void {
     commit("setLocationSearchValue", locationSearchValue);
   },
-  setSelectedLocation({ commit, dispatch, state }, selectedLocation): void {
+  setSelectedLocation({ commit }, selectedLocation): void {
     let selectedLocationObject = selectedLocation
       ? LocationService.findByTitle(selectedLocation)
       : null;
@@ -30,7 +30,7 @@ export const actions: ActionTree<LocationSearchState, RootState> = {
     commit("setSelectedLocation", selectedLocation);
     commit("setSelectedLocationObject", selectedLocationObject);
   },
-  setSelectedRadius({ commit, dispatch }, radiusSearchValue): void {
+  setSelectedRadius({ commit }, radiusSearchValue): void {
     commit("setAlternateRadius", "");
     commit("setSelectedRadius", radiusSearchValue);
   },

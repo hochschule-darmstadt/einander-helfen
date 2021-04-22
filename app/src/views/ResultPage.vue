@@ -375,7 +375,7 @@ const { mapState: mapSearchState } = createNamespacedHelpers(
 );
 
 import L, { LatLngTuple } from "leaflet";
-import { LMap, LTileLayer, LMarker, LTooltip } from "vue2-leaflet";
+import { LMap, LTileLayer, LTooltip } from "vue2-leaflet";
 import Vue2LeafletMarkerCluster from "vue2-leaflet-markercluster/Vue2LeafletMarkercluster.vue";
 import * as Vue2Leaflet from "vue2-leaflet";
 import { GestureHandling } from "leaflet-gesture-handling";
