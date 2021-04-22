@@ -34,18 +34,22 @@ class LatLonEnhancer:
         # If object has lat lon: return object
         if None is post['geo_location']:
 
-            request_string = LatLonEnhancer.get_api_request_string(post)
+            prioritized_request_list = LatLonEnhancer.get_prioritized_request_strings(post)
 
-            lat_lon = self.__check_local_storage(request_string)
+            for request_string in prioritized_request_list:
+                lat_lon = self.__check_local_storage(request_string)
 
-            if lat_lon is None:
-                LatLonEnhancer.logger.info(f"enhancing lat lon for {post}")
-                lat_lon = self.__handle_api_requests(request_string)
-                if lat_lon:
-                    self.__add_new_entry(request_string, lat_lon)
+                if lat_lon is None:
+                    LatLonEnhancer.logger.info(f"enhancing lat lon for {post}")
+                    lat_lon = self.__handle_api_requests(request_string)
+                    if lat_lon:
+                        self.__add_new_entry(request_string, lat_lon)
+                        post['geo_location'] = lat_lon
+                        post['post_struct']['geo_location'] = lat_lon
+                        break
 
-            post['geo_location'] = lat_lon
-            post['post_struct']['geo_location'] = lat_lon
+                post['geo_location'] = lat_lon
+                post['post_struct']['geo_location'] = lat_lon
 
     def __check_local_storage(self, request_string):
         """Checks if local storage contains a result for the query. If it does, the geo_location object is returned.
@@ -100,11 +104,17 @@ class LatLonEnhancer:
         return None
 
     @staticmethod
-    def get_api_request_string(post):
+    def get_prioritized_request_strings(post):
         """Build the API request string"""
         LatLonEnhancer.logger.debug("get_api_request_string()")
 
+        prioritized_request_list = []
+
+        if LatLonEnhancer.has_insufficient_information(post):
+            prioritized_request_list.append(post['location'])
+
         struct_data = post['post_struct']
+
         request_string = ""
 
         # Try to build request string from:
@@ -121,7 +131,15 @@ class LatLonEnhancer:
                                                                          struct_data[field]['country'] else ''
                 request_string = request_string.strip()
 
-        return request_string
+        prioritized_request_list.append(request_string)
+
+        return prioritized_request_list
+
+    @staticmethod
+    def has_insufficient_information(post):
+        loc = post['post_struct']['location']
+        res = list({ele for ele in loc if loc[ele] and len(loc[ele]) > 0})
+        return len(res) < 2 and (len(res) == 0 or 'country' in res)
 
 
 def add_lat_lon(data):
