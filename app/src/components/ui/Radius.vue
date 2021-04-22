@@ -16,6 +16,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Radius from "@/models/radius";
+import radii from "@/resources/radii";
 
 export default Vue.extend({
   name: "Radius",
@@ -39,14 +40,14 @@ export default Vue.extend({
   },
   data() {
     return {
-      radii: [] as Radius[],
+      radii: radii as Radius[],
       radius: this.value as Radius | null,
     };
   },
   watch: {
     /** change selection on value change */
     value(): void {
-      this.radius = this.value;
+      this.setRadius();
     },
     international(): void {
       if (this.international) this.radius = null;
@@ -58,9 +59,15 @@ export default Vue.extend({
     },
   },
   mounted(): void {
-    this.radius = this.value;
+    this.setRadius();
   },
   methods: {
+    setRadius() {
+      this.radius = this.value;
+      if (!this.radius || !Object.keys(this.radius) || !this.radius.text) {
+        this.radius = this.radii[0];
+      }
+    },
     onInputChange(): void {
       this.$emit("input", this.radius);
     },
@@ -74,41 +81,34 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 .radius_select {
-  margin-left: 10px;
-  margin-right: 10px;
 }
 
 @media (min-width: 280px) and (max-width: 305px) {
   .radius_select {
-    margin-left: 0 !important;
     width: 60%;
   }
 }
 
 @media (min-width: 305px) and (max-width: 342px) {
   .radius_select {
-    margin-left: 0 !important;
     width: 60%;
   }
 }
 
 @media (min-width: 342px) and (max-width: 383px) {
   .radius_select {
-    margin-left: 0 !important;
     width: 70%;
   }
 }
 
 @media (min-width: 383px) {
   .radius_select {
-    margin-left: 0 !important;
     max-width: 77.5%;
   }
 }
 
 @media (min-width: 410px) {
   .radius_select {
-    margin-left: 0 !important;
     max-width: 90%;
   }
 }
@@ -116,8 +116,6 @@ export default Vue.extend({
 @media (min-width: 535px) {
   .radius_select {
     max-width: 20%;
-    min-width: none;
-    margin-left: 10px !important;
   }
 }
 

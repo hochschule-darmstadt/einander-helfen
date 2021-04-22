@@ -1,6 +1,6 @@
 import Post from "@/models/post";
 import { TextSearchState } from "@/store/TextSearch";
-import { LocationSearchState } from "@/store/LocationSearch/types";
+import { LocationSearchState } from "@/store/LocationSearch";
 
 export interface RootState {
   posts: Post[];

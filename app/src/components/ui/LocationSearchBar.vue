@@ -11,7 +11,6 @@
     :dark="dark"
     :hide-no-data="true"
     :append-icon="shownLocations.length > 0 ? '$dropdown' : ''"
-    :attach="attachTo"
     v-model="locationSearchValue"
     @keyup.self="locationOnKeyUp"
     @keyup.enter="onEnter"
@@ -133,19 +132,10 @@ export default Vue.extend({
 });
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .location_search {
-  margin-left: 10px;
-  margin-right: 10px;
-
   .v-menu__content {
     z-index: 9999 !important;
-  }
-
-  .v-autocomplete__content.v-menu__content {
-    top: auto !important;
-    left: auto !important;
-    margin-top: 50px;
   }
 
   .v-text-field {
@@ -178,6 +168,14 @@ export default Vue.extend({
     .v-text-field {
       padding-right: 0px !important;
     }
+  }
+}
+
+@media (min-width: 315px) and (max-width: 382px) {
+  #headerLocation .v-autocomplete__content.v-menu__content {
+    max-height: 225px !important;
+    overflow-y: scroll;
+    overflow-x: hidden;
   }
 }
 

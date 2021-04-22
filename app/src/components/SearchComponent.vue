@@ -1,9 +1,13 @@
 <template>
-  <v-form class="searchbox mt-8 mb-9">
+  <v-form class="searchbox" :class="{ fullwidth: isFullwidth }">
     <v-row justify="center" lg="2">
-      <v-col class="searchCol" cols="12">
+      <v-col
+        class="searchCol"
+        cols="12"
+        :md="isFullwidth ? 12 : 5"
+        :lg="isFullwidth ? 12 : 6"
+      >
         <SearchBar
-          attachTo=".searchCol"
           tabindex="1"
           v-model="searchValue"
           :tags="searchTags"
@@ -14,11 +18,17 @@
         />
       </v-col>
 
-      <v-col cols="12" class="locationDiv">
-        <AreaSelect attachTo=".locationDiv" v-model="area" tabindex="2" />
+      <v-col
+        class="locationDiv"
+        cols="12"
+        :md="isFullwidth ? 12 : 7"
+        :lg="isFullwidth ? 12 : 6"
+      >
+        <AreaSelect tabindex="2" v-model="area" :dark="dark" />
         <LocationSearchBar
           attachTo=".locationDiv"
           tabindex="3"
+          :dark="dark"
           :international="international"
           v-model="locationSearchValue"
           @enter="executeSearch"
@@ -26,9 +36,10 @@
         />
         <Radius
           tabindex="4"
+          :dark="dark"
           :international="international"
           v-model="radius"
-          @enter="onRadiusEnter"
+          @enter="executeSearch"
         />
         <SearchButton @click="executeSearch" tabindex="5" />
       </v-col>
@@ -44,6 +55,9 @@ import SearchBar from "@/components/ui/SearchBar.vue";
 import SearchButton from "@/components/ui/SearchButton.vue";
 import AreaSelect from "@/components/ui/AreaSelect.vue";
 
+/**
+ * Emits @Search onSearch triggered event
+ */
 export default Vue.extend({
   name: "SearchComponent",
   components: {
@@ -53,13 +67,23 @@ export default Vue.extend({
     Radius,
     SearchButton,
   },
+  props: {
+    fullwidth: {
+      type: Boolean,
+      default: true,
+    },
+    dark: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data: function () {
     return {
       searchValue: "",
       searchTags: [] as string[],
       locationSearchValue: "",
       area: "germany",
-      radius: null,
+      radius: { text: "Überall", value: "" },
     };
   },
   mounted(): void {
@@ -71,16 +95,25 @@ export default Vue.extend({
     international(): boolean {
       return this.area === "international";
     },
+    isFullwidth(): boolean {
+      return this.fullwidth;
+    },
   },
   methods: {
     executeSearch(): void {
+      // add search value to tags
+      if (this.searchValue) this.searchTags.push(this.searchValue);
       // update search parameter
       this.$store.commit("addSearchValue", this.searchValue);
       this.$store.commit("setInternational", this.international);
       this.$store.commit("setLocationSearchValue", this.locationSearchValue);
       this.$store.commit("setSelectedRadius", this.radius);
+      // emit search event
+      this.$emit("search");
       // update uri
       this.$store.commit("updateURIFromState");
+      // clear search field
+      this.searchValue = "";
     },
     onSearchClick(): void {
       const isSafari =
@@ -101,80 +134,53 @@ export default Vue.extend({
       }
     },
     removeTag(tag: string) {
+      this.searchTags = this.searchTags.filter((item) => item != tag);
       this.$store.commit("removeSearchValue", tag);
     },
   },
 });
 </script>
 
-<style lang="scss">
-.v-input__slot {
-  margin-bottom: 0;
-}
-
-img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.slick-arrow {
-  display: none !important ;
-  visibility: hidden;
-}
-
-#searchButton {
-  margin-right: 0 !important;
-}
-
-#searchbox {
-  padding-left: 12px;
-  padding-right: 12px;
-}
-
-#container {
-  margin: auto;
-}
-
-#locationDiv {
-  padding-left: 12px !important;
-  padding-right: 12px !important;
-}
-
-@media (min-width: 800px) {
-  #container {
-    max-width: 1450px;
+<style lang="scss" scoped>
+.searchbox {
+  ::v-deep .v-input__slot {
+    margin-bottom: 0;
   }
 }
 
+.locationDiv {
+  display: flex;
+  flex-direction: row;
+
+  > div {
+    margin-right: 8px;
+  }
+}
+
+@media (max-width: 599px) {
+  /** TODO Umbruch zu mobile header */
+}
+
+@media (max-width: 959px) {
+  .locationDiv {
+    padding-bottom: 0px;
+  }
+  .searchCol {
+    padding-top: 0px;
+  }
+}
 @media (min-width: 960px) {
-  #container {
-    width: 960px;
-    max-width: none;
+  .locationDiv,
+  .searchCol {
+    padding: 0px 12px;
+    padding-top: 6px;
   }
 }
+</style>
 
-@media (min-width: 1100px) {
-  #container {
-    width: 1100px;
-  }
-}
-
-@media (min-width: 1300px) {
-  #container {
-    width: 1300px;
-  }
-}
-
-@media (min-width: 1618px) {
-  #container {
-    width: 1618px;
-  }
-}
-
-@media (min-width: 1904px) {
-  #container {
-    width: 85%;
-  }
+<style lang="scss">
+.searchbox .v-menu__content {
+  z-index: 999 !important;
+  display: inline-table;
 }
 </style>

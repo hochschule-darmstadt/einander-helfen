@@ -4,8 +4,6 @@
     :items="items"
     v-model="selection"
     label=""
-    item-text="title"
-    item-value="value"
     :dark="dark"
     :attach="attachTo"
     @change="onInputChange"
@@ -13,7 +11,7 @@
     <template v-slot:item="{ item }">
       <img class="areaImage" :src="item.img" />
       <v-spacer />
-      <span>{{ item.title }}</span>
+      <span>{{ item.text }}</span>
     </template>
     <template v-slot:selection="{ item }">
       <img class="areaImageSelected" :src="item.img" />
@@ -25,7 +23,7 @@
 import Vue from "vue";
 
 interface Item {
-  title: string;
+  text: string;
   value: string;
   img: string;
 }
@@ -53,17 +51,17 @@ export default Vue.extend({
     return {
       items: [
         {
-          title: "Deutschland",
+          text: "Deutschland",
           value: "germany",
           img: require("@/assets/images/240px-Flag_of_Germany.png"),
         },
         {
-          title: "International",
+          text: "International",
           value: "international",
           img: require("@/assets/images/240px-Earth_icon_2.png"),
         },
       ] as Item[],
-      selection: "" as Item["value"],
+      selection: {} as Item,
     };
   },
   mounted(): void {
@@ -78,20 +76,20 @@ export default Vue.extend({
   methods: {
     setSelection(): void {
       // find object to value
-      const itemToValue = this.items.find((item) => item.value == this.value);
+      const itemToValue = this.items.find((item) => item.value === this.value);
       // if object found
-      if (itemToValue?.title) {
+      if (itemToValue && itemToValue.text) {
         // set selected object
-        this.selection = itemToValue.title;
+        this.selection = itemToValue;
       }
       // else set default object and emit change
       else {
-        this.selection = this.items[0].title;
-        this.onChange();
+        this.selection = this.items[0];
+        this.onInputChange();
       }
     },
     onInputChange() {
-      this.$emit("input", this.selection);
+      this.$emit("input", this.selection.value);
     },
   },
 });
@@ -99,11 +97,15 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 .areaSelect {
-  margin-top: 4px;
   max-width: fit-content;
-  margin-right: 8px;
-  margin-left: 0;
+  margin-top: 8px;
+
+  ::v-deep .v-select__selections input {
+    display: none;
+    visibility: hidden;
+  }
 }
+
 .areaImage,
 .areaImageSelected {
   height: 1.5em;
@@ -114,10 +116,5 @@ export default Vue.extend({
 
 .areaImage {
   margin-right: 1em;
-}
-
-.areaSelect .v-select__selections input {
-  display: none;
-  visibility: hidden;
 }
 </style>

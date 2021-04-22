@@ -3,7 +3,6 @@ import { RootState } from "../types";
 import Location from "@/models/location";
 import LocationService from "@/utils/services/LocationService";
 
-
 export interface LocationSearchState {
   locationSearchValue: string;
   selectedLocation: string;
@@ -21,8 +20,7 @@ const locationSearchModule: Module<LocationSearchState, RootState> = {
     selectedRadius: "",
     alternateRadius: "",
   },
-  getters: {
-  },
+  getters: {},
   mutations: {
     setSelectedLocation(state, value): void {
       state.selectedLocation = value;
@@ -74,8 +72,7 @@ const locationSearchModule: Module<LocationSearchState, RootState> = {
     setAlternateRadius({ commit }, radiusSearchValue): void {
       commit("setAlternateRadius", radiusSearchValue);
     },
-  }
-
+  },
 };
 
 export default locationSearchModule;

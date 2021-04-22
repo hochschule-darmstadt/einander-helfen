@@ -20,7 +20,7 @@
             <v-list-item-title>
               Drücken Sie
               <kbd>Enter</kbd> für eine Freitextsuche mit Ihrer Eingabe
-              <v-chip>"{{ mySearchValue }}"</v-chip>
+              <v-chip>"{{ searchValue }}"</v-chip>
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
@@ -192,3 +192,21 @@ export default Vue.extend({
   },
 });
 </script>
+
+<style lang="scss" scoped>
+.searchBar {
+  background: white;
+  border-radius: 20px;
+  margin-right: 2%;
+  width: inherit;
+  display: flex;
+  flex-direction: column;
+}
+</style>
+<style lang="scss">
+.searchBar .v-autocomplete__content.v-menu__content {
+  top: auto !important;
+  left: auto !important;
+  margin-top: 50px;
+}
+</style>

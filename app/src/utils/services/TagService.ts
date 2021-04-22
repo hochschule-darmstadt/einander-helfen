@@ -2,7 +2,7 @@ import importedTags from "@/resources/tags/index";
 import Tag from "@/models/tag";
 
 /**
- * this service manage all static tags from resources 
+ * this service manage all static tags from resources
  */
 class TagService {
   private tags: Tag[] = [];

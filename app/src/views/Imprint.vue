@@ -78,7 +78,7 @@
 
         <h1>Quellenangabe / Bildquellen</h1>
         <ul class="mt-2 mb-5">
-          <li v-for="item in items" class="mb-2">
+          <li v-for="item in items" :key="item" class="mb-2">
             <strong>{{ item.author }}</strong> - <i>{{ item.position }}</i>
             <br />
             <a class="wordbreak" :href="item.source">{{ item.source }}</a
