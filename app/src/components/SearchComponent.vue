@@ -8,7 +8,7 @@
           v-model="searchValue"
           :tags="searchTags"
           :enable-no-data-message="true"
-          @click.native="onSearchBarClick"
+          @click.native="onSearchClick"
           @enter="executeSearch"
           @remove="removeTag"
         />
@@ -22,7 +22,7 @@
           :international="international"
           v-model="locationSearchValue"
           @enter="executeSearch"
-          @click.native="focussearch"
+          @click.native="onSearchClick"
         />
         <Radius
           tabindex="4"
@@ -63,6 +63,8 @@ export default Vue.extend({
     };
   },
   mounted(): void {
+    // TODO: load data from store
+
     this.$store.commit("clearSearchParams");
   },
   computed: {
@@ -77,11 +79,10 @@ export default Vue.extend({
       this.$store.commit("setInternational", this.international);
       this.$store.commit("setLocationSearchValue", this.locationSearchValue);
       this.$store.commit("setSelectedRadius", this.radius);
-      // todo radius
       // update uri
       this.$store.commit("updateURIFromState");
     },
-    onSearchBarClick(): void {
+    onSearchClick(): void {
       const isSafari =
         navigator.vendor &&
         navigator.vendor.indexOf("Apple") > -1 &&
