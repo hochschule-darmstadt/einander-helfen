@@ -78,43 +78,12 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-@media (min-width: 280px) and (max-width: 305px) {
+@media (max-width: 480px) {
   .radius_select {
-    width: 60%;
+    flex-basis: 0;
   }
 }
-
-@media (min-width: 305px) and (max-width: 342px) {
-  .radius_select {
-    width: 60%;
-  }
-}
-
-@media (min-width: 342px) and (max-width: 383px) {
-  .radius_select {
-    width: 70%;
-  }
-}
-
-@media (min-width: 383px) {
-  .radius_select {
-    max-width: 77.5%;
-  }
-}
-
-@media (min-width: 410px) {
-  .radius_select {
-    max-width: 90%;
-  }
-}
-
-@media (min-width: 535px) {
-  .radius_select {
-    max-width: 20%;
-  }
-}
-
-@media (min-width: 613px) {
+@media (min-width: 600px) {
   .radius_select {
     width: 200px;
   }
