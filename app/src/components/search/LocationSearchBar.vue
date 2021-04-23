@@ -9,12 +9,13 @@
     :filter="filterLocations"
     :items="shownLocations"
     :dark="dark"
+    :attach="attachTo"
     :hide-no-data="true"
     :append-icon="shownLocations.length > 0 ? '$dropdown' : ''"
-    v-model="locationSearchValue"
+    v-model="location"
     @keyup.self="locationOnKeyUp"
     @keyup.enter="onEnter"
-    @focus="clearOnFocus"
+    @focus="onFocus"
     @change="onInputChange"
   />
 </template>
@@ -46,29 +47,32 @@ export default Vue.extend({
   },
   data: function () {
     return {
-      locationSearchValue: this.value,
+      location: this.value as string | undefined,
+      searchValue: "",
     };
   },
   computed: {
     shownLocations(): Location[] {
+      const q = this.searchValue || this.location || "";
       return this.international
-        ? LocationService.findCountryByName(this.locationSearchValue)
-        : LocationService.findLocationByPlzOrName(this.locationSearchValue);
+        ? LocationService.findCountryByName(q)
+        : LocationService.findLocationByPlzOrName(q);
     },
     hintText(): string {
       return this.international ? "Land" : "Ort oder PLZ";
     },
   },
   mounted(): void {
-    this.locationSearchValue = this.value;
+    this.location = this.value;
   },
   watch: {
     /** change selection on value change */
     value(): void {
-      this.locationSearchValue = this.value;
+      this.location = this.value;
     },
     international(): void {
-      this.locationSearchValue = "";
+      this.searchValue = "";
+      this.location = undefined;
     },
   },
   methods: {
@@ -107,25 +111,30 @@ export default Vue.extend({
         const curValue = evt.target.value;
         const plz = curValue.match(/^\d+/);
         if (plz) {
-          this.locationSearchValue = plz[0];
+          this.searchValue = plz[0];
         } else {
-          this.locationSearchValue = curValue;
+          this.searchValue = curValue;
+          // emit event by clearing field
+          if (!curValue) {
+            this.location = undefined;
+            this.$emit("input", this.location);
+          }
         }
       }
     },
-    clearOnFocus(evt): void {
+    onFocus(evt): void {
+      // clear search value on focus
       if (!evt.target.value) {
-        this.locationSearchValue = "";
-        this.$emit("input", this.locationSearchValue);
+        this.searchValue = "";
       }
     },
     onInputChange(): void {
       // reduce to only one word
-      this.locationSearchValue = this.locationSearchValue.split(" ")[0];
-      this.$emit("input", this.locationSearchValue);
+      this.searchValue = this.searchValue.split(" ")[0];
     },
     onEnter(): void {
-      this.$emit("input", this.locationSearchValue);
+      this.searchValue = this.location || "";
+      this.$emit("input", this.location);
       this.$emit("enter");
     },
   },

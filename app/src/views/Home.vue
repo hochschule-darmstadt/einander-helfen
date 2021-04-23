@@ -44,7 +44,8 @@
 import Vue from "vue";
 import Toolbar from "@/components/layout/Toolbar.vue";
 import Carousel from "@/components/layout/Carousel.vue";
-import SearchComponent from "@/components/SearchComponent.vue";
+import SearchComponent from "@/components/search/SearchComponent.vue";
+import { mapActions } from "vuex";
 
 export default Vue.extend({
   components: {
@@ -77,6 +78,13 @@ export default Vue.extend({
         },
       ] as { title: string; to: string; img: string }[],
     };
+  },
+  created() {
+    // clear search params on home load
+    this.clearSearchParams();
+  },
+  methods: {
+    ...mapActions(["clearSearchParams"]),
   },
 });
 </script>

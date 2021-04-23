@@ -13,8 +13,8 @@ export interface PaginatedResponse<T> {
 
 export interface SearchParameters {
   searchValues: string[];
-  location: Location | null;
-  radius: string;
+  location?: Location;
+  radius?: string;
   from: number;
   size: number;
   international: boolean;
@@ -23,8 +23,8 @@ export interface SearchParameters {
 class DataService {
   private static findNationalBySelection(
     queryObject: QueryObject,
-    location: Location | null,
-    radius: string
+    location: Location | undefined,
+    radius: string | undefined
   ): void {
     if (location) {
       queryObject.sort.push({
@@ -68,7 +68,7 @@ class DataService {
 
   private static findInternationalBySelection(
     queryObject: QueryObject,
-    location: Location | null
+    location: Location | undefined
   ): void {
     // only international posts (default)
     queryObject.query.bool.must.push({

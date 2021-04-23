@@ -4,32 +4,32 @@ import Location from "@/models/location";
 import LocationService from "@/utils/services/LocationService";
 
 export interface LocationSearchState {
-  locationSearchValue: string;
-  selectedLocation: string;
-  selectedLocationObject: Location | null;
-  selectedRadius: string;
-  alternateRadius: string;
+  selectedLocation?: Location;
+  selectedRadius?: string;
+  alternateRadius?: string;
 }
 
 const locationSearchModule: Module<LocationSearchState, RootState> = {
   namespaced: true,
   state: {
-    locationSearchValue: "",
-    selectedLocation: "",
-    selectedLocationObject: null,
-    selectedRadius: "",
-    alternateRadius: "",
+    selectedLocation: undefined,
+    selectedRadius: undefined,
+    alternateRadius: undefined,
   },
-  getters: {},
+  getters: {
+    getLocationText(state): string {
+      return state.selectedLocation ? state.selectedLocation.title : "";
+    },
+    getLocation(state): Location | undefined {
+      return state.selectedLocation;
+    },
+    getRadius(state): string {
+      return state.selectedRadius || "";
+    },
+  },
   mutations: {
     setSelectedLocation(state, value): void {
       state.selectedLocation = value;
-    },
-    setSelectedLocationObject(state, value): void {
-      state.selectedLocationObject = value;
-    },
-    setLocationSearchValue(state, value): void {
-      state.locationSearchValue = value;
     },
     setSelectedRadius(state, value): void {
       state.selectedRadius = value;
@@ -39,31 +39,23 @@ const locationSearchModule: Module<LocationSearchState, RootState> = {
     },
   },
   actions: {
-    setLocationSearchValue({ commit, dispatch }, locationSearchValue): void {
+    setLocationSearchValue({ commit }, locationSearchValue): void {
       commit("setLocationSearchValue", locationSearchValue);
     },
-    setSelectedLocation({ commit, dispatch, state }, selectedLocation): void {
-      let selectedLocationObject = selectedLocation
-        ? LocationService.findByTitle(selectedLocation)
-        : null;
-      if (selectedLocationObject === undefined) {
-        selectedLocationObject = {
-          name: "",
-          plz: "",
-          title: "",
-          state: "",
-          lat: 0,
-          lon: 0,
-          rank: 0,
-          country: selectedLocation,
-        };
-      }
-      if (selectedLocationObject === undefined) {
-        selectedLocationObject = null;
+    setSelectedLocation({ commit, state }, selectedLocation): void {
+      const selectedLocationObject = LocationService.findByTitle(selectedLocation)
+        || {
+        name: "",
+        plz: "",
+        title: "",
+        state: "",
+        lat: 0,
+        lon: 0,
+        rank: 0,
+        country: selectedLocation,
       }
 
-      commit("setSelectedLocation", selectedLocation);
-      commit("setSelectedLocationObject", selectedLocationObject);
+      state.selectedLocation = selectedLocationObject;
     },
     setSelectedRadius({ commit, dispatch }, radiusSearchValue): void {
       commit("setAlternateRadius", "");

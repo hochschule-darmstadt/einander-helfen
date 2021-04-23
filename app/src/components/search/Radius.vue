@@ -22,7 +22,7 @@ export default Vue.extend({
   name: "Radius",
   props: {
     value: {
-      type: Object as () => Radius,
+      type: String,
       required: true,
     },
     international: {
@@ -41,7 +41,7 @@ export default Vue.extend({
   data() {
     return {
       radii: radii as Radius[],
-      radius: this.value as Radius | null,
+      radius: this.value as string | null,
     };
   },
   watch: {
@@ -63,10 +63,8 @@ export default Vue.extend({
   },
   methods: {
     setRadius() {
-      this.radius = this.value;
-      if (!this.radius || !Object.keys(this.radius) || !this.radius.text) {
-        this.radius = this.radii[0];
-      }
+      this.radius = this.value || this.radii[0].value;
+      this.$emit("input", this.radius);
     },
     onInputChange(): void {
       this.$emit("input", this.radius);
@@ -80,9 +78,6 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-.radius_select {
-}
-
 @media (min-width: 280px) and (max-width: 305px) {
   .radius_select {
     width: 60%;

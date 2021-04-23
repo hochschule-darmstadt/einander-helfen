@@ -26,7 +26,6 @@
       >
         <AreaSelect tabindex="2" v-model="area" :dark="dark" />
         <LocationSearchBar
-          attachTo=".locationDiv"
           tabindex="3"
           :dark="dark"
           :international="international"
@@ -49,11 +48,12 @@
 
 <script lang="ts">
 import Vue from "vue";
-import LocationSearchBar from "@/components/ui/LocationSearchBar.vue";
-import Radius from "@/components/ui/Radius.vue";
-import SearchBar from "@/components/ui/SearchBar.vue";
-import SearchButton from "@/components/ui/SearchButton.vue";
-import AreaSelect from "@/components/ui/AreaSelect.vue";
+import LocationSearchBar from "@/components/search/LocationSearchBar.vue";
+import Radius from "@/components/search/Radius.vue";
+import SearchBar from "@/components/search/SearchBar.vue";
+import SearchButton from "@/components/search/SearchButton.vue";
+import AreaSelect from "@/components/search/AreaSelect.vue";
+import { mapActions, mapGetters } from "vuex";
 
 /**
  * Emits @Search onSearch triggered event
@@ -83,15 +83,21 @@ export default Vue.extend({
       searchTags: [] as string[],
       locationSearchValue: "",
       area: "germany",
-      radius: { text: "Überall", value: "" },
+      radius: "",
     };
   },
   mounted(): void {
-    // TODO: load data from store
-
-    this.$store.commit("clearSearchParams");
+    // load data from store
+    this.area = this.getInternational ? "international" : "germany";
+    this.radius = this.getRadius;
+    this.searchTags = this.getSearchValues;
+    this.locationSearchValue = this.getLocationText;
   },
   computed: {
+    ...mapGetters("locationSearchModule", ["getRadius", "getLocationText"]),
+    ...mapGetters("textSearchModule", ["getSearchValues"]),
+    ...mapGetters(["getInternational"]),
+
     international(): boolean {
       return this.area === "international";
     },
@@ -100,18 +106,25 @@ export default Vue.extend({
     },
   },
   methods: {
+    ...mapActions("locationSearchModule", [
+      "setSelectedRadius",
+      "setSelectedLocation",
+    ]),
+    ...mapActions("textSearchModule", ["addSearchValue", "removeSearchValue"]),
+    ...mapActions(["setInternational", "updateURIFromState"]),
+
     executeSearch(): void {
       // add search value to tags
       if (this.searchValue) this.searchTags.push(this.searchValue);
-      // update search parameter
-      this.$store.commit("addSearchValue", this.searchValue);
-      this.$store.commit("setInternational", this.international);
-      this.$store.commit("setLocationSearchValue", this.locationSearchValue);
-      this.$store.commit("setSelectedRadius", this.radius);
+      // update search parameter in store
+      this.addSearchValue(this.searchValue);
+      this.setInternational(this.international);
+      this.setSelectedLocation(this.locationSearchValue);
+      this.setSelectedRadius(this.radius);
       // emit search event
       this.$emit("search");
       // update uri
-      this.$store.commit("updateURIFromState");
+      this.updateURIFromState();
       // clear search field
       this.searchValue = "";
     },
@@ -135,7 +148,7 @@ export default Vue.extend({
     },
     removeTag(tag: string) {
       this.searchTags = this.searchTags.filter((item) => item != tag);
-      this.$store.commit("removeSearchValue", tag);
+      this.removeSearchValue(tag);
     },
   },
 });
@@ -184,7 +197,8 @@ export default Vue.extend({
 
 <style lang="scss">
 .searchbox .v-menu__content {
-  z-index: 999 !important;
+  z-index: 1001 !important;
   display: inline-table;
+  border-radius: 4px;
 }
 </style>

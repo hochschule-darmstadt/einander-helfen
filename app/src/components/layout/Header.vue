@@ -29,7 +29,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import SearchComponent from "@/components/SearchComponent.vue";
+import SearchComponent from "@/components/search/SearchComponent.vue";
 import MenuButton from "@/components/layout/MenuButton.vue";
 
 export default Vue.extend({

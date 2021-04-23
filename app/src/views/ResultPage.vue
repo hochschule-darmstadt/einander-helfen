@@ -455,7 +455,7 @@ export default Vue.extend({
     },
   },
   created(): void {
-    this.hydrateStateFromRoute(this.$route).then(() => {
+    this.hydrateStateFromRoute().then(() => {
       if (window.matchMedia("(max-width: 960px)").matches) {
         this.showMap = false;
         this.smartphone = true;

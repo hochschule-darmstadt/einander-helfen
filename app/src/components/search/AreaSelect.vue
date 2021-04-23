@@ -61,7 +61,7 @@ export default Vue.extend({
           img: require("@/assets/images/240px-Earth_icon_2.png"),
         },
       ] as Item[],
-      selection: {} as Item,
+      selection: "",
     };
   },
   mounted(): void {
@@ -75,21 +75,11 @@ export default Vue.extend({
   },
   methods: {
     setSelection(): void {
-      // find object to value
-      const itemToValue = this.items.find((item) => item.value === this.value);
-      // if object found
-      if (itemToValue && itemToValue.text) {
-        // set selected object
-        this.selection = itemToValue;
-      }
-      // else set default object and emit change
-      else {
-        this.selection = this.items[0];
-        this.onInputChange();
-      }
+      this.selection = this.value || this.items[0].value;
+      this.$emit("input", this.selection);
     },
     onInputChange() {
-      this.$emit("input", this.selection.value);
+      this.$emit("input", this.selection);
     },
   },
 });

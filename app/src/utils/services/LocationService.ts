@@ -21,6 +21,7 @@ class LocationService {
    * @param title The title of the searched location.
    */
   public findByTitle(title: string): Location | undefined {
+    if (!title) return undefined;
     return this.locations.find((location) => location.title === title);
   }
 

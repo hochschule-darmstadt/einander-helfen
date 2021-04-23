@@ -15,6 +15,11 @@ export const textSearchModule: Module<TextSearchState, RootState> = {
     synonyms: [] as string[],
     searchValues: [] as string[],
   },
+  getters: {
+    getSearchValues(state): string[] {
+      return state.searchValues;
+    }
+  },
   mutations: {
     addSearchValue(state, value: string): void {
       if (!state.searchValues.includes(value)) {
