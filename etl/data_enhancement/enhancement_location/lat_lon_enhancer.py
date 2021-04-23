@@ -2,6 +2,7 @@ from geopy.geocoders import Nominatim
 import csv
 import time
 import os
+from bs4 import BeautifulSoup
 from shared.LoggerFactory import LoggerFactory
 
 
@@ -11,7 +12,11 @@ class LatLonEnhancer:
     logger = LoggerFactory.get_enhancement_logger()
     dict_file = os.path.join(os.getenv('ROOT_DIR'), 'data_enhancement',
                              'enhancement_location', 'geocoder_lat_lon.csv')
+    blacklist_file = os.path.join(os.getenv('ROOT_DIR'), 'data_enhancement',
+                             'enhancement_location', 'geocoder_blacklist.csv')
+
     lat_lon_dict = {}
+    lat_lon_blacklist = []
 
     def __init__(self):
         """Initializes the enhancer."""
@@ -40,16 +45,23 @@ class LatLonEnhancer:
                 lat_lon = self.__check_local_storage(request_string)
 
                 if lat_lon is None:
-                    LatLonEnhancer.logger.info(f"enhancing lat lon for {post}")
+                    if request_string in self.lat_lon_blacklist:
+                        LatLonEnhancer.logger.debug(f"Request string {request_string} was found \
+                                                      on blacklist, skipping api request.")
+                        continue
                     lat_lon = self.__handle_api_requests(request_string)
                     if lat_lon:
                         self.__add_new_entry(request_string, lat_lon)
                         post['geo_location'] = lat_lon
                         post['post_struct']['geo_location'] = lat_lon
+                        LatLonEnhancer.logger.debug(f"Enhanced lat lon for {post}")
                         break
-
-                post['geo_location'] = lat_lon
-                post['post_struct']['geo_location'] = lat_lon
+                    else:
+                        self.__add_new_entry_to_blacklist(request_string)
+                else:
+                    post['geo_location'] = lat_lon
+                    post['post_struct']['geo_location'] = lat_lon
+                    LatLonEnhancer.logger.debug(f"Used cache to enhance lat lon for {post}")
 
     def __check_local_storage(self, request_string):
         """Checks if local storage contains a result for the query. If it does, the geo_location object is returned.
@@ -79,6 +91,12 @@ class LatLonEnhancer:
                     # row[0]: request string, row[1]: lat, row[2]: lon
                     self.lat_lon_dict[row[0]] = {'lat': float(row[1]), 'lon': float(row[2])}
 
+        try:
+            with open(self.blacklist_file, 'r', encoding='utf-8') as blacklist:
+                self.lat_lon_blacklist = blacklist.read().splitlines()
+        except IOError:
+            LatLonEnhancer.logger.warn("Blacklist file could not be opened.")
+
     def __add_new_entry(self, request_string, geo_location):
         """Adds new entry to local storage"""
         LatLonEnhancer.logger.debug("__add_new_entry()")
@@ -89,6 +107,17 @@ class LatLonEnhancer:
             writer.writerow([request_string, str(geo_location['lat']), str(geo_location['lon'])])
 
         LatLonEnhancer.logger.info(f'Added geo location of \'{request_string}\' to the dictionary')
+
+    def __add_new_entry_to_blacklist(self, request_string):
+        """Adds new entry to local blacklist"""
+        LatLonEnhancer.logger.debug("__add_new_entry_to_blacklist()")
+
+        self.lat_lon_blacklist.append(request_string)
+        with open(self.blacklist_file, 'a', encoding='utf-8') as blacklist:
+            blacklist.write(request_string)
+            blacklist.write('\n')
+
+        LatLonEnhancer.logger.info(f'Added \'{request_string}\' to the location blacklist')
 
     def __handle_api_requests(self, request_string):
         """Executes the API request"""
@@ -105,13 +134,13 @@ class LatLonEnhancer:
 
     @staticmethod
     def get_prioritized_request_strings(post):
-        """Build the API request string"""
-        LatLonEnhancer.logger.debug("get_api_request_string()")
+        """Build a prioritized list of API request string"""
+        LatLonEnhancer.logger.debug("get_prioritized_request_strings()")
 
         prioritized_request_list = []
 
         if LatLonEnhancer.has_insufficient_information(post):
-            prioritized_request_list.append(post['location'])
+            prioritized_request_list.append(BeautifulSoup(post['location'], 'lxml').text)
 
         struct_data = post['post_struct']
 
@@ -137,6 +166,9 @@ class LatLonEnhancer:
 
     @staticmethod
     def has_insufficient_information(post):
+        """Checks if the post has insufficient location information"""
+        LatLonEnhancer.logger.debug("has_insufficient_information()")
+
         loc = post['post_struct']['location']
         res = list({ele for ele in loc if loc[ele] and len(loc[ele]) > 0})
         return len(res) < 2 and (len(res) == 0 or 'country' in res)
