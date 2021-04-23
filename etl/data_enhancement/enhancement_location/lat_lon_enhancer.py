@@ -62,6 +62,7 @@ class LatLonEnhancer:
                     post['geo_location'] = lat_lon
                     post['post_struct']['geo_location'] = lat_lon
                     LatLonEnhancer.logger.debug(f"Used cache to enhance lat lon for {post}")
+                    break
 
     def __check_local_storage(self, request_string):
         """Checks if local storage contains a result for the query. If it does, the geo_location object is returned.
