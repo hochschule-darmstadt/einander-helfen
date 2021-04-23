@@ -30,7 +30,8 @@
     <v-chip-group
       active-class="primary-text"
       column
-      style="margin-left: 10px; margin-right: 10px; margin-top: -20px"
+      class="tags"
+      v-if="tags.length"
     >
       <v-chip
         v-for="tag in tags"
@@ -196,11 +197,16 @@ export default Vue.extend({
 <style lang="scss" scoped>
 .searchBar {
   background: white;
-  border-radius: 20px;
+  border-radius: 28px;
   margin-right: 2%;
   width: inherit;
   display: flex;
   flex-direction: column;
+}
+.tags {
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: -20px;
 }
 </style>
 <style lang="scss">

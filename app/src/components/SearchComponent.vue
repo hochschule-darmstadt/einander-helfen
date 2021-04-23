@@ -158,7 +158,9 @@ export default Vue.extend({
 }
 
 @media (max-width: 599px) {
-  /** TODO Umbruch zu mobile header */
+  .locationDiv {
+    flex-wrap: wrap;
+  }
 }
 
 @media (max-width: 959px) {
@@ -170,10 +172,12 @@ export default Vue.extend({
   }
 }
 @media (min-width: 960px) {
-  .locationDiv,
-  .searchCol {
-    padding: 0px 12px;
-    padding-top: 6px;
+  .searchbox:not(.fullwidth) {
+    .locationDiv,
+    .searchCol {
+      padding: 0px 12px;
+      padding-top: 6px;
+    }
   }
 }
 </style>

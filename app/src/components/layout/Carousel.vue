@@ -33,3 +33,15 @@ export default Vue.extend({
   },
 });
 </script>
+
+<style lang="scss" scoped>
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.slick-arrow {
+  display: none !important ;
+  visibility: hidden;
+}
+</style>

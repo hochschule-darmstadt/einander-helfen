@@ -3,58 +3,8 @@
     <Toolbar />
     <Carousel />
 
-    <v-container id="container">
-      <v-form>
-        <v-row id="searchbox" justify="center" lg="2">
-          <v-layout row justify-center no-gutters class="mt-8 mb-9">
-            <v-flex>
-              <v-form>
-                <v-row>
-                  <v-col id="searchCol" cols="12">
-                    <search-bar
-                      :searchInput.sync="currentSearchValue"
-                      id="search"
-                      :attachTo="'#search'"
-                      @click.native="focussearch"
-                      v-model="selectedInput"
-                      @enter="onSearchEnter"
-                      tabindex="1"
-                    />
-                  </v-col>
-                </v-row>
-
-                <v-row class="flex-grow-1 ps-4" id="locationDiv">
-                  <area-select
-                    id="areaSelect"
-                    ref="areaSelect"
-                    @change="switchArea"
-                    tabindex="2"
-                  />
-                  <location-search-bar
-                    @click.native="focussearch"
-                    id="location"
-                    :attachTo="'#location'"
-                    ref="locationSearchBar"
-                    @enter="onLocationEnter"
-                    tabindex="3"
-                  />
-                  <radius
-                    ref="radius"
-                    id="radius"
-                    @enter="onRadiusEnter"
-                    tabindex="4"
-                  />
-                  <search-button
-                    id="searchButton"
-                    @click="executeSearch"
-                    tabindex="5"
-                  />
-                </v-row>
-              </v-form>
-            </v-flex>
-          </v-layout>
-        </v-row>
-      </v-form>
+    <v-container class="container">
+      <SearchComponent class="searchcomponent" :fullwidth="true" />
 
       <v-row justify="center" lg="3">
         <v-col md="3" xl="3" v-for="tag in volunteerTags" :key="tag.title">
@@ -91,31 +41,16 @@
 </template>
 
 <script lang="ts">
-import { createNamespacedHelpers, mapActions } from "vuex";
-const { mapActions: mapTextSearchActions } = createNamespacedHelpers(
-  "textSearchModule"
-);
-const { mapState: mapLocationSearchState } = createNamespacedHelpers(
-  "locationSearchModule"
-);
 import Vue from "vue";
 import Toolbar from "@/components/layout/Toolbar.vue";
 import Carousel from "@/components/layout/Carousel.vue";
-import LocationSearchBar from "@/components/ui/LocationSearchBar.vue";
-import Radius from "@/components/ui/Radius.vue";
-import SearchBar from "@/components/ui/SearchBar.vue";
-import SearchButton from "@/components/ui/SearchButton.vue";
-import AreaSelect from "../components/ui/AreaSelect.vue";
+import SearchComponent from "@/components/SearchComponent.vue";
 
 export default Vue.extend({
   components: {
-    SearchBar,
     Carousel,
-    AreaSelect,
-    LocationSearchBar,
-    Radius,
     Toolbar,
-    SearchButton,
+    SearchComponent,
   },
   data: function () {
     return {
@@ -141,274 +76,57 @@ export default Vue.extend({
           img: require("@/assets/images/jugend.jpeg"),
         },
       ] as { title: string; to: string; img: string }[],
-      selectedInput: "",
-      currentSearchValue: "",
     };
-  },
-  created(): void {
-    this.clearSearchParams();
-    this.clearLocationSearchValue();
-  },
-  computed: {
-    ...mapLocationSearchState(["selectedRadius", "selectedLocation"]),
-  },
-  methods: {
-    ...mapTextSearchActions(["addSearchValue"]),
-    ...mapActions(["updateURIFromState", "clearSearchParams"]),
-    executeSearch(): void {
-      if (this.selectedInput) {
-        this.addSearchValue(this.selectedInput);
-      } else if (this.currentSearchValue) {
-        this.addSearchValue(this.currentSearchValue);
-      }
-      this.updateURIFromState();
-    },
-    clearLocationSearchValue(): void {
-      this.$nextTick(() => {
-        // @ts-ignore
-        this.$refs.locationSearchBar.clearInput();
-      });
-    },
-    onSearchEnter(): void {
-      if (this.selectedInput) {
-        this.executeSearch();
-      }
-    },
-    onLocationEnter(): void {
-      if (this.selectedLocation) {
-        this.executeSearch();
-      }
-    },
-    onRadiusEnter(): void {
-      if (this.selectedRadius) {
-        this.executeSearch();
-      }
-    },
-
-    focussearch(): void {
-      const isSafari =
-        navigator.vendor &&
-        navigator.vendor.indexOf("Apple") > -1 &&
-        navigator.userAgent &&
-        navigator.userAgent.indexOf("CriOS") === -1 &&
-        navigator.userAgent.indexOf("FxiOS") === -1;
-
-      const focussearch = document.getElementById("searchCol");
-
-      if (
-        isSafari === false &&
-        focussearch !== null &&
-        window.matchMedia("(max-width: 420px)").matches
-      ) {
-        focussearch.scrollIntoView(true);
-      }
-    },
-    switchArea(): void {
-      const areaSelect = this.$refs.areaSelect;
-      // @ts-ignore
-      const areaSelection = (areaSelect as AreaSelect).selection;
-      const international =
-        // @ts-ignore
-        areaSelection === (areaSelect as AreaSelect).items[0].title
-          ? false
-          : true;
-      (this.$refs.locationSearchBar as any).setLocationSearchBar(international);
-      (this.$refs.radius as any).disableRadius(international);
-      (this.$refs.locationSearchBar as any).setSelectedLocation(null);
-    },
   },
 });
 </script>
 
-<style lang="scss">
-#location .v-autocomplete__content.v-menu__content {
-  top: auto !important;
-  left: auto !important;
-  margin-top: 50px;
+<style lang="scss" scoped>
+.searchcomponent {
+  margin: 3em 0;
 }
 
-.v-input__slot {
-  margin-bottom: 0;
-}
-
-.no-radius {
-  border-radius: 0 !important;
-}
-
-img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.slick-arrow {
-  display: none !important ;
-  visibility: hidden;
-}
-
-#searchButton {
-  margin-right: 0 !important;
-}
-
-#searchbox {
-  padding-left: 12px;
-  padding-right: 12px;
-}
-
-#container {
+/**
+ TODO: is this container css nessesary?
+ look vuetify grid
+*/
+.container {
   margin: auto;
 }
 
-#locationDiv {
-  padding-left: 12px !important;
-  padding-right: 12px !important;
-}
-
-@media (min-width: 280px) and (max-width: 305px) {
-  #location {
-    max-width: 77vw;
-  }
-
-  #radius {
-    margin-left: 0 !important;
-    width: 60%;
-  }
-
-  #location .v-input__slot {
-    margin-left: 2px;
-  }
-
-  #location .v-text-field {
-    padding-right: 0px !important;
-  }
-}
-
-@media (min-width: 305px) and (max-width: 342px) {
-  #location {
-    max-width: 79.5vw;
-  }
-
-  #radius {
-    margin-left: 0 !important;
-    width: 60%;
-  }
-
-  #location .v-input__slot {
-    margin-left: 2px;
-  }
-
-  #location .v-text-field {
-    padding-right: 0px !important;
-  }
-}
-
-@media (min-width: 342px) and (max-width: 383px) {
-  #location {
-    max-width: 98vw;
-  }
-
-  #radius {
-    margin-left: 0 !important;
-    width: 70%;
-  }
-
-  #location .v-autocomplete__content.v-menu__content {
-    max-height: 225px !important;
-    overflow-y: scroll;
-    overflow-x: hidden;
-  }
-}
-
-#location .v-text-field {
-  padding-right: 5px;
-}
-
-@media (min-width: 383px) {
-  #location {
-    max-width: 98vw;
-  }
-
-  #location .v-input__slot {
-    margin-left: 2px;
-  }
-
-  #radius {
-    margin-left: 0 !important;
-    max-width: 77.5%;
-  }
-}
-
-@media (min-width: 410px) {
-  #location {
-    max-width: 98vw;
-  }
-
-  #location .v-input__slot {
-    margin-left: 2px;
-  }
-
-  #radius {
-    margin-left: 0 !important;
-    max-width: 90%;
-  }
-}
-
-@media (min-width: 535px) {
-  #location {
-    width: auto;
-    max-width: none;
-  }
-
-  #radius {
-    max-width: 20%;
-    min-width: none;
-    margin-left: 10px !important;
-  }
-
-  #location .v-text-field {
-    padding-right: 0px;
-  }
-}
-
-@media (min-width: 613px) {
-  #radius {
-    width: 200px;
-  }
-}
-
 @media (min-width: 800px) {
-  #container {
+  .container {
     max-width: 1450px;
   }
 }
 
 @media (min-width: 960px) {
-  #container {
+  .container {
     width: 960px;
     max-width: none;
   }
 }
 
 @media (min-width: 1100px) {
-  #container {
+  .container {
     width: 1100px;
   }
 }
 
 @media (min-width: 1300px) {
-  #container {
+  .container {
     width: 1300px;
   }
 }
 
 @media (min-width: 1618px) {
-  #container {
+  .container {
     width: 1618px;
   }
 }
 
 @media (min-width: 1904px) {
-  #container {
+  .container {
     width: 85%;
   }
 }
