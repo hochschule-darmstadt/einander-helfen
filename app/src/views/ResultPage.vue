@@ -355,7 +355,6 @@
   </div>
 </template>
 
-<!-- test content -->
 <script lang="ts">
 import Header from "@/components/layout/Header.vue";
 import Post from "@/models/post";
@@ -375,7 +374,7 @@ const { mapState: mapSearchState } = createNamespacedHelpers(
 );
 
 import L, { LatLngTuple } from "leaflet";
-import { LMap, LTileLayer, LMarker, LTooltip } from "vue2-leaflet";
+import { LMap, LTileLayer, LTooltip } from "vue2-leaflet";
 import Vue2LeafletMarkerCluster from "vue2-leaflet-markercluster/Vue2LeafletMarkercluster.vue";
 import * as Vue2Leaflet from "vue2-leaflet";
 import { GestureHandling } from "leaflet-gesture-handling";
@@ -439,7 +438,6 @@ export default Vue.extend({
     ...mapGetters(["postsOnCurrentPage", "numberOfPages", "pageOfCurrentPost"]),
     ...mapLocationState([
       "selectedLocation",
-      "selectedLocationObject",
       "selectedRadius",
       "alternateRadius",
     ]),
@@ -615,13 +613,13 @@ export default Vue.extend({
       });
     },
     postDistance(post: Post): string {
-      if (!this.selectedLocationObject || !post.geo_location) {
+      if (!this.selectedLocation || !post.geo_location) {
         return "";
       }
 
       const distance = this.haversineDistance(
         [post.geo_location.lat, post.geo_location.lon],
-        [this.selectedLocationObject.lat, this.selectedLocationObject.lon]
+        [this.selectedLocation.lat, this.selectedLocation.lon]
       );
 
       if (distance) {
