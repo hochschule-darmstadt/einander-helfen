@@ -94,10 +94,6 @@ export default Vue.extend({
   margin: 3em 0;
 }
 
-/**
- TODO: is this container css nessesary?
- look vuetify grid
-*/
 .container {
   margin: auto;
 }
