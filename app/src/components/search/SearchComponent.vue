@@ -184,8 +184,23 @@ export default Vue.extend({
     padding-top: 0px;
   }
 }
-@media (min-width: 960px) {
-  .searchbox:not(.fullwidth) {
+
+.searchbox.fullwidth {
+  @media (max-width: 390px) {
+    .radius_select {
+      flex-basis: 0;
+    }
+  }
+}
+
+.searchbox:not(.fullwidth) {
+  @media (max-width: 480px) {
+    .radius_select {
+      flex-basis: 0;
+    }
+  }
+
+  @media (min-width: 960px) {
     .locationDiv,
     .searchCol {
       padding: 0px 12px;

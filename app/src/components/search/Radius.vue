@@ -78,11 +78,6 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-@media (max-width: 480px) {
-  .radius_select {
-    flex-basis: 0;
-  }
-}
 @media (min-width: 600px) {
   .radius_select {
     width: 200px;
