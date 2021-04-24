@@ -209,11 +209,3 @@ export default Vue.extend({
   }
 }
 </style>
-
-<style lang="scss">
-.searchbox .v-menu__content {
-  z-index: 1001 !important;
-  display: inline-table;
-  border-radius: 4px;
-}
-</style>
