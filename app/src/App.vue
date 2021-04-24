@@ -20,8 +20,16 @@ export default Vue.extend({
 });
 </script>
 
+
+
 <style lang="scss">
 /** global style */
+
+html,
+body {
+  overflow-x: hidden;
+}
+
 .v-menu__content {
   z-index: 1001 !important;
   display: inline-table;

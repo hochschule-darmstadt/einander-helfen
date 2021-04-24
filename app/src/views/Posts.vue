@@ -53,132 +53,7 @@
 
       <!-- right side content-->
       <v-flex sm12 md6 order-md2 class="details" v-if="!showMap && !smartphone">
-        <div>
-          <v-card tile style="height: 70vh; overflow: auto">
-            <v-list-item three-line>
-              <v-tooltip top v-if="selectedPost.geo_location === null">
-                <template v-slot:activator="{ on }">
-                  <div
-                    id="divWithDisabledButton"
-                    v-on="on"
-                    class="d-inline-block"
-                  >
-                    <v-btn
-                      id="disabledMapButton"
-                      :disabled="selectedPost.geo_location === null"
-                      dark
-                      class="mr-3"
-                      text
-                    >
-                      <v-icon>map</v-icon> Karte
-                    </v-btn>
-                  </div>
-                </template>
-                <span
-                  >Der Pin für dieses Angebot kann auf der Karte nicht angezeigt
-                  werden, da keine Geodaten hinterlegt sind.</span
-                >
-              </v-tooltip>
-
-              <v-btn
-                dark
-                class="mr-3 button-map"
-                text
-                @click="openMap()"
-                v-if="selectedPost.geo_location !== null"
-              >
-                <v-icon>map</v-icon> Karte
-              </v-btn>
-
-              <!--display title, subtitle and image on the right side-->
-              <v-list-item-content style="margin-top: 2%" class="headline">
-                {{ selectedPost.title }}
-              </v-list-item-content>
-              <v-btn class="button-close" icon @click="closePost()">
-                <v-icon>close</v-icon>
-              </v-btn>
-            </v-list-item>
-
-            <!--display content on the right side-->
-            <v-card-text style="padding: 0 10px">
-              <v-simple-table class="no-border detail-table">
-                <tbody>
-                  <tr v-if="selectedPost.location">
-                    <td>Einsatzort</td>
-                    <td v-html="selectedPost.location"></td>
-                  </tr>
-                  <tr class="pt-1" v-if="selectedPost.title">
-                    <td>Aufgabe</td>
-                    <td v-html="selectedPost.task"></td>
-                  </tr>
-                  <tr class="pt-1" v-if="selectedPost.contact">
-                    <td>Ansprechpartner</td>
-                    <td v-html="selectedPost.contact"></td>
-                  </tr>
-                  <tr class="pt-1" v-if="selectedPost.organization">
-                    <td>Organisation</td>
-                    <td v-html="selectedPost.organization"></td>
-                  </tr>
-                  <tr class="pt-1" v-if="selectedPost.target_group">
-                    <td>Zielgruppe</td>
-                    <td v-html="selectedPost.target_group"></td>
-                  </tr>
-                  <tr class="pt-1" v-if="selectedPost.timing">
-                    <td>Einstiegsdatum / Beginn</td>
-                    <td v-html="selectedPost.timing"></td>
-                  </tr>
-                  <tr class="pt-1" v-if="selectedPost.effort">
-                    <td>Zeitaufwand</td>
-                    <td v-html="selectedPost.effort"></td>
-                  </tr>
-                  <tr class="pt-1" v-if="selectedPost.opportunities">
-                    <td>Möglichkeiten</td>
-                    <td v-html="selectedPost.opportunities"></td>
-                  </tr>
-                  <tr class="pt-1" v-if="selectedPost.prerequisites">
-                    <td>Anforderungen</td>
-                    <td v-html="selectedPost.prerequisites"></td>
-                  </tr>
-                  <tr class="pt-1" v-if="selectedPost.language_skills">
-                    <td>Sprachen</td>
-                    <td v-html="selectedPost.language_skills"></td>
-                  </tr>
-                  <tr class="pt-1" v-if="selectedPost.link">
-                    <td>Quelle</td>
-                    <td>
-                      <a :href="selectedPost.link" target="_blank">{{
-                        selectedPost.source
-                      }}</a>
-                    </td>
-                  </tr>
-                </tbody>
-              </v-simple-table>
-            </v-card-text>
-
-            <v-card-actions>
-              <v-flex md12 sm12>
-                <v-container style="margin-bottom: 10px">
-                  <template v-for="(category, i) in selectedPost.categories">
-                    <v-chip :key="i" class="mr-2 mt-2">{{ category }}</v-chip>
-                  </template>
-                </v-container>
-                <v-spacer></v-spacer>
-                <v-container style="display: flex; justify-content: center">
-                  <v-btn
-                    class="my-2"
-                    dark
-                    large
-                    color="#054C66"
-                    :href="selectedPost.link"
-                    target="_blank"
-                  >
-                    Zum Angebot
-                  </v-btn>
-                </v-container>
-              </v-flex>
-            </v-card-actions>
-          </v-card>
-        </div>
+        <PostCard :post="selectedPost" @close="closePost" @openMap="openMap" />
       </v-flex>
 
       <!--left side content-->
@@ -339,6 +214,7 @@
         </div>
       </v-flex>
     </v-container>
+
     <!--pageination-->
     <div class="text-center" style="margin-top: 2%; margin-bottom: 1%">
       <v-pagination
@@ -347,10 +223,10 @@
         :length="numberOfPages"
         total-visible="7"
         color="#054C66"
-      ></v-pagination>
-      <span class="pl-2 mt-2 d-inline-block font-italic"
-        >{{ totalResultSize }} Ergebnisse</span
-      >
+      />
+      <span class="pl-2 mt-2 d-inline-block font-italic">
+        {{ totalResultSize }} Ergebnisse
+      </span>
     </div>
   </div>
 </template>
@@ -379,12 +255,14 @@ import Vue2LeafletMarkerCluster from "vue2-leaflet-markercluster/Vue2LeafletMark
 import * as Vue2Leaflet from "vue2-leaflet";
 import { GestureHandling } from "leaflet-gesture-handling";
 import radii from "@/resources/radii";
+import PostCard from "@/components/map/PostCard.vue";
 
 L.Map.addInitHook("addHandler", "gestureHandling", GestureHandling);
 
 export default Vue.extend({
   components: {
     Header,
+    PostCard,
     LMap,
     LTileLayer,
     // LMarker,
@@ -662,6 +540,13 @@ export default Vue.extend({
   },
 });
 </script>
+<style lang="scss" scoped>
+.details {
+  height: 75vh;
+  overflow: auto;
+}
+</style>
+
 
 <style>
 @import "~leaflet/dist/leaflet.css";
@@ -682,47 +567,11 @@ strong[class^="copy"] {
 .activeListItem {
   background-color: #c4e0ff !important;
 }
-.no-border tr:not(:last-child) td:not(.v-data-table__mobile-row) {
-  border: 0 !important;
-}
-.detail-table table {
-  border-spacing: 0 20px !important;
-}
-.detail-table td {
-  height: unset !important;
-}
-.detail-table tr:hover {
-  background: unset !important;
-}
-.detail-table tr td {
-  vertical-align: top;
-}
-#divWithDisabledButton {
-  padding-top: 21px;
-  align-self: flex-start;
-}
-#disabledMapButton {
-  margin-left: 35px;
-  background-color: #e0e0e0;
-  color: rgb(174, 168, 168) !important;
-}
-#disabledMapButton .v-icon {
-  color: rgb(174, 168, 168) !important;
-}
-.button-map {
-  margin-top: 21px;
-  margin-left: 35px;
-  background-color: rgb(5, 76, 102);
-  align-self: flex-start;
-}
 .button-smartphone {
   display: none;
 }
 .button-map-smartphone {
   display: none;
-}
-.button-close {
-  align-self: flex-start;
 }
 .button-close-smartphone {
   position: absolute;
@@ -743,11 +592,6 @@ strong[class^="copy"] {
 }
 .map-heigth {
   height: 70vh;
-}
-
-html,
-body {
-  overflow-x: hidden;
 }
 
 @media only screen and (max-width: 960px) {
@@ -784,9 +628,6 @@ body {
   .button-details {
     display: none;
   }
-  .v-application .headline {
-    font-size: 1.3rem !important;
-  }
   .full-text {
     white-space: normal;
   }
@@ -802,10 +643,6 @@ body {
   }
 }
 @media only screen and (max-width: 500px) {
-  .button-map,
-  .button-close {
-    display: none;
-  }
   .button-smartphone {
     display: block;
   }
