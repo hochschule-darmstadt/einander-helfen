@@ -55,3 +55,27 @@ export default Vue.extend({
   }
 }
 </style>
+
+<style lang="scss">
+/** 
+* global style 
+* some hacks for optimal use of space in header
+*/
+@media screen and (max-width: 599px) {
+  .header_layout {
+    .locationDiv {
+      padding-top: 0px;
+      & > div {
+        width: calc(100% + 80px);
+      }
+    }
+  }
+}
+@media screen and (max-width: 959px) {
+  .header_layout {
+    .menubutton {
+      max-height: 50px;
+    }
+  }
+}
+</style>

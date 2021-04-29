@@ -1,12 +1,7 @@
 <template>
   <v-form class="searchbox" :class="{ fullwidth: isFullwidth }">
     <v-row justify="center" lg="2">
-      <v-col
-        class="searchCol"
-        cols="12"
-        :md="isFullwidth ? 12 : 5"
-        :lg="isFullwidth ? 12 : 6"
-      >
+      <v-col class="searchCol" cols="12" :md="isFullwidth ? 12 : 6">
         <SearchBar
           tabindex="1"
           v-model="searchValue"
@@ -18,29 +13,28 @@
         />
       </v-col>
 
-      <v-col
-        class="locationDiv"
-        cols="12"
-        :md="isFullwidth ? 12 : 7"
-        :lg="isFullwidth ? 12 : 6"
-      >
-        <AreaSelect tabindex="2" v-model="area" :dark="dark" />
-        <LocationSearchBar
-          tabindex="3"
-          :dark="dark"
-          :international="international"
-          v-model="locationSearchValue"
-          @enter="paramChanged"
-          @click.native="onSearchClick"
-        />
-        <Radius
-          tabindex="4"
-          :dark="dark"
-          :international="international"
-          v-model="radius"
-          @enter="paramChanged"
-        />
-        <SearchButton @click="executeSearch" tabindex="5" />
+      <v-col class="locationDiv" cols="12" :md="isFullwidth ? 12 : 6">
+        <div>
+          <AreaSelect tabindex="2" v-model="area" :dark="dark" />
+          <LocationSearchBar
+            tabindex="3"
+            :dark="dark"
+            :international="international"
+            v-model="locationSearchValue"
+            @enter="paramChanged"
+            @click.native="onSearchClick"
+          />
+        </div>
+        <div>
+          <Radius
+            tabindex="4"
+            :dark="dark"
+            :international="international"
+            v-model="radius"
+            @enter="paramChanged"
+          />
+          <SearchButton @click="executeSearch" tabindex="5" />
+        </div>
       </v-col>
     </v-row>
   </v-form>
@@ -190,13 +184,20 @@ export default Vue.extend({
   flex-direction: row;
 
   > div {
-    margin-right: 8px;
+    display: flex;
+    align-items: center;
+    &:first-child {
+      flex-grow: 1;
+    }
+    > div {
+      margin-right: 8px;
+    }
   }
 }
 
 @media (max-width: 599px) {
   .locationDiv {
-    flex-wrap: wrap;
+    flex-direction: column;
   }
 }
 
@@ -210,20 +211,14 @@ export default Vue.extend({
 }
 
 .searchbox.fullwidth {
-  @media (max-width: 390px) {
+  @media (min-width: 800px) {
     .radius_select {
-      flex-basis: 0;
+      width: 200px;
     }
   }
 }
 
 .searchbox:not(.fullwidth) {
-  @media (max-width: 480px) {
-    .radius_select {
-      flex-basis: 0;
-    }
-  }
-
   @media (min-width: 960px) {
     .locationDiv,
     .searchCol {

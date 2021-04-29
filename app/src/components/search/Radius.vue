@@ -80,7 +80,7 @@ export default Vue.extend({
 <style lang="scss" scoped>
 @media (min-width: 600px) {
   .radius_select {
-    width: 200px;
+    width: 100px;
   }
 }
 </style>

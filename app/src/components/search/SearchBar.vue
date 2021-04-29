@@ -209,7 +209,9 @@ export default Vue.extend({
   margin-top: -20px;
 }
 </style>
+
 <style lang="scss">
+/** global style */
 .searchBar .v-autocomplete__content.v-menu__content {
   top: auto !important;
   left: auto !important;
