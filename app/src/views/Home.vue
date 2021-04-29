@@ -4,7 +4,7 @@
     <Carousel />
 
     <v-container class="container">
-      <SearchComponent class="searchcomponent" :fullwidth="true" />
+      <SearchComponent class="searchcomponent" />
 
       <v-row justify="center" lg="3">
         <v-col md="3" xl="3" v-for="tag in volunteerTags" :key="tag.title">

@@ -21,7 +21,7 @@
       </router-link>
     </v-btn>
 
-    <SearchComponent class="search_bar" dark :fullwidth="false" />
+    <SearchComponent class="search_bar" dark direktsearch small />
 
     <MenuButton />
   </header>

@@ -13,7 +13,7 @@
           :tags="searchTags"
           :enable-no-data-message="true"
           @click.native="onSearchClick"
-          @enter="executeSearch"
+          @enter="paramChanged"
           @remove="removeTag"
         />
       </v-col>
@@ -30,7 +30,7 @@
           :dark="dark"
           :international="international"
           v-model="locationSearchValue"
-          @enter="executeSearch"
+          @enter="paramChanged"
           @click.native="onSearchClick"
         />
         <Radius
@@ -38,7 +38,7 @@
           :dark="dark"
           :international="international"
           v-model="radius"
-          @enter="executeSearch"
+          @enter="paramChanged"
         />
         <SearchButton @click="executeSearch" tabindex="5" />
       </v-col>
@@ -68,9 +68,19 @@ export default Vue.extend({
     SearchButton,
   },
   props: {
-    fullwidth: {
+    /**
+     * define if the searchcomponent should be rendered smaller
+     */
+    small: {
       type: Boolean,
-      default: true,
+      default: false,
+    },
+    /**
+     * define if the search should be executed by any value change
+     */
+    direktsearch: {
+      type: Boolean,
+      default: false,
     },
     dark: {
       type: Boolean,
@@ -85,6 +95,14 @@ export default Vue.extend({
       area: "germany",
       radius: "",
     };
+  },
+  watch: {
+    radius() {
+      this.paramChanged();
+    },
+    area() {
+      this.paramChanged();
+    },
   },
   mounted(): void {
     // load data from store
@@ -102,7 +120,7 @@ export default Vue.extend({
       return this.area === "international";
     },
     isFullwidth(): boolean {
-      return this.fullwidth;
+      return !this.small;
     },
   },
   methods: {
@@ -113,6 +131,9 @@ export default Vue.extend({
     ...mapActions("textSearchModule", ["addSearchValue", "removeSearchValue"]),
     ...mapActions(["setInternational", "updateURIFromState"]),
 
+    paramChanged(): void {
+      if (this.direktsearch) this.executeSearch();
+    },
     executeSearch(): void {
       // add search value to tags
       if (this.searchValue) this.searchTags.push(this.searchValue);
@@ -147,8 +168,11 @@ export default Vue.extend({
       }
     },
     removeTag(tag: string) {
+      // remove tag
       this.searchTags = this.searchTags.filter((item) => item != tag);
       this.removeSearchValue(tag);
+      // update uri
+      this.updateURIFromState();
     },
   },
 });
