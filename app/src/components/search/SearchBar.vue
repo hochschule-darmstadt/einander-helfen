@@ -11,7 +11,7 @@
       :items="searchProposals"
       :search-input.sync="searchValue"
       @change="onInputChange"
-      @keydown.enter="onEnter"
+      @keyup.enter="onEnter"
       attach=".searchBar"
     >
       <template v-slot:no-data v-if="showNoData">
