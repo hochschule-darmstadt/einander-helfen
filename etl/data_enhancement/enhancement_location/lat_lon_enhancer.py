@@ -2,8 +2,8 @@ from geopy.geocoders import Nominatim
 import csv
 import time
 import os
-from bs4 import BeautifulSoup
 from shared.LoggerFactory import LoggerFactory
+from data_enhancement.enhancement_location.request_string_cleaner import RequestStringCleaner
 
 
 class LatLonEnhancer:
@@ -23,6 +23,7 @@ class LatLonEnhancer:
         self.__setup()
         self.geo_locator = Nominatim(user_agent="einander-helfen.org")
         self.__load_local_storage()
+        self.request_string_cleaner = RequestStringCleaner()
 
     def __setup(self):
         """Checks if the local storage file exists and creates it if it is missing"""
@@ -39,7 +40,7 @@ class LatLonEnhancer:
         # If object has lat lon: return object
         if None is post['geo_location']:
 
-            prioritized_request_list = LatLonEnhancer.get_prioritized_request_strings(post)
+            prioritized_request_list = self.get_prioritized_request_strings(post)
 
             for request_string in prioritized_request_list:
                 lat_lon = self.__check_local_storage(request_string)
@@ -133,15 +134,14 @@ class LatLonEnhancer:
                 return geo_location
         return None
 
-    @staticmethod
-    def get_prioritized_request_strings(post):
+    def get_prioritized_request_strings(self, post):
         """Build a prioritized list of API request string"""
         LatLonEnhancer.logger.debug("get_prioritized_request_strings()")
 
         prioritized_request_list = []
 
         if LatLonEnhancer.has_insufficient_information(post):
-            prioritized_request_list.append(BeautifulSoup(post['location'], 'lxml').text)
+            prioritized_request_list.append(self.request_string_cleaner.clean_request_string(post['location'], post['source']))
 
         struct_data = post['post_struct']
 
