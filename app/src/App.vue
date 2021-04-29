@@ -35,5 +35,9 @@ body {
   display: inline-table;
   border-radius: 4px;
 }
+
+.btn-dark {
+  background-color: rgb(5, 76, 102) !important;
+}
 </style>
 

@@ -18,7 +18,7 @@
         </span>
       </v-tooltip>
 
-      <v-btn v-else class="button-map" dark @click="openMap()">
+      <v-btn v-else class="button-map btn-dark" dark @click="openMap()">
         <v-icon>map</v-icon> Karte
       </v-btn>
 
@@ -122,7 +122,6 @@ export default Vue.extend({
     .button-map {
       margin-left: 20px;
       margin-right: 20px;
-      background-color: rgb(5, 76, 102) !important;
 
       &.disabled {
         background-color: #e0e0e0;

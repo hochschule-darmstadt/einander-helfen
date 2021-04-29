@@ -2,53 +2,20 @@
   <div>
     <Header />
     <v-container sitecontent row wrap no-gutters>
+      <div class="mb-2 smartphone-map-button">
+        <v-btn clas="btn-dark" dark @click="toggleMapVisibility()">
+          <v-icon>map</v-icon>
+          {{ showMap ? "Karte ausblenden" : "Karte anzeigen" }}
+        </v-btn>
+      </div>
       <!-- Map -->
-      <v-btn
-        id="mapButton"
-        class="mb-2 button-map-smartphone"
-        dark
-        @click="toggleMapVisibility()"
-      >
-        <v-icon>map</v-icon> {{ mapButtonText }}
-      </v-btn>
-      <v-flex xs12 md6 order-md2 class="map-smartphone" v-show="showMap">
-        <div class="map">
-          <v-card tile id="mapcard" class="map-heigth">
-            <div id="map" :style="{ height: map.height, width: map.width }">
-              <v-btn
-                v-if="currentPostId.length > 0"
-                @click="toggleMapVisibility()"
-                class="button-details"
-                dark
-                ><v-icon>info</v-icon> Details
-              </v-btn>
-              <l-map
-                ref="map"
-                :center="map.center"
-                :zoom="map.zoom"
-                :options="{ gestureHandling: true }"
-              >
-                <l-tile-layer
-                  :url="map.url"
-                  :attribution="map.attribution"
-                ></l-tile-layer>
-                <v-marker-cluster>
-                  <v-marker
-                    v-for="post in postWithGeoLocation"
-                    :key="post.id"
-                    :icon="
-                      post.id === currentPostId ? map.markerRed : map.markerBlue
-                    "
-                    :lat-lng="[post.geo_location.lat, post.geo_location.lon]"
-                    @click="openPost(post.id)"
-                  >
-                    <l-tooltip :content="post.title"></l-tooltip>
-                  </v-marker>
-                </v-marker-cluster>
-              </l-map>
-            </div>
-          </v-card>
-        </div>
+      <v-flex xs12 md6 order-md2 class="map" v-show="showMap">
+        <MapCard
+          :posts="postWithGeoLocation"
+          :activePost="currentPostId"
+          @showDetail="toggleMapVisibility"
+          @openPost="openPost"
+        />
       </v-flex>
 
       <!-- right side content-->
@@ -232,9 +199,11 @@
 </template>
 
 <script lang="ts">
-import Header from "@/components/layout/Header.vue";
-import Post from "@/models/post";
 import Vue from "vue";
+import Header from "@/components/layout/Header.vue";
+import PostCard from "@/components/map/PostCard.vue";
+import MapCard from "@/components/map/MapCard.vue";
+import Post from "@/models/post";
 import {
   mapActions,
   mapState,
@@ -249,57 +218,19 @@ const { mapState: mapSearchState } = createNamespacedHelpers(
   "textSearchModule"
 );
 
-import L, { LatLngTuple } from "leaflet";
-import { LMap, LTileLayer, LTooltip } from "vue2-leaflet";
-import Vue2LeafletMarkerCluster from "vue2-leaflet-markercluster/Vue2LeafletMarkercluster.vue";
-import * as Vue2Leaflet from "vue2-leaflet";
-import { GestureHandling } from "leaflet-gesture-handling";
 import radii from "@/resources/radii";
-import PostCard from "@/components/map/PostCard.vue";
-
-L.Map.addInitHook("addHandler", "gestureHandling", GestureHandling);
 
 export default Vue.extend({
+  name: "PostsView",
   components: {
     Header,
     PostCard,
-    LMap,
-    LTileLayer,
-    // LMarker,
-    LTooltip,
-    "v-marker": Vue2Leaflet.LMarker,
-    // "v-popup": Vue2Leaflet.LPopup,
-    "v-marker-cluster": Vue2LeafletMarkerCluster,
+    MapCard,
   },
-  data(): {
-    map: any;
-    mapButtonText: string;
-    showMap: boolean;
-    smartphone: boolean;
-    radiusExtendedFrom: "";
-    showRadiusExtendedMessage: boolean;
-  } {
+  data: function () {
     return {
-      mapButtonText: "Karte anzeigen",
       showMap: true,
       smartphone: false,
-      map: {
-        url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-        attribution:
-          '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-        center: [51.5, 10.5],
-        zoom: 12,
-        width: "100%",
-        height: "100%",
-        markerBlue: L.icon({
-          iconUrl: require("../../public/images/marker/marker-icon.png"),
-          iconSize: [25, 41],
-        }),
-        markerRed: L.icon({
-          iconUrl: require("../../public/images/marker/marker-icon-red.png"),
-          iconSize: [25, 41],
-        }),
-      },
       radiusExtendedFrom: "",
       showRadiusExtendedMessage: false,
     };
@@ -342,9 +273,7 @@ export default Vue.extend({
       window.addEventListener("resize", this.onResize);
     });
   },
-  mounted(): void {
-    this.rerenderMap();
-  },
+  mounted(): void {},
   watch: {
     /**
      * Beobachtet die aktuell geladenen Posts.
@@ -433,20 +362,6 @@ export default Vue.extend({
       this.showMap = true;
       this.setMapLocation();
     },
-    setMapLocation(): void {
-      if (!this.showMap) {
-        return;
-      }
-      const currentPost = this.selectedPost as Post;
-      const location = [
-        currentPost.geo_location.lat,
-        currentPost.geo_location.lon,
-      ] as LatLngTuple;
-      this.rerenderMap();
-      this.$nextTick(() => {
-        (this.$refs.map as LMap).setCenter(location);
-      });
-    },
     closePost(): void {
       this.setSelectedPost(null);
       if (!this.smartphone) {
@@ -457,29 +372,8 @@ export default Vue.extend({
         this.fitMapBounds(this.posts);
       });
     },
-    fitMapBounds(posts: Post[]): void {
-      if (!this.showMap) {
-        return;
-      }
-      const markers = posts
-        .filter((post) => post.geo_location !== null)
-        .map(
-          (post) =>
-            [post.geo_location.lat, post.geo_location.lon] as LatLngTuple
-        );
-      (this.$refs.map as LMap).fitBounds(markers);
-    },
-    rerenderMap(): void {
-      if (!this.showMap) {
-        return;
-      }
-      this.$nextTick(() => {
-        (this.$refs.map as LMap).mapObject.invalidateSize();
-      });
-    },
     toggleMapVisibility(): void {
       this.showMap = !this.showMap;
-      this.mapButtonText = this.showMap ? "Karte ausblenden" : "Karte anzeigen";
       this.$nextTick(() => {
         if (this.showMap) {
           if (this.selectedPost !== null) {
@@ -529,7 +423,6 @@ export default Vue.extend({
       if (!this.smartphone && window.innerWidth <= 960) {
         this.smartphone = true;
         this.showMap = false;
-        this.mapButtonText = "Karte anzeigen";
       } else if (this.smartphone && window.innerWidth > 960) {
         this.smartphone = false;
         if (this.selectedPost === null) {
@@ -545,15 +438,15 @@ export default Vue.extend({
   height: 75vh;
   overflow: auto;
 }
+
+@media only screen and (min-width: 960px) {
+  .smartphone-map-button {
+    display: none;
+  }
+}
 </style>
 
-
 <style>
-@import "~leaflet/dist/leaflet.css";
-@import "~leaflet.markercluster/dist/MarkerCluster.css";
-@import "~leaflet.markercluster/dist/MarkerCluster.Default.css";
-@import "~leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
-
 .copyright,
 .copy,
 .cpy,
@@ -567,22 +460,9 @@ strong[class^="copy"] {
 .activeListItem {
   background-color: #c4e0ff !important;
 }
-.button-smartphone {
-  display: none;
-}
-.button-map-smartphone {
-  display: none;
-}
 .button-close-smartphone {
   position: absolute;
   right: 0;
-}
-.button-details {
-  position: absolute;
-  z-index: 9999;
-  margin-left: 50px;
-  margin-top: 20px;
-  background-color: rgb(5, 76, 102) !important;
 }
 .details-smartphone {
   display: none;
@@ -590,21 +470,9 @@ strong[class^="copy"] {
 .post-subtitle {
   display: -webkit-box !important;
 }
-.map-heigth {
-  height: 70vh;
-}
-
 @media only screen and (max-width: 960px) {
-  .map-heigth {
-    height: 60vh;
-  }
   .map-smartphone {
     margin-bottom: 12px;
-  }
-  .button-map-smartphone {
-    display: block;
-    width: 100%;
-    background-color: rgb(5, 76, 102) !important;
   }
   .details {
     display: none;
@@ -640,11 +508,6 @@ strong[class^="copy"] {
     max-height: 40px;
     opacity: 1;
     transition: all 0.4s 0.2s;
-  }
-}
-@media only screen and (max-width: 500px) {
-  .button-smartphone {
-    display: block;
   }
 }
 

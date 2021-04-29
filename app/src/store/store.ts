@@ -9,7 +9,6 @@ import { RootState } from "./types";
 
 Vue.use(Vuex);
 
-/** TODO: remove unnessesary module splitting, maybe just one searchmodule and one page module */
 const store: StoreOptions<RootState> = {
   modules: {
     textSearchModule,
