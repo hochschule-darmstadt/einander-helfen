@@ -9,11 +9,13 @@
 </template>
 
 <script lang="ts">
-import { Vue } from 'vue-property-decorator';
+import Vue from 'vue';
 import Toolbar from '@/components/layout/Toolbar.vue';
 import Footer from '@/components/layout/Footer.vue';
 
 export default Vue.extend({
+  name: 'App',
+
   components: {
     Footer,
     Toolbar

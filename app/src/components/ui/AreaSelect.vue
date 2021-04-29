@@ -22,67 +22,85 @@
 </template>
 
 <script lang="ts">
-import { createNamespacedHelpers, mapActions as mapStateActions, mapGetters } from 'vuex';
-const { mapState, mapActions } = createNamespacedHelpers('locationSearchModule');
+// import { createNamespacedHelpers, mapActions as mapStateActions, mapGetters } from 'vuex';
+// const { mapState, mapActions } = createNamespacedHelpers('locationSearchModule');
 import Vue from 'vue';
-import Component from 'vue-class-component';
-import { Prop, Watch } from 'vue-property-decorator';
-import { Getter, Mutation } from 'vuex-class';
 
 interface Item {
   title: string;
   img: string;
 }
 
-@Component
-export default class AreaSelect extends Vue {
+export default Vue.extend({
+  name: 'AreaSelect',
 
-  get international(): boolean {
-    return this.getInternational;
-  }
-  @Getter('getInternational') public getInternational;
-  @Mutation('setInternational') public setInternational;
-
-  @Prop({default: false})
-  public dark!: boolean;
-
-  @Prop({default: ''})
-  public attachTo!: string;
-
-  public items: Item[] = [
-    {
-      title: 'Deutschland',
-      img: '/images/240px-Flag_of_Germany.png'
+  props: {
+    dark: {
+      type: Boolean,
+      default: false
     },
-    {
-      title: 'International',
-      img: '/images/240px-Earth_icon_2.png'
+    attachTo: {
+      type: String,
+      default: '',
     }
-  ];
+  },
 
-  public selection: string = this.items[0].title;
+  data(): {
+    items: Item[],
+    selection: string
+  } {
+    return {
+      items: [
+        {
+          title: 'Deutschland',
+          img: '/images/240px-Flag_of_Germany.png'
+        },
+        {
+          title: 'International',
+          img: '/images/240px-Earth_icon_2.png'
+        }
+      ],
+      selection: '',
+    };
+  },
 
-  @Watch('selection')
-  public onPropertyChanged(newValue: string): void {
-    if (newValue === this.items[0].title) {
-      this.setInternational(false);
-    } else {
-      this.setInternational(true);
-    }
-  }
-
-  public mounted(): void {
+  mounted(): void {
+    this.selection = this.items[0].title;
     this.setSelection(this.international);
-  }
+  },
 
-  public setSelection(international: boolean): void {
-    if (international) {
-      this.selection = this.items[1].title;
-    } else {
-      this.selection = this.items[0].title;
-    }
-  }
-}
+  computed: {
+    getInternational(): any {
+      return this.$store.getters.getInternational;
+    },
+    international(): boolean {
+      return this.getInternational;
+    },
+  },
+
+  watch: {
+    selection(newValue: string): void {
+      if (newValue === this.items[0].title) {
+        this.setInternational(false);
+      } else {
+        this.setInternational(true);
+      }
+    },
+  },
+
+  methods: {
+    setSelection(international: boolean): void {
+      if (international) {
+        this.selection = this.items[1].title;
+      } else {
+        this.selection = this.items[0].title;
+      }
+    },
+    setInternational(obj: boolean): void {
+      this.$store.commit('setInternational', obj);
+    },
+  },
+});
 </script>
 
 <style>
