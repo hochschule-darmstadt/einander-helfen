@@ -24,8 +24,7 @@ export default Vue.extend({
 /** global style */
 .v-menu__content {
   z-index: 1001 !important;
-  display: inline-table;
-  border-radius: 4px;
+  border-radius: 4px !important;
 }
 </style>
 

@@ -107,4 +107,8 @@ export default Vue.extend({
 .areaImage {
   margin-right: 1em;
 }
+
+::v-deep .v-menu__content {
+  display: inline-table;
+}
 </style>
