@@ -22,8 +22,6 @@
 </template>
 
 <script lang="ts">
-// import { createNamespacedHelpers, mapActions as mapStateActions, mapGetters } from 'vuex';
-// const { mapState, mapActions } = createNamespacedHelpers('locationSearchModule');
 import Vue from 'vue';
 
 interface Item {
