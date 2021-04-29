@@ -21,7 +21,7 @@
       </router-link>
     </v-btn>
 
-    <SearchComponent class="search_bar" dark :fullwidth="false" />
+    <SearchComponent class="search_bar" dark direktsearch small />
 
     <MenuButton />
   </header>
@@ -52,6 +52,30 @@ export default Vue.extend({
   .search_bar {
     flex-grow: 1;
     margin-right: 30px;
+  }
+}
+</style>
+
+<style lang="scss">
+/** 
+* global style 
+* some hacks for optimal use of space in header
+*/
+@media screen and (max-width: 599px) {
+  .header_layout {
+    .locationDiv {
+      padding-top: 0px;
+      & > div {
+        width: calc(100% + 80px);
+      }
+    }
+  }
+}
+@media screen and (max-width: 959px) {
+  .header_layout {
+    .menubutton {
+      max-height: 50px;
+    }
   }
 }
 </style>

@@ -32,8 +32,7 @@ body {
 
 .v-menu__content {
   z-index: 1001 !important;
-  display: inline-table;
-  border-radius: 4px;
+  border-radius: 4px !important;
 }
 
 .btn-dark {
