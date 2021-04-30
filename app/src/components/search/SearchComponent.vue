@@ -26,7 +26,7 @@
           />
         </div>
         <div>
-          <Radius
+          <RadiusSelect
             tabindex="4"
             :dark="dark"
             :international="international"
@@ -43,11 +43,12 @@
 <script lang="ts">
 import Vue from "vue";
 import LocationSearchBar from "@/components/search/LocationSearchBar.vue";
-import Radius from "@/components/search/Radius.vue";
+import RadiusSelect from "@/components/search/RadiusSelect.vue";
 import SearchBar from "@/components/search/SearchBar.vue";
 import SearchButton from "@/components/search/SearchButton.vue";
 import AreaSelect from "@/components/search/AreaSelect.vue";
 import { mapActions, mapGetters } from "vuex";
+import Radius from "@/models/radius";
 
 /**
  * Emits @Search onSearch triggered event
@@ -58,7 +59,7 @@ export default Vue.extend({
     SearchBar,
     AreaSelect,
     LocationSearchBar,
-    Radius,
+    RadiusSelect,
     SearchButton,
   },
   props: {
@@ -87,7 +88,7 @@ export default Vue.extend({
       searchTags: [] as string[],
       locationSearchValue: "",
       area: "germany",
-      radius: "",
+      radius: undefined as Radius | undefined,
     };
   },
   watch: {
@@ -106,9 +107,12 @@ export default Vue.extend({
     this.locationSearchValue = this.getLocationText;
   },
   computed: {
-    ...mapGetters("locationSearchModule", ["getRadius", "getLocationText"]),
-    ...mapGetters("textSearchModule", ["getSearchValues"]),
-    ...mapGetters(["getInternational"]),
+    ...mapGetters("searchModule", [
+      "getRadius",
+      "getLocationText",
+      "getSearchValues",
+      "getInternational",
+    ]),
 
     international(): boolean {
       return this.area === "international";
@@ -118,12 +122,14 @@ export default Vue.extend({
     },
   },
   methods: {
-    ...mapActions("locationSearchModule", [
+    ...mapActions("searchModule", [
       "setSelectedRadius",
       "setSelectedLocation",
+      "addSearchValue",
+      "removeSearchValue",
+      "setInternational",
     ]),
-    ...mapActions("textSearchModule", ["addSearchValue", "removeSearchValue"]),
-    ...mapActions(["setInternational", "updateURIFromState"]),
+    ...mapActions(["updateURIFromState"]),
 
     paramChanged(): void {
       if (this.direktsearch) this.executeSearch();

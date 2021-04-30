@@ -2,7 +2,6 @@
   <v-select
     class="radius_select"
     label="Umkreis"
-    item-value="value"
     :items="radii"
     :dark="dark"
     :disabled="disabled"
@@ -19,11 +18,10 @@ import Radius from "@/models/radius";
 import radii from "@/resources/radii";
 
 export default Vue.extend({
-  name: "Radius",
+  name: "RadiusSelect",
   props: {
     value: {
-      type: String,
-      required: true,
+      type: Object as () => Radius,
     },
     international: {
       type: Boolean,
@@ -41,7 +39,7 @@ export default Vue.extend({
   data() {
     return {
       radii: radii as Radius[],
-      radius: this.value as string | null,
+      radius: this.value as Radius,
     };
   },
   watch: {
@@ -50,12 +48,15 @@ export default Vue.extend({
       this.setRadius();
     },
     international(): void {
-      if (this.international) this.radius = null;
+      if (this.international) this.radius = this.defaultRadii;
     },
   },
   computed: {
     disabled(): boolean {
       return this.international;
+    },
+    defaultRadii(): Radius {
+      return this.radii[0];
     },
   },
   mounted(): void {
@@ -63,7 +64,7 @@ export default Vue.extend({
   },
   methods: {
     setRadius() {
-      this.radius = this.value || this.radii[0].value;
+      this.radius = this.value || this.defaultRadii;
       this.$emit("input", this.radius);
     },
     onInputChange(): void {

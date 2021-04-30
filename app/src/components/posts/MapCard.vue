@@ -1,10 +1,10 @@
 <template>
   <v-card class="map" :style="{ height: map.height, width: map.width }" tile>
     <v-btn
-      v-if="activePost != undefined"
+      v-if="selectedPost != undefined"
       class="button-details"
       dark
-      @click="onDetailClick()"
+      @click="openPost(selectedPost)"
     >
       <v-icon>info</v-icon> Details
     </v-btn>
@@ -17,9 +17,13 @@
       <LTileLayer :url="map.url" :attribution="map.attribution" />
       <LMarckerCluster>
         <Lmarker
-          v-for="post in posts"
+          v-for="post in postWithGeoLocation"
           :key="post.id"
-          :icon="post.id === activePost.id ? map.markerRed : map.markerBlue"
+          :icon="
+            selectedPost && post.id === selectedPost.id
+              ? map.markerRed
+              : map.markerBlue
+          "
           :lat-lng="[post.geo_location.lat, post.geo_location.lon]"
           @click="openPost(post)"
         >
@@ -44,8 +48,7 @@ import { GestureHandling } from "leaflet-gesture-handling";
 L.Map.addInitHook("addHandler", "gestureHandling", GestureHandling);
 
 /**
- * Emits @showDetail
- * Emits @openPost
+ * Emits @openPost if single post is clickt
  */
 export default Vue.extend({
   name: "MapCard",
@@ -61,9 +64,8 @@ export default Vue.extend({
       type: Array as () => Post[],
       required: true,
     },
-    activePost: {
+    selectedPost: {
       type: Object as () => Post,
-      default: undefined,
     },
   },
   data: function () {
@@ -77,20 +79,27 @@ export default Vue.extend({
         width: "100%",
         height: "100%",
         markerBlue: L.icon({
-          iconUrl: require("../../public/images/marker/marker-icon.png"),
+          iconUrl: require("@/assets/images/marker/marker-icon.png"),
           iconSize: [25, 41],
         }),
         markerRed: L.icon({
-          iconUrl: require("../../public/images/marker/marker-icon-red.png"),
+          iconUrl: require("@/assets/images/marker/marker-icon-red.png"),
           iconSize: [25, 41],
         }),
       },
     };
   },
+  computed: {
+    /**
+     * filter only posts that have a gea_location
+     */
+    postWithGeoLocation(): any {
+      return this.posts.filter((post) => post.geo_location !== null);
+    },
+  },
   watch: {
-    activePost() {
+    selectedPost() {
       this.rerenderMap();
-      this.setMapLocation();
     },
     posts() {
       this.rerenderMap();
@@ -98,21 +107,21 @@ export default Vue.extend({
   },
   mounted(): void {
     this.rerenderMap();
-    this.setMapLocation();
   },
   methods: {
     rerenderMap(): void {
       this.$nextTick(() => {
         (this.$refs.map as LMap).mapObject.invalidateSize();
         this.fitMapBounds();
+        this.setMapLocation();
       });
     },
 
     setMapLocation(): void {
-      if (this.activePost) {
+      if (this.selectedPost) {
         const location = [
-          this.activePost.geo_location.lat,
-          this.activePost.geo_location.lon,
+          this.selectedPost.geo_location.lat,
+          this.selectedPost.geo_location.lon,
         ] as LatLngTuple;
         this.$nextTick(() => {
           (this.$refs.map as LMap).setCenter(location);
@@ -120,18 +129,19 @@ export default Vue.extend({
       }
     },
 
+    /**
+     * Sets the viewpost of the map to all marks
+     */
     fitMapBounds(): void {
-      const markers = this.posts
-        .filter((post) => post.geo_location !== null)
-        .map(
-          (post) =>
-            [post.geo_location.lat, post.geo_location.lon] as LatLngTuple
-        );
-      (this.$refs.map as LMap).fitBounds(markers);
-    },
-
-    onDetailClick(): void {
-      this.$emit("showDetail");
+      if (this.posts.length) {
+        const markers = this.posts
+          .filter((post) => post.geo_location !== null)
+          .map(
+            (post) =>
+              [post.geo_location.lat, post.geo_location.lon] as LatLngTuple
+          );
+        (this.$refs.map as LMap).fitBounds(markers);
+      }
     },
 
     openPost(post: Post): void {
@@ -162,5 +172,19 @@ export default Vue.extend({
   .button-details {
     display: none;
   }
+}
+</style>
+
+<style lang="scss">
+/** global style */
+.copyright,
+.copy,
+.cpy,
+strong[class^="copyright"],
+strong[class^="cpy"],
+strong[class^="copy"] {
+  clear: both;
+  padding: 10px 0px;
+  display: none;
 }
 </style>

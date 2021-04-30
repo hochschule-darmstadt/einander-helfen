@@ -1,424 +1,170 @@
 <template>
   <div>
     <Header />
-    <v-container sitecontent row wrap no-gutters>
-      <div class="mb-2 smartphone-map-button">
-        <v-btn clas="btn-dark" dark @click="toggleMapVisibility()">
-          <v-icon>map</v-icon>
-          {{ showMap ? "Karte ausblenden" : "Karte anzeigen" }}
-        </v-btn>
-      </div>
-      <!-- Map -->
-      <v-flex xs12 md6 order-md2 class="map" v-show="showMap">
-        <MapCard
-          :posts="postWithGeoLocation"
-          :activePost="currentPostId"
-          @showDetail="toggleMapVisibility"
-          @openPost="openPost"
-        />
-      </v-flex>
+    <PostsLoader @postsChange="onPostsChange" @extendRadius="onRadiusExtended">
+      <template v-slot="{ allPosts, pagePosts }">
+        <v-container class="sitecontent row wrap no-gutters">
+          <MapButton v-if="smartphone" v-model="showMap" />
 
-      <!-- right side content-->
-      <v-flex sm12 md6 order-md2 class="details" v-if="!showMap && !smartphone">
-        <PostCard :post="selectedPost" @close="closePost" @openMap="openMap" />
-      </v-flex>
+          <!-- right side content for desktop-->
+          <v-flex class="map xs12 md6 order-md2">
+            <!-- Map -->
+            <MapCard
+              v-show="showMap"
+              :posts="allPosts"
+              :activePost="selectedPost"
+              @openPost="openPost"
+            />
+            <!-- detail card if not smartphone -->
+            <PostCard
+              v-if="!showMap && !smartphone"
+              :post="selectedPost"
+              @close="closePost"
+              @openMap="openMap"
+            />
+          </v-flex>
 
-      <!--left side content-->
-      <v-flex sm12 md6 order-md1>
-        <div id="postbox" style="height: 70vh; overflow: auto">
-          <div v-if="showRadiusExtendedMessage" class="text-center pt-12 pb-12">
-            <h3 class="font-weight-bold">
-              Zu Ihrer Suchanfrage mit einem Radius von
-              {{ radiusExtendedFrom }} haben wir keine Treffer gefunden.
-              <template v-if="alternateRadius"
-                >Folgende Ergebnisse werden in einem Umkreis von
-                {{ alternateRadius }} gefunden.</template
-              >
-              <template v-else
-                >Folgende Ergebnisse werden in einem Umkreis von mehr als 50 km
-                gefunden.</template
-              >
-            </h3>
-          </div>
-
-          <v-card
-            id="posttitlecard"
-            v-for="post in postsOnCurrentPage"
-            :key="post.id"
-            class="mb-3"
-          >
-            <v-list-item
-              :ripple="false"
-              three-line
-              :class="{ activeListItem: currentPostId === post.id }"
-              @click="
-                currentPostId === post.id ? closePost() : openPost(post.id)
-              "
+          <!--left side content for desktop-->
+          <v-flex class="list sm12 md6 order-md1">
+            <div
+              v-if="showRadiusExtendedMessage"
+              class="text-center pt-12 pb-12"
             >
-              <v-list-item-content>
-                <v-list-item-title
-                  class="headline mb-1"
-                  :class="{ 'full-text': currentPostId === post.id }"
+              <h3 class="font-weight-bold">
+                Zu Ihrer Suchanfrage mit einem Radius von
+                {{ oldRadius }} haben wir keine Treffer gefunden.
+                <template v-if="radius.value"
+                  >Folgende Ergebnisse werden in einem Umkreis von
+                  {{ radius }} gefunden.</template
                 >
-                  {{ post.title }}
-                </v-list-item-title>
-                <v-list-item-subtitle
-                  :set="(distance = postDistance(post))"
-                  :class="{
-                    'post-subtitle-hidden': currentPostId === post.id,
-                    'post-subtitle': currentPostId !== post.id,
-                  }"
+                <template v-else
+                  >Folgende Ergebnisse werden in einem Umkreis von mehr als 50
+                  km gefunden.</template
                 >
-                  <strong>
-                    <span
-                      v-if="post.post_struct.location.country === 'Deutschland'"
-                      >{{ post.post_struct.location.zipcode }}</span
-                    >
-                    <span> {{ post.post_struct.location.city }}</span>
-                    <span
-                      v-if="post.post_struct.location.country !== 'Deutschland'"
-                      >{{ post.post_struct.location.country }}</span
-                    >
-                    <em
-                      v-if="
-                        distance &&
-                        post.post_struct.location.country === 'Deutschland'
-                      "
-                    >
-                      (in {{ distance }})</em
-                    >
-                  </strong>
-                  &mdash;
-                  <span v-html="post.task" />
-                </v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-            <v-card
-              ref="detailsSmartphone"
-              class="details-smartphone"
-              :class="{
-                'details-smartphone-visible': currentPostId === post.id,
-                'details-smartphone-hidden': currentPostId !== post.id,
-              }"
-            >
-              <v-card-text>
-                <div v-if="post.location">
-                  <h3>Einsatzort</h3>
-                  <p v-html="post.location"></p>
-                </div>
-                <div v-if="post.task">
-                  <h3>Aufgabe</h3>
-                  <p v-html="post.task"></p>
-                </div>
-                <div v-if="post.contact">
-                  <h3>Ansprechpartner</h3>
-                  <p v-html="post.contact"></p>
-                </div>
-                <div v-if="post.organization">
-                  <h3>Organisation</h3>
-                  <p v-html="post.organization"></p>
-                </div>
-                <div v-if="post.target_group">
-                  <h3>Zielgruppe</h3>
-                  <p v-html="post.target_group"></p>
-                </div>
-                <div v-if="post.timing">
-                  <h3>Einstiegsdatum / Beginn</h3>
-                  <p v-html="post.timing"></p>
-                </div>
-                <div v-if="post.effort">
-                  <h3>Zeitaufwand</h3>
-                  <p v-html="post.effort"></p>
-                </div>
-                <div v-if="post.opportunities">
-                  <h3>Möglichkeiten</h3>
-                  <p v-html="post.opportunities"></p>
-                </div>
-                <div v-if="post.prerequisites">
-                  <h3>Anforderungen</h3>
-                  <p v-html="post.prerequisites"></p>
-                </div>
-                <div v-if="post.language_skills">
-                  <h3>Sprachen</h3>
-                  <p v-html="post.language_skills"></p>
-                </div>
-                <div v-if="post.link">
-                  <h3>Quelle</h3>
-                  <p>
-                    <a :href="post.link" target="_blank">{{ post.source }}</a>
-                  </p>
-                </div>
-              </v-card-text>
-              <v-card-actions>
-                <v-flex md12 sm12>
-                  <v-container style="margin-bottom: 10px">
-                    <template v-for="(category, i) in post.categories">
-                      <v-chip :key="i" class="mr-2 mt-2">{{ category }}</v-chip>
-                    </template>
-                  </v-container>
-                  <v-spacer></v-spacer>
-                  <v-container style="display: flex; justify-content: center">
-                    <v-btn
-                      class="my-2"
-                      dark
-                      large
-                      color="#054C66"
-                      :href="post.link"
-                      target="_blank"
-                    >
-                      Zum Angebot
-                    </v-btn>
-                  </v-container>
-                </v-flex>
-              </v-card-actions>
-            </v-card>
-          </v-card>
-          <div class="text-center pt-12" v-if="!postsOnCurrentPage.length">
-            <h3 class="font-weight-bold">
-              Es wurden keine Suchergebnisse zu Ihrer Suchanfrage gefunden.
-            </h3>
-          </div>
-        </div>
-      </v-flex>
-    </v-container>
+              </h3>
+            </div>
 
-    <!--pageination-->
-    <div class="text-center" style="margin-top: 2%; margin-bottom: 1%">
-      <v-pagination
-        @input="setPage($event)"
-        :value="page"
-        :length="numberOfPages"
-        total-visible="7"
-        color="#054C66"
-      />
-      <span class="pl-2 mt-2 d-inline-block font-italic">
-        {{ totalResultSize }} Ergebnisse
-      </span>
-    </div>
+            <PostListItem
+              v-for="post in pagePosts"
+              :key="post.id"
+              :post="post"
+              :active="post.id == selectedPost.id"
+              :showDetail="smartphone"
+              @click="currentPostId === post.id ? closePost() : openPost(post)"
+            />
+
+            <div class="text-center pt-12" v-if="!allPosts.length">
+              <h3 class="font-weight-bold">
+                Es wurden keine Suchergebnisse zu Ihrer Suchanfrage gefunden.
+              </h3>
+            </div>
+          </v-flex>
+        </v-container>
+      </template>
+    </PostsLoader>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import Header from "@/components/layout/Header.vue";
-import PostCard from "@/components/map/PostCard.vue";
-import MapCard from "@/components/map/MapCard.vue";
-import Post from "@/models/post";
-import {
-  mapActions,
-  mapState,
-  mapGetters,
-  createNamespacedHelpers,
-} from "vuex";
-const {
-  mapState: mapLocationState,
-  mapActions: mapLocationActions,
-} = createNamespacedHelpers("locationSearchModule");
-const { mapState: mapSearchState } = createNamespacedHelpers(
-  "textSearchModule"
-);
+import PostCard from "@/components/posts/PostCard.vue";
+import MapCard from "@/components/posts/MapCard.vue";
+import PostListItem from "@/components/posts/PostListItem.vue";
+import PostsLoader from "@/components/posts/PostsLoader.vue";
+import MapButton from "@/components/posts/MapButton.vue";
 
-import radii from "@/resources/radii";
+import Radius from "@/models/radius";
+import Post from "@/models/post";
+import { mapActions, mapMutations, mapState } from "vuex";
 
 export default Vue.extend({
   name: "PostsView",
   components: {
     Header,
+    MapButton,
+    PostsLoader,
     PostCard,
     MapCard,
+    PostListItem,
   },
   data: function () {
     return {
       showMap: true,
       smartphone: false,
-      radiusExtendedFrom: "",
+      radiusExtendedFrom: undefined as Radius | undefined,
       showRadiusExtendedMessage: false,
     };
   },
   computed: {
-    ...mapState([
-      "posts",
-      "page",
-      "resultsFrom",
-      "selectedPost",
-      "totalResultSize",
-      "hitsPerPage",
-    ]),
-    ...mapGetters(["postsOnCurrentPage", "numberOfPages", "pageOfCurrentPost"]),
-    ...mapLocationState([
-      "selectedLocation",
-      "selectedRadius",
-      "alternateRadius",
-    ]),
-    ...mapSearchState(["searchValues"]),
-    currentPostId(): string {
-      return this.selectedPost ? this.selectedPost.id : "";
-    },
-    postIsOpen(): boolean {
-      return !!this.selectedPost;
-    },
-    postWithGeoLocation(): any {
-      return this.posts.filter((post) => post.geo_location !== null);
-    },
+    ...mapState("postsModule", ["selectedPost"]),
   },
-  created(): void {
+  mounted(): void {
     this.hydrateStateFromRoute().then(() => {
+      // check if device is smartphone view
       if (window.matchMedia("(max-width: 960px)").matches) {
         this.showMap = false;
         this.smartphone = true;
       }
-      if (this.postIsOpen) {
-        this.showMap = false;
-      }
+      // close map if a post is open
+      if (this.selectedPost) this.showMap = false;
+
+      // set resize event handler
       window.addEventListener("resize", this.onResize);
     });
   },
-  mounted(): void {},
+  beforeDestroy(): void {
+    // remove event handler
+    window.removeEventListener("resize", this.onResize);
+  },
   watch: {
-    /**
-     * Beobachtet die aktuell geladenen Posts.
-     * Wenn nur ein Post vorhanden ist, diesen direkt öffnen.
-     * Wenn überhaupt Posts vorhanden sind, den Viewport der Karte auf alle Marker setzen.
-     * Wenn keine Posts da sind, ggf. den Radius vergrößern und erneut suchen.
-     *
-     * @param val Post[]
-     */
-    posts(val: Post[]): void {
-      if (val.length === 1) {
-        this.openPost(val[0].id);
-      }
-      if (val.length) {
-        this.fitMapBounds(val);
-
-        if (this.radiusExtendedFrom) {
-          this.showRadiusExtendedMessage = true;
-        }
-      } else {
-        // Unsere Suche hat keine Ergebnisse geliefert.
-        if (
-          this.selectedLocation &&
-          (this.selectedRadius || this.alternateRadius)
-        ) {
-          const myRadius = this.alternateRadius
-            ? this.alternateRadius
-            : this.selectedRadius;
-
-          // Wenn wir mit einem Radius um einen Ort suchen, den Radius vergrößern und nochmal probieren!
-          const currentRadiusIndex = radii.findIndex(
-            (r) => r.value === myRadius
-          );
-          const nextBiggerRadius =
-            radii[(currentRadiusIndex + 1) % radii.length];
-          // Wir wollen uns merken, dass wir den Radius verändert haben, um den Nutzer darüber zu informieren.
-          // Aber nur, wenn wir das nicht bereits gemacht haben um uns den Wert nicht zu überschreiben.
-          if (!this.radiusExtendedFrom) {
-            this.radiusExtendedFrom = this.selectedRadius;
-          }
-          this.setAlternateRadius(nextBiggerRadius.value);
-          this.findPosts();
-        }
-      }
-    },
-    selectedPost(value): void {
-      if (value === null) {
-        this.closePost();
-      }
-      this.updateURIFromState();
-    },
-    page(value): void {
-      this.setPage(value);
-    },
-    resultsFrom(newValue, oldValue): void {
-      if (oldValue !== newValue) {
-        this.findPosts();
-      }
-    },
-    alternateRadius(newValue, oldValue): void {
-      if (oldValue !== newValue && !newValue) {
+    radiusExtendedFrom(newValue, oldValue): void {
+      if (oldValue !== newValue && !newValue)
         this.showRadiusExtendedMessage = false;
-        this.radiusExtendedFrom = "";
-      }
     },
   },
   methods: {
-    ...mapActions([
-      "hydrateStateFromRoute",
-      "updateURIFromState",
-      "setSelectedPost",
-      "setPage",
-      "findPosts",
-    ]),
-    ...mapLocationActions(["setSelectedRadius", "setAlternateRadius"]),
-    openPost(id: string): void {
-      if (!this.smartphone) {
-        this.showMap = false;
-      }
-      const postIndex = this.posts.findIndex((post) => post.id === id);
-      this.setSelectedPost(this.posts[postIndex]);
-      this.setPage(this.pageOfCurrentPost);
-      this.setMapLocation();
+    ...mapMutations("postsModule", ["setSelectedPostId"]),
+    ...mapActions(["hydrateStateFromRoute"]),
+
+    /** Open details for a post */
+    openPost(post: Post): void {
+      // close map to show detail page
+      if (!this.smartphone) this.showMap = false;
+      // set selected post
+      this.setSelectedPostId(post.id);
     },
-    openMap(): void {
-      this.showMap = true;
-      this.setMapLocation();
-    },
+    /** Close current selected post  */
     closePost(): void {
-      this.setSelectedPost(null);
+      this.setSelectedPostId(undefined);
       if (!this.smartphone) {
         this.showMap = true;
       }
-      this.rerenderMap();
-      this.$nextTick(() => {
-        this.fitMapBounds(this.posts);
-      });
     },
-    toggleMapVisibility(): void {
-      this.showMap = !this.showMap;
-      this.$nextTick(() => {
-        if (this.showMap) {
-          if (this.selectedPost !== null) {
-            this.setMapLocation();
-          } else {
-            this.rerenderMap();
-          }
-        }
-      });
+    /** Show the map  */
+    openMap(): void {
+      this.showMap = true;
     },
-    postDistance(post: Post): string {
-      if (!this.selectedLocation || !post.geo_location) {
-        return "";
+    onPostsChange(posts: Post[]) {
+      // Open post if list contains only one post.
+      if (posts.length === 1) this.openPost(posts[0]);
+      // there is a full list of posts
+      else if (posts.length) {
+        this.showRadiusExtendedMessage = this.radiusExtendedFrom ? true : false;
       }
+      // else there are no posts in the list
+    },
+    onRadiusExtended(radii: Radius[]) {
+      const oldRadius = radii[0];
+      const newRadius = radii[1];
 
-      const distance = this.haversineDistance(
-        [post.geo_location.lat, post.geo_location.lon],
-        [this.selectedLocation.lat, this.selectedLocation.lon]
-      );
-
-      if (distance) {
-        return Math.round(distance) + " km";
-      } else {
-        return "";
+      // Wir wollen uns merken, dass wir den Radius verändert haben, um den Nutzer darüber zu informieren.
+      // Aber nur, wenn wir das nicht bereits gemacht haben um uns den Wert nicht zu überschreiben.
+      if (!this.radiusExtendedFrom) {
+        this.radiusExtendedFrom = oldRadius;
       }
     },
-    haversineDistance([lat1, lon1], [lat2, lon2]): number {
-      const toRadian = (angle) => (Math.PI / 180) * angle;
-      const distance = (a, b) => (Math.PI / 180) * (a - b);
-      const RADIUS_OF_EARTH_IN_KM = 6371;
-
-      const dLat = distance(lat2, lat1);
-      const dLon = distance(lon2, lon1);
-
-      lat1 = toRadian(lat1);
-      lat2 = toRadian(lat2);
-
-      // Haversine Formula
-      const h =
-        Math.pow(Math.sin(dLat / 2), 2) +
-        Math.pow(Math.sin(dLon / 2), 2) * Math.cos(lat1) * Math.cos(lat2);
-      const c = 2 * Math.asin(Math.sqrt(h));
-
-      return RADIUS_OF_EARTH_IN_KM * c;
-    },
+    /** Resize handler for window Resize */
     onResize(): void {
       if (!this.smartphone && window.innerWidth <= 960) {
         this.smartphone = true;
@@ -438,85 +184,9 @@ export default Vue.extend({
   height: 75vh;
   overflow: auto;
 }
-
-@media only screen and (min-width: 960px) {
-  .smartphone-map-button {
-    display: none;
-  }
-}
 </style>
 
 <style>
-.copyright,
-.copy,
-.cpy,
-strong[class^="copyright"],
-strong[class^="cpy"],
-strong[class^="copy"] {
-  clear: both;
-  padding: 10px 0px;
-  display: none;
-}
-.activeListItem {
-  background-color: #c4e0ff !important;
-}
-.button-close-smartphone {
-  position: absolute;
-  right: 0;
-}
-.details-smartphone {
-  display: none;
-}
-.post-subtitle {
-  display: -webkit-box !important;
-}
-@media only screen and (max-width: 960px) {
-  .map-smartphone {
-    margin-bottom: 12px;
-  }
-  .details {
-    display: none;
-  }
-  .details-smartphone {
-    display: block;
-    overflow: hidden;
-  }
-  .details-smartphone-visible {
-    max-height: 10000px;
-    transition: max-height 0.4s ease;
-  }
-  .details-smartphone-hidden {
-    max-height: 0;
-    transition: max-height 0.4s ease;
-  }
-  .details-smartphone p,
-  .details-smartphone h3 {
-    color: rgba(0, 0, 0, 0.87) !important;
-  }
-  .button-details {
-    display: none;
-  }
-  .full-text {
-    white-space: normal;
-  }
-  .post-subtitle-hidden {
-    max-height: 0;
-    opacity: 0;
-    position: absolute;
-  }
-  .post-subtitle {
-    max-height: 40px;
-    opacity: 1;
-    transition: all 0.4s 0.2s;
-  }
-}
-
-@media (max-width: 480px) {
-  .card {
-    max-width: 75vh;
-  }
-}
-
 @media (min-width: 960px) {
   .sitecontent {
     width: 960px;
@@ -527,11 +197,6 @@ strong[class^="copy"] {
 
   #postbox {
     margin-right: 2%;
-  }
-
-  .list-item {
-    margin-top: 5%;
-    margin-right: 1px;
   }
 }
 
