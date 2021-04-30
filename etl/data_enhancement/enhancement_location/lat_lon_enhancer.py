@@ -141,7 +141,7 @@ class LatLonEnhancer:
         prioritized_request_list = []
 
         if LatLonEnhancer.has_insufficient_information(post):
-            prioritized_request_list.append(self.request_string_cleaner.clean_request_string(post['location'], post['source']))
+            prioritized_request_list.append(self.request_string_cleaner.clean_request_string(post['location']))
 
         struct_data = post['post_struct']
 
@@ -151,17 +151,17 @@ class LatLonEnhancer:
         # 1. structured location 2. structured address of contact 3. structured address of organisation
         for field in ['location', 'contact', 'organization']:
             if len(request_string) < 1 and field in struct_data and struct_data[field] and len(struct_data[field]) > 0:
-                request_string += struct_data[field]['street'] + ' ' if 'street' in struct_data[field] and \
-                                                                        struct_data[field]['street'] else ''
-                request_string += struct_data[field]['zipcode'] + ' ' if 'zipcode' in struct_data[field] and \
-                                                                         struct_data[field]['zipcode'] else ''
-                request_string += struct_data[field]['city'] + ' ' if 'city' in struct_data[field] and \
-                                                                      struct_data[field]['city'] else ''
-                request_string += struct_data[field]['country'] + ' ' if 'country' in struct_data[field] and \
-                                                                         struct_data[field]['country'] else ''
+                request_string += struct_data[field]['street'] + ', ' if 'street' in struct_data[field] and \
+                                                                         struct_data[field]['street'] else ''
+                request_string += struct_data[field]['zipcode'] + ', ' if 'zipcode' in struct_data[field] and \
+                                                                          struct_data[field]['zipcode'] else ''
+                request_string += struct_data[field]['city'] + ', ' if 'city' in struct_data[field] and \
+                                                                       struct_data[field]['city'] else ''
+                request_string += struct_data[field]['country'] + ', ' if 'country' in struct_data[field] and \
+                                                                          struct_data[field]['country'] else ''
                 request_string = request_string.strip()
 
-        prioritized_request_list.append(request_string)
+        prioritized_request_list.append(self.request_string_cleaner.clean_request_string(request_string))
 
         return prioritized_request_list
 

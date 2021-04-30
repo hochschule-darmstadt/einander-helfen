@@ -8,30 +8,43 @@ class RequestStringCleaner:
 
     logger = LoggerFactory.get_enhancement_logger()
 
-    dividers = {
-        'https://www.weltwaerts.de': ','
-    }
-
-    def clean_request_string(self, request_string, source=''):
+    def clean_request_string(self, request_string):
         """Cleans the given request string"""
+
+        # Remove html tags
         result = BeautifulSoup(request_string, 'lxml').text
 
-        divider = ','
-        if source in self.dividers:
-            divider = self.dividers[source]
+        # Remove newlines
+        result = result.replace('\n', ' ')
 
-        if divider and len(divider) > 0:
-            address_fields = self._split_fields(result, divider)
-            result_fields = []
-            for field in address_fields:
-                field = field.strip()
-                if not self._remove_field(field):
-                    result_fields.append(field)
-                else:
-                    self.logger.debug(f"Detected and removed irrelevant field: {field}")
-            result = ', '.join(result_fields)
+        result = self._handle_single_field_rules(result)
+        result = self._handle_multi_field_rules(result)
 
         return result.strip()
+
+    def _handle_single_field_rules(self, input_string):
+        """Execute rules that apply to single address fields"""
+        result = input_string
+        divider = ','
+
+        address_fields = self._split_fields(result, divider)
+        result_fields = []
+        for field in address_fields:
+            field = field.strip()
+            if not self._remove_field(field):
+                result_fields.append(field)
+            else:
+                self.logger.debug(f"Detected and removed irrelevant field: {field}")
+        result = ', '.join(result_fields)
+        return result
+
+    def _handle_multi_field_rules(self, input_string):
+        """Execute rules that are applied across multiple address fields"""
+        result = input_string
+        result = re.sub(r'\(.*?\)', '', result)
+        result = re.sub(r'[0-9]{1,2}\. ?(Stock|OG|Stockwerk) ', '', result)
+        result = result.replace(' OT ', ' ')
+        return result
 
     def _split_fields(self, input_string, divider):
         """Splits an input string using the given divider"""
@@ -40,9 +53,14 @@ class RequestStringCleaner:
     def _remove_field(self, field):
         """Determines whether the given field should be removed"""
         is_po = self._is_post_office_substring(field)
-        return is_po
+        is_district = self._is_district_substring(field)
+        return is_po or is_district
 
     def _is_post_office_substring(self, input_string):
         """Determines whether the given input string matches the post office pattern (e.g. P.O. Box <number>)"""
         return len(re.findall(r'P\.? *O\.? *B[ox|OX][- 0-9]*[^,./]{0,4}', string=input_string)) > 0
+
+    def _is_district_substring(self, input_string):
+        """Determines whether the given input string is a district address field"""
+        return len(re.findall(r'[Dd]istrict', string=input_string)) > 0
 
