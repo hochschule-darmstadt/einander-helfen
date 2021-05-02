@@ -5,7 +5,7 @@
         <SearchBar
           tabindex="1"
           v-model="searchValue"
-          :tags="searchTags"
+          :tags="searchValues"
           :enable-no-data-message="true"
           @click.native="onSearchClick"
           @enter="paramChanged"
@@ -47,7 +47,7 @@ import RadiusSelect from "@/components/search/RadiusSelect.vue";
 import SearchBar from "@/components/search/SearchBar.vue";
 import SearchButton from "@/components/search/SearchButton.vue";
 import AreaSelect from "@/components/search/AreaSelect.vue";
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 import Radius from "@/models/radius";
 
 /**
@@ -85,7 +85,6 @@ export default Vue.extend({
   data: function () {
     return {
       searchValue: "",
-      searchTags: [] as string[],
       locationSearchValue: "",
       area: "germany",
       radius: undefined as Radius | undefined,
@@ -101,18 +100,12 @@ export default Vue.extend({
   },
   mounted(): void {
     // load data from store
-    this.area = this.getInternational ? "international" : "germany";
-    this.radius = this.getRadius;
-    this.searchTags = this.getSearchValues;
-    this.locationSearchValue = this.getLocationText;
+    this.area = this.getInternational() ? "international" : "germany";
+    this.radius = this.getRadius();
+    this.locationSearchValue = this.getLocationText();
   },
   computed: {
-    ...mapGetters("searchModule", [
-      "getRadius",
-      "getLocationText",
-      "getSearchValues",
-      "getInternational",
-    ]),
+    ...mapState("searchModule", ["searchValues"]),
 
     international(): boolean {
       return this.area === "international";
@@ -122,6 +115,12 @@ export default Vue.extend({
     },
   },
   methods: {
+    ...mapGetters("searchModule", [
+      "getRadius",
+      "getLocationText",
+      "getSearchValues",
+      "getInternational",
+    ]),
     ...mapActions("searchModule", [
       "setSelectedRadius",
       "setSelectedLocation",
@@ -135,8 +134,6 @@ export default Vue.extend({
       if (this.direktsearch) this.executeSearch();
     },
     executeSearch(): void {
-      // add search value to tags
-      if (this.searchValue) this.searchTags.push(this.searchValue);
       // update search parameter in store
       this.addSearchValue(this.searchValue);
       this.setInternational(this.international);
@@ -169,7 +166,6 @@ export default Vue.extend({
     },
     removeTag(tag: string) {
       // remove tag
-      this.searchTags = this.searchTags.filter((item) => item != tag);
       this.removeSearchValue(tag);
       // update uri
       this.updateURIFromState();
