@@ -1,67 +1,61 @@
 <template>
   <div>
     <Header />
-    <PostsLoader @postsChange="onPostsChange" @extendRadius="onRadiusExtended">
-      <template v-slot="{ allPosts, pagePosts }">
-        <section class="sitecontent row">
-          <MapButton v-if="smartphone" v-model="showMap" />
+    <section class="sitecontent row">
+      <MapButton v-if="smartphone" v-model="showMap" />
 
-          <!-- right side content for desktop-->
-          <v-flex class="map xs12 md6 order-md2">
-            <!-- Map -->
-            <MapCard
-              v-show="showMap"
-              :posts="allPosts"
-              :activePost="selectedPost"
-              @openPost="openPost"
-            />
-            <!-- detail card if not smartphone -->
-            <PostCard
-              v-if="!showMap && !smartphone"
-              :post="selectedPost"
-              @close="closePost"
-              @openMap="openMap"
-            />
-          </v-flex>
+      <!-- right side content for desktop-->
+      <v-flex class="map xs12 md6 order-md2">
+        <!-- Map -->
+        <MapCard
+          v-show="showMap"
+          :posts="posts"
+          :activePost="selectedPost"
+          @openPost="openPost"
+        />
+        <!-- detail card if not smartphone -->
+        <PostCard
+          v-if="!showMap && !smartphone"
+          :post="selectedPost"
+          @close="closePost"
+          @openMap="openMap"
+        />
+      </v-flex>
 
-          <!--left side content for desktop-->
-          <v-flex class="list sm12 md6 order-md1">
-            <div
-              v-if="showRadiusExtendedMessage"
-              class="text-center pt-12 pb-12"
+      <!--left side content for desktop-->
+      <v-flex class="list sm12 md6 order-md1">
+        <div v-if="showRadiusExtendedMessage" class="text-center pt-12 pb-12">
+          <h3 class="font-weight-bold">
+            Zu Ihrer Suchanfrage mit einem Radius von
+            {{ oldRadius }} haben wir keine Treffer gefunden.
+            <template v-if="radius.value"
+              >Folgende Ergebnisse werden in einem Umkreis von
+              {{ radius }} gefunden.</template
             >
-              <h3 class="font-weight-bold">
-                Zu Ihrer Suchanfrage mit einem Radius von
-                {{ oldRadius }} haben wir keine Treffer gefunden.
-                <template v-if="radius.value"
-                  >Folgende Ergebnisse werden in einem Umkreis von
-                  {{ radius }} gefunden.</template
-                >
-                <template v-else
-                  >Folgende Ergebnisse werden in einem Umkreis von mehr als 50
-                  km gefunden.</template
-                >
-              </h3>
-            </div>
+            <template v-else
+              >Folgende Ergebnisse werden in einem Umkreis von mehr als 50 km
+              gefunden.</template
+            >
+          </h3>
+        </div>
 
-            <PostListItem
-              v-for="post in pagePosts"
-              :key="post.id"
-              :post="post"
-              :active="selectedPost && post.id == selectedPost.id"
-              :showDetail="smartphone"
-              @click="currentPostId === post.id ? closePost() : openPost(post)"
-            />
+        <PostListItem
+          v-for="post in postsOnCurrentPage"
+          :key="post.id"
+          :post="post"
+          :active="post.id == selectedPostId"
+          :showDetail="smartphone"
+          @click="selectedPostId === post.id ? closePost() : openPost(post)"
+        />
 
-            <div class="text-center pt-12" v-if="!allPosts.length">
-              <h3 class="font-weight-bold">
-                Es wurden keine Suchergebnisse zu Ihrer Suchanfrage gefunden.
-              </h3>
-            </div>
-          </v-flex>
-        </section>
-      </template>
-    </PostsLoader>
+        <div class="text-center pt-12" v-if="!posts.length">
+          <h3 class="font-weight-bold">
+            Es wurden keine Suchergebnisse zu Ihrer Suchanfrage gefunden.
+          </h3>
+        </div>
+      </v-flex>
+    </section>
+    <PostPagination />
   </div>
 </template>
 
@@ -71,19 +65,21 @@ import Header from "@/components/layout/Header.vue";
 import PostCard from "@/components/posts/PostCard.vue";
 import MapCard from "@/components/posts/MapCard.vue";
 import PostListItem from "@/components/posts/PostListItem.vue";
-import PostsLoader from "@/components/posts/PostsLoader.vue";
+import PostPagination from "@/components/posts/PostPagination.vue";
 import MapButton from "@/components/posts/MapButton.vue";
 
 import Radius from "@/models/radius";
 import Post from "@/models/post";
-import { mapActions, mapMutations, mapState } from "vuex";
+import radii from "@/resources/radii";
+import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 
+// TODO: add isLoading state
 export default Vue.extend({
   name: "PostsView",
   components: {
     Header,
     MapButton,
-    PostsLoader,
+    PostPagination,
     PostCard,
     MapCard,
     PostListItem,
@@ -97,21 +93,48 @@ export default Vue.extend({
     };
   },
   computed: {
-    ...mapState("postsModule", ["selectedPost"]),
+    ...mapState("postsModule", ["selectedPost", "posts", "resultsFrom"]),
+    ...mapGetters("postsModule", ["postsOnCurrentPage", "selectedPostId"]),
+    ...mapState("searchModule", [
+      "selectedLocation",
+      "selectedRadius",
+      "searchValues",
+      "international",
+    ]),
   },
   mounted(): void {
-    this.hydrateStateFromRoute().then(() => {
-      // check if device is smartphone view
-      if (window.matchMedia("(max-width: 960px)").matches) {
-        this.showMap = false;
-        this.smartphone = true;
-      }
-      // close map if a post is open
-      if (this.selectedPost) this.showMap = false;
+    // get params from route query and execute findPosts
+    this.hydrateStateFromRoute()
+      .then(() => {
+        // check if device is smartphone view
+        if (window.matchMedia("(max-width: 960px)").matches) {
+          this.showMap = false;
+          this.smartphone = true;
+        }
+        // close map if a post is open
+        if (this.selectedPost) {
+          this.showMap = false;
+        }
+      })
+      .then(() => {
+        this.$watch(
+          // watch all parameters which are used to find posts
+          () => (
+            this.searchValues,
+            this.international,
+            this.selectedLocation,
+            this.selectedRadius,
+            this.resultsFrom,
+            // and to be sure that a different value is returned every time
+            Date.now()
+          ),
+          // and execute findPosts if a parameter change
+          () => this.loadPosts()
+        );
 
-      // set resize event handler
-      window.addEventListener("resize", this.onResize);
-    });
+        // set resize event handler
+        window.addEventListener("resize", this.onResize);
+      });
   },
   beforeDestroy(): void {
     // remove event handler
@@ -122,48 +145,68 @@ export default Vue.extend({
       if (oldValue !== newValue && !newValue)
         this.showRadiusExtendedMessage = false;
     },
+
+    /** If the list of posts is emtpy, increase the radius an search again. */
+    posts(posts: Post[]): void {
+      // there is a full list of posts
+      if (posts.length) {
+        this.showRadiusExtendedMessage = this.radiusExtendedFrom ? true : false;
+      }
+      // if there are no posts in the list
+      else {
+        // if a location and a radius is set
+        if (this.selectedLocation && this.selectedRadius) {
+          const radiusBeforeExtend = this.selectedRadius;
+          // Wenn wir mit einem Radius um einen Ort suchen, den Radius vergrößern und nochmal probieren!
+
+          // find radius index of radii
+          const currentRadiusIndex = radii.findIndex(
+            (r) => r.value === radiusBeforeExtend.value
+          );
+          // find next bigger radii
+          const nextBiggerRadius =
+            radii[(currentRadiusIndex + 1) % radii.length];
+
+          // Wir wollen uns merken, dass wir den Radius verändert haben, um den Nutzer darüber zu informieren.
+          // Aber nur, wenn wir das nicht bereits gemacht haben um uns den Wert nicht zu überschreiben.
+          if (!this.radiusExtendedFrom) {
+            this.radiusExtendedFrom = radiusBeforeExtend;
+          }
+
+          // update radius -> new search is triggered
+          this.setRadius(nextBiggerRadius);
+        }
+      }
+    },
   },
   methods: {
-    ...mapMutations("postsModule", ["setSelectedPostId"]),
-    ...mapActions(["hydrateStateFromRoute"]),
+    ...mapMutations("searchModule", ["setRadius"]),
+    ...mapMutations("postsModule", ["setSelectedPost"]),
+    ...mapActions(["hydrateStateFromRoute", "updateURIFromState", "loadPosts"]),
 
     /** Open details for a post */
     openPost(post: Post): void {
       // close map to show detail page
       if (!this.smartphone) this.showMap = false;
       // set selected post
-      this.setSelectedPostId(post.id);
+      this.setSelectedPost(post);
+      // update uri with post
+      this.$nextTick(() => this.updateURIFromState());
     },
     /** Close current selected post  */
     closePost(): void {
-      this.setSelectedPostId(undefined);
-      if (!this.smartphone) {
-        this.showMap = true;
-      }
+      // show map on smartphone
+      if (!this.smartphone) this.showMap = true;
+      // remove selected post
+      this.setSelectedPost(undefined);
+      // update uri without post
+      this.$nextTick(() => this.updateURIFromState());
     },
     /** Show the map  */
     openMap(): void {
       this.showMap = true;
     },
-    onPostsChange(posts: Post[]) {
-      // Open post if list contains only one post.
-      if (posts.length === 1) this.openPost(posts[0]);
-      // there is a full list of posts
-      else if (posts.length) {
-        this.showRadiusExtendedMessage = this.radiusExtendedFrom ? true : false;
-      }
-      // else there are no posts in the list
-    },
-    onRadiusExtended(radii: Radius[]) {
-      const oldRadius = radii[0];
-      const newRadius = radii[1];
 
-      // Wir wollen uns merken, dass wir den Radius verändert haben, um den Nutzer darüber zu informieren.
-      // Aber nur, wenn wir das nicht bereits gemacht haben um uns den Wert nicht zu überschreiben.
-      if (!this.radiusExtendedFrom) {
-        this.radiusExtendedFrom = oldRadius;
-      }
-    },
     /** Resize handler for window Resize */
     onResize(): void {
       if (!this.smartphone && window.innerWidth <= 960) {
@@ -179,12 +222,8 @@ export default Vue.extend({
   },
 });
 </script>
-<style lang="scss" scoped>
-.details {
-  height: 75vh;
-  overflow: auto;
-}
 
+<style lang="scss" scoped>
 @media (min-width: 960px) {
   .map,
   .list {
@@ -192,7 +231,7 @@ export default Vue.extend({
   }
 
   .list {
-    overflow-y: scroll;
+    overflow-y: auto;
     margin-right: 1%;
     flex-basis: 49%;
     padding-right: 3px;
