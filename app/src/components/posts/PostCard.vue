@@ -54,7 +54,7 @@
         </template>
       </div>
       <v-spacer />
-      <div class="my-2">
+      <div class="my-2 mt-6">
         <v-btn dark large color="#054C66" :href="post.link" target="_blank">
           Zum Angebot
         </v-btn>
@@ -110,6 +110,8 @@ export default Vue.extend({
 <style lang="scss" scoped>
 .post {
   padding: 20px 0px;
+  height: 100%;
+  overflow-y: auto;
 
   .button-close {
     position: absolute;

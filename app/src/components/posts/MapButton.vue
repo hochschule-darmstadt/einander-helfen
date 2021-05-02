@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-2">
+  <div class="mb-2 btn-container">
     <v-btn class="btn-dark" dark block @click="open = !open">
       <v-icon>map</v-icon>
       {{ open ? "Karte ausblenden" : "Karte anzeigen" }}
@@ -32,3 +32,9 @@ export default Vue.extend({
   },
 });
 </script>
+
+<style lang="scss" scoped>
+.btn-container {
+  width: 100%;
+}
+</style>
