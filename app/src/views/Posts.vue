@@ -3,7 +3,7 @@
     <Header />
     <PostsLoader @postsChange="onPostsChange" @extendRadius="onRadiusExtended">
       <template v-slot="{ allPosts, pagePosts }">
-        <v-container class="sitecontent row wrap no-gutters">
+        <section class="sitecontent row">
           <MapButton v-if="smartphone" v-model="showMap" />
 
           <!-- right side content for desktop-->
@@ -48,7 +48,7 @@
               v-for="post in pagePosts"
               :key="post.id"
               :post="post"
-              :active="post.id == selectedPost.id"
+              :active="selectedPost && post.id == selectedPost.id"
               :showDetail="smartphone"
               @click="currentPostId === post.id ? closePost() : openPost(post)"
             />
@@ -59,7 +59,7 @@
               </h3>
             </div>
           </v-flex>
-        </v-container>
+        </section>
       </template>
     </PostsLoader>
   </div>
@@ -184,66 +184,51 @@ export default Vue.extend({
   height: 75vh;
   overflow: auto;
 }
-</style>
 
-<style>
 @media (min-width: 960px) {
-  .sitecontent {
+  .map,
+  .list {
+    height: 70vh;
+  }
+
+  .list {
+    overflow-y: scroll;
+    margin-right: 1%;
+    flex-basis: 49%;
+    padding-right: 3px;
+  }
+}
+.sitecontent {
+  @media (max-width: 959px) {
+    width: 100%;
+    padding: 12px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+  @media (min-width: 960px) {
     width: 960px;
     margin: auto;
     max-width: none;
     margin-top: 2%;
   }
-
-  #postbox {
-    margin-right: 2%;
-  }
-}
-
-@media (min-width: 1100px) {
-  .sitecontent {
+  @media (min-width: 1100px) {
     width: 1100px;
     margin: auto;
     margin-top: 2%;
   }
-
-  #postbox {
-    margin-right: 2%;
-  }
-}
-
-@media (min-width: 1300px) {
-  .sitecontent {
+  @media (min-width: 1300px) {
     width: 1300px;
     margin: auto;
     margin-top: 2%;
   }
-
-  #postbox {
-    margin-right: 2%;
-  }
-}
-
-@media (min-width: 1618px) {
-  .sitecontent {
+  @media (min-width: 1618px) {
     width: 1618px;
     margin-top: 2%;
   }
-
-  #postbox {
-    margin-right: 2%;
-  }
-}
-
-@media (min-width: 1904px) {
-  .sitecontent {
+  @media (min-width: 1904px) {
     width: 85%;
     margin: auto;
     margin-top: 2%;
-  }
-
-  #postbox {
-    margin-right: 2%;
   }
 }
 </style>

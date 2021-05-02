@@ -1,6 +1,6 @@
 <template>
   <div class="mb-2">
-    <v-btn clas="btn-dark" dark @click="open = !open">
+    <v-btn class="btn-dark" dark block @click="open = !open">
       <v-icon>map</v-icon>
       {{ open ? "Karte ausblenden" : "Karte anzeigen" }}
     </v-btn>

@@ -1,6 +1,6 @@
 <template>
-  <v-app>
-    <v-main style="background: #00254f0c">
+  <v-app class="app">
+    <v-main class="main">
       <router-view></router-view>
     </v-main>
     <Footer />
@@ -20,14 +20,20 @@ export default Vue.extend({
 });
 </script>
 
-
+<style lang="scss" scoped>
+.app {
+  background: #00254f0c !important;
+}
+</style>
 
 <style lang="scss">
 /** global style */
-
-html,
-body {
-  overflow-x: hidden;
+@media screen and (min-width: 960px) {
+  html,
+  body {
+    overflow: hidden !important;
+    max-height: 100vh;
+  }
 }
 
 .v-menu__content {
@@ -39,4 +45,3 @@ body {
   background-color: rgb(5, 76, 102) !important;
 }
 </style>
-
