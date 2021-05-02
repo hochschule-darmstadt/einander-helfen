@@ -53,12 +53,12 @@ export default Vue.extend({
         {
           text: "Deutschland",
           value: "germany",
-          img: require("@/assets/images/240px-Flag_of_Germany.png"),
+          img: require("@/assets/images/area/240px-Flag_of_Germany.png"),
         },
         {
           text: "International",
           value: "international",
-          img: require("@/assets/images/240px-Earth_icon_2.png"),
+          img: require("@/assets/images/area/240px-Earth_icon_2.png"),
         },
       ] as Item[],
       selection: "",
