@@ -1,6 +1,6 @@
 import Location from '@/models/location';
 import locationArray from '@/resources/locations/index';
-import CountryService from '@/utils/services/CountryService';
+import CountryService from '@/services/CountryService';
 
 class LocationService {
     public locations: Location[] = [];

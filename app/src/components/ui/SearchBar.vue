@@ -29,7 +29,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import TagService from '@/utils/services/TagService';
+import TagService from '@/services/TagService';
 import Tag from '@/models/tag';
 import { createNamespacedHelpers } from 'vuex';
 const { mapState, mapActions } = createNamespacedHelpers('textSearchModule');
