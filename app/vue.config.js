@@ -14,7 +14,7 @@ module.exports = {
             ]
         },
         plugins: [
-            require('./src/config/build-env-plugin')
+            require('./build-env-plugin')
         ]
     }
 }
