@@ -186,7 +186,9 @@ export default Vue.extend({
       }
     },
     switchArea(): void {
+      // @ts-ignore
       const areaSelect = (this.$refs.areaSelect as AreaSelect);
+      // @ts-ignore
       const areaSelection = (this.$refs.areaSelect as AreaSelect).selection;
       const international = (areaSelection === areaSelect.items[0].title) ? false : true;
       (this.$refs.locationSearchBar as any).setLocationSearchBar(international);
