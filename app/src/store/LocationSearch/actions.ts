@@ -1,7 +1,7 @@
 import {ActionTree} from 'vuex';
 import {LocationSearchState} from './types';
 import {RootState} from '@/store/types';
-import LocationService from '@/utils/services/LocationService';
+import LocationService from '@/services/LocationService';
 
 export const actions: ActionTree<LocationSearchState, RootState> = {
   setLocationSearchValue({ commit, dispatch }, locationSearchValue): void {
