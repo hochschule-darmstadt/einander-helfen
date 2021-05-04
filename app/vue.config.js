@@ -13,6 +13,6 @@ module.exports = {
         },
       ],
     },
-    plugins: [require("./src/config/build-env-plugin")],
+    plugins: [require("./build-env-plugin")],
   },
 };

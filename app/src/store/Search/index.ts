@@ -1,7 +1,7 @@
 import { Module } from "vuex";
 import Tag from "@/models/tag";
 import Location from "@/models/location";
-import LocationService from "@/utils/services/LocationService";
+import LocationService from "@/services/LocationService";
 import Radius from "@/models/radius";
 import { RootState } from "../store";
 import radii from "@/resources/radii";

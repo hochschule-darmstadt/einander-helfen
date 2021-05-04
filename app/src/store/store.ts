@@ -3,7 +3,7 @@ import Vuex, { StoreOptions } from "vuex";
 import router from "@/router";
 import { searchModule, SearchState } from "./Search";
 import { postsModule, PostsState } from "./Posts";
-import DataService, { PaginatedResponse } from "@/utils/services/DataService";
+import DataService, { PaginatedResponse } from "@/services/DataService";
 import Post from "@/models/post";
 
 Vue.use(Vuex);

@@ -88,6 +88,7 @@ export default Vue.extend({
       locationSearchValue: "",
       area: "germany",
       radius: undefined as Radius | undefined,
+      secondSearch: false,
     };
   },
   watch: {
@@ -131,7 +132,8 @@ export default Vue.extend({
     ...mapActions(["updateURIFromState"]),
 
     paramChanged(): void {
-      if (this.direktsearch) this.executeSearch();
+      if (this.direktsearch || this.secondSearch) this.executeSearch();
+      else this.secondSearch = true;
     },
     executeSearch(): void {
       // update search parameter in store
