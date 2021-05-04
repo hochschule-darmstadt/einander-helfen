@@ -88,6 +88,7 @@ export default Vue.extend({
       locationSearchValue: "",
       area: "germany",
       radius: "",
+      secondSearch: false,
     };
   },
   watch: {
@@ -126,7 +127,8 @@ export default Vue.extend({
     ...mapActions(["setInternational", "updateURIFromState"]),
 
     paramChanged(): void {
-      if (this.direktsearch) this.executeSearch();
+      if (this.direktsearch || this.secondSearch) this.executeSearch();
+      else this.secondSearch = true;
     },
     executeSearch(): void {
       // add search value to tags
