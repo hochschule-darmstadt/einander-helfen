@@ -23,7 +23,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Location from "@/models/location";
-import LocationService from "@/utils/services/LocationService";
+import LocationService from "@/services/LocationService";
 
 export default Vue.extend({
   name: "LocationSearchBar",

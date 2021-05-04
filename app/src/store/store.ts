@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex, { StoreOptions } from "vuex";
-import DataService, { PaginatedResponse } from "../utils/services/DataService";
+import DataService, { PaginatedResponse } from "../services/DataService";
 import router from "@/router";
 import Post from "@/models/post";
 import { textSearchModule } from "./TextSearch";

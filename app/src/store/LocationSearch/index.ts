@@ -1,7 +1,7 @@
 import { Module } from "vuex";
 import { RootState } from "../types";
 import Location from "@/models/location";
-import LocationService from "@/utils/services/LocationService";
+import LocationService from "@/services/LocationService";
 
 export interface LocationSearchState {
   selectedLocation?: Location;
