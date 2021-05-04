@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="posts-page">
     <Header />
     <section class="sitecontent row">
       <MapButton v-if="smartphone" v-model="showMap" />
@@ -210,14 +210,15 @@ export default Vue.extend({
 
     /** Resize handler for window Resize */
     onResize(): void {
+      // swtich to smartphone view
       if (!this.smartphone && window.innerWidth <= 960) {
         this.smartphone = true;
         this.showMap = false;
-      } else if (this.smartphone && window.innerWidth > 960) {
+      }
+      // switch to desktop view
+      else if (this.smartphone && window.innerWidth > 960) {
         this.smartphone = false;
-        if (this.selectedPost === null) {
-          this.showMap = true;
-        }
+        if (!this.selectedPost) this.showMap = true;
       }
     },
   },
@@ -226,9 +227,15 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 @media (min-width: 960px) {
+  .posts-page {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-between;
+  }
   .map,
   .list {
-    height: 70vh;
+    height: calc(100vh - 345px);
   }
 
   .list {
