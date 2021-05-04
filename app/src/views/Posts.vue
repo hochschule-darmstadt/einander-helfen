@@ -24,6 +24,7 @@
 
       <!--left side content for desktop-->
       <v-flex class="list sm12 md6 order-md1">
+        <!-- TODO: is this properlly working?! -->
         <div v-if="showRadiusExtendedMessage" class="text-center pt-12 pb-12">
           <h3 class="font-weight-bold">
             Zu Ihrer Suchanfrage mit einem Radius von
