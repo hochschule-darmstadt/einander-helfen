@@ -26,9 +26,9 @@ const store: StoreOptions<RootState> = {
   },
   actions: {
     clearSearchParams({ commit }): void {
-      commit("searchModule/clearSearchParams"),
-        commit("postsModule/setSelectedPost"),
-        commit("postsModule/setSelectedPage")
+      commit("searchModule/clearSearchParams");
+      commit("postsModule/setSelectedPost");
+      commit("postsModule/setSelectedPage");
     },
     /**
      * Sets state values from values of the current route 
@@ -41,7 +41,7 @@ const store: StoreOptions<RootState> = {
       return dispatch('clearSearchParams')
         .then(() => {
           if ('q' in queryParams && queryParams.q)
-            commit('searchModule/addSearchValues', queryParams.q.split(','));
+            dispatch('searchModule/addSearchValues', queryParams.q.split(','));
 
           if ('area' in queryParams && queryParams.area)
             commit('searchModule/setInternational', queryParams.area.toLowerCase() === 'international');
