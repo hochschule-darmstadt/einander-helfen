@@ -91,19 +91,24 @@ export default Vue.extend({
       secondSearch: false,
     };
   },
-  watch: {
-    radius() {
-      this.paramChanged();
-    },
-    area() {
-      this.paramChanged();
-    },
-  },
   mounted(): void {
     // load data from store
     this.area = this.getInternational() ? "international" : "germany";
     this.radius = this.getRadius();
     this.locationSearchValue = this.getLocationText();
+
+    // set watcher after data initialisation
+    this.$watch(
+      // watch these parameters to detect change
+      () => (
+        this.radius,
+        this.area,
+        // and to be sure that a different value is returned every time
+        Date.now()
+      ),
+      // and execute paramChanged if a parameter change
+      () => this.paramChanged()
+    );
   },
   computed: {
     ...mapState("searchModule", ["searchValues"]),
