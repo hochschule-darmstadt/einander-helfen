@@ -3,10 +3,10 @@ import time
 
 import requests
 from bs4 import BeautifulSoup
+from tqdm import tqdm
 
 from shared.utils import append_data_to_json, write_data_to_json
 from shared.LoggerFactory import LoggerFactory
-from shared.ProgressBar import ProgressBar
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -20,12 +20,14 @@ class Scraper:
     # Delay between requests
     delay = 0.5
 
+    progress_bar_format = '{desc:40} |{bar:50}| {n_fmt}/{total_fmt} [{elapsed}] '
+
     def __init__(self, name):
         """Constructor of the scraper."""
 
         # Scraper name -> Overwritten by name of the scraper file
         self.name = name
-        
+
         # The URLs which will be parsed and scraped  
         self.urls = []
         
@@ -38,6 +40,8 @@ class Scraper:
         # start time of logger
         self.start = None
 
+        self.progress_bar = None
+
     def run(self):
         """Runs the Scraper.
         Step 1: Adding URLs
@@ -45,9 +49,6 @@ class Scraper:
         Step 3: Crawl each URL in the urls-array"""
         self.logger.debug("run()")
         self.logger.info(f'Scraper {self.name} started')
-
-        # register progress bar
-        ProgressBar.register_crawler(self.name)
 
         self.start = time.time()
 
@@ -67,7 +68,6 @@ class Scraper:
             self.crawl(url, i + 1)
 
         crawling_time = "{:.2f}".format((time.time() - self.start))
-        ProgressBar.add_time(self.name, crawling_time)
         self.logger.debug(f"[{self.name}] took {crawling_time} seconds to crawl {len(self.urls)}"
                           f" pages from {self.base_url}")
 
@@ -168,10 +168,23 @@ class Scraper:
         """ Updates progress data of fetching process for crawler and triggers print of progeess bar"""
         self.logger.debug("get_progress_data_fetching()")
 
-        ProgressBar.get_progress_data(self.name, current, total, ProgressBar.MODE_FETCHING)
+        if self.progress_bar is None:
+            self.progress_bar = tqdm(desc='[FETCHING] ' + self.name + ':', total=int(total),
+                                     bar_format=self.progress_bar_format)
+
+        self.progress_bar.update()
 
     def get_progress_data_crawling(self, current, total):
         """ Updates progress data of crawling for crawler and triggers print of progeess bar"""
-        self.logger.debug("get_progress_data_fetching()")
+        self.logger.debug("get_progress_data_crawling()")
 
-        ProgressBar.get_progress_data(self.name, current, total, ProgressBar.MODE_CRAWLING)
+        if current == 1:
+            self.progress_bar.reset(total=int(total))
+            self.progress_bar.set_description(desc='[CRAWLING] ' + self.name, refresh=True)
+
+        self.progress_bar.update()
+
+        if current == total:
+            self.progress_bar.set_description('[FINISHED] ' + self.name)
+            self.progress_bar.close()
+            self.progress_bar = None
