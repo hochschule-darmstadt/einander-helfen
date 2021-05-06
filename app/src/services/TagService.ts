@@ -31,5 +31,3 @@ class TagService {
 const tagServiceInstance = new TagService();
 
 export default tagServiceInstance;
-
-export { tagServiceInstance as TagService };

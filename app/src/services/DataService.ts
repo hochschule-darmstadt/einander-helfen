@@ -158,5 +158,3 @@ class DataService {
 const dataServiceInstance = new DataService();
 
 export default dataServiceInstance;
-
-export { dataServiceInstance as DataService };

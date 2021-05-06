@@ -1,4 +1,4 @@
-export interface Radius {
+interface Radius {
   text: string;
   value: string;
 }

@@ -63,5 +63,3 @@ class CountryService {
 const countryServiceInstance = new CountryService();
 
 export default countryServiceInstance;
-
-export { countryServiceInstance as CountryService };

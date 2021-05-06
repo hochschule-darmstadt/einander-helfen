@@ -201,5 +201,3 @@ class LocationService {
 const locationServiceInstance = new LocationService();
 
 export default locationServiceInstance;
-
-export { locationServiceInstance as LocationService };
