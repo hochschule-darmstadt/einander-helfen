@@ -8,14 +8,14 @@
       <v-flex class="map xs12 md6 order-md2">
         <!-- Map -->
         <MapCard
-          v-show="showMap"
           :posts="posts"
-          :activePost="selectedPost"
+          :selectedPost="selectedPost"
           @openPost="openPost"
         />
         <!-- detail card if not smartphone -->
         <PostCard
-          v-if="!showMap && !smartphone"
+          class="map-overlay"
+          v-show="!showMap && !smartphone"
           :post="selectedPost"
           @close="closePost"
           @openMap="openMap"
@@ -71,7 +71,6 @@ import MapButton from "@/components/posts/MapButton.vue";
 
 import Post from "@/models/post";
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
-import radii from "@/resources/radii";
 
 export default Vue.extend({
   name: "PostsView",
@@ -151,6 +150,7 @@ export default Vue.extend({
       if (!this.smartphone) this.showMap = false;
       // set selected post
       this.setSelectedPost(post).then(() =>
+        //TODO: is not updating
         // update uri with post
         this.updateURIFromState()
       );
@@ -207,6 +207,16 @@ export default Vue.extend({
     flex-basis: 49%;
     padding-right: 3px;
     padding-left: 3px;
+  }
+
+  .map {
+    position: relative;
+
+    .map-overlay {
+      z-index: 1000;
+      position: absolute;
+      top: 0;
+    }
   }
 }
 .sitecontent {

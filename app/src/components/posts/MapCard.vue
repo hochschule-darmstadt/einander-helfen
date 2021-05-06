@@ -112,8 +112,10 @@ export default Vue.extend({
     rerenderMap(): void {
       this.$nextTick(() => {
         (this.$refs.map as LMap).mapObject.invalidateSize();
-        this.fitMapBounds();
-        this.setMapLocation();
+        this.$nextTick(() => {
+          this.fitMapBounds();
+          this.setMapLocation();
+        });
       });
     },
 
@@ -162,12 +164,18 @@ export default Vue.extend({
 <style lang="scss" scoped>
 .button-details {
   position: absolute;
-  z-index: 9999;
+  z-index: 500;
   margin-left: 50px;
   margin-top: 20px;
   background-color: rgb(5, 76, 102) !important;
 }
 
+.map ::v-deep a {
+  color: #1976d2 !important;
+  &:hover {
+    color: #000 !important;
+  }
+}
 @media only screen and (max-width: 960px) {
   .button-details {
     display: none;
@@ -186,12 +194,5 @@ strong[class^="copy"] {
   clear: both;
   padding: 10px 0px;
   display: none;
-}
-
-.map a {
-  color: #1976d2 !important;
-  &:hover {
-    color: #000 !important;
-  }
 }
 </style>
