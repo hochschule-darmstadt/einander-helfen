@@ -48,159 +48,159 @@
 </template>
 
 <script>
-export default {
-  data: () => ({
-    links: [
-      { text: 'Home', route: '/'},
-      { text: 'Über uns', route: '/about' },
-      { text: 'Impressum', route: '/imprint' },
-      { text: 'Datenschutzerklärung', route: '/privacy' }
-    ]
-  })
-};
+import Vue from "vue";
+
+export default Vue.extend({
+  name: "Toolbar",
+  data: function () {
+    return {
+      links: [
+        { text: "Home", route: "/" },
+        { text: "Über uns", route: "/about" },
+        { text: "Impressum", route: "/imprint" },
+        { text: "Datenschutzerklärung", route: "/privacy" },
+      ],
+    };
+  },
+});
 </script>
 
-<style>
+<style lang="scss">
 #menu {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
-#slogan{
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-    display: none ;
+#slogan {
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  display: none;
 }
 
 #sloganCol {
-    visibility: hidden !important;
-    display: none !important;
+  visibility: hidden !important;
+  display: none !important;
 }
 
 @media (max-width: 300px) {
-    .column {
-        padding-bottom: 19px !important ;
-    }
-    .logoCol{
-        max-width: 70% !important ;
-    }
+  .column {
+    padding-bottom: 19px !important ;
+  }
+  .logoCol {
+    max-width: 70% !important ;
+  }
 
-    .menuCol {
-        max-width: 30% !important;
-    }
+  .menuCol {
+    max-width: 30% !important;
+  }
 
-    #logo {
-        margin-top: 6px ;
-        display: none ;
-        visibility: hidden;
-    }
-}
-
-@media (min-width: 301px) and (max-width:424px) {
-    .column {
-        padding-bottom: 19px !important;
-    }
-    .logoCol{
-        max-width: 50% !important;
-    }
-
-    .menuCol {
-        max-width: 50% !important;
-    }
-
-    #logo {
-        margin-top: 12px !important;
-    }
-}
-
-
-@media (min-width: 424px ) and (max-width: 765px) {
-    .column {
-        padding-bottom: 19px !important;
-    }
-    .logoCol{
-        max-width: 80% !important;
-    }
-
-    .menuCol {
-        max-width: 20% !important;
-    }
-    #logo {
-        margin-top: 24px !important
-    }
-}
-
-
-@media (min-width: 766px) {
-    .column{
-        max-width: 24% !important;
-        padding-top: 6px !important;
-    }
-
-    #logo {
-        margin-top: 6px ! important;
-    }
-
-    #slogan {
-        display: block ;
-        margin-top: 0px !important;
-    }
-
-    #sloganCol {
-        visibility: visible !important;
-        display: block !important;
-    }  
-}
-     
-@media (min-width: 855px) and (max-width: 1003px) {
-    .column{
-        max-width: 40% !important;
-        padding-top: 6px !important;
-    }
-
-    #logo {
-        margin-top: 6px !important;
-        max-width: 60%;
-    }    
-
-    #sloganCol{
-        max-width: 50% !important
+  #logo {
+    margin-top: 6px;
+    display: none;
+    visibility: hidden;
   }
 }
 
+@media (min-width: 301px) and (max-width: 424px) {
+  .column {
+    padding-bottom: 19px !important;
+  }
+  .logoCol {
+    max-width: 50% !important;
+  }
+
+  .menuCol {
+    max-width: 50% !important;
+  }
+
+  #logo {
+    margin-top: 12px !important;
+  }
+}
+
+@media (min-width: 424px) and (max-width: 765px) {
+  .column {
+    padding-bottom: 19px !important;
+  }
+  .logoCol {
+    max-width: 80% !important;
+  }
+
+  .menuCol {
+    max-width: 20% !important;
+  }
+  #logo {
+    margin-top: 24px !important;
+  }
+}
+
+@media (min-width: 766px) {
+  .column {
+    max-width: 24% !important;
+    padding-top: 6px !important;
+  }
+
+  #logo {
+    margin-top: 6px !important;
+  }
+
+  #slogan {
+    display: block;
+    margin-top: 0px !important;
+  }
+
+  #sloganCol {
+    visibility: visible !important;
+    display: block !important;
+  }
+}
+
+@media (min-width: 855px) and (max-width: 1003px) {
+  .column {
+    max-width: 40% !important;
+    padding-top: 6px !important;
+  }
+
+  #logo {
+    margin-top: 6px !important;
+    max-width: 60%;
+  }
+
+  #sloganCol {
+    max-width: 50% !important;
+  }
+}
 
 @media (min-width: 1004px) and (max-width: 1477px) {
-    .column{
-        max-width: 80%;
-        padding-top: 6px ;
-    }
+  .column {
+    max-width: 80%;
+    padding-top: 6px;
+  }
 
-    #logo {
-        margin-top: 6px !important;
-    }
+  #logo {
+    margin-top: 6px !important;
+  }
 
-    #sloganCol {
-        visibility: visible;
-    }
+  #sloganCol {
+    visibility: visible;
+  }
 
-    #slogan {
-        margin-top: 20px !important;
-    }
+  #slogan {
+    margin-top: 20px !important;
+  }
 }
-
 
 @media (min-width: 1393px) {
-    #logo {
-        margin-top: 24px !important;
-    }
+  #logo {
+    margin-top: 24px !important;
+  }
 
-    #sloganCol {
-        visibility: visible;
-    }
+  #sloganCol {
+    visibility: visible;
+  }
 
-    #slogan {
-        margin-top: 20px !important;
-    }    
+  #slogan {
+    margin-top: 20px !important;
+  }
 }
-
 </style>
