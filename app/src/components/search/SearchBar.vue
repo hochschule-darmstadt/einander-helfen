@@ -197,7 +197,7 @@ export default Vue.extend({
 <style lang="scss" scoped>
 .searchBar {
   background: white;
-  border-radius: 28px;
+  border-radius: 25px;
   margin-right: 2%;
   width: inherit;
   display: flex;

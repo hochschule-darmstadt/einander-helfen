@@ -187,4 +187,11 @@ strong[class^="copy"] {
   padding: 10px 0px;
   display: none;
 }
+
+.map a {
+  color: #1976d2 !important;
+  &:hover {
+    color: #000 !important;
+  }
+}
 </style>
