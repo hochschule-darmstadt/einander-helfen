@@ -27,5 +27,4 @@ interface Post {
   };
 }
 
-export { Post };
 export default Post;
