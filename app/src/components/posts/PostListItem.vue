@@ -1,8 +1,9 @@
 <template>
-  <v-card class="post-list-item mb-3">
+  <v-card class="post mb-3">
     <v-list-item
       :ripple="false"
       three-line
+      class="post-list-item"
       :class="{ active: active }"
       @click="onClick"
     >
@@ -10,9 +11,8 @@
         <v-list-item-title
           class="headline mb-1"
           :class="{ 'full-text': active }"
-        >
-          {{ post.title }}
-        </v-list-item-title>
+          v-html="post.title"
+        />
         <v-list-item-subtitle
           :set="(distance = postDistance(post))"
           :class="{
@@ -42,7 +42,6 @@
       </v-list-item-content>
     </v-list-item>
     <!-- Detail Card -->
-    <!-- TODO: Refactor this or use PostCard ... -->
     <v-card
       v-if="active && showDetail"
       class="details-smartphone"
@@ -52,74 +51,35 @@
       }"
     >
       <v-card-text>
-        <div v-if="post.location">
-          <h3>Einsatzort</h3>
-          <p v-html="post.location"></p>
-        </div>
-        <div v-if="post.task">
-          <h3>Aufgabe</h3>
-          <p v-html="post.task"></p>
-        </div>
-        <div v-if="post.contact">
-          <h3>Ansprechpartner</h3>
-          <p v-html="post.contact"></p>
-        </div>
-        <div v-if="post.organization">
-          <h3>Organisation</h3>
-          <p v-html="post.organization"></p>
-        </div>
-        <div v-if="post.target_group">
-          <h3>Zielgruppe</h3>
-          <p v-html="post.target_group"></p>
-        </div>
-        <div v-if="post.timing">
-          <h3>Einstiegsdatum / Beginn</h3>
-          <p v-html="post.timing"></p>
-        </div>
-        <div v-if="post.effort">
-          <h3>Zeitaufwand</h3>
-          <p v-html="post.effort"></p>
-        </div>
-        <div v-if="post.opportunities">
-          <h3>Möglichkeiten</h3>
-          <p v-html="post.opportunities"></p>
-        </div>
-        <div v-if="post.prerequisites">
-          <h3>Anforderungen</h3>
-          <p v-html="post.prerequisites"></p>
-        </div>
-        <div v-if="post.language_skills">
-          <h3>Sprachen</h3>
-          <p v-html="post.language_skills"></p>
-        </div>
-        <div v-if="post.link">
-          <h3>Quelle</h3>
-          <p>
-            <a :href="post.link" target="_blank">{{ post.source }}</a>
-          </p>
-        </div>
+        <template v-for="el in postTable">
+          <div v-if="post[el.key]" :key="el.key">
+            <h3>{{ el.label }}</h3>
+            <p v-if="el.link">
+              <a :href="post[el.link]" target="_blank">{{ post[el.key] }}</a>
+            </p>
+            <p v-else v-html="post[el.key]" />
+          </div>
+        </template>
       </v-card-text>
-      <v-card-actions>
-        <v-flex md12 sm12>
-          <v-container style="margin-bottom: 10px">
-            <template v-for="(category, i) in post.categories">
-              <v-chip :key="i" class="mr-2 mt-2">{{ category }}</v-chip>
-            </template>
-          </v-container>
-          <v-spacer></v-spacer>
-          <v-container style="display: flex; justify-content: center">
-            <v-btn
-              class="my-2"
-              dark
-              large
-              color="#054C66"
-              :href="post.link"
-              target="_blank"
-            >
-              Zum Angebot
-            </v-btn>
-          </v-container>
-        </v-flex>
+      <v-card-actions class="actions">
+        <div class="tags">
+          <template v-for="(category, i) in post.categories">
+            <v-chip :key="i" class="mr-2 mt-2">{{ category }}</v-chip>
+          </template>
+        </div>
+        <v-spacer></v-spacer>
+        <div class="my-2 mt-6">
+          <v-btn
+            class="my-2"
+            dark
+            large
+            color="#054C66"
+            :href="post.link"
+            target="_blank"
+          >
+            Zum Angebot
+          </v-btn>
+        </div>
       </v-card-actions>
     </v-card>
   </v-card>
@@ -128,7 +88,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Post from "@/models/post";
-import { mapState } from "vuex";
+import Location from "@/models/location";
 
 export default Vue.extend({
   name: "PostListItem",
@@ -145,27 +105,40 @@ export default Vue.extend({
       type: Boolean,
       default: false,
     },
+    location: {
+      type: Object as () => Location,
+      default: undefined,
+    },
   },
-  computed: {
-    /** TODO: remove store variables from this component */
-    ...mapState("searchModule", [
-      "selectedLocation",
-      "selectedRadius",
-      "alternateRadius",
-    ]),
+  data: function () {
+    return {
+      postTable: [
+        { key: "location", label: "Einsatzort" },
+        { key: "task", label: "Aufgabe" },
+        { key: "contact", label: "Ansprechpartner" },
+        { key: "organization", label: "Organisation" },
+        { key: "target_group", label: "Zielgruppe" },
+        { key: "timing", label: "Einstiegsdatum / Beginn" },
+        { key: "effort", label: "Zeitaufwand" },
+        { key: "opportunities", label: "Möglichkeiten" },
+        { key: "prerequisites", label: "Anforderungen" },
+        { key: "language_skills", label: "Sprachen" },
+        { key: "source", label: "Quelle", link: "link" },
+      ],
+    };
   },
   methods: {
     onClick() {
       this.$emit("click", this.post);
     },
     postDistance(post: Post): string {
-      if (!this.selectedLocation || !post.geo_location) {
+      if (!this.location || !post.geo_location) {
         return "";
       }
 
       const distance = this.haversineDistance(
         [post.geo_location.lat, post.geo_location.lon],
-        [this.selectedLocation.lat, this.selectedLocation.lon]
+        [this.location.lat, this.location.lon]
       );
 
       if (distance) {
@@ -197,8 +170,8 @@ export default Vue.extend({
 });
 </script>
 <style lang="scss" scoped>
-.post-list-item {
-  &.active {
+.post {
+  .post-list-item.active {
     background-color: #c4e0ff !important;
   }
 
@@ -208,6 +181,15 @@ export default Vue.extend({
 
   .details-smartphone {
     display: none;
+  }
+
+  .actions {
+    flex-direction: column;
+
+    .tags {
+      align-self: flex-start;
+      margin: 0px 10px;
+    }
   }
 
   @media only screen and (max-width: 960px) {
