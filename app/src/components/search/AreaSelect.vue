@@ -35,7 +35,7 @@ export default Vue.extend({
   name: "AreaSelect",
   props: {
     value: {
-      type: String,
+      type: Boolean,
       required: true,
     },
     dark: {
@@ -73,13 +73,18 @@ export default Vue.extend({
       this.setSelection();
     },
   },
+  computed: {
+    isInternational(): boolean {
+      return this.selection == this.items[1].value;
+    },
+  },
   methods: {
     setSelection(): void {
-      this.selection = this.value || this.items[0].value;
-      this.$emit("input", this.selection);
+      this.selection = this.value ? this.items[1].value : this.items[0].value;
+      this.$emit("input", this.isInternational);
     },
     onInputChange() {
-      this.$emit("input", this.selection);
+      this.$emit("input", this.isInternational);
     },
   },
 });

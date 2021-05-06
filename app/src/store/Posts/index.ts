@@ -49,12 +49,21 @@ export const postsModule: Module<PostsState, RootState> = {
     },
   },
   mutations: {
+    clearPostParams(state): void {
+      state.posts = [];
+      state.selectedPost = undefined;
+      state.selectedPage = 1;
+      state.resultsFrom = 0;
+      state.totalResultSize = 0;
+    },
     setPosts(state, posts: Post[]): void {
       // set Open post if list contains only one post.
       if (posts.length === 1) state.selectedPost = posts[0];
       state.posts = posts;
     },
-    setSelectedPost(state, post: Post | undefined = undefined): void {
+  },
+  actions: {
+    setSelectedPost({ state }, post: Post | undefined = undefined): void {
       const selectedPostIndex = state.posts.findIndex(
         (post) => state.selectedPost && post.id === state.selectedPost.id
       );
@@ -73,7 +82,7 @@ export const postsModule: Module<PostsState, RootState> = {
         } // else selectedPost not in posts => do nothing
       }
     },
-    setSelectedPage(state, page = 1): void {
+    setSelectedPage({ state }, page = 1): void {
       const inChunk = (x: number, chunk: { min: number; max: number }): boolean =>
         x >= chunk.min && x <= chunk.max;
 
@@ -97,8 +106,6 @@ export const postsModule: Module<PostsState, RootState> = {
         state.selectedPage = page;
       }
     },
-  },
-  actions: {
   },
 };
 

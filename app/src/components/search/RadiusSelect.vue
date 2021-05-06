@@ -6,8 +6,8 @@
     :dark="dark"
     :disabled="disabled"
     :attach="attachTo"
-    v-model="radius"
-    @change="onInputChange"
+    :value="radius"
+    @change="onChange"
     @keydown.enter="onEnter"
   />
 </template>
@@ -15,13 +15,13 @@
 <script lang="ts">
 import Vue from "vue";
 import Radius from "@/models/radius";
-import radii from "@/resources/radii";
+import radii, { radii as radiiArray } from "@/resources/radii";
 
 export default Vue.extend({
   name: "RadiusSelect",
   props: {
     value: {
-      type: Object as () => Radius,
+      type: String,
     },
     international: {
       type: Boolean,
@@ -38,8 +38,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      radii: radii as Radius[],
-      radius: this.value as Radius,
+      radius: {} as Radius,
     };
   },
   watch: {
@@ -47,16 +46,13 @@ export default Vue.extend({
     value(): void {
       this.setRadius();
     },
-    international(): void {
-      if (this.international) this.radius = this.defaultRadii;
-    },
   },
   computed: {
     disabled(): boolean {
       return this.international;
     },
-    defaultRadii(): Radius {
-      return this.radii[0];
+    radii(): Radius[] {
+      return radiiArray;
     },
   },
   mounted(): void {
@@ -64,15 +60,17 @@ export default Vue.extend({
   },
   methods: {
     setRadius() {
-      this.radius = this.value || this.defaultRadii;
-      this.$emit("input", this.radius);
+      if (this.radius.value != this.value) this.radius = this.getRadiusObject();
     },
-    onInputChange(): void {
-      this.$emit("input", this.radius);
+    onChange(v) {
+      if (this.value != v) this.$emit("input", v);
     },
     onEnter(): void {
-      this.$emit("input", this.radius);
+      this.$emit("input", this.radius.value);
       this.$emit("enter");
+    },
+    getRadiusObject() {
+      return radii.find((r) => r.value == this.value) || radii[0];
     },
   },
 });

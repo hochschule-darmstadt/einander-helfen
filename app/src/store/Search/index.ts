@@ -2,15 +2,14 @@ import { Module } from "vuex";
 import Tag from "@/models/tag";
 import Location from "@/models/location";
 import LocationService from "@/services/LocationService";
-import Radius from "@/models/radius";
 import { RootState } from "../store";
-import radii from "@/resources/radii";
+import { getDefaultRadius } from "@/resources/radii";
 
 export interface SearchState {
   tags: Tag[]
   searchValues: string[];
   selectedLocation?: Location;
-  selectedRadius: Radius;
+  selectedRadius: string;
   international: boolean,
 }
 
@@ -20,7 +19,7 @@ export const searchModule: Module<SearchState, RootState> = {
     tags: [] as Tag[],
     searchValues: [] as string[],
     selectedLocation: undefined,
-    selectedRadius: radii[0],
+    selectedRadius: "",
     international: false,
   },
   getters: {
@@ -30,7 +29,7 @@ export const searchModule: Module<SearchState, RootState> = {
     getLocation(state): Location | undefined {
       return state.selectedLocation;
     },
-    getRadius(state): Radius | undefined {
+    getRadius(state): string {
       return state.selectedRadius;
     },
     getSearchValues(state): string[] {
@@ -44,40 +43,7 @@ export const searchModule: Module<SearchState, RootState> = {
     setTags(state, value: Tag[]): void {
       state.tags = value;
     },
-    setSelectedLocation(state, value: Location | undefined): void {
-      state.selectedLocation = value;
-    },
-    setSelectedRadius(state, value: Radius): void {
-      state.selectedRadius = value;
-    },
-    addSearchValue(state, value: string): void {
-      if (value && !state.searchValues.includes(value))
-        state.searchValues.push(value);
-    },
-    removeSearchValue(state, value: string): void {
-      state.searchValues.splice(state.searchValues.indexOf(value), 1);
-    },
-    setInternational(state, value: boolean): void {
-      state.international = value;
-    },
-    clearSearchParams(state): void {
-      state.searchValues = [];
-      state.selectedRadius = radii[0];
-      state.selectedLocation = undefined;
-    },
-  },
-  actions: {
-    addSearchValue({ commit }, searchValue: string): void {
-      searchValue = searchValue.trim();
-      commit("addSearchValue", searchValue);
-    },
-    addSearchValues({ dispatch }, searchValues: string[]): void {
-      searchValues.forEach((val) => dispatch("addSearchValue", val));
-    },
-    removeSearchValue({ commit }, value: string): void {
-      commit("removeSearchValue", value);
-    },
-    setSelectedLocation({ state }, location: string): void {
+    setSelectedLocation(state, location: string): void {
       const locationObject = LocationService.findByTitle(location)
         || {
         name: "",
@@ -92,14 +58,31 @@ export const searchModule: Module<SearchState, RootState> = {
 
       state.selectedLocation = locationObject;
     },
-    setSelectedRadius({ commit }, radiusSearchValue): void {
-      commit("setSelectedRadius", radiusSearchValue);
+    setSelectedRadius(state, value: string): void {
+      state.selectedRadius = value;
     },
-    setInternational({ commit }, international: boolean): void {
-      commit("setInternational", international);
+    addSearchValue(state, value: string): void {
+      value = value.trim();
+      if (value && !state.searchValues.includes(value))
+        state.searchValues.push(value);
     },
-    clearSearchParams({ commit }): void {
-      commit("clearSearchParams");
+    removeSearchValue(state, value: string): void {
+      state.searchValues.splice(state.searchValues.indexOf(value), 1);
+    },
+    setInternational(state, value: boolean): void {
+      if (state.international != value)
+        state.selectedRadius = getDefaultRadius().value;
+      state.international = value;
+    },
+    clearSearchParams(state): void {
+      state.searchValues = [];
+      state.selectedRadius = getDefaultRadius().value;
+      state.selectedLocation = undefined;
+    },
+  },
+  actions: {
+    addSearchValues({ commit }, searchValues: string[]): void {
+      searchValues.forEach((val) => commit("addSearchValue", val));
     },
   },
 };

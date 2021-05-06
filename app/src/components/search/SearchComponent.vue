@@ -15,7 +15,7 @@
 
       <v-col class="locationDiv" cols="12" :md="isFullwidth ? 12 : 6">
         <div>
-          <AreaSelect tabindex="2" v-model="area" :dark="dark" />
+          <AreaSelect tabindex="2" v-model="internationalValue" :dark="dark" />
           <LocationSearchBar
             tabindex="3"
             :dark="dark"
@@ -31,6 +31,7 @@
             :dark="dark"
             :international="international"
             v-model="radius"
+            @input="paramChanged"
             @enter="paramChanged"
           />
           <SearchButton @click="executeSearch" tabindex="5" />
@@ -47,8 +48,7 @@ import RadiusSelect from "@/components/search/RadiusSelect.vue";
 import SearchBar from "@/components/search/SearchBar.vue";
 import SearchButton from "@/components/search/SearchButton.vue";
 import AreaSelect from "@/components/search/AreaSelect.vue";
-import { mapActions, mapGetters, mapState } from "vuex";
-import Radius from "@/models/radius";
+import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 
 /**
  * Emits @Search onSearch triggered event
@@ -86,48 +86,57 @@ export default Vue.extend({
     return {
       searchValue: "",
       locationSearchValue: "",
-      area: "germany",
-      radius: undefined as Radius | undefined,
+      internationalValue: false,
+      radius: "",
       secondSearch: false,
     };
   },
   mounted(): void {
-    // load data from store
-    this.area = this.getInternational() ? "international" : "germany";
-    this.radius = this.getRadius();
-    this.locationSearchValue = this.getLocationText();
-
-    // set watcher after data initialisation
-    this.$watch(
-      // watch these parameters to detect change
-      () => (
-        this.radius,
-        this.area,
-        // and to be sure that a different value is returned every time
-        Date.now()
-      ),
-      // and execute paramChanged if a parameter change
-      () => this.paramChanged()
+    this.$nextTick(() =>
+      // set watcher after data initialisation
+      this.$watch(
+        // watch these parameters to detect change
+        () => (
+          // this.radius,
+          this.internationalValue,
+          // and to be sure that a different value is returned every time
+          Date.now()
+        ),
+        // and execute paramChanged if a parameter change
+        () => {
+          this.paramChanged();
+        }
+      )
     );
   },
-  computed: {
-    ...mapState("searchModule", ["searchValues"]),
-
-    international(): boolean {
-      return this.area === "international";
+  watch: {
+    // watch selectedRadius in store
+    selectedRadius(value: string) {
+      if (this.radius != value) this.radius = value;
     },
+    // watch selectedLocation in store
+    selectedLocation() {
+      if (this.locationSearchValue != this.getLocationText())
+        this.locationSearchValue = this.getLocationText() || "";
+    },
+    international(value) {
+      this.internationalValue = value;
+    },
+  },
+  computed: {
+    ...mapState("searchModule", [
+      "searchValues",
+      "selectedRadius",
+      "selectedLocation",
+      "international",
+    ]),
     isFullwidth(): boolean {
       return !this.small;
     },
   },
   methods: {
-    ...mapGetters("searchModule", [
-      "getRadius",
-      "getLocationText",
-      "getSearchValues",
-      "getInternational",
-    ]),
-    ...mapActions("searchModule", [
+    ...mapGetters("searchModule", ["getLocationText", "getInternational"]),
+    ...mapMutations("searchModule", [
       "setSelectedRadius",
       "setSelectedLocation",
       "addSearchValue",
@@ -143,9 +152,9 @@ export default Vue.extend({
     executeSearch(): void {
       // update search parameter in store
       this.addSearchValue(this.searchValue);
-      this.setInternational(this.international);
       this.setSelectedLocation(this.locationSearchValue);
       this.setSelectedRadius(this.radius);
+      this.setInternational(this.internationalValue);
       // emit search event
       this.$emit("search");
       // update uri

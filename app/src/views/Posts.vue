@@ -24,19 +24,18 @@
 
       <!--left side content for desktop-->
       <v-flex class="list sm12 md6 order-md1">
-        <!-- TODO: is this properlly working?! -->
-        <div v-if="showRadiusExtendedMessage" class="text-center pt-12 pb-12">
+        <div v-if="radiusExtended" class="text-center pt-12 pb-12">
           <h3 class="font-weight-bold">
             Zu Ihrer Suchanfrage mit einem Radius von
-            {{ oldRadius }} haben wir keine Treffer gefunden.
-            <template v-if="radius.value"
-              >Folgende Ergebnisse werden in einem Umkreis von
-              {{ radius }} gefunden.</template
-            >
-            <template v-else
-              >Folgende Ergebnisse werden in einem Umkreis von mehr als 50 km
-              gefunden.</template
-            >
+            {{ radiusExtendedFrom }} haben wir keine Treffer gefunden.
+            <template v-if="selectedRadius">
+              Folgende Ergebnisse werden in einem Umkreis von
+              {{ selectedRadius }} gefunden.
+            </template>
+            <template v-else>
+              Folgende Ergebnisse werden in einem Umkreis von mehr als 50 km
+              gefunden.
+            </template>
           </h3>
         </div>
 
@@ -46,6 +45,7 @@
           :post="post"
           :active="post.id == selectedPostId"
           :showDetail="smartphone"
+          :location="selectedLocation"
           @click="selectedPostId === post.id ? closePost() : openPost(post)"
         />
 
@@ -69,12 +69,10 @@ import PostListItem from "@/components/posts/PostListItem.vue";
 import PostPagination from "@/components/posts/PostPagination.vue";
 import MapButton from "@/components/posts/MapButton.vue";
 
-import Radius from "@/models/radius";
 import Post from "@/models/post";
-import radii from "@/resources/radii";
 import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
+import radii from "@/resources/radii";
 
-// TODO: add isLoading state
 export default Vue.extend({
   name: "PostsView",
   components: {
@@ -89,21 +87,21 @@ export default Vue.extend({
     return {
       showMap: true,
       smartphone: false,
-      radiusExtendedFrom: undefined as Radius | undefined,
-      showRadiusExtendedMessage: false,
     };
   },
   computed: {
     ...mapState("postsModule", ["selectedPost", "posts", "resultsFrom"]),
     ...mapGetters("postsModule", ["postsOnCurrentPage", "selectedPostId"]),
+    ...mapState(["radiusExtended", "radiusExtendedFrom"]),
     ...mapState("searchModule", [
       "selectedLocation",
       "selectedRadius",
       "searchValues",
       "international",
     ]),
+    ...mapGetters("searchModule", []),
   },
-  mounted(): void {
+  created(): void {
     // get params from route query and execute findPosts
     this.hydrateStateFromRoute()
       .then(() => {
@@ -141,48 +139,10 @@ export default Vue.extend({
     // remove event handler
     window.removeEventListener("resize", this.onResize);
   },
-  watch: {
-    radiusExtendedFrom(newValue, oldValue): void {
-      if (oldValue !== newValue && !newValue)
-        this.showRadiusExtendedMessage = false;
-    },
-
-    /** If the list of posts is emtpy, increase the radius an search again. */
-    posts(posts: Post[]): void {
-      // there is a full list of posts
-      if (posts.length) {
-        this.showRadiusExtendedMessage = this.radiusExtendedFrom ? true : false;
-      }
-      // if there are no posts in the list
-      else {
-        // if a location and a radius is set
-        if (this.selectedLocation && this.selectedRadius) {
-          const radiusBeforeExtend = this.selectedRadius;
-          // Wenn wir mit einem Radius um einen Ort suchen, den Radius vergrößern und nochmal probieren!
-
-          // find radius index of radii
-          const currentRadiusIndex = radii.findIndex(
-            (r) => r.value === radiusBeforeExtend.value
-          );
-          // find next bigger radii
-          const nextBiggerRadius =
-            radii[(currentRadiusIndex + 1) % radii.length];
-
-          // Wir wollen uns merken, dass wir den Radius verändert haben, um den Nutzer darüber zu informieren.
-          // Aber nur, wenn wir das nicht bereits gemacht haben um uns den Wert nicht zu überschreiben.
-          if (!this.radiusExtendedFrom) {
-            this.radiusExtendedFrom = radiusBeforeExtend;
-          }
-
-          // update radius -> new search is triggered
-          this.setRadius(nextBiggerRadius);
-        }
-      }
-    },
-  },
+  watch: {},
   methods: {
-    ...mapMutations("searchModule", ["setRadius"]),
-    ...mapMutations("postsModule", ["setSelectedPost"]),
+    ...mapMutations("searchModule", ["setSelectedRadius"]),
+    ...mapActions("postsModule", ["setSelectedPost"]),
     ...mapActions(["hydrateStateFromRoute", "updateURIFromState", "loadPosts"]),
 
     /** Open details for a post */
@@ -190,24 +150,26 @@ export default Vue.extend({
       // close map to show detail page
       if (!this.smartphone) this.showMap = false;
       // set selected post
-      this.setSelectedPost(post);
-      // update uri with post
-      this.$nextTick(() => this.updateURIFromState());
+      this.setSelectedPost(post).then(() =>
+        // update uri with post
+        this.updateURIFromState()
+      );
     },
     /** Close current selected post  */
     closePost(): void {
       // show map on smartphone
       if (!this.smartphone) this.showMap = true;
       // remove selected post
-      this.setSelectedPost(undefined);
-      // update uri without post
-      this.$nextTick(() => this.updateURIFromState());
+      this.setSelectedPost(undefined).then(() =>
+        // update uri without post
+        this.updateURIFromState()
+      );
     },
     /** Show the map  */
     openMap(): void {
+      // TODO: Details Button is not shown -  map is not focusing on the item
       this.showMap = true;
     },
-
     /** Resize handler for window Resize */
     onResize(): void {
       // swtich to smartphone view
@@ -235,7 +197,8 @@ export default Vue.extend({
   }
   .map,
   .list {
-    height: calc(100vh - 345px);
+    // full height minus header, footer and pagination height
+    height: calc(100vh - 340px);
   }
 
   .list {
@@ -243,6 +206,7 @@ export default Vue.extend({
     margin-right: 1%;
     flex-basis: 49%;
     padding-right: 3px;
+    padding-left: 3px;
   }
 }
 .sitecontent {
@@ -257,6 +221,7 @@ export default Vue.extend({
     margin: auto;
     max-width: none;
     margin-top: 2%;
+    padding: 0 5px;
   }
   @media (min-width: 1100px) {
     width: 1100px;
