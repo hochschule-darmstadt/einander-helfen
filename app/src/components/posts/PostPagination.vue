@@ -31,9 +31,10 @@ export default Vue.extend({
     // update page in store if this page change
     page(page: number): void {
       if (page != this.selectedPage) {
-        this.setSelectedPage(page);
-        // update uri with new page
-        this.updateURIFromState();
+        this.setSelectedPage(page).then(() =>
+          // update uri with new page
+          this.updateURIFromState()
+        );
       }
     },
     // update this page if page in store change
@@ -46,7 +47,7 @@ export default Vue.extend({
     this.page = this.selectedPage;
   },
   methods: {
-    ...mapMutations("postsModule", ["setSelectedPage"]),
+    ...mapActions("postsModule", ["setSelectedPage"]),
     ...mapActions(["updateURIFromState"]),
   },
 });
