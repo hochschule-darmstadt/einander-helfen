@@ -100,7 +100,7 @@ const store: StoreOptions<RootState> = {
         path += "/" + state.postsModule.selectedPost.id;
 
       // only change route if query parameter change from current query parameter
-      if (JSON.stringify(query) !== JSON.stringify(router.currentRoute.query))
+      if (JSON.stringify(query) !== JSON.stringify(router.currentRoute.query) || router.currentRoute.path !== path)
         router.push({
           path,
           query
