@@ -1,5 +1,4 @@
-import { shallowMount } from '@vue/test-utils';
-import LocationService from '@/services/LocationService';
+import LocationService from "@/services/LocationService";
 
 describe("LocationService.vue", () => {
   beforeEach(() => {

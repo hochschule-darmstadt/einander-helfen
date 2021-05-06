@@ -105,7 +105,7 @@ const store: StoreOptions<RootState> = {
         });
       });
     },
-    setPage({ commit, dispatch, state, getters }, page: number): void {
+    setPage({ commit, dispatch, state }, page: number): void {
       if (page < 1) {
         page = 1;
       }
@@ -133,10 +133,10 @@ const store: StoreOptions<RootState> = {
       commit("setSelectedPost", value);
     },
     /**
-     * Sets state values from values of the current route 
-     * @param param0 
-     * @param route 
-     * @returns 
+     * Sets state values from values of the current route
+     * @param param0
+     * @param route
+     * @returns
      */
     hydrateStateFromRoute({ commit, dispatch }): Promise<any> {
       const queryParams = router.currentRoute.query as any;
@@ -182,7 +182,9 @@ const store: StoreOptions<RootState> = {
         ...router.currentRoute.query,
         q: state.textSearchModule.searchValues.join(","),
         area: state.international ? "international" : "national",
-        location: state.locationSearchModule.selectedLocation ? state.locationSearchModule.selectedLocation.title : "",
+        location: state.locationSearchModule.selectedLocation
+          ? state.locationSearchModule.selectedLocation.title
+          : "",
         radius: state.locationSearchModule.selectedRadius,
         page: state.page.toString(),
       };

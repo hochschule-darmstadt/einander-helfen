@@ -1,7 +1,5 @@
 import { Module } from "vuex";
 import { RootState } from "../types";
-import Tag from "@/models/tag";
-
 export interface TextSearchState {
   labels: string[];
   synonyms: string[];
@@ -18,7 +16,7 @@ export const textSearchModule: Module<TextSearchState, RootState> = {
   getters: {
     getSearchValues(state): string[] {
       return state.searchValues;
-    }
+    },
   },
   mutations: {
     addSearchValue(state, value: string): void {
