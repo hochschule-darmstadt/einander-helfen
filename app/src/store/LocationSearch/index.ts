@@ -42,9 +42,10 @@ const locationSearchModule: Module<LocationSearchState, RootState> = {
     setLocationSearchValue({ commit }, locationSearchValue): void {
       commit("setLocationSearchValue", locationSearchValue);
     },
-    setSelectedLocation({ commit, state }, selectedLocation): void {
-      const selectedLocationObject = LocationService.findByTitle(selectedLocation)
-        || {
+    setSelectedLocation({ state }, selectedLocation): void {
+      const selectedLocationObject = LocationService.findByTitle(
+        selectedLocation
+      ) || {
         name: "",
         plz: "",
         title: "",
@@ -53,11 +54,11 @@ const locationSearchModule: Module<LocationSearchState, RootState> = {
         lon: 0,
         rank: 0,
         country: selectedLocation,
-      }
+      };
 
       state.selectedLocation = selectedLocationObject;
     },
-    setSelectedRadius({ commit, dispatch }, radiusSearchValue): void {
+    setSelectedRadius({ commit }, radiusSearchValue): void {
       commit("setAlternateRadius", "");
       commit("setSelectedRadius", radiusSearchValue);
     },
