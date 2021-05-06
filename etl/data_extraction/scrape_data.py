@@ -60,3 +60,7 @@ def run():
     # Waits for all scraper_threads to finish
     for scraper_thread in scraper_threads:
         scraper_thread.join()
+
+    # Prevents double output of the last progress bar
+    print(' '*200)
+    logger.info("All crawlers were successfully executed")
