@@ -3,5 +3,4 @@ interface Tag {
   synonyms: string[];
 }
 
-export { Tag };
 export default Tag;

@@ -9,5 +9,4 @@ interface Location {
   country: string;
 }
 
-export { Location };
 export default Location;

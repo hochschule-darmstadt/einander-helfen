@@ -20,8 +20,11 @@ module.exports = {
     "@typescript-eslint/no-explicit-any": 0,
     "@typescript-eslint/ban-ts-comment": 0,
     "@typescript-eslint/no-var-requires": 0,
-    "prettier/prettier": ["warn", {
-      "endOfLine": "auto"
-    }],
+    "prettier/prettier": [
+      "warn",
+      {
+        endOfLine: "auto",
+      },
+    ],
   },
 };

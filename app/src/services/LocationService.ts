@@ -1,6 +1,6 @@
-import Location from '@/models/location';
-import locationArray from '@/resources/locations/index';
-import CountryService from '@/services/CountryService';
+import Location from "@/models/location";
+import locationArray from "@/resources/locations/index";
+import CountryService from "@/services/CountryService";
 
 class LocationService {
   public locations: Location[] = [];
@@ -201,5 +201,3 @@ class LocationService {
 const locationServiceInstance = new LocationService();
 
 export default locationServiceInstance;
-
-export { locationServiceInstance as LocationService };
