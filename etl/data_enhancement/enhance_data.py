@@ -27,6 +27,7 @@ class Enhancer:
             'gutetat_munich': self.__enhance_gute_tat,
             'ein_jahr_freiwillig': self.__enhance_ein_jahr_freiwillig,
             'bundesfreiwilligendienst': self.__enhance_bundesfreiwilligendienst,
+            'european_youth_portal': self.__enhance_european_youth_portal,
         }
 
     def run(self):
@@ -77,6 +78,12 @@ class Enhancer:
     def __enhance_bundesfreiwilligendienst(self):
         """ domain specific enhancement for bundesfreiwilligendienst """
         self.logger.debug("__enhance_bundesfreiwilligendienst()")
+
+        e_tags.run(self.__data, self.__domain_name)
+
+    def __enhance_european_youth_portal(self):
+        """ domain specific enhancement for european_youth_portal """
+        self.logger.debug("__enhance_european_youth_portal()")
 
         e_tags.run(self.__data, self.__domain_name)
 
