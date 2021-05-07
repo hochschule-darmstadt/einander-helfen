@@ -2,6 +2,7 @@ from data_enhancement.enhancement_duplicates import enhancement_exact_duplicates
 from data_enhancement.enhancement_tags import enhancement_tags as e_tags
 from data_enhancement.enhancement_location import enhancement_location as e_location
 from data_enhancement.enhancement_location.lat_lon_enhancer import add_lat_lon
+from data_enhancement.enhancement_translation.enhancement_translation import translate_english_countries
 from shared.LoggerFactory import LoggerFactory
 
 
@@ -87,3 +88,4 @@ class Enhancer:
 
         e_tags.run(self.__data, self.__domain_name)
 
+        translate_english_countries(self.__data)
