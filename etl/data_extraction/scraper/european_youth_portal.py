@@ -112,9 +112,12 @@ class EuropeanYouthPortalScraper(Scraper):
             detail_page_a_tags = [x.find('a', href=re.compile('/youth/volunteering/organisation')) for x in card_divs]
 
             # Get maximum number of pages
-            last_page_link = response.find('li', {'class': 'pager-last'}).a['href']
-            index_max = re.match(r'.*page=([0-9]*)', last_page_link).group(1)
-            index_max = int(index_max)+1
+            index_max = index
+            last_page_link = response.find('li', {'class': 'pager-last'})
+            if last_page_link is not None:
+                last_page_link = last_page_link.a['href']
+                index_max = re.match(r'.*page=([0-9]*)', last_page_link).group(1)
+                index_max = int(index_max)+1
 
             self.logger.debug(f'Fetched {len(detail_page_a_tags)} URLs from {next_page_url} [{index}/{index_max}]')
             self.get_progress_data_fetching(index, index_max)
@@ -132,9 +135,9 @@ class EuropeanYouthPortalScraper(Scraper):
                     self.urls.append(current_link)
 
             # Get next result page
-            next_page_url = response.find('li', {'class': 'next'}).a
+            next_page_url = response.find('li', {'class': 'next'})
             if next_page_url:
-                next_page_url = self.base_url + next_page_url['href']
+                next_page_url = self.base_url + next_page_url.a['href']
 
             index += 1
 
