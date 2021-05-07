@@ -23,9 +23,8 @@ interface Post {
       zipcode: string;
       city: string;
       country: string;
-    }
+    };
   };
 }
 
-export {Post};
 export default Post;

@@ -3,14 +3,16 @@
     <Header />
     <div class="privacy">
       <v-container justify="center" class="containerWithContent">
-        <h1 class="wordbreak">Datenschutzerklärung (Data protection declaration, in German)</h1>
+        <h1 class="wordbreak">
+          Datenschutzerklärung (Data protection declaration, in German)
+        </h1>
 
         <h2>1. Datenschutz auf einen Blick</h2>
 
         <h3>Allgemeine Hinweise</h3>
         <p>
-          Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit
-          Ihren personenbezogenen Daten passiert, wenn Sie unsere Website
+          Die folgenden Hinweise geben einen einfachen Überblick darüber, was
+          mit Ihren personenbezogenen Daten passiert, wenn Sie unsere Website
           besuchen. Personenbezogene Daten sind alle Daten, mit denen Sie
           persönlich identifiziert werden können. Ausführliche Informationen zum
           Thema Datenschutz entnehmen Sie unserer unter diesem Text aufgeführten
@@ -42,10 +44,12 @@
           Erfassung dieser Daten erfolgt automatisch, sobald Sie unsere Website
           betreten.
         </p>
-        <p class="text-success"><strong>Wofür nutzen wir Ihre Daten?</strong></p>
+        <p class="text-success">
+          <strong>Wofür nutzen wir Ihre Daten?</strong>
+        </p>
         <p>
-          Ein Teil der Daten wird erhoben, um eine fehlerfreie Bereitstellung der
-          Website zu gewährleisten. Andere Daten können zur Analyse Ihres
+          Ein Teil der Daten wird erhoben, um eine fehlerfreie Bereitstellung
+          der Website zu gewährleisten. Andere Daten können zur Analyse Ihres
           Nutzerverhaltens verwendet werden.
         </p>
         <p class="text-success">
@@ -54,11 +58,11 @@
         <p>
           Sie haben jederzeit das Recht unentgeltlich Auskunft über Herkunft,
           Empfänger und Zweck Ihrer gespeicherten personenbezogenen Daten zu
-          erhalten. Sie haben außerdem ein Recht, die Berichtigung, Sperrung oder
-          Löschung dieser Daten zu verlangen. Hierzu sowie zu weiteren Fragen zum
-          Thema Datenschutz können Sie sich jederzeit unter der im Impressum
-          angegebenen Adresse an uns wenden. Des Weiteren steht Ihnen ein
-          Beschwerderecht bei der zuständigen Aufsichtsbehörde zu.
+          erhalten. Sie haben außerdem ein Recht, die Berichtigung, Sperrung
+          oder Löschung dieser Daten zu verlangen. Hierzu sowie zu weiteren
+          Fragen zum Thema Datenschutz können Sie sich jederzeit unter der im
+          Impressum angegebenen Adresse an uns wenden. Des Weiteren steht Ihnen
+          ein Beschwerderecht bei der zuständigen Aufsichtsbehörde zu.
         </p>
         <p>
           Außerdem haben Sie das Recht, unter bestimmten Umständen die
@@ -80,7 +84,8 @@
           Daten erhoben. Personenbezogene Daten sind Daten, mit denen Sie
           persönlich identifiziert werden können. Die vorliegende
           Datenschutzerklärung erläutert, welche Daten wir erheben und wofür wir
-          sie nutzen. Sie erläutert auch, wie und zu welchem Zweck das geschieht.
+          sie nutzen. Sie erläutert auch, wie und zu welchem Zweck das
+          geschieht.
         </p>
         <p>
           Wir weisen darauf hin, dass die Datenübertragung im Internet (z.B. bei
@@ -91,8 +96,8 @@
 
         <h3>Hinweis zur verantwortlichen Stelle</h3>
         <p>
-          Die verantwortliche Stelle für die Datenverarbeitung auf dieser Website
-          ist:
+          Die verantwortliche Stelle für die Datenverarbeitung auf dieser
+          Website ist:
         </p>
         Roland Humm <br />
         Pragelatostr. 113<br />
@@ -105,17 +110,17 @@
         <p>
           Verantwortliche Stelle ist die natürliche oder juristische Person, die
           allein oder gemeinsam mit anderen über die Zwecke und Mittel der
-          Verarbeitung von personenbezogenen Daten (z.B. Namen, E-Mail-Adressen o.
-          Ä.) entscheidet.
+          Verarbeitung von personenbezogenen Daten (z.B. Namen, E-Mail-Adressen
+          o. Ä.) entscheidet.
         </p>
 
         <h3>Widerruf Ihrer Einwilligung zur Datenverarbeitung</h3>
         <p>
           Viele Datenverarbeitungsvorgä nge sind nur mit Ihrer ausdrücklichen
           Einwilligung möglich. Sie können eine bereits erteilte Einwilligung
-          jederzeit widerrufen. Dazu reicht eine formlose Mitteilung per E-Mail an
-          uns. Die Rechtmäßigkeit der bis zum Widerruf erfolgten Datenverarbeitung
-          bleibt vom Widerruf unberührt.
+          jederzeit widerrufen. Dazu reicht eine formlose Mitteilung per E-Mail
+          an uns. Die Rechtmäßigkeit der bis zum Widerruf erfolgten
+          Datenverarbeitung bleibt vom Widerruf unberührt.
         </p>
 
         <h3>
@@ -125,30 +130,30 @@
         <p>
           <strong
             >Wenn die Datenverarbeitung auf Grundlage von Art. 6 Abs. 1 lit. e
-            oder f DSGVO erfolgt, haben Sie jederzeit das Recht, aus Gründen, die
-            sich aus Ihrer besonderen Situation ergeben, gegen die Verarbeitung
-            Ihrer personenbezogenen Daten Widerspruch einzulegen; dies gilt auch
-            für ein auf diese Bestimmungen gestütztes Profiling. Die jeweilige
-            Rechtsgrundlage, auf denen eine Verarbeitung beruht, entnehmen Sie
-            dieser Datenschutzerklärung. Wenn Sie Widerspruch einlegen, werden wir
-            Ihre betroffenen personenbezogenen Daten nicht mehr verarbeiten, es
-            sei denn, wir können zwingende schutzwürdige Gründe für die
-            Verarbeitung nachweisen, die Ihre Interessen, Rechte und Freiheiten
-            überwiegen oder die Verarbeitung dient der Geltendmachung, Ausübung
-            oder Verteidigung von Rechtsansprüchen (Widerspruch nach Art. 21 Abs.
-            1 DSGVO).</strong
+            oder f DSGVO erfolgt, haben Sie jederzeit das Recht, aus Gründen,
+            die sich aus Ihrer besonderen Situation ergeben, gegen die
+            Verarbeitung Ihrer personenbezogenen Daten Widerspruch einzulegen;
+            dies gilt auch für ein auf diese Bestimmungen gestütztes Profiling.
+            Die jeweilige Rechtsgrundlage, auf denen eine Verarbeitung beruht,
+            entnehmen Sie dieser Datenschutzerklärung. Wenn Sie Widerspruch
+            einlegen, werden wir Ihre betroffenen personenbezogenen Daten nicht
+            mehr verarbeiten, es sei denn, wir können zwingende schutzwürdige
+            Gründe für die Verarbeitung nachweisen, die Ihre Interessen, Rechte
+            und Freiheiten überwiegen oder die Verarbeitung dient der
+            Geltendmachung, Ausübung oder Verteidigung von Rechtsansprüchen
+            (Widerspruch nach Art. 21 Abs. 1 DSGVO).</strong
           >
         </p>
         <p>
           <strong
-            >Werden Ihre personenbezogenen Daten verarbeitet, um Direktwerbung zu
-            betreiben, so haben Sie das Recht, jederzeit Widerspruch gegen die
-            Verarbeitung Sie betreffender personenbezogener Daten zum Zwecke
+            >Werden Ihre personenbezogenen Daten verarbeitet, um Direktwerbung
+            zu betreiben, so haben Sie das Recht, jederzeit Widerspruch gegen
+            die Verarbeitung Sie betreffender personenbezogener Daten zum Zwecke
             derartiger Werbung einzulegen; dies gilt auch für das Profiling,
             soweit es mit solcher Direktwerbung in Verbindung steht. Wenn Sie
-            widersprechen, werden Ihre personenbezogenen Daten anschließend nicht
-            mehr zum Zwecke der Direktwerbung verwendet (Widerspruch nach Art. 21
-            Abs. 2 DSGVO).
+            widersprechen, werden Ihre personenbezogenen Daten anschließend
+            nicht mehr zum Zwecke der Direktwerbung verwendet (Widerspruch nach
+            Art. 21 Abs. 2 DSGVO).
           </strong>
         </p>
 
@@ -156,52 +161,52 @@
         <p>
           Im Falle von Verstößen gegen die DSGVO steht den Betroffenen ein
           Beschwerderecht bei einer Aufsichtsbehörde, insbesondere in dem
-          Mitgliedstaat ihres gewöhnlichen Aufenthalts, ihres Arbeitsplatzes oder
-          des Orts des mutmaßlichen Verstoßes zu. Das Beschwerderecht besteht
-          unbeschadet anderweitiger verwaltungsrechtlicher oder gerichtlicher
-          Rechtsbehelfe.
+          Mitgliedstaat ihres gewöhnlichen Aufenthalts, ihres Arbeitsplatzes
+          oder des Orts des mutmaßlichen Verstoßes zu. Das Beschwerderecht
+          besteht unbeschadet anderweitiger verwaltungsrechtlicher oder
+          gerichtlicher Rechtsbehelfe.
         </p>
 
         <h3>Recht auf Datenübertragbarkeit</h3>
         <p>
           Sie haben das Recht, Daten, die wir auf Grundlage Ihrer Einwilligung
-          oder in Erfüllung eines Vertrags automatisiert verarbeiten, an sich oder
-          an einen Dritten in einem gängigen, maschinenlesbaren Format aushändigen
-          zu lassen. Sofern Sie die direkte übertragung der Daten an einen anderen
-          Verantwortlichen verlangen, erfolgt dies nur, soweit es technisch
-          machbar ist.
+          oder in Erfüllung eines Vertrags automatisiert verarbeiten, an sich
+          oder an einen Dritten in einem gängigen, maschinenlesbaren Format
+          aushändigen zu lassen. Sofern Sie die direkte übertragung der Daten an
+          einen anderen Verantwortlichen verlangen, erfolgt dies nur, soweit es
+          technisch machbar ist.
         </p>
 
         <h3>Auskunft, Sperrung, Löschung und Berichtigung</h3>
         <p>
           Sie haben im Rahmen der geltenden gesetzlichen Bestimmungen jederzeit
           das Recht auf unentgeltliche Auskunft über Ihre gespeicherten
-          personenbezogenen Daten, deren Herkunft und Empfänger und den Zweck der
-          Datenverarbeitung und ggf. ein Recht auf Berichtigung Sperrung oder
-          Löschung dieser Daten. Hierzu sowie zu weiteren Fragen zum Thema
-          personenbezogene Daten können Sie sich jederzeit unter der im Impressum
-          angegebenen Adresse an uns wenden.
+          personenbezogenen Daten, deren Herkunft und Empfänger und den Zweck
+          der Datenverarbeitung und ggf. ein Recht auf Berichtigung Sperrung
+          oder Löschung dieser Daten. Hierzu sowie zu weiteren Fragen zum Thema
+          personenbezogene Daten können Sie sich jederzeit unter der im
+          Impressum angegebenen Adresse an uns wenden.
         </p>
 
         <h3>Recht auf Einschränkung der Verarbeitung</h3>
         <p>
           Sie haben das Recht, die Einschränkung der Verarbeitung Ihrer
           personenbezogenen Daten zu verlangen. Hierzu können Sie sich jederzeit
-          unter der im Impressum angegebenen Adresse an uns wenden. Das Recht auf
-          Einschränkung der Verarbeitung besteht in folgenden Fällen:
+          unter der im Impressum angegebenen Adresse an uns wenden. Das Recht
+          auf Einschränkung der Verarbeitung besteht in folgenden Fällen:
         </p>
         <ul>
           <li>
-            Wenn Sie die Richtigkeit Ihrer bei uns gespeicherten personenbezogenen
-            Daten bestreiten, benötigen wir in der Regel Zeit, um dies zu
-            überprüfen. Für die Dauer der Prüfung haben Sie das Recht, die
-            Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu
-            verlangen.
+            Wenn Sie die Richtigkeit Ihrer bei uns gespeicherten
+            personenbezogenen Daten bestreiten, benötigen wir in der Regel Zeit,
+            um dies zu überprüfen. Für die Dauer der Prüfung haben Sie das
+            Recht, die Einschränkung der Verarbeitung Ihrer personenbezogenen
+            Daten zu verlangen.
           </li>
           <li>
             Wenn die Verarbeitung Ihrer personenbezogenen Daten unrechtmäßig
-            geschah/geschieht, können Sie statt der Löschung die Einschränkung der
-            Datenverarbeitung verlangen.
+            geschah/geschieht, können Sie statt der Löschung die Einschränkung
+            der Datenverarbeitung verlangen.
           </li>
           <li>
             Wenn wir Ihre personenbezogenen Daten nicht mehr benötigen, Sie sie
@@ -211,11 +216,11 @@
             verlangen.
           </li>
           <li>
-            Wenn Sie einen Widerspruch nach Art. 21 Abs. 1 DSGVO eingelegt haben,
-            muss eine Abwägung zwischen Ihren und unseren Interessen vorgenommen
-            werden. Solange noch nicht feststeht, wessen Interessen überwiegen,
-            haben Sie das Recht, die Einschränkung der Verarbeitung Ihrer
-            personenbezogenen Daten zu verlangen.
+            Wenn Sie einen Widerspruch nach Art. 21 Abs. 1 DSGVO eingelegt
+            haben, muss eine Abwägung zwischen Ihren und unseren Interessen
+            vorgenommen werden. Solange noch nicht feststeht, wessen Interessen
+            überwiegen, haben Sie das Recht, die Einschränkung der Verarbeitung
+            Ihrer personenbezogenen Daten zu verlangen.
           </li>
         </ul>
         <p>
@@ -224,8 +229,8 @@
           Ihrer Einwilligung oder zur Geltendmachung, Ausübung oder Verteidigung
           von Rechtsansprüchen oder zum Schutz der Rechte einer anderen
           natürlichen oder juristischen Person oder aus Gründen eines wichtigen
-          öffentlichen Interesses der Europäischen Union oder eines Mitgliedstaats
-          verarbeitet werden.
+          öffentlichen Interesses der Europäischen Union oder eines
+          Mitgliedstaats verarbeitet werden.
         </p>
 
         <h3>Widerspruch gegen Werbe-E-Mails</h3>
@@ -259,10 +264,10 @@
           vorgenommen.
         </p>
         <p>
-          Die Erfassung dieser Daten erfolgt auf Grundlage von Art. 6 Abs. 1 lit.
-          f DSGVO. Der Websitebetreiber hat ein berechtigtes Interesse an der
-          technisch fehlerfreien Darstellung und der Optimierung seiner Website -
-          hierzu müssen die Server-Log-Files erfasst werden.
+          Die Erfassung dieser Daten erfolgt auf Grundlage von Art. 6 Abs. 1
+          lit. f DSGVO. Der Websitebetreiber hat ein berechtigtes Interesse an
+          der technisch fehlerfreien Darstellung und der Optimierung seiner
+          Website - hierzu müssen die Server-Log-Files erfasst werden.
         </p>
 
         <h3>Anfrage per E-Mail, Telefon oder Telefax</h3>
@@ -286,10 +291,10 @@
         <p>
           Die von Ihnen an uns per Kontaktanfragen übersandten Daten verbleiben
           bei uns, bis Sie uns zur Löschung auffordern, Ihre Einwilligung zur
-          Speicherung widerrufen oder der Zweck für die Datenspeicherung entfällt
-          (z.B. nach abgeschlossener Bearbeitung Ihres Anliegens). Zwingende
-          gesetzliche Bestimmungen - insbesondere gesetzliche Aufbewahrungsfristen
-          - bleiben unberührt.
+          Speicherung widerrufen oder der Zweck für die Datenspeicherung
+          entfällt (z.B. nach abgeschlossener Bearbeitung Ihres Anliegens).
+          Zwingende gesetzliche Bestimmungen - insbesondere gesetzliche
+          Aufbewahrungsfristen - bleiben unberührt.
         </p>
         <p>Quelle: <a href="https://www.e-recht24.de">e-recht24.de</a></p>
       </v-container>
@@ -298,18 +303,17 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import Header from '@/components/layout/Header.vue';
+import Vue from "vue";
+import Header from "@/components/layout/Header.vue";
 
 export default Vue.extend({
-  name: 'Privacy',
-
+  name: "Privacy",
   components: {
-    Header
-  }
+    Header,
+  },
 });
 </script>
 
 <style>
-  @import './../styles/ContainerWithContent.css';
+@import "./../styles/ContainerWithContent.css";
 </style>

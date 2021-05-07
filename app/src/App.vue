@@ -1,7 +1,6 @@
 <template>
   <v-app>
-    <Header/>
-    <v-main style="background: #00254f0c" >
+    <v-main style="background: #00254f0c">
       <router-view></router-view>
     </v-main>
     <Footer />
@@ -9,18 +8,24 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import Toolbar from '@/components/layout/Toolbar.vue';
-import Footer from '@/components/layout/Footer.vue';
+import Vue from "vue";
+// import Toolbar from "@/components/layout/Toolbar.vue";
+import Footer from "@/components/layout/Footer.vue";
 
 export default Vue.extend({
-  name: 'App',
+  name: "App",
 
   components: {
     Footer,
-    Toolbar
-  }
+    // Toolbar,
+  },
 });
 </script>
 
-
+<style lang="scss">
+/** global style */
+.v-menu__content {
+  z-index: 1001 !important;
+  border-radius: 4px !important;
+}
+</style>
