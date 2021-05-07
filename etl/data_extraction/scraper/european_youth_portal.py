@@ -98,7 +98,7 @@ class EuropeanYouthPortalScraper(Scraper):
 
         import time
 
-        search_page_url = f'{self.base_url}/youth/volunteering/organisations_de'
+        search_page_url = f'{self.base_url}/youth/volunteering/organisations_de?country=&topic=&scope%5Bql%5D=volunteering&town=&name=&combine=&inclusion_topic=&op=Apply+Filter'
         next_page_url = search_page_url
 
         index = 1
