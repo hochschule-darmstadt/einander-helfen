@@ -2,6 +2,7 @@ from data_enhancement.enhancement_duplicates import enhancement_exact_duplicates
 from data_enhancement.enhancement_tags import enhancement_tags as e_tags
 from data_enhancement.enhancement_location import enhancement_location as e_location
 from data_enhancement.enhancement_location.lat_lon_enhancer import add_lat_lon
+from data_enhancement.enhancement_translation.enhancement_translation import translate_english_countries
 from shared.LoggerFactory import LoggerFactory
 
 
@@ -27,6 +28,7 @@ class Enhancer:
             'gutetat_munich': self.__enhance_gute_tat,
             'ein_jahr_freiwillig': self.__enhance_ein_jahr_freiwillig,
             'bundesfreiwilligendienst': self.__enhance_bundesfreiwilligendienst,
+            'european_youth_portal': self.__enhance_european_youth_portal,
         }
 
     def run(self):
@@ -80,3 +82,10 @@ class Enhancer:
 
         e_tags.run(self.__data, self.__domain_name)
 
+    def __enhance_european_youth_portal(self):
+        """ domain specific enhancement for european_youth_portal """
+        self.logger.debug("__enhance_european_youth_portal()")
+
+        e_tags.run(self.__data, self.__domain_name)
+
+        translate_english_countries(self.__data)

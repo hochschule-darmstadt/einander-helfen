@@ -73,6 +73,14 @@
                 >www.bundesfreiwilligendienst.de</a
               >
             </li>
+            <li>
+              <a
+                href="https://www.europa.eu/youth/home_de"
+                target="_blank"
+                rel="noopener"
+                >www.europa.eu/youth</a
+              >
+            </li>
           </ul>
           <p>
             <br />
