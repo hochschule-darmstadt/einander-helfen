@@ -22,7 +22,7 @@
 <script lang="ts">
 import Vue from "vue";
 
-interface Item {
+interface AreaItem {
   text: string;
   value: string;
   img: string;
@@ -34,6 +34,10 @@ interface Item {
 export default Vue.extend({
   name: "AreaSelect",
   props: {
+    /**
+     * value is used for v-model implementation.
+     * It defines if the area is international (true) or national/germany (false)
+     */
     value: {
       type: Boolean,
       required: true,
@@ -60,7 +64,7 @@ export default Vue.extend({
           value: "international",
           img: require("@/assets/images/area/240px-Earth_icon_2.png"),
         },
-      ] as Item[],
+      ] as AreaItem[],
       selection: "",
     };
   },

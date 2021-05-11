@@ -60,17 +60,23 @@ export default Vue.extend({
   },
   methods: {
     setRadius() {
-      if (this.radius.value != this.value) this.radius = this.getRadiusObject();
+      if (this.radius.value != this.value) {
+        this.radius = this.getRadiusObject();
+      }
     },
-    onChange(v) {
-      if (this.value != v) this.$emit("input", v);
+    onChange(inputValue) {
+      if (this.value != inputValue) {
+        this.$emit("input", inputValue);
+      }
     },
     onEnter(): void {
       this.$emit("input", this.radius.value);
       this.$emit("enter");
     },
     getRadiusObject() {
-      return radii.find((r) => r.value == this.value) || radii[0];
+      return (
+        radii.find((radius: Radius) => radius.value == this.value) || radii[0]
+      );
     },
   },
 });

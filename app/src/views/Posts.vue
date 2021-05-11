@@ -10,14 +10,14 @@
         <MapCard
           :posts="posts"
           :selectedPost="selectedPost"
-          @openPost="openPost"
+          @openPost="openPostDetails"
         />
         <!-- detail card if not smartphone -->
         <PostCard
           class="map-overlay"
           v-show="!showMap && !smartphone"
           :post="selectedPost"
-          @close="closePost"
+          @close="closePostDetails"
           @openMap="openMap"
         />
       </v-flex>
@@ -46,7 +46,11 @@
           :active="post.id == selectedPostId"
           :showDetail="smartphone"
           :location="selectedLocation"
-          @click="selectedPostId === post.id ? closePost() : openPost(post)"
+          @click="
+            selectedPostId === post.id
+              ? closePostDetails()
+              : openPostDetails(post)
+          "
         />
 
         <div class="text-center pt-12" v-if="!posts.length">
@@ -131,33 +135,29 @@ export default Vue.extend({
         );
 
         // set resize event handler
-        window.addEventListener("resize", this.onResize);
+        window.addEventListener("resize", this.onWindowResize);
       });
   },
   beforeDestroy(): void {
     // remove event handler
-    window.removeEventListener("resize", this.onResize);
+    window.removeEventListener("resize", this.onWindowResize);
   },
-  watch: {},
   methods: {
     ...mapMutations("searchModule", ["setSelectedRadius"]),
     ...mapActions("postsModule", ["setSelectedPost"]),
     ...mapActions(["hydrateStateFromRoute", "updateURIFromState", "loadPosts"]),
 
-    /** Open details for a post */
-    openPost(post: Post): void {
-      // close map to show detail page
+    openPostDetails(post: Post): void {
+      // close map to show detail page if not smartphone
       if (!this.smartphone) this.showMap = false;
       // set selected post
       this.setSelectedPost(post).then(() =>
-        //TODO: is not updating
         // update uri with post
         this.updateURIFromState()
       );
     },
-    /** Close current selected post  */
-    closePost(): void {
-      // show map on smartphone
+    closePostDetails(): void {
+      // show map if not smartphone
       if (!this.smartphone) this.showMap = true;
       // remove selected post
       this.setSelectedPost(undefined).then(() =>
@@ -167,11 +167,10 @@ export default Vue.extend({
     },
     /** Show the map  */
     openMap(): void {
-      // TODO: Details Button is not shown -  map is not focusing on the item
       this.showMap = true;
     },
     /** Resize handler for window Resize */
-    onResize(): void {
+    onWindowResize(): void {
       // swtich to smartphone view
       if (!this.smartphone && window.innerWidth <= 960) {
         this.smartphone = true;
