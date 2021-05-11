@@ -4,14 +4,14 @@ import { RootState } from "../store";
 
 export interface PostsState {
   // post stuff
-  posts: Post[]
+  posts: Post[];
   selectedPost?: Post;
   // page stuff
-  selectedPage: number
-  hitsPerPage: number,
-  resultSetSize: number,
-  resultsFrom: number
-  totalResultSize: number,
+  selectedPage: number;
+  hitsPerPage: number;
+  resultSetSize: number;
+  resultsFrom: number;
+  totalResultSize: number;
 }
 
 export const postsModule: Module<PostsState, RootState> = {
@@ -83,8 +83,10 @@ export const postsModule: Module<PostsState, RootState> = {
       }
     },
     setSelectedPage({ state }, page = 1): void {
-      const inChunk = (x: number, chunk: { min: number; max: number }): boolean =>
-        x >= chunk.min && x <= chunk.max;
+      const inChunk = (
+        x: number,
+        chunk: { min: number; max: number }
+      ): boolean => x >= chunk.min && x <= chunk.max;
 
       // set page to minimal page if less
       if (page < 1) page = 1;
@@ -99,7 +101,8 @@ export const postsModule: Module<PostsState, RootState> = {
         if (!inChunk(currentPageIndex, currentLoadedChunk)) {
           // Calculate the needed offset
           // rounding off to the next multiple of our resultSetSize
-          const from = currentPageIndex - (currentPageIndex % state.resultSetSize);
+          const from =
+            currentPageIndex - (currentPageIndex % state.resultSetSize);
           state.resultsFrom = from;
         }
 
@@ -108,4 +111,3 @@ export const postsModule: Module<PostsState, RootState> = {
     },
   },
 };
-

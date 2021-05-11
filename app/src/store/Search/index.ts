@@ -6,11 +6,11 @@ import { RootState } from "../store";
 import { getDefaultRadius } from "@/resources/radii";
 
 export interface SearchState {
-  tags: Tag[]
+  tags: Tag[];
   searchValues: string[];
   selectedLocation?: Location;
   selectedRadius: string;
-  isInternational: boolean,
+  isInternational: boolean;
 }
 
 export const searchModule: Module<SearchState, RootState> = {
@@ -44,8 +44,7 @@ export const searchModule: Module<SearchState, RootState> = {
       state.tags = value;
     },
     setSelectedLocation(state, location: string): void {
-      const locationObject = LocationService.findByTitle(location)
-        || {
+      const locationObject = LocationService.findByTitle(location) || {
         name: "",
         plz: "",
         title: "",
@@ -54,7 +53,7 @@ export const searchModule: Module<SearchState, RootState> = {
         lon: 0,
         rank: 0,
         country: location,
-      }
+      };
 
       state.selectedLocation = locationObject;
     },
