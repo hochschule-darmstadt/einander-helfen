@@ -88,7 +88,7 @@ const store: StoreOptions<RootState> = {
       const query = {
         ...router.currentRoute.query,
         q: state.searchModule.searchValues.join(","),
-        area: state.searchModule.international ? "international" : "national",
+        area: state.searchModule.isInternational ? "international" : "national",
         location: state.searchModule.selectedLocation ? state.searchModule.selectedLocation.title : "",
         radius: state.searchModule.selectedRadius,
         page: state.postsModule.selectedPage.toString(),
@@ -117,7 +117,7 @@ const store: StoreOptions<RootState> = {
         radius: state.searchModule.selectedRadius,
         from: state.postsModule.resultsFrom,
         size: state.postsModule.resultSetSize,
-        international: state.searchModule.international,
+        international: state.searchModule.isInternational,
       })
         .then((result: PaginatedResponse<Post>) => {
           state.postsModule.totalResultSize = result.meta.total;
@@ -138,7 +138,7 @@ const store: StoreOptions<RootState> = {
           // if there are no posts in the list and // if a location and a radius is set
           else if (state.searchModule.selectedLocation && state.searchModule.selectedRadius) {
             const radiusValueBeforeExtend = state.searchModule.selectedRadius;
-            // Wenn wir mit einem Radius um einen Ort suchen, den Radius vergrößern und nochmal probieren!
+            // Wenn wir mit einem Radius um einen Ort suchen, den Radius vergrï¿½ï¿½ern und nochmal probieren!
 
             // find radius index of radii
             const currentRadiusIndex = radii.findIndex(
@@ -147,8 +147,8 @@ const store: StoreOptions<RootState> = {
             // find next bigger radii
             const nextBiggerRadiusValue = radii[(currentRadiusIndex + 1) % radii.length].value;
 
-            // Wir wollen uns merken, dass wir den Radius verändert haben, um den Nutzer darüber zu informieren.
-            // Aber nur, wenn wir das nicht bereits gemacht haben um uns den Wert nicht zu überschreiben.
+            // Wir wollen uns merken, dass wir den Radius verï¿½ndert haben, um den Nutzer darï¿½ber zu informieren.
+            // Aber nur, wenn wir das nicht bereits gemacht haben um uns den Wert nicht zu ï¿½berschreiben.
             if (!state.radiusExtendedFrom)
               state.radiusExtendedFrom = radiusValueBeforeExtend;
 

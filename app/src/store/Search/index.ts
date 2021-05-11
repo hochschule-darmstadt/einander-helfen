@@ -10,7 +10,7 @@ export interface SearchState {
   searchValues: string[];
   selectedLocation?: Location;
   selectedRadius: string;
-  international: boolean,
+  isInternational: boolean,
 }
 
 export const searchModule: Module<SearchState, RootState> = {
@@ -20,7 +20,7 @@ export const searchModule: Module<SearchState, RootState> = {
     searchValues: [] as string[],
     selectedLocation: undefined,
     selectedRadius: "",
-    international: false,
+    isInternational: false,
   },
   getters: {
     getLocationText(state): string {
@@ -35,8 +35,8 @@ export const searchModule: Module<SearchState, RootState> = {
     getSearchValues(state): string[] {
       return state.searchValues;
     },
-    getInternational(state): boolean {
-      return state.international;
+    isInternational(state): boolean {
+      return state.isInternational;
     },
   },
   mutations: {
@@ -70,9 +70,9 @@ export const searchModule: Module<SearchState, RootState> = {
       state.searchValues.splice(state.searchValues.indexOf(value), 1);
     },
     setInternational(state, value: boolean): void {
-      if (state.international != value)
+      if (state.isInternational != value)
         state.selectedRadius = getDefaultRadius().value;
-      state.international = value;
+      state.isInternational = value;
     },
     clearSearchParams(state): void {
       state.searchValues = [];

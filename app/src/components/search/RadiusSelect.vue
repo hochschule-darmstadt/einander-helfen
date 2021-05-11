@@ -23,7 +23,7 @@ export default Vue.extend({
     value: {
       type: String,
     },
-    international: {
+    isInternational: {
       type: Boolean,
       default: true,
     },
@@ -49,7 +49,7 @@ export default Vue.extend({
   },
   computed: {
     disabled(): boolean {
-      return this.international;
+      return this.isInternational;
     },
     radii(): Radius[] {
       return radiiArray;

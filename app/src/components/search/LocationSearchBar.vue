@@ -32,7 +32,7 @@ export default Vue.extend({
       type: String,
       required: true,
     },
-    international: {
+    isInternational: {
       type: Boolean,
       default: true,
     },
@@ -54,12 +54,12 @@ export default Vue.extend({
   computed: {
     shownLocations(): Location[] {
       const q = this.searchValue || this.location || "";
-      return this.international
+      return this.isInternational
         ? LocationService.findCountryByName(q)
         : LocationService.findLocationByPlzOrName(q);
     },
     hintText(): string {
-      return this.international ? "Land" : "Ort oder PLZ";
+      return this.isInternational ? "Land" : "Ort oder PLZ";
     },
   },
   mounted(): void {
@@ -70,7 +70,7 @@ export default Vue.extend({
     value(): void {
       this.location = this.value;
     },
-    international(): void {
+    isInternational(): void {
       this.searchValue = "";
       this.location = undefined;
     },

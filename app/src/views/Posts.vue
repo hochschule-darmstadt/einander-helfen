@@ -100,7 +100,7 @@ export default Vue.extend({
       "selectedLocation",
       "selectedRadius",
       "searchValues",
-      "international",
+      "isInternational",
     ]),
     ...mapGetters("searchModule", []),
   },
@@ -123,7 +123,7 @@ export default Vue.extend({
           // watch all parameters which are used to find posts
           () => (
             this.searchValues,
-            this.international,
+            this.isInternational,
             this.selectedLocation,
             this.selectedRadius,
             this.resultsFrom,

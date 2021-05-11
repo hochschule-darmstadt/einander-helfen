@@ -19,7 +19,7 @@
           <LocationSearchBar
             tabindex="3"
             :dark="dark"
-            :international="international"
+            :isInternational="isInternational"
             v-model="locationSearchValue"
             @enter="paramChanged"
             @click.native="onSearchClick"
@@ -29,7 +29,7 @@
           <RadiusSelect
             tabindex="4"
             :dark="dark"
-            :international="international"
+            :isInternational="isInternational"
             v-model="radius"
             @input="paramChanged"
             @enter="paramChanged"
@@ -119,7 +119,7 @@ export default Vue.extend({
       if (this.locationSearchValue != this.getLocationText())
         this.locationSearchValue = this.getLocationText() || "";
     },
-    international(value) {
+    isInternational(value) {
       this.internationalValue = value;
     },
   },
@@ -128,14 +128,14 @@ export default Vue.extend({
       "searchValues",
       "selectedRadius",
       "selectedLocation",
-      "international",
+      "isInternational",
     ]),
     isFullwidth(): boolean {
       return !this.small;
     },
   },
   methods: {
-    ...mapGetters("searchModule", ["getLocationText", "getInternational"]),
+    ...mapGetters("searchModule", ["getLocationText"]),
     ...mapMutations("searchModule", [
       "setSelectedRadius",
       "setSelectedLocation",
