@@ -19,11 +19,7 @@
         <Lmarker
           v-for="post in postWithGeoLocation"
           :key="post.id"
-          :icon="
-            selectedPost && post.id === selectedPost.id
-              ? map.markerRed
-              : map.markerBlue
-          "
+          :icon="getMarker(post)"
           :lat-lng="[post.geo_location.lat, post.geo_location.lon]"
           @click="openPost(post)"
         >
@@ -39,7 +35,7 @@ import Vue from "vue";
 import Post from "@/models/post";
 
 // Map components
-import L, { LatLngTuple } from "leaflet";
+import L, { Icon, IconOptions, LatLngTuple } from "leaflet";
 import { LMap, LTileLayer, LTooltip } from "vue2-leaflet";
 import Vue2LeafletMarkerCluster from "vue2-leaflet-markercluster/Vue2LeafletMarkercluster.vue";
 import * as Vue2Leaflet from "vue2-leaflet";
@@ -118,7 +114,6 @@ export default Vue.extend({
         });
       });
     },
-
     setMapLocation(): void {
       if (this.selectedPost) {
         const location = [
@@ -130,7 +125,6 @@ export default Vue.extend({
         });
       }
     },
-
     /**
      * Sets the viewpost of the map to all marks
      */
@@ -145,7 +139,13 @@ export default Vue.extend({
         (this.$refs.map as LMap).fitBounds(markers);
       }
     },
-
+    getMarker(post: Post): Icon<IconOptions> {
+      // get marker for selectedPost
+      if (this.selectedPost && post.id === this.selectedPost.id)
+        return this.map.markerRed;
+      // else get blue marker
+      else return this.map.markerBlue;
+    },
     openPost(post: Post): void {
       this.$emit("openPost", post);
     },

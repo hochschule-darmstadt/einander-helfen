@@ -30,17 +30,17 @@
     <v-card-text class="content">
       <v-simple-table dense>
         <tbody>
-          <template v-for="el in headers">
-            <tr v-if="post[el.key]" :key="el.key">
-              <td>{{ el.label }}</td>
-              <td v-if="el.link">
+          <template v-for="column in columns">
+            <tr v-if="post[column.key]" :key="column.key">
+              <td>{{ column.label }}</td>
+              <td v-if="column.link">
                 <a
-                  :href="post[el.link]"
+                  :href="post[column.link]"
                   target="_blank"
-                  v-html="post[el.key]"
+                  v-html="post[column.key]"
                 />
               </td>
-              <td v-else v-html="post[el.key]" />
+              <td v-else v-html="post[column.key]" />
             </tr>
           </template>
         </tbody>
@@ -49,8 +49,8 @@
 
     <v-card-actions class="actions">
       <div class="tags">
-        <template v-for="(category, i) in post.categories">
-          <v-chip :key="i" class="mr-2 mt-2">{{ category }}</v-chip>
+        <template v-for="(category, index) in post.categories">
+          <v-chip :key="index" class="mr-2 mt-2">{{ category }}</v-chip>
         </template>
       </div>
       <v-spacer />
@@ -80,7 +80,7 @@ export default Vue.extend({
   },
   data: function () {
     return {
-      headers: [
+      columns: [
         { key: "location", label: "Einsatzort" },
         { key: "task", label: "Aufgabe" },
         { key: "contact", label: "Ansprechpartner" },

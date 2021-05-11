@@ -97,7 +97,6 @@ export default Vue.extend({
       this.$watch(
         // watch these parameters to detect change
         () => (
-          // this.radius,
           this.internationalValue,
           // and to be sure that a different value is returned every time
           Date.now()

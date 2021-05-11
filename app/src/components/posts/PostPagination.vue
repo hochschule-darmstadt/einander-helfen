@@ -3,7 +3,7 @@
     <v-pagination
       v-model="page"
       :length="totalPages"
-      total-visible="7"
+      :total-visible="buttonsCount"
       color="#054C66"
     />
     <span class="pl-2 mt-2 d-inline-block font-italic">
@@ -14,13 +14,14 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 
 export default Vue.extend({
   name: "PostPagination",
   data: function () {
     return {
       page: 1,
+      buttonsCount: 7,
     };
   },
   computed: {
