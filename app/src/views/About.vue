@@ -22,7 +22,7 @@
             Ein Angebot auswählen (in der Liste oder auf der Karte) und schon
             werden die dazugehörigen Details angezeigt. Mit einem weiteren Klick
             ist man auf der Seite des Anbieters - mit weiteren Informationen.
-            Sie können Sie Suche auch durch mehrere Stichworte einschränken.
+            Sie können die Suche auch durch mehrere Stichworte einschränken.
           </p>
           <p>
             Sie suchen ein Stellenangebot für internationalen
