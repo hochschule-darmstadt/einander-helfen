@@ -20,44 +20,54 @@
           @close="closePostDetails"
           @openMap="openMap"
         />
+        <v-skeleton-loader v-if="isLoading" type="card-avatar" />
       </v-flex>
 
       <!--left side content for desktop-->
       <v-flex class="list sm12 md6 order-md1">
-        <div v-if="radiusExtended" class="text-center pt-12 pb-12">
-          <h3 class="font-weight-bold">
-            Zu Ihrer Suchanfrage mit einem Radius von
-            {{ radiusExtendedFrom }} haben wir keine Treffer gefunden.
-            <template v-if="selectedRadius">
-              Folgende Ergebnisse werden in einem Umkreis von
-              {{ selectedRadius }} gefunden.
-            </template>
-            <template v-else>
-              Folgende Ergebnisse werden in einem Umkreis von mehr als 50 km
-              gefunden.
-            </template>
-          </h3>
-        </div>
+        <template v-if="isLoading">
+          <PostListItemSkeleton v-for="i in 3" :key="i" />
+        </template>
+        <template v-else>
+          <template v-if="radiusExtended">
+            <div class="text-center pt-12 pb-12">
+              <h3 class="font-weight-bold">
+                Zu Ihrer Suchanfrage mit einem Radius von
+                {{ radiusExtendedFrom }} haben wir keine Treffer gefunden.
+                <template v-if="selectedRadius">
+                  Folgende Ergebnisse werden in einem Umkreis von
+                  {{ selectedRadius }} gefunden.
+                </template>
+                <template v-else>
+                  Folgende Ergebnisse werden in einem Umkreis von mehr als 50 km
+                  gefunden.
+                </template>
+              </h3>
+            </div>
+          </template>
 
-        <PostListItem
-          v-for="post in postsOnCurrentPage"
-          :key="post.id"
-          :post="post"
-          :active="post.id == selectedPostId"
-          :showDetail="smartphone"
-          :location="selectedLocation"
-          @click="
-            selectedPostId === post.id
-              ? closePostDetails()
-              : openPostDetails(post)
-          "
-        />
+          <template v-if="!posts.length">
+            <div class="text-center pt-12">
+              <h3 class="font-weight-bold">
+                Es wurden keine Suchergebnisse zu Ihrer Suchanfrage gefunden.
+              </h3>
+            </div>
+          </template>
 
-        <div class="text-center pt-12" v-if="!posts.length">
-          <h3 class="font-weight-bold">
-            Es wurden keine Suchergebnisse zu Ihrer Suchanfrage gefunden.
-          </h3>
-        </div>
+          <PostListItem
+            v-for="post in postsOnCurrentPage"
+            :key="post.id"
+            :post="post"
+            :active="post.id == selectedPostId"
+            :showDetail="smartphone"
+            :location="selectedLocation"
+            @click="
+              selectedPostId === post.id
+                ? closePostDetails()
+                : openPostDetails(post)
+            "
+          />
+        </template>
       </v-flex>
     </section>
     <PostPagination />
@@ -70,6 +80,7 @@ import Header from "@/components/layout/Header.vue";
 import PostCard from "@/components/posts/PostCard.vue";
 import MapCard from "@/components/posts/MapCard.vue";
 import PostListItem from "@/components/posts/PostListItem.vue";
+import PostListItemSkeleton from "@/components/posts/PostListItemSkeleton.vue";
 import PostPagination from "@/components/posts/PostPagination.vue";
 import MapButton from "@/components/posts/MapButton.vue";
 
@@ -85,11 +96,13 @@ export default Vue.extend({
     PostCard,
     MapCard,
     PostListItem,
+    PostListItemSkeleton,
   },
   data: function () {
     return {
       showMap: true,
       smartphone: false,
+      isLoading: false,
     };
   },
   computed: {
