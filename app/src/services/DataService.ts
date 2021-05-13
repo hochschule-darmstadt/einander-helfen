@@ -21,6 +21,8 @@ export interface SearchParameters {
 }
 
 class DataService {
+  private baseUrl = process.env.VUE_APP_SEARCH_URI;
+
   private static findNationalBySelection(
     queryObject: QueryObject,
     location: Location | undefined,
@@ -87,7 +89,6 @@ class DataService {
       }
     }
   }
-  private baseUrl = searchURI;
 
   public findBySelection(
     params: SearchParameters
