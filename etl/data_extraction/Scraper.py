@@ -1,7 +1,6 @@
 import os
 import sys
 import time
-import platform
 
 import requests
 from bs4 import BeautifulSoup
@@ -22,15 +21,11 @@ class Scraper:
     # Delay between requests
     delay = 0.5
 
-    progress_bar_format = '{desc:40} |{bar:50}| {n_fmt}/{total_fmt} [{elapsed}] '
-
     def __init__(self, name, index):
         """Constructor of the scraper."""
 
         # Scraper name -> Overwritten by name of the scraper file
         self.name = name
-
-        self.index = index
 
         # The URLs which will be parsed and scraped  
         self.urls = []
@@ -172,28 +167,32 @@ class Scraper:
         """ Updates progress data of fetching process for crawler and triggers print of progeess bar"""
         self.logger.debug("get_progress_data_fetching()")
 
-        if platform.system() == 'Linux':
-            if self.progress_bar is None:
-                self.progress_bar = tqdm(desc='[FETCHING] ' + self.name + ':', total=int(total),
-                                         bar_format=self.progress_bar_format, position=self.index, file=sys.stdout)
-
-            self.progress_bar.update()
-        elif current % 5 == 0 or current == total:
-            self.logger.info(f'[FETCHING] {self.name} ({current}/{total})')
+        self.get_progress_data(current, total, 'FETCH')
 
     def get_progress_data_crawling(self, current, total):
         """ Updates progress data of crawling for crawler and triggers print of progeess bar"""
         self.logger.debug("get_progress_data_crawling()")
-        if platform.system() == 'Linux':
-            if current == 1:
-                self.progress_bar.reset(total=int(total))
-                self.progress_bar.set_description(desc='[CRAWLING] ' + self.name, refresh=True)
 
-            self.progress_bar.update()
+        self.get_progress_data(current, total, 'CRAWL')
 
-            if current == total:
-                self.progress_bar.set_description('[FINISHED] ' + self.name)
-                self.progress_bar.close()
-                self.progress_bar = None
-        elif current % 5 == 0 or current == total:
-            self.logger.info(f'[CRAWLING] {self.name} ({current}/{total})')
+    def get_progress_data(self, current, total, phase):
+        """ Updates progress for crawler and triggers print of progeess bar"""
+        self.logger.debug("get_progress_data()")
+
+        current = int(current)
+        total = int(total)
+
+        if self.progress_bar is None:
+            self.progress_bar = tqdm(desc=f'[{phase}ING] {self.name}:',
+                                     total=total,
+                                     mininterval=5,
+                                     position=0,
+                                     file=sys.stdout,
+                                     bar_format='{desc:45} {percentage:3.0f}%|{bar:50}| {n_fmt}/{total_fmt} [{elapsed}] ')
+
+        self.progress_bar.update()
+
+        if current == total:
+            self.progress_bar.set_description(f'✓ [{phase}ED] {self.name}')
+            self.progress_bar.close()
+            self.progress_bar = None
