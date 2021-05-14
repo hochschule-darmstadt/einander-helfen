@@ -144,3 +144,5 @@ class BetterplaceScraper(Scraper):
             index += 1
 
             time.sleep(self.delay)
+
+        self.get_finished_progress(index, 'FETCH')
