@@ -3,4 +3,5 @@ elasticsearch~=7.9.1
 requests~=2.25.0
 lxml~=4.6.1
 geopy~=2.0.0
+tqdm~=4.50.2
 pycountry~=20.7.3
