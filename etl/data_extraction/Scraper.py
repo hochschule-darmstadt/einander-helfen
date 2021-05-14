@@ -193,6 +193,6 @@ class Scraper:
         self.progress_bar.update()
 
         if current == total:
-            self.progress_bar.set_description(f'✓ [{phase}ED] {self.name}')
+            self.progress_bar.set_description(f'[{phase}ED] {self.name}')
             self.progress_bar.close()
             self.progress_bar = None
