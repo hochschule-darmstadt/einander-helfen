@@ -1,7 +1,7 @@
 import axios from "axios";
-import QueryBuilder, { QueryObject } from "es-query-builder";
 import Location from "@/models/location";
 import Post from "@/models/post";
+import BuilderFactory, { Bodybuilder } from "bodybuilder";
 
 export interface PaginatedResponse<T> {
   data: T[];
@@ -21,13 +21,43 @@ export interface SearchParameters {
 }
 
 class DataService {
+  private baseUrl = searchURI;
+
+  public findBySelection(params: SearchParameters): Promise<PaginatedResponse<Post>> {
+
+    const builder = BuilderFactory()
+      .from(params.from)
+      .size(params.size)
+
+      .andQuery("bool", (builder) => {
+        params.searchValues
+          .map((value) => value + "*")
+          .map((value) =>
+            builder.orQuery("query_string",
+              {
+                query: value,
+                fields: ["title", "categories", "task"]
+              },
+            )
+          )
+        return builder;
+      })
+
+    const complete_builder = params.international ?
+      DataService.findInternationalBySelection(builder, params.location) :
+      DataService.findNationalBySelection(builder, params.location, params.radius);
+
+    return this.performQuery<Post>(complete_builder);
+  }
+
+
   private static findNationalBySelection(
-    queryObject: QueryObject,
+    builder: Bodybuilder,
     location: Location | undefined,
     radius: string | undefined
-  ): void {
+  ): Bodybuilder {
     if (location) {
-      queryObject.sort.push({
+      builder = builder.sort([{
         _geo_distance: {
           geo_location: {
             lat: location.lat,
@@ -39,119 +69,61 @@ class DataService {
           distance_type: "arc",
           ignore_unmapped: true,
         },
-      });
+      }]);
     }
 
     if (location && radius) {
-      // @ts-ignore
-      queryObject.query.bool.filter = {
-        geo_distance: {
+      builder = builder.filter("bool", "geo_distance",
+        {
           distance: radius,
           geo_location: {
             lat: location.lat,
             lon: location.lon,
           },
         },
-      };
+      );
     }
 
     // only national posts
-    // @ts-ignore
-    queryObject.query.bool.must_not = [
-      {
-        term: {
-          categories: "international",
-        },
-      },
-    ];
+    builder = builder.notQuery("term", "categories", "international");
+    return builder;
   }
 
   private static findInternationalBySelection(
-    queryObject: QueryObject,
+    builder: Bodybuilder,
     location: Location | undefined
-  ): void {
+  ): Bodybuilder {
     // only international posts (default)
-    queryObject.query.bool.must.push({
-      term: {
-        categories: "international",
-      },
-    });
+    builder = builder.andQuery("term", "categories", "international");
 
     if (location) {
       if (location.country && location.country !== "Deutschland") {
-        queryObject.query.bool.must.push({
-          match: {
-            "post_struct.location.country": location.country,
-          },
-        });
+        builder = builder.andQuery("match", "post_struct.location.country", location.country);
       }
     }
+    return builder;
   }
-  private baseUrl = searchURI;
 
-  public findBySelection(
-    params: SearchParameters
-  ): Promise<PaginatedResponse<Post>> {
-    const {
-      searchValues,
-      location,
-      radius,
-      from,
-      size,
-      international,
-    } = params;
+  private performQuery<T>(query: Bodybuilder): Promise<PaginatedResponse<T>> {
+    return axios
+      .post(this.baseUrl, query.build())
+      .then(({ data }) => {
+        const entities: T[] = data.hits.hits.map((elem: any) => {
+          return {
+            id: elem._id,
+            ...elem._source,
+          };
+        });
 
-    const query = new QueryBuilder();
-    query.from(from);
-    query.size(size);
-
-    const queryObject = query.build();
-
-    queryObject.query.bool.must.push({ bool: { should: [] } });
-
-    queryObject.query.bool.must[0].bool.should = searchValues
-      .map((value) => value + "*")
-      .map((value) => {
-        return {
-          query_string: {
-            query: value,
-            fields: ["title", "categories", "task"],
+        const response: PaginatedResponse<T> = {
+          data: entities,
+          meta: {
+            total: data.hits.total.value,
+            size: entities.length,
           },
         };
-      });
-
-    if (international) {
-      DataService.findInternationalBySelection(queryObject, location);
-    } else {
-      DataService.findNationalBySelection(queryObject, location, radius);
-    }
-
-    return this.performQuery<Post>(new QueryBuilder(queryObject));
-  }
-
-  private performQuery<T>(query: QueryBuilder): Promise<PaginatedResponse<T>> {
-    return new Promise<PaginatedResponse<T>>((resolve, reject) => {
-      axios
-        .post(this.baseUrl, query.build())
-        .then(({ data }) => {
-          const entities: T[] = data.hits.hits.map((elem: any) => {
-            return {
-              id: elem._id,
-              ...elem._source,
-            };
-          });
-
-          const response: PaginatedResponse<T> = {
-            data: entities,
-            meta: {
-              total: data.hits.total.value,
-              size: entities.length,
-            },
-          };
-          resolve(response);
-        })
-        .catch((error) => reject(error));
-    });
+        return response;
+      })
   }
 }
 
