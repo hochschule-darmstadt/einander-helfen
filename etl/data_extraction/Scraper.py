@@ -196,3 +196,19 @@ class Scraper:
             self.progress_bar.set_description(f'[{phase}ED] {self.name}')
             self.progress_bar.close()
             self.progress_bar = None
+
+    def get_finished_progress(self, total, phase):
+        total = int(total)
+
+        self.progress_bar = tqdm(desc=f'[{phase}ING] {self.name}:',
+                                 total=total,
+                                 mininterval=5,
+                                 position=0,
+                                 file=sys.stdout,
+                                 bar_format='{desc:45} {percentage:3.0f}%|{bar:50}| {n_fmt}/{total_fmt} [{elapsed}] ')
+
+        self.progress_bar.update(total)
+
+        self.progress_bar.set_description(f'[{phase}ED] {self.name}')
+        self.progress_bar.close()
+        self.progress_bar = None
