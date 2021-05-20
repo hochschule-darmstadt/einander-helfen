@@ -5,10 +5,10 @@ from scraper.gutetat_berlin import GuteTatBerlinScraper
 class GuteTatHamburgScraper(GuteTatBerlinScraper, Scraper):
     """Scrapes the website gute-tat.de for the region hamburg."""
 
-    def __init__(self, name):
+    def __init__(self, name, index):
         """Constructor of GuteTatHamburgScraper."""
 
-        super().__init__(name)
+        super().__init__(name, index)
 
         # user id 15 leads to hamburg
         self.user_id = 15
