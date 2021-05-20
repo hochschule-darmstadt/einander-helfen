@@ -145,4 +145,4 @@ class BetterplaceScraper(Scraper):
 
             time.sleep(self.delay)
 
-        self.get_finished_progress(index, 'FETCH')
+        self.set_progress_completed(index, 'FETCH')

@@ -147,7 +147,7 @@ class EinJahrFreiwillig(Scraper):
             index_max = math.ceil(index_max / 20)
 
             self.logger.debug(f'Fetched {len(detail_link_tags)} URLs from {next_page_url} [{index}/{index_max}]')
-            self.get_progress_data_fetching(index, index_max)
+            self.update_fetching_progress(index, index_max)
 
             # Iterate links and add, if not already found
             for link_tag in detail_link_tags:
