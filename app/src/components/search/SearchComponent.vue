@@ -8,7 +8,7 @@
           :tags="searchValues"
           :enable-no-data-message="true"
           @click.native="onSearchClick"
-          @enter="paramChanged"
+          @enter="onSearchValueEnter"
           @remove="removeTag"
         />
       </v-col>
@@ -21,7 +21,7 @@
             :dark="dark"
             :isInternational="internationalValue"
             v-model="locationSearchValue"
-            @enter="paramChanged"
+            @enter="onLocationValueEnter"
             @click.native="onSearchClick"
           />
         </div>
@@ -135,6 +135,15 @@ export default Vue.extend({
       this.radius = this.locationSearchValue = "";
       // execute search if direktseach
       if (this.direktsearch) this.executeSearch();
+    },
+
+    onSearchValueEnter(value: string): void {
+      if (value != this.searchValue) this.searchValue = value;
+      else this.paramChanged();
+    },
+    onLocationValueEnter(value: string): void {
+      if (value != this.locationSearchValue) this.locationSearchValue = value;
+      else this.paramChanged();
     },
     paramChanged(): void {
       if (this.direktsearch || this.secondSearch) this.executeSearch();
