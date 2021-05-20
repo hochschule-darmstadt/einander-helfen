@@ -91,6 +91,10 @@ export default Vue.extend({
       secondSearch: false,
     };
   },
+  mounted() {
+    // load internation value on startup else change it later by watcher
+    this.internationalValue = this.isInternational;
+  },
   watch: {
     // watch selectedRadius in store
     selectedRadius(value: string) {
@@ -101,6 +105,7 @@ export default Vue.extend({
       if (this.locationSearchValue != this.getLocationText())
         this.locationSearchValue = this.getLocationText() || "";
     },
+    // watch isInternational in store
     isInternational(value) {
       this.internationalValue = value;
     },
@@ -155,8 +160,6 @@ export default Vue.extend({
       this.setSelectedLocation(this.locationSearchValue);
       this.setSelectedRadius(this.radius);
       this.setInternational(this.internationalValue);
-      // emit search event
-      this.$emit("search");
       // update uri
       this.updateURIFromState();
       // clear search field

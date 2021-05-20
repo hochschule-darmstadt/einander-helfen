@@ -24,7 +24,13 @@ export const searchModule: Module<SearchState, RootState> = {
   },
   getters: {
     getLocationText(state): string {
-      return state.selectedLocation ? state.selectedLocation.title : "";
+      if (state.selectedLocation) {
+        if (state.selectedLocation.title)
+          return state.selectedLocation.title;
+        if (state.selectedLocation.country)
+          return state.selectedLocation.country
+      }
+      return "";
     },
     getLocation(state): Location | undefined {
       return state.selectedLocation;
@@ -77,6 +83,7 @@ export const searchModule: Module<SearchState, RootState> = {
       state.searchValues = [];
       state.selectedRadius = getDefaultRadius().value;
       state.selectedLocation = undefined;
+      state.isInternational = false;
     },
   },
   actions: {

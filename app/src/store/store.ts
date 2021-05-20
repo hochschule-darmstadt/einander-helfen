@@ -86,14 +86,12 @@ const store: StoreOptions<RootState> = {
     /**
      * Updates url parameter with currently values from the store
      */
-    updateURIFromState({ state }): void {
+    updateURIFromState({ state, getters }): void {
       const query = {
         ...router.currentRoute.query,
         q: state.searchModule.searchValues.join(","),
         area: state.searchModule.isInternational ? "international" : "national",
-        location: state.searchModule.selectedLocation
-          ? state.searchModule.selectedLocation.title
-          : "",
+        location: getters['searchModule/getLocationText'],
         radius: state.searchModule.selectedRadius,
         page: state.postsModule.selectedPage.toString(),
       };
