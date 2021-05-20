@@ -1,94 +1,75 @@
 <template>
-  <v-app-bar flat height="100px" color="#00254f">
-    <v-layout justify-space-between no-gutters color="#00254f">
-      <v-row>
-        <v-col class="column logoCol">
-          <v-layout>
-            <v-app-bar-nav-icon>
-              <v-img
-                class="mt-7"
-                width="80px"
-                height="75px"
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Heart-hand-shake.svg/256px-Heart-hand-shake.svg.png"
-              ></v-img>
-            </v-app-bar-nav-icon>
-            <div
-              id="logo"
-              class="pl-5 mt-5 headline font-weight-light white--text"
-            >
-              einander-helfen.org
-            </div>
-          </v-layout>
-        </v-col>
-        <v-col id="sloganCol">
-          <div
-            id="slogan"
-            class="font-weight-bold d-none d-sm-flex pl-5 mt-5 title font-weight-light white--text"
-          >
-            Das schnelle Suchportal für Freiwilligenarbeit
-          </div>
-        </v-col>
-        <v-col class="column menuCol">
-          <div align="right">
-            <v-menu>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn id="menu" v-bind="attrs" v-on="on" dark icon>
-                  <v-icon>menu</v-icon>
-                </v-btn>
-              </template>
-              <v-list>
-                <v-list-item
-                  v-for="(link, index) in links"
-                  :key="index"
-                  router
-                  :to="link.route"
-                >
-                  <v-list-item-title>{{ link.text }}</v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </v-menu>
-          </div>
-        </v-col>
-      </v-row>
-    </v-layout>
+  <v-app-bar flat height="100px" width="100%" color="#00254f">
+    <v-row class="header">
+      <v-col class="logo">
+        <v-app-bar-nav-icon>
+          <v-img
+            class="mt-7"
+            width="80px"
+            height="75px"
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Heart-hand-shake.svg/256px-Heart-hand-shake.svg.png"
+          />
+        </v-app-bar-nav-icon>
+        <div class="logo_text pl-5 mt-5 headline font-weight-light white--text">
+          einander-helfen.org
+        </div>
+      </v-col>
+      <v-col class="slogan">
+        <div
+          class="font-weight-bold d-none d-sm-flex pl-5 mt-5 title font-weight-light white--text"
+        >
+          Das Portal für Freiwilligenarbeit
+        </div>
+      </v-col>
+      <v-col class="menu">
+        <MenuButton />
+      </v-col>
+    </v-row>
   </v-app-bar>
 </template>
 
 <script>
 import Vue from "vue";
+import MenuButton from "@/components/layout/MenuButton.vue";
 
 export default Vue.extend({
-  name: "Toolbar",
+  name: "HeaderHome",
+  components: {
+    MenuButton,
+  },
   data: function () {
-    return {
-      links: [
-        { text: "Home", route: "/" },
-        { text: "Über uns", route: "/about" },
-        { text: "Impressum", route: "/imprint" },
-        { text: "Datenschutzerklärung", route: "/privacy" },
-      ],
-    };
+    return {};
   },
 });
 </script>
 
+
+<style lang="scss" scoped>
+.header {
+  margin-left: 16px;
+
+  .logo {
+    display: flex;
+  }
+
+  .slogan {
+    text-align: center;
+  }
+
+  .menu {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  @media screen and (max-width: 765px) {
+    .slogan {
+      display: none;
+    }
+  }
+}
+</style>
+
 <style lang="scss">
-#menu {
-  margin-top: 20px;
-}
-
-#slogan {
-  text-align: center;
-  justify-content: center;
-  align-items: center;
-  display: none;
-}
-
-#sloganCol {
-  visibility: hidden !important;
-  display: none !important;
-}
-
 @media (max-width: 300px) {
   .column {
     padding-bottom: 19px !important ;
