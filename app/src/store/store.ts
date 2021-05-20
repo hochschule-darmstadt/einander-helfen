@@ -147,6 +147,9 @@ const store: StoreOptions<RootState> = {
             )
               state.radiusExtended = false;
 
+            // set Open post if list contains only one post.
+            if (posts.length === 1) dispatch("postsModule/selectedPostId", posts[0].id);
+
             return posts;
           }
           // if there are no posts in the list and // if a location and a radius is set
@@ -155,7 +158,7 @@ const store: StoreOptions<RootState> = {
             state.searchModule.selectedRadius
           ) {
             const radiusValueBeforeExtend = state.searchModule.selectedRadius;
-            // Wenn wir mit einem Radius um einen Ort suchen, den Radius vergr��ern und nochmal probieren!
+            // Wenn wir mit einem Radius um einen Ort suchen, den Radius vergroeßern und nochmal probieren!
 
             // find radius index of radii
             const currentRadiusIndex = radii.findIndex(
@@ -165,8 +168,8 @@ const store: StoreOptions<RootState> = {
             const nextBiggerRadiusValue =
               radii[(currentRadiusIndex + 1) % radii.length].value;
 
-            // Wir wollen uns merken, dass wir den Radius ver�ndert haben, um den Nutzer dar�ber zu informieren.
-            // Aber nur, wenn wir das nicht bereits gemacht haben um uns den Wert nicht zu �berschreiben.
+            // Wir wollen uns merken, dass wir den Radius verändert haben, um den Nutzer darüber zu informieren.
+            // Aber nur, wenn wir das nicht bereits gemacht haben um uns den Wert nicht zu überschreiben.
             if (!state.radiusExtendedFrom)
               state.radiusExtendedFrom = radiusValueBeforeExtend;
 

@@ -206,7 +206,9 @@ export default Vue.extend({
       // switch to desktop view
       else if (this.smartphone && window.innerWidth > 960) {
         this.smartphone = false;
-        if (!this.selectedPost) this.showMap = true;
+        if (!this.selectedPost) {
+          this.showMap = true;
+        }
       }
     },
   },

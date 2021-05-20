@@ -3,11 +3,8 @@ import Post from "@/models/post";
 import { RootState } from "../store";
 
 export interface PostsState {
-  // post stuff
   posts: Post[];
-  // selectedPost?: Post;
   selectedPostId?: string;
-  // page stuff
   selectedPage: number;
   hitsPerPage: number;
   resultSetSize: number;
@@ -19,7 +16,6 @@ export const postsModule: Module<PostsState, RootState> = {
   namespaced: true,
   state: {
     posts: [] as Post[],
-    // selectedPost: undefined,
     selectedPostId: undefined,
     selectedPage: 1,
     hitsPerPage: process.env.VUE_APP_HITS_PER_PAGE || 10,
@@ -62,7 +58,7 @@ export const postsModule: Module<PostsState, RootState> = {
 
         if (postIndex > 0) {
           // if selectedPost is in posts set page to page of this selectedPost
-          const pageOffset = state.resultsFrom / state.hitsPerPage + 1; // pages are 1 indexed...
+          const pageOffset = state.resultsFrom / state.hitsPerPage + 1; // pages are 1 indexed
           const pageOnPost = Math.floor(postIndex / state.hitsPerPage) + pageOffset;
           if (state.selectedPage != pageOnPost)
             state.selectedPage = pageOnPost;
@@ -72,9 +68,6 @@ export const postsModule: Module<PostsState, RootState> = {
   },
   actions: {
     setPosts({ state, commit }, posts: Post[]): void {
-      // TODO move this to other place
-      // set Open post if list contains only one post.
-      // if (posts.length === 1) state.selectedPostId = posts[0];
       state.posts = posts;
       commit("switchPageToSelectedPost");
     },
@@ -93,10 +86,10 @@ export const postsModule: Module<PostsState, RootState> = {
 
       if (page != state.selectedPage) {
         // Calculate the new from parameter to load the next resultSet chunk if necessary
-        const currentPageIndex = (page - 1) * state.hitsPerPage; // these hu-mons start counting their pages at 1...
+        const currentPageIndex = (page - 1) * state.hitsPerPage; // Pages start at 1
         const currentLoadedChunk = {
           min: state.resultsFrom,
-          max: state.resultsFrom + state.resultSetSize - 1, // again with these hu-mons and their count beginning at 1...
+          max: state.resultsFrom + state.resultSetSize - 1, // Pages start at 1
         };
         if (!inChunk(currentPageIndex, currentLoadedChunk)) {
           // Calculate the needed offset
