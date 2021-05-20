@@ -31,8 +31,8 @@
             :dark="dark"
             :isInternational="internationalValue"
             v-model="radius"
-            @input="paramChanged"
-            @enter="paramChanged"
+            @input="onRadiusChanged"
+            @enter="onRadiusChanged"
           />
           <SearchButton @click="executeSearch" tabindex="5" />
         </div>
@@ -88,7 +88,7 @@ export default Vue.extend({
       locationSearchValue: "",
       internationalValue: false,
       radius: "",
-      secondSearch: false,
+      oldValue: "",
     };
   },
   mounted() {
@@ -103,7 +103,7 @@ export default Vue.extend({
     // watch selectedLocation in store
     selectedLocation() {
       if (this.locationSearchValue != this.getLocationText())
-        this.locationSearchValue = this.getLocationText() || "";
+        this.locationSearchValue = this.getLocationText();
     },
     // watch isInternational in store
     isInternational(value) {
@@ -136,30 +136,43 @@ export default Vue.extend({
     ...mapActions(["updateURIFromState"]),
 
     changeInternational(): void {
-      // clear radius and location an international change
-      this.radius = this.locationSearchValue = "";
-      // execute search if direktseach
+      // clear radius and location on international change
+      // set default radius in store
+      this.setSelectedRadius();
+      // unset location in stre
+      this.setSelectedLocation();
+      // update search parameter in store
+      this.setInternational(this.internationalValue);
+      // execute serach if directsearch is enabled
       if (this.direktsearch) this.executeSearch();
     },
-
     onSearchValueEnter(value: string): void {
       if (value != this.searchValue) this.searchValue = value;
-      else this.paramChanged();
+      if (this.direktsearch || value == this.oldValue) {
+        this.executeSearch();
+      }
+      this.oldValue = value;
     },
     onLocationValueEnter(value: string): void {
       if (value != this.locationSearchValue) this.locationSearchValue = value;
-      else this.paramChanged();
+      if (this.direktsearch || value == this.oldValue) {
+        this.executeSearch();
+      }
+      this.oldValue = value;
     },
-    paramChanged(): void {
-      if (this.direktsearch || this.secondSearch) this.executeSearch();
-      else this.secondSearch = true;
+    onRadiusChanged(value: string): void {
+      if (value != this.radius) {
+        this.radius = value;
+      }
+      // update state search parameter in store
+      this.setSelectedRadius(this.radius);
+      // execute serach if directsearch is enabled
+      if (this.direktsearch) this.executeSearch();
     },
     executeSearch(): void {
-      // update search parameter in store
+      // update state search parameter in store
       this.addSearchValue(this.searchValue);
       this.setSelectedLocation(this.locationSearchValue);
-      this.setSelectedRadius(this.radius);
-      this.setInternational(this.internationalValue);
       // update uri
       this.updateURIFromState();
       // clear search field
