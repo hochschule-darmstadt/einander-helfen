@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex, { StoreOptions } from "vuex";
-import DataService, { PaginatedResponse } from "../services/DataService";
+import DataService, { PaginatedResponse } from "@/services/DataService";
 import router from "@/router";
 import Post from "@/models/post";
 import { textSearchModule } from "./TextSearch";
@@ -91,7 +91,7 @@ const store: StoreOptions<RootState> = {
       const international = state.international;
 
       return new Promise((resolve) => {
-        DataService.findBySelection({
+        DataService.findPosts({
           searchValues,
           location,
           radius,

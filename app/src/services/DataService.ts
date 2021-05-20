@@ -20,15 +20,13 @@ export interface SearchParameters {
   international: boolean;
 }
 
-class DataService {
+class PostsService {
   private baseUrl = searchURI;
 
-  public findBySelection(params: SearchParameters): Promise<PaginatedResponse<Post>> {
-
-    const builder = BuilderFactory()
+  public findPosts(params: SearchParameters): Promise<PaginatedResponse<Post>> {
+    let builder = BuilderFactory()
       .from(params.from)
       .size(params.size)
-
       .andQuery("bool", (builder) => {
         params.searchValues
           .map((value) => value + "*")
@@ -43,19 +41,32 @@ class DataService {
         return builder;
       })
 
-    const complete_builder = params.international ?
-      DataService.findInternationalBySelection(builder, params.location) :
-      DataService.findNationalBySelection(builder, params.location, params.radius);
+    builder = params.international ?
+      this.addInternationalFilter(builder, params.location) :
+      this.addNationalFilter(builder, params.location, params.radius);
 
-    return this.performQuery<Post>(complete_builder);
+    return this.performPostsQuery<Post>(builder);
   }
 
+  public countPosts(international: boolean): Promise<number> {
+    let builder = BuilderFactory()
+      .rawOption("track_total_hits", true)
 
-  private static findNationalBySelection(
+    builder = international ?
+      this.addInternationalFilter(builder) :
+      this.addNationalFilter(builder);
+
+    return this.performCountQuery(builder);
+  }
+
+  private addNationalFilter(
     builder: Bodybuilder,
-    location: Location | undefined,
-    radius: string | undefined
+    location: Location | undefined = undefined,
+    radius: string | undefined = undefined
   ): Bodybuilder {
+    // only national posts
+    builder = builder.notQuery("term", "categories", "international");
+
     if (location) {
       builder = builder.sort([{
         _geo_distance: {
@@ -73,38 +84,33 @@ class DataService {
     }
 
     if (location && radius) {
-      builder = builder.filter("bool", "geo_distance",
-        {
-          distance: radius,
-          geo_location: {
-            lat: location.lat,
-            lon: location.lon,
-          },
+      builder = builder.filter("bool", "geo_distance", {
+        distance: radius,
+        geo_location: {
+          lat: location.lat,
+          lon: location.lon,
         },
-      );
+      });
     }
 
-    // only national posts
-    builder = builder.notQuery("term", "categories", "international");
     return builder;
   }
 
-  private static findInternationalBySelection(
+  private addInternationalFilter(
     builder: Bodybuilder,
-    location: Location | undefined
+    location: Location | undefined = undefined
   ): Bodybuilder {
     // only international posts (default)
     builder = builder.andQuery("term", "categories", "international");
 
-    if (location) {
-      if (location.country && location.country !== "Deutschland") {
-        builder = builder.andQuery("match", "post_struct.location.country", location.country);
-      }
+    if (location && location.country && location.country !== "Deutschland") {
+      builder = builder.andQuery("match", "post_struct.location.country", location.country);
     }
+
     return builder;
   }
 
-  private performQuery<T>(query: Bodybuilder): Promise<PaginatedResponse<T>> {
+  private performPostsQuery<T>(query: Bodybuilder): Promise<PaginatedResponse<T>> {
     return axios
       .post(this.baseUrl, query.build())
       .then(({ data }) => {
@@ -125,8 +131,18 @@ class DataService {
         return response;
       })
   }
+
+
+  private performCountQuery<T>(query: Bodybuilder): Promise<number> {
+    return axios
+      .post(this.baseUrl + "posts/?filter_path=hits.total", query.build())
+      .then(({ data }) => {
+        const count: number = data.hits.total.value
+        return count;
+      })
+  }
 }
 
-const dataServiceInstance = new DataService();
+const serviceInstance = new PostsService();
 
-export default dataServiceInstance;
+export default serviceInstance;
