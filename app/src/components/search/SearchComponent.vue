@@ -137,6 +137,7 @@ export default Vue.extend({
 
     changeInternational(): void {
       // clear radius and location on international change
+      this.radius = this.locationSearchValue = "";
       // set default radius in store
       this.setSelectedRadius();
       // unset location in stre

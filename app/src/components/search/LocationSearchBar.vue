@@ -68,7 +68,7 @@ export default Vue.extend({
   watch: {
     /** change selection on value change */
     value(): void {
-      this.location = this.value;
+      this.$nextTick(() => (this.location = this.value));
     },
     isInternational(): void {
       this.searchValue = "";
