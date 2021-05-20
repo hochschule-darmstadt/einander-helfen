@@ -21,7 +21,7 @@ export interface SearchParameters {
 }
 
 class PostService {
-  private baseUrl = searchURI;
+  private baseUrl = process.env.VUE_APP_SEARCH_URI;
 
   public findBySelection(params: SearchParameters): Promise<PaginatedResponse<Post>> {
 
