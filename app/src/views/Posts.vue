@@ -8,6 +8,7 @@
       <v-flex class="map xs12 md6 order-md2">
         <!-- Map -->
         <MapCard
+          v-show="!smartphone || showMap"
           :posts="posts"
           :selectedPost="selectedPost"
           @openPost="openPostDetails"
@@ -146,8 +147,12 @@ export default Vue.extend({
             // and to be sure that a different value is returned every time
             Date.now()
           ),
-          // and execute findPosts if a parameter change
-          () => this.loadPosts()
+          () => {
+            // clear selected post by parameter change
+            this.closePostDetails();
+            // and execute loadPosts if a parameter change
+            this.loadPosts();
+          }
         );
       });
   },
@@ -209,7 +214,12 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-@media (min-width: 960px) {
+@media screen and (max-width: 959px) {
+  .map {
+    overflow: hidden;
+  }
+}
+@media screen and (min-width: 960px) {
   .posts-page {
     display: flex;
     flex-direction: column;

@@ -1,33 +1,35 @@
 <template>
-  <v-card class="map" :style="{ height: map.height, width: map.width }" tile>
-    <v-btn
-      v-if="selectedPost != undefined"
-      class="button-details"
-      dark
-      @click="openPost(selectedPost)"
-    >
-      <v-icon>info</v-icon> Details
-    </v-btn>
-    <LMap
-      ref="map"
-      :center="map.center"
-      :zoom="map.zoom"
-      :options="{ gestureHandling: true }"
-    >
-      <LTileLayer :url="map.url" :attribution="map.attribution" />
-      <LMarckerCluster>
-        <Lmarker
-          v-for="post in postWithGeoLocation"
-          :key="post.id"
-          :icon="getMarker(post)"
-          :lat-lng="[post.geo_location.lat, post.geo_location.lon]"
-          @click="openPost(post)"
-        >
-          <LTooltip :content="post.title" />
-        </Lmarker>
-      </LMarckerCluster>
-    </LMap>
-  </v-card>
+  <transition name="slide">
+    <v-card class="map" :style="{ height: map.height, width: map.width }" tile>
+      <v-btn
+        v-if="selectedPost != undefined"
+        class="button-details"
+        dark
+        @click="openPost(selectedPost)"
+      >
+        <v-icon>info</v-icon> Details
+      </v-btn>
+      <LMap
+        ref="map"
+        :center="map.center"
+        :zoom="map.zoom"
+        :options="{ gestureHandling: true }"
+      >
+        <LTileLayer :url="map.url" :attribution="map.attribution" />
+        <LMarckerCluster>
+          <Lmarker
+            v-for="post in postWithGeoLocation"
+            :key="post.id"
+            :icon="getMarker(post)"
+            :lat-lng="[post.geo_location.lat, post.geo_location.lon]"
+            @click="openPost(post)"
+          >
+            <LTooltip :content="post.title" />
+          </Lmarker>
+        </LMarckerCluster>
+      </LMap>
+    </v-card>
+  </transition>
 </template>
 
 <script lang="ts">
@@ -176,9 +178,27 @@ export default Vue.extend({
     color: #000 !important;
   }
 }
-@media only screen and (max-width: 960px) {
+@media only screen and (max-width: 959px) {
   .button-details {
     display: none;
+  }
+  .map {
+    height: 50vh !important;
+    margin-bottom: 1rem;
+
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide-enter-active,
+  .slide-leave-enter {
+    transition: all 0.5s ease-in-out;
+    transform: translateY(0);
+  }
+  .slide-enter,
+  .slide-leave-to {
+    transition: all 0.5s ease-in-out;
+    transform: translateY(-100%);
   }
 }
 </style>

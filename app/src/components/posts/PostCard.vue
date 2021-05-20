@@ -110,6 +110,7 @@ export default Vue.extend({
 .post {
   padding: 20px 0px;
   height: 100%;
+  width: 100%;
   overflow-y: auto;
 
   .button-close {
@@ -121,7 +122,7 @@ export default Vue.extend({
     align-items: center;
     flex-wrap: unset;
     .button-map {
-      margin-left: 20px;
+      margin-left: 10px;
       margin-right: 20px;
 
       &.disabled {
