@@ -19,7 +19,7 @@
           <LocationSearchBar
             tabindex="3"
             :dark="dark"
-            :isInternational="isInternational"
+            :isInternational="internationalValue"
             v-model="locationSearchValue"
             @enter="paramChanged"
             @click.native="onSearchClick"
@@ -29,7 +29,7 @@
           <RadiusSelect
             tabindex="4"
             :dark="dark"
-            :isInternational="isInternational"
+            :isInternational="internationalValue"
             v-model="radius"
             @input="paramChanged"
             @enter="paramChanged"
@@ -91,23 +91,6 @@ export default Vue.extend({
       secondSearch: false,
     };
   },
-  mounted(): void {
-    this.$nextTick(() =>
-      // set watcher after data initialisation
-      this.$watch(
-        // watch these parameters to detect change
-        () => (
-          this.internationalValue,
-          // and to be sure that a different value is returned every time
-          Date.now()
-        ),
-        // and execute paramChanged if a parameter change
-        () => {
-          this.paramChanged();
-        }
-      )
-    );
-  },
   watch: {
     // watch selectedRadius in store
     selectedRadius(value: string) {
@@ -120,6 +103,9 @@ export default Vue.extend({
     },
     isInternational(value) {
       this.internationalValue = value;
+    },
+    internationalValue() {
+      this.changeInternational();
     },
   },
   computed: {
@@ -144,6 +130,12 @@ export default Vue.extend({
     ]),
     ...mapActions(["updateURIFromState"]),
 
+    changeInternational(): void {
+      // clear radius and location an international change
+      this.radius = this.locationSearchValue = "";
+      // execute search if direktseach
+      if (this.direktsearch) this.executeSearch();
+    },
     paramChanged(): void {
       if (this.direktsearch || this.secondSearch) this.executeSearch();
       else this.secondSearch = true;
