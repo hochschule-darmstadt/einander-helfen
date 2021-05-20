@@ -5,7 +5,8 @@ import { RootState } from "../store";
 export interface PostsState {
   // post stuff
   posts: Post[];
-  selectedPost?: Post;
+  // selectedPost?: Post;
+  selectedPostId?: string;
   // page stuff
   selectedPage: number;
   hitsPerPage: number;
@@ -18,7 +19,8 @@ export const postsModule: Module<PostsState, RootState> = {
   namespaced: true,
   state: {
     posts: [] as Post[],
-    selectedPost: undefined,
+    // selectedPost: undefined,
+    selectedPostId: undefined,
     selectedPage: 1,
     hitsPerPage: process.env.VUE_APP_HITS_PER_PAGE || 10,
     resultSetSize: process.env.VUE_APP_RESULT_SET_SIZE || 100,
@@ -29,8 +31,8 @@ export const postsModule: Module<PostsState, RootState> = {
     getPosts(state): Post[] {
       return state.posts;
     },
-    getSelectedPost(state): Post | undefined {
-      return state.selectedPost;
+    getSelectedPostId(state): string | undefined {
+      return state.selectedPostId;
     },
     getSelectedPage(state): number {
       return state.selectedPage;
@@ -44,43 +46,41 @@ export const postsModule: Module<PostsState, RootState> = {
         state.selectedPage * state.hitsPerPage - state.resultsFrom
       );
     },
-    selectedPostId(state): string | undefined {
-      return state.selectedPost ? state.selectedPost.id : undefined;
-    },
   },
   mutations: {
     clearPostParams(state): void {
       state.posts = [];
-      state.selectedPost = undefined;
+      state.selectedPostId = undefined;
       state.selectedPage = 1;
       state.resultsFrom = 0;
       state.totalResultSize = 0;
     },
-    setPosts(state, posts: Post[]): void {
-      // set Open post if list contains only one post.
-      if (posts.length === 1) state.selectedPost = posts[0];
-      state.posts = posts;
-    },
-  },
-  actions: {
-    setSelectedPost({ state }, post: Post | undefined = undefined): void {
-      const selectedPostIndex = state.posts.findIndex(
-        (post) => state.selectedPost && post.id === state.selectedPost.id
-      );
-
-      // set post
-      state.selectedPost = post;
-      if (post) {
+    switchPageToSelectedPost(state): void {
+      if (state.selectedPostId && state.posts) {
         // update page if nessecary
-        const postIndex = selectedPostIndex;
+        const postIndex = state.posts.findIndex((post) => post.id === state.selectedPostId);
+
         if (postIndex > 0) {
           // if selectedPost is in posts set page to page of this selectedPost
           const pageOffset = state.resultsFrom / state.hitsPerPage + 1; // pages are 1 indexed...
-          const pageOnPost =
-            Math.floor(postIndex / state.hitsPerPage) + pageOffset;
-          state.selectedPage = pageOnPost;
+          const pageOnPost = Math.floor(postIndex / state.hitsPerPage) + pageOffset;
+          if (state.selectedPage != pageOnPost)
+            state.selectedPage = pageOnPost;
         } // else selectedPost not in posts => do nothing
       }
+    }
+  },
+  actions: {
+    setPosts({ state, commit }, posts: Post[]): void {
+      // TODO move this to other place
+      // set Open post if list contains only one post.
+      // if (posts.length === 1) state.selectedPostId = posts[0];
+      state.posts = posts;
+      commit("switchPageToSelectedPost");
+    },
+    setSelectedPostId({ state, commit }, postId: string | undefined = undefined): void {
+      state.selectedPostId = postId;
+      commit("switchPageToSelectedPost");
     },
     setSelectedPage({ state }, page = 1): void {
       const inChunk = (

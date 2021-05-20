@@ -6,7 +6,6 @@ import { RootState } from "../store";
 import { getDefaultRadius } from "@/resources/radii";
 
 export interface SearchState {
-  tags: Tag[];
   searchValues: string[];
   selectedLocation?: Location;
   selectedRadius: string;
@@ -16,7 +15,6 @@ export interface SearchState {
 export const searchModule: Module<SearchState, RootState> = {
   namespaced: true,
   state: {
-    tags: [] as Tag[],
     searchValues: [] as string[],
     selectedLocation: undefined,
     selectedRadius: "",
@@ -46,10 +44,9 @@ export const searchModule: Module<SearchState, RootState> = {
     },
   },
   mutations: {
-    setTags(state, value: Tag[]): void {
-      state.tags = value;
-    },
     setSelectedLocation(state, location: string): void {
+      if (!location)
+        state.selectedLocation = undefined;
       const locationObject = LocationService.findByTitle(location) || {
         name: "",
         plz: "",
@@ -64,7 +61,10 @@ export const searchModule: Module<SearchState, RootState> = {
       state.selectedLocation = locationObject;
     },
     setSelectedRadius(state, value: string): void {
-      state.selectedRadius = value;
+      if (value)
+        state.selectedRadius = value;
+      else
+        state.selectedRadius = getDefaultRadius().value;
     },
     addSearchValue(state, value: string): void {
       value = value.trim();
@@ -75,8 +75,6 @@ export const searchModule: Module<SearchState, RootState> = {
       state.searchValues.splice(state.searchValues.indexOf(value), 1);
     },
     setInternational(state, value: boolean): void {
-      if (state.isInternational != value)
-        state.selectedRadius = getDefaultRadius().value;
       state.isInternational = value;
     },
     clearSearchParams(state): void {

@@ -35,29 +35,34 @@ const store: StoreOptions<RootState> = {
     /**
      * Sets state values from values of the current route
      */
-    hydrateStateFromRoute({ commit, dispatch }): Promise<void> {
+    hydrateStateFromRoute({ commit, dispatch }): Promise<any> {
       const queryParams = router.currentRoute.query as any;
       const params = router.currentRoute.params;
 
       // Clear previous search parameters. The URI is our single source of truth!
       return dispatch("clearSearchParams").then(() => {
         const promises = new Array<Promise<any>>();
+        // get query string
         if ("q" in queryParams && queryParams.q)
           promises.push(
             dispatch("searchModule/addSearchValues", queryParams.q.split(","))
           );
+        // get area value
         if ("area" in queryParams && queryParams.area)
           commit(
             "searchModule/setInternational",
             queryParams.area.toLowerCase() === "international"
           );
 
+        // get location value
         if ("location" in queryParams && queryParams.location)
           commit("searchModule/setSelectedLocation", queryParams.location);
 
+        // get radius value
         if ("radius" in queryParams && queryParams.radius)
           commit("searchModule/setSelectedRadius", queryParams.radius);
 
+        // get page value
         if ("page" in queryParams && queryParams.page)
           promises.push(
             dispatch(
@@ -66,20 +71,14 @@ const store: StoreOptions<RootState> = {
             )
           );
 
+        // get selected post id value
+        if ("id" in params && params.id)
+          promises.push(
+            dispatch("postsModule/setSelectedPostId", params.id)
+          );
+
         // wati that all properties are set
-        return Promise.all(promises).then(() =>
-          // load all posts for this properties
-          dispatch("loadPosts").then((posts: Post[]) => {
-            // set selected post if id is given
-            if ("id" in params && params.id) {
-              const post = posts.find((post) => post.id === params.id);
-              dispatch("postsModule/setSelectedPost", post).then(() =>
-                // to be sure that the param types are not overriden in the query
-                dispatch("updateURIFromState")
-              );
-            }
-          })
-        );
+        return Promise.all(promises);
       });
     },
 
@@ -98,8 +97,8 @@ const store: StoreOptions<RootState> = {
 
       let path = "/posts";
       // is there a post currently open? => reflect it in the route
-      if (state.postsModule.selectedPost)
-        path += "/" + state.postsModule.selectedPost.id;
+      if (state.postsModule.selectedPostId)
+        path += "/" + state.postsModule.selectedPostId;
 
       // only change route if query parameter change from current query parameter
       if (
@@ -113,9 +112,17 @@ const store: StoreOptions<RootState> = {
     },
 
     /**
+     *  find a post from DataService by given id
+     */
+    loadPost(context, id: string): Promise<Post | undefined> {
+      return DataService.findById(id)
+        .then((post) => post);
+    },
+
+    /**
      *  find posts from DataService by setted parameter
      */
-    loadPosts({ state, commit }): Promise<Post[]> {
+    loadPosts({ state, dispatch, commit }): Promise<Post[]> {
       return DataService.findBySelection({
         searchValues: state.searchModule.searchValues,
         location: state.searchModule.selectedLocation,
@@ -126,8 +133,8 @@ const store: StoreOptions<RootState> = {
       })
         .then((result: PaginatedResponse<Post>) => {
           state.postsModule.totalResultSize = result.meta.total;
-          commit("postsModule/setPosts", result.data);
-          return result.data;
+          return dispatch("postsModule/setPosts", result.data)
+            .then(() => result.data);
         })
         .then((posts: Post[]) => {
           // there is a full list of posts

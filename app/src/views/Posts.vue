@@ -90,11 +90,12 @@ export default Vue.extend({
     return {
       showMap: true,
       smartphone: false,
+      selectedPost: undefined as Post | undefined,
     };
   },
   computed: {
-    ...mapState("postsModule", ["selectedPost", "posts", "resultsFrom"]),
-    ...mapGetters("postsModule", ["postsOnCurrentPage", "selectedPostId"]),
+    ...mapState("postsModule", ["selectedPostId", "posts", "resultsFrom"]),
+    ...mapGetters("postsModule", ["postsOnCurrentPage"]),
     ...mapState(["radiusExtended", "radiusExtendedFrom"]),
     ...mapState("searchModule", [
       "selectedLocation",
@@ -102,11 +103,22 @@ export default Vue.extend({
       "searchValues",
       "isInternational",
     ]),
-    ...mapGetters("searchModule", []),
   },
-  created(): void {
-    // get params from route query and execute findPosts
+  mounted(): void {
+    // get params from route query
     this.hydrateStateFromRoute()
+      .then(() => {
+        // if an post is selected by default
+        if (this.selectedPostId) {
+          // load selected post
+          this.loadPost(this.selectedPostId).then((post) =>
+            post ? this.openPostDetails(post) : undefined
+          );
+        }
+        // load posts by updated state parameter
+        return this.loadPosts();
+      })
+      // set properties
       .then(() => {
         // check if device is smartphone view
         if (window.matchMedia("(max-width: 960px)").matches) {
@@ -117,7 +129,11 @@ export default Vue.extend({
         if (this.selectedPost) {
           this.showMap = false;
         }
+
+        // set resize event handler
+        window.addEventListener("resize", this.onWindowResize);
       })
+      // add watcher after parameters are loaded from route
       .then(() => {
         this.$watch(
           // watch all parameters which are used to find posts
@@ -133,9 +149,6 @@ export default Vue.extend({
           // and execute findPosts if a parameter change
           () => this.loadPosts()
         );
-
-        // set resize event handler
-        window.addEventListener("resize", this.onWindowResize);
       });
   },
   beforeDestroy(): void {
@@ -144,26 +157,35 @@ export default Vue.extend({
   },
   methods: {
     ...mapMutations("searchModule", ["setSelectedRadius"]),
-    ...mapActions("postsModule", ["setSelectedPost"]),
-    ...mapActions(["hydrateStateFromRoute", "updateURIFromState", "loadPosts"]),
+    ...mapActions("postsModule", ["setSelectedPostId"]),
+    ...mapActions([
+      "hydrateStateFromRoute",
+      "updateURIFromState",
+      "loadPosts",
+      "loadPost",
+    ]),
 
     openPostDetails(post: Post): void {
       // close map to show detail page if not smartphone
       if (!this.smartphone) this.showMap = false;
-      // set selected post
-      this.setSelectedPost(post).then(() =>
+      // set selected post in store
+      this.setSelectedPostId(post.id).then(() => {
+        // set selected post here
+        this.selectedPost = post;
         // update uri with post
-        this.updateURIFromState()
-      );
+        this.updateURIFromState();
+      });
     },
     closePostDetails(): void {
       // show map if not smartphone
       if (!this.smartphone) this.showMap = true;
-      // remove selected post
-      this.setSelectedPost(undefined).then(() =>
+      // remove selected post in store
+      this.setSelectedPostId(undefined).then(() => {
+        // set selected post here
+        this.selectedPost = undefined;
         // update uri without post
-        this.updateURIFromState()
-      );
+        this.updateURIFromState();
+      });
     },
     /** Show the map  */
     openMap(): void {
