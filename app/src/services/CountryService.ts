@@ -1,5 +1,6 @@
 import axios from "axios";
 import Location from "@/models/location";
+import Bodybuilder from "bodybuilder";
 
 class CountryService {
   public countries: Location[] = [];
@@ -12,51 +13,44 @@ class CountryService {
     this.findCountries();
   }
 
-  /**
-   * This method finds all unique countries.
-   */
-  public findCountries(): void {
-    const query = {
-      size: 0,
-      aggs: {
-        country: {
-          terms: {
-            field: "post_struct.location.country.keyword",
-            size: 1000,
-          },
-        },
-      },
-    };
 
-    this.performQuery(query);
+  /**
+   * This query finds all unique countries.
+   * @return The elasticsearch querystring
+   */
+  private createQuery(): any {
+    return Bodybuilder()
+      .size(0)
+      .agg("terms",
+        "post_struct.location.country.keyword",
+        { size: 1000 },
+        "country")
+      .build();
   }
 
   /**
    * This method performs the elasticsearch query
-   * @param query The elasticsearch querystring
    */
-  private performQuery(query: any): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      axios
-        .post(this.baseUrl, query)
-        .then(({ data }) => {
-          data.aggregations.country.buckets.map((elem: any) => {
-            if (elem.key !== "Deutschland") {
-              this.countries.push({
-                name: "",
-                plz: "",
-                title: elem.key,
-                state: "",
-                lat: 0,
-                lon: 0,
-                rank: 0,
-                country: elem.key,
-              });
-            }
-          });
-        })
-        .catch((error) => reject(error));
-    });
+  private findCountries(): Promise<any> {
+    const query = this.createQuery();
+    return axios
+      .post(this.baseUrl, query)
+      .then(({ data }) => {
+        data.aggregations.country.buckets.map((elem: any) => {
+          if (elem.key !== "Deutschland") {
+            this.countries.push({
+              name: "",
+              plz: "",
+              title: elem.key,
+              state: "",
+              lat: 0,
+              lon: 0,
+              rank: 0,
+              country: elem.key,
+            });
+          }
+        });
+      })
   }
 }
 
