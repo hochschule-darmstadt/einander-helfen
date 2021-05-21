@@ -17,7 +17,7 @@ from data_management.DataManager import DataManager
 
 logger = LoggerFactory.get_general_logger()
 # Runs the extraction process and writes the scraped data to data_extraction/data directory
-#run_extraction()
+run_extraction()
 
 for file in os.scandir(os.path.join(ROOT_DIR, 'data_extraction/data')):
     file_name = os.path.splitext(file.name)[0]
