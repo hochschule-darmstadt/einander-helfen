@@ -4,7 +4,7 @@ import Bodybuilder from "bodybuilder";
 
 class CountryService {
   public countries: Location[] = [];
-  private baseUrl = searchURI;
+  private baseUrl = process.env.VUE_APP_SEARCH_URI;
 
   /**
    * The constructor initializes the `country` list.

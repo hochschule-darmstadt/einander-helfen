@@ -21,7 +21,7 @@ export interface SearchParameters {
 }
 
 class PostsService {
-  private baseUrl = searchURI;
+  private baseUrl = process.env.VUE_APP_SEARCH_URI;
 
   public findPosts(params: SearchParameters): Promise<PaginatedResponse<Post>> {
     let builder = BuilderFactory()
