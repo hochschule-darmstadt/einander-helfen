@@ -10,16 +10,28 @@
               src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Heart-hand-shake.svg/256px-Heart-hand-shake.svg.png"
             />
           </v-app-bar-nav-icon>
-          <div class="pl-5 headline font-weight-light white--text">
+          <p class="headline pl-5 font-weight-light white--text">
             einander-helfen.org
-          </div>
+          </p>
         </v-col>
         <v-col class="sloganCol">
-          <div
-            class="font-weight-bold pl-5 mt-5 title font-weight-light white--text"
-          >
-            Das schnelle Suchportal für Freiwilligenarbeit
-          </div>
+          <p class="title font-weight-bold font-weight-light white--text">
+            Das Portal für Freiwilligenarbeit
+          </p>
+          <p class="subtitle font-weight-light white--text d-flex">
+            <span>
+              Aktuell {{ nationalCount }}
+              <span class="pl-1 pr-1">
+                <img class="areImage" :src="nationalImg" />
+              </span>
+              nationale und
+              {{ internationalCount }}
+              <span class="pl-1 pr-1">
+                <img class="areImage" :src="internationalImg" />
+              </span>
+            </span>
+            <span> internationale Stellenangebote zur Auswahl </span>
+          </p>
         </v-col>
         <v-col class="menuCol">
           <MenuButton />
@@ -39,14 +51,22 @@ export default Vue.extend({
     MenuButton,
   },
   data: function () {
-    return {};
+    return {
+      nationalCount: 130000,
+      nationalImg: require("@/assets/images/240px-Flag_of_Germany.png"),
+      internationalCount: 350000,
+      internationalImg: require("@/assets/images/240px-Earth_icon_2.png"),
+    };
   },
 });
 </script>
 
-
 <style lang="scss" scoped>
 .header {
+  p {
+    margin-bottom: unset;
+  }
+
   .logoCol {
     display: flex;
     flex-direction: row;
@@ -54,9 +74,20 @@ export default Vue.extend({
   }
   .sloganCol {
     display: flex;
+    align-items: center;
     justify-content: center;
     text-align: center;
-    flex-grow: 2;
+    flex-direction: column;
+    flex-grow: 3;
+    .subtitle > span {
+      display: flex;
+    }
+
+    .areImage {
+      border-radius: 50%;
+      height: 17px;
+      width: 17px;
+    }
   }
 
   .menuCol {
@@ -74,6 +105,15 @@ export default Vue.extend({
     }
     .sloganCol {
       display: none !important;
+    }
+  }
+  @media (max-width: 1144px) {
+    .sloganCol .subtitle {
+      flex-direction: column;
+      align-items: center;
+      > span {
+        flex-shrink: 0;
+      }
     }
   }
 }
