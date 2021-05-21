@@ -29,6 +29,8 @@ class Enhancer:
             'ein_jahr_freiwillig': self.__enhance_ein_jahr_freiwillig,
             'bundesfreiwilligendienst': self.__enhance_bundesfreiwilligendienst,
             'european_youth_portal': self.__enhance_european_youth_portal,
+            'betterplace': self.__enhance_betterplace,
+            'ehrenamt_sachsen': self.__enhance_ehrenamt_sachsen,
         }
 
     def run(self):
@@ -89,3 +91,15 @@ class Enhancer:
         e_tags.run(self.__data, self.__domain_name)
 
         translate_english_countries(self.__data)
+
+    def __enhance_betterplace(self):
+        """ domain specific enhancement for betterplace """
+        self.logger.debug("__enhance_betterplace()")
+
+        e_tags.run(self.__data, self.__domain_name)
+
+    def __enhance_ehrenamt_sachsen(self):
+        """ domain specific enhancement for ehrenamt_sachsen """
+        self.logger.debug("__enhance_ehrenamt_sachsen()")
+
+        e_tags.run(self.__data, self.__domain_name)
