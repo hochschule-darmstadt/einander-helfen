@@ -59,7 +59,7 @@ class BetterplaceScraper(Scraper):
             'opportunities': None,
             'organization': None,
             'contact': contact_text,
-            'link': None,
+            'link': url or None,
             'source': "betterplace.org",
             'geo_location':  {
                 'lat': lat,
