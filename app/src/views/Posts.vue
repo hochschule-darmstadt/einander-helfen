@@ -11,14 +11,14 @@
           v-show="!smartphone || showMap"
           :posts="posts"
           :selectedPost="selectedPost"
-          @openPost="openPostDetails"
+          @openPost="togglePostDetails"
         />
         <!-- detail card if not smartphone -->
         <PostCard
           class="map-overlay"
           v-show="!showMap && !smartphone"
           :post="selectedPost"
-          @close="closePostDetails"
+          @close="togglePostDetails"
           @openMap="openMap"
         />
       </v-flex>
@@ -48,9 +48,7 @@
           :showDetail="smartphone"
           :location="selectedLocation"
           @click="
-            selectedPostId === post.id
-              ? closePostDetails()
-              : openPostDetails(post)
+            togglePostDetails(selectedPostId === post.id ? undefined : post)
           "
         />
 
@@ -91,12 +89,11 @@ export default Vue.extend({
     return {
       showMap: true,
       smartphone: false,
-      selectedPost: undefined as Post | undefined,
     };
   },
   computed: {
     ...mapState("postsModule", ["selectedPostId", "posts", "resultsFrom"]),
-    ...mapGetters("postsModule", ["postsOnCurrentPage"]),
+    ...mapGetters("postsModule", ["postsOnCurrentPage", "selectedPost"]),
     ...mapState(["radiusExtended", "radiusExtendedFrom"]),
     ...mapState("searchModule", [
       "selectedLocation",
@@ -109,15 +106,10 @@ export default Vue.extend({
     // get params from route query
     this.hydrateStateFromRoute()
       .then(() => {
-        // if an post is selected by default
-        if (this.selectedPostId) {
-          // load selected post
-          this.loadPost(this.selectedPostId).then((post) =>
-            post ? this.openPostDetails(post) : undefined
-          );
-        }
         // load posts by updated state parameter
-        return this.loadPosts();
+        return this.loadPosts().then(() =>
+          this.togglePostDetails(this.selectedPost)
+        );
       })
       // set properties
       .then(() => {
@@ -149,7 +141,7 @@ export default Vue.extend({
           ),
           () => {
             // clear selected post by parameter change
-            this.closePostDetails();
+            this.togglePostDetails();
             // and execute loadPosts if a parameter change
             this.loadPosts();
           }
@@ -170,27 +162,18 @@ export default Vue.extend({
       "loadPost",
     ]),
 
-    openPostDetails(post: Post): void {
+    /** Opens a post if a post is given, else clear the selected post */
+    togglePostDetails(post: Post | undefined = undefined): void {
       // close map to show detail page if not smartphone
-      if (!this.smartphone) this.showMap = false;
-      // set selected post in store
-      this.setSelectedPostId(post.id).then(() => {
-        // set selected post here
-        this.selectedPost = post;
-        // update uri with post
-        this.updateURIFromState();
-      });
-    },
-    closePostDetails(): void {
+      if (post && !this.smartphone) this.showMap = false;
       // show map if not smartphone
-      if (!this.smartphone) this.showMap = true;
-      // remove selected post in store
-      this.setSelectedPostId(undefined).then(() => {
-        // set selected post here
-        this.selectedPost = undefined;
-        // update uri without post
-        this.updateURIFromState();
-      });
+      if (!post && !this.smartphone) this.showMap = true;
+      // set selected post id or set undefined in store
+      const id = post ? post.id : undefined;
+      this.setSelectedPostId(id).then(() =>
+        // update uri
+        this.updateURIFromState()
+      );
     },
     /** Show the map  */
     openMap(): void {

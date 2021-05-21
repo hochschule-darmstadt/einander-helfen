@@ -42,6 +42,11 @@ export const postsModule: Module<PostsState, RootState> = {
         state.selectedPage * state.hitsPerPage - state.resultsFrom
       );
     },
+
+    selectedPost(state): Post | undefined {
+      if (!state.selectedPostId) return undefined;
+      return state.posts.find((post) => post.id === state.selectedPostId);
+    }
   },
   mutations: {
     clearPostParams(state): void {
@@ -64,7 +69,7 @@ export const postsModule: Module<PostsState, RootState> = {
             state.selectedPage = pageOnPost;
         } // else selectedPost not in posts => do nothing
       }
-    }
+    },
   },
   actions: {
     setPosts({ state, commit }, posts: Post[]): void {
