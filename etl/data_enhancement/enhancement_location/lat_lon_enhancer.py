@@ -51,8 +51,13 @@ class LatLonEnhancer:
                         LatLonEnhancer.logger.debug(f'Request string {request_string} was found \
                                                       on blacklist, skipping api request.')
                         continue
-                    lat_lon = self.__handle_api_requests(request_string)
-                    if lat_lon:
+
+                    try:
+                        lat_lon = self.__handle_api_requests(request_string)
+                    except Exception as err:
+                        LatLonEnhancer.logger.exception(str(err))
+
+                    if lat_lon is not None:
                         self.__add_new_entry(request_string, lat_lon)
                         post['geo_location'] = lat_lon
                         post['post_struct']['geo_location'] = lat_lon
