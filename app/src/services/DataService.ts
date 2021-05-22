@@ -89,7 +89,7 @@ class PostService {
     }
 
     if (location && radius) {
-      builder = builder.filter("bool", "geo_distance",
+      builder = builder.filter("geo_distance",
         {
           distance: radius,
           geo_location: {
