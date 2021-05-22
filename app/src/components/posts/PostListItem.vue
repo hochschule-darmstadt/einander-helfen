@@ -43,7 +43,7 @@
     </v-list-item>
     <!-- Detail Card -->
     <v-card
-      v-if="active && showDetail"
+      v-if="showDetail"
       class="details-smartphone"
       :class="{
         'details-smartphone-visible': active,
@@ -71,14 +71,7 @@
         </div>
         <v-spacer></v-spacer>
         <div class="my-2 mt-6">
-          <v-btn
-            class="my-2"
-            dark
-            large
-            color="#054C66"
-            :href="post.link"
-            target="_blank"
-          >
+          <v-btn dark large color="#054C66" :href="post.link" target="_blank">
             Zum Angebot
           </v-btn>
         </div>
@@ -171,6 +164,7 @@ export default Vue.extend({
   },
 });
 </script>
+
 <style lang="scss" scoped>
 .post {
   .post-list-item.active {
@@ -212,14 +206,13 @@ export default Vue.extend({
     .details-smartphone {
       display: block;
       overflow: hidden;
+      transition: max-height 0.4s ease-in-out;
     }
     .details-smartphone-visible {
       max-height: 10000px;
-      transition: max-height 0.4s ease;
     }
     .details-smartphone-hidden {
       max-height: 0;
-      transition: max-height 0.4s ease;
     }
     .details-smartphone p,
     .details-smartphone h3 {
