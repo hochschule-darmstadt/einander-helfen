@@ -114,7 +114,7 @@ export default Vue.extend({
       // set properties
       .then(() => {
         // check if device is smartphone view
-        if (window.matchMedia("(max-width: 960px)").matches) {
+        if (window.matchMedia("(max-width: 959px)").matches) {
           this.showMap = false;
           this.smartphone = true;
         }
@@ -182,12 +182,12 @@ export default Vue.extend({
     /** Resize handler for window Resize */
     onWindowResize(): void {
       // swtich to smartphone view
-      if (!this.smartphone && window.innerWidth <= 960) {
+      if (!this.smartphone && window.innerWidth < 960) {
         this.smartphone = true;
         this.showMap = false;
       }
       // switch to desktop view
-      else if (this.smartphone && window.innerWidth > 960) {
+      else if (this.smartphone && window.innerWidth >= 960) {
         this.smartphone = false;
         if (!this.selectedPost) {
           this.showMap = true;
