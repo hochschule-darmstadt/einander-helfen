@@ -1,6 +1,11 @@
 <template>
   <transition name="slide">
-    <v-card class="map" :style="{ height: map.height, width: map.width }" tile>
+    <v-card
+      v-show="show"
+      class="map"
+      :style="{ height: map.height, width: map.width }"
+      tile
+    >
       <v-btn
         v-if="selectedPost != undefined"
         class="button-details"
@@ -65,6 +70,10 @@ export default Vue.extend({
     selectedPost: {
       type: Object as () => Post,
     },
+    show: {
+      type: Boolean,
+      default: true,
+    },
   },
   data: function () {
     return {
@@ -102,19 +111,24 @@ export default Vue.extend({
     posts() {
       this.rerenderMap();
     },
+    show() {
+      this.rerenderMap();
+    },
   },
   mounted(): void {
     this.rerenderMap();
   },
   methods: {
     rerenderMap(): void {
-      this.$nextTick(() => {
-        (this.$refs.map as LMap).mapObject.invalidateSize();
+      if (this.show) {
         this.$nextTick(() => {
-          this.fitMapBounds();
-          this.setMapLocation();
+          (this.$refs.map as LMap).mapObject.invalidateSize();
+          this.$nextTick(() => {
+            this.fitMapBounds();
+            this.setMapLocation();
+          });
         });
-      });
+      }
     },
     setMapLocation(): void {
       if (this.selectedPost) {
@@ -122,9 +136,7 @@ export default Vue.extend({
           this.selectedPost.geo_location.lat,
           this.selectedPost.geo_location.lon,
         ] as LatLngTuple;
-        this.$nextTick(() => {
-          (this.$refs.map as LMap).setCenter(location);
-        });
+        (this.$refs.map as LMap).setCenter(location);
       }
     },
     /**

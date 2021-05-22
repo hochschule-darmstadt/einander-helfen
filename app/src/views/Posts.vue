@@ -8,15 +8,16 @@
       <v-flex class="map xs12 md6 order-md2">
         <!-- Map -->
         <MapCard
-          v-show="!smartphone || showMap"
+          :show="!smartphone || showMap"
           :posts="posts"
           :selectedPost="selectedPost"
           @openPost="togglePostDetails"
         />
         <!-- detail card if not smartphone -->
         <PostCard
+          v-if="!smartphone"
           class="map-overlay"
-          v-show="!showMap && !smartphone"
+          :show="!showMap"
           :post="selectedPost"
           @close="togglePostDetails"
           @openMap="openMap"

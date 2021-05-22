@@ -1,5 +1,5 @@
 <template>
-  <v-card class="post" tile v-if="post">
+  <v-card v-show="show" class="post" tile v-if="post">
     <v-btn class="button-close" icon @click="closePost()">
       <v-icon>close</v-icon>
     </v-btn>
@@ -76,6 +76,10 @@ export default Vue.extend({
   props: {
     post: {
       type: Object as () => Post,
+    },
+    show: {
+      type: Boolean,
+      default: true,
     },
   },
   data: function () {
