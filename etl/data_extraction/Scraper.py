@@ -85,7 +85,7 @@ class Scraper:
             self.logger.exception(f'fn : parse, body {str(err)}, index: {index}, url:{url}')
 
         self.logger.debug(f'[{self.name}] Scraping page #{index} ended')
-        self.get_progress_data_crawling(index, len(self.urls))
+        self.update_crawling_progress(index, len(self.urls))
 
     def soupify(self, url):
         """Executes GET-request with the given url, transforms it to a BeautifulSoup object and returns it."""
@@ -163,19 +163,24 @@ class Scraper:
 
         return BeautifulSoup(value, 'lxml').text
 
-    def get_progress_data_fetching(self, current, total):
+    def update_fetching_progress(self, current, total):
         """ Updates progress data of fetching process for crawler and triggers print of progeess bar"""
         self.logger.debug("get_progress_data_fetching()")
 
-        self.get_progress_data(current, total, 'FETCH')
+        self.update_progress(current, total, 'FETCH')
 
-    def get_progress_data_crawling(self, current, total):
+    def update_crawling_progress(self, current, total):
         """ Updates progress data of crawling for crawler and triggers print of progeess bar"""
         self.logger.debug("get_progress_data_crawling()")
 
-        self.get_progress_data(current, total, 'CRAWL')
+        if current == 1 and self.progress_bar is not None:
+            self.progress_bar.set_description(f'[FETCHED] {self.name}')
+            self.progress_bar.close()
+            self.progress_bar = None
 
-    def get_progress_data(self, current, total, phase):
+        self.update_progress(current, total, 'CRAWL')
+
+    def update_progress(self, current, total, phase):
         """ Updates progress for crawler and triggers print of progeess bar"""
         self.logger.debug("get_progress_data()")
 
@@ -197,7 +202,7 @@ class Scraper:
             self.progress_bar.close()
             self.progress_bar = None
 
-    def get_finished_progress(self, total, phase):
+    def set_progress_completed(self, total, phase):
         total = int(total)
 
         self.progress_bar = tqdm(desc=f'[{phase}ING] {self.name}:',

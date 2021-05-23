@@ -33,8 +33,7 @@ class Enhancer:
 
     def run(self):
         """ run general enhancements and load domainspecific enhancement. """
-        self.logger.debug("run()")
-        self.logger.info(f"Run general enhancement enhancement for {self.__domain_name}")
+        self.logger.info(f"Run general enhancement for {self.__domain_name}")
 
         e_exact_duplicates.remove_duplicates(self.__data)
         e_location.add_map_address(self.__data)
@@ -44,7 +43,6 @@ class Enhancer:
 
     def __run_for_domain(self, domain):
         """ run domainspecific enhancement. """
-        self.logger.debug("__run_for_domain()")
         self.logger.info(f"Run domain specific enhancement enhancement for {domain}")
 
         if domain in self.__function_map:
