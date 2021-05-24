@@ -25,12 +25,14 @@
                 <img class="areImage" :src="nationalImg" />
               </span>
               nationale und
+            </span>
+            <span>
               {{ internationalCount }}
               <span class="pl-1 pr-1">
                 <img class="areImage" :src="internationalImg" />
               </span>
+              internationale Stellenangebote zur Auswahl
             </span>
-            <span> internationale Stellenangebote zur Auswahl </span>
           </p>
         </v-col>
         <v-col class="menuCol">
@@ -46,7 +48,7 @@ import Vue from "vue";
 import MenuButton from "@/components/layout/MenuButton.vue";
 
 export default Vue.extend({
-  name: "HeaderHome",
+  name: "MainHeader",
   components: {
     MenuButton,
   },
@@ -105,6 +107,12 @@ export default Vue.extend({
     }
     .sloganCol {
       display: none !important;
+    }
+  }
+  @media (min-width: 767px) and (max-width: 818px) {
+    // give slogan more space because of long text
+    .menuCol {
+      flex-grow: 0;
     }
   }
   @media (max-width: 1144px) {

@@ -356,7 +356,7 @@
 </template>
 
 <script lang="ts">
-import Header from "@/components/layout/Header.vue";
+import Header from "@/components/layout/SearchHeader.vue";
 import Post from "@/models/post";
 import Vue from "vue";
 import {
