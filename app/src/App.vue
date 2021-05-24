@@ -14,7 +14,6 @@ import Footer from "@/components/layout/Footer.vue";
 
 export default Vue.extend({
   name: "App",
-
   components: {
     Footer,
     // Toolbar,
@@ -31,10 +30,17 @@ export default Vue.extend({
 <style lang="scss">
 /** global style */
 @media screen and (min-width: 960px) {
-  html,
-  body {
-    overflow: hidden !important;
+  body.posts {
+    overflow-y: hidden !important;
     max-height: 100vh;
+
+    /* Hide scrollbar for IE, Edge and Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 }
 
