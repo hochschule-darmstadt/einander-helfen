@@ -23,6 +23,11 @@ export interface SearchParameters {
 class PostsService {
   private baseUrl = process.env.VUE_APP_SEARCH_URI;
 
+  /**
+   * Return a paginated list of posts fitting to the @SearchParameters 
+   * @param params @SearchParameters 
+   * @returns Promise<PaginatedResponse<Post>>
+   */
   public findPosts(params: SearchParameters): Promise<PaginatedResponse<Post>> {
     let builder = BuilderFactory()
       .from(params.from)
@@ -48,6 +53,11 @@ class PostsService {
     return this.performPostsQuery<Post>(builder);
   }
 
+  /**
+   * Return the number of national of international posts
+   * @param international boolean
+   * @returns Promise<number>
+   */
   public countPosts(international: boolean): Promise<number> {
     let builder = BuilderFactory()
       .rawOption("track_total_hits", true)
