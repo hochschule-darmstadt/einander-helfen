@@ -2,7 +2,7 @@
   <v-select
     class="radius_select"
     label="Umkreis"
-    :items="radii"
+    :items="radiiArray"
     :dark="dark"
     :disabled="disabled"
     :attach="attachTo"
@@ -15,7 +15,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Radius from "@/models/radius";
-import radii, { radii as radiiArray } from "@/resources/radii";
+import radii from "@/resources/radii";
 
 export default Vue.extend({
   name: "RadiusSelect",
@@ -51,8 +51,8 @@ export default Vue.extend({
     disabled(): boolean {
       return this.isInternational;
     },
-    radii(): Radius[] {
-      return radiiArray;
+    radiiArray(): Radius[] {
+      return radii;
     },
   },
   mounted(): void {

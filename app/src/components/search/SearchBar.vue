@@ -184,7 +184,6 @@ export default Vue.extend({
      * On searchbar enter
      */
     onEnter(): void {
-      // this.$emit("input", this.searchValue);
       this.$emit("enter", this.searchValue);
     },
     removeTag(tag: string): void {

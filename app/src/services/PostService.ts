@@ -143,6 +143,6 @@ class PostService {
   }
 }
 
-const serviceInstance = new PostService();
+const postServiceInstance = new PostService();
 
-export default serviceInstance;
+export default postServiceInstance;

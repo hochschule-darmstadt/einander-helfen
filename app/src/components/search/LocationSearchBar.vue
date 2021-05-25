@@ -135,7 +135,6 @@ export default Vue.extend({
     },
     onEnter(): void {
       this.searchValue = this.location || "";
-      // this.$emit("input", this.location);
       this.$emit("enter", this.location);
     },
   },

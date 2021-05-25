@@ -3,7 +3,7 @@ import Vuex, { StoreOptions } from "vuex";
 import router from "@/router";
 import { searchModule, SearchState } from "./Search";
 import { postsModule, PostsState } from "./Posts";
-import DataService, { PaginatedResponse } from "@/services/DataService";
+import PostService, { PaginatedResponse } from "@/services/PostService";
 import Post from "@/models/post";
 import radii from "@/resources/radii";
 
@@ -115,7 +115,7 @@ const store: StoreOptions<RootState> = {
      *  find a post from DataService by given id
      */
     loadPost(context, id: string): Promise<Post | undefined> {
-      return DataService.findById(id)
+      return PostService.findById(id)
         .then((post) => post);
     },
 
@@ -123,7 +123,7 @@ const store: StoreOptions<RootState> = {
      *  find posts from DataService by setted parameter
      */
     loadPosts({ state, dispatch, commit }): Promise<Post[]> {
-      return DataService.findBySelection({
+      return PostService.findBySelection({
         searchValues: state.searchModule.searchValues,
         location: state.searchModule.selectedLocation,
         radius: state.searchModule.selectedRadius,
@@ -168,10 +168,11 @@ const store: StoreOptions<RootState> = {
             const nextBiggerRadiusValue =
               radii[(currentRadiusIndex + 1) % radii.length].value;
 
-            // Wir wollen uns merken, dass wir den Radius verändert haben, um den Nutzer darüber zu informieren.
-            // Aber nur, wenn wir das nicht bereits gemacht haben um uns den Wert nicht zu überschreiben.
-            if (!state.radiusExtendedFrom)
+            // We want to notice whether the radius changed to inform the user
+            // but only if we did not already do so in order to not overwrite the value.
+            if (!state.radiusExtendedFrom) {
               state.radiusExtendedFrom = radiusValueBeforeExtend;
+            }
 
             // update radius
             commit("searchModule/setSelectedRadius", nextBiggerRadiusValue);

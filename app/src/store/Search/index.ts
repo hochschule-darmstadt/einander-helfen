@@ -1,5 +1,4 @@
 import { Module } from "vuex";
-import Tag from "@/models/tag";
 import Location from "@/models/location";
 import LocationService from "@/services/LocationService";
 import { RootState } from "../store";

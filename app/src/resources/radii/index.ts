@@ -8,6 +8,6 @@ Object.freeze(radii);
 
 const getDefaultRadius = (): Radius => Object.assign({}, radii[0]);
 
-export { radii, getDefaultRadius };
+export { getDefaultRadius };
 
 export default radii;

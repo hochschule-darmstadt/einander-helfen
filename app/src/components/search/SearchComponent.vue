@@ -145,7 +145,9 @@ export default Vue.extend({
       // update search parameter in store
       this.setInternational(this.internationalValue);
       // execute serach if directsearch is enabled
-      if (this.direktsearch) this.executeSearch();
+      if (this.direktsearch) {
+        this.executeSearch();
+      }
     },
     onSearchValueEnter(value: string): void {
       if (value != this.searchValue) this.searchValue = value;
@@ -168,7 +170,9 @@ export default Vue.extend({
       // update state search parameter in store
       this.setSelectedRadius(this.radius);
       // execute serach if directsearch is enabled
-      if (this.direktsearch) this.executeSearch();
+      if (this.direktsearch) {
+        this.executeSearch();
+      }
     },
     executeSearch(): void {
       // update state search parameter in store

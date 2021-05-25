@@ -51,7 +51,7 @@ import { GestureHandling } from "leaflet-gesture-handling";
 L.Map.addInitHook("addHandler", "gestureHandling", GestureHandling);
 
 /**
- * Emits @openPost if single post is clickt
+ * Emits @openPost if single post is clicked
  */
 export default Vue.extend({
   name: "MapCard",
