@@ -32,7 +32,6 @@
       "dom",
       "dom.iterable",
       "scripthost",
-      "es2018.promise"
     ]
   },
   "include": [

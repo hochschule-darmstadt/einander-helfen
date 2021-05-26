@@ -1,6 +1,6 @@
 <template>
-  <v-app>
-    <v-main style="background: #00254f0c">
+  <v-app class="app">
+    <v-main class="main">
       <router-view></router-view>
     </v-main>
     <Footer />
@@ -14,7 +14,6 @@ import Footer from "@/components/layout/Footer.vue";
 
 export default Vue.extend({
   name: "App",
-
   components: {
     Footer,
     // Toolbar,
@@ -22,10 +21,35 @@ export default Vue.extend({
 });
 </script>
 
+<style lang="scss" scoped>
+.app {
+  background: #00254f0c !important;
+}
+</style>
+
 <style lang="scss">
 /** global style */
+@media screen and (min-width: 960px) {
+  body.posts {
+    overflow-y: hidden !important;
+    max-height: 100vh;
+
+    /* Hide scrollbar for IE, Edge and Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}
+
 .v-menu__content {
   z-index: 1001 !important;
   border-radius: 4px !important;
+}
+
+.btn-dark {
+  background-color: rgb(5, 76, 102) !important;
 }
 </style>
