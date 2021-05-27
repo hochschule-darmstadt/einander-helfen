@@ -3,7 +3,7 @@
     <v-menu offset-y fixed>
       <template v-slot:activator="{ on, attrs }">
         <v-btn v-bind="attrs" v-on="on" dark icon class="burgermenu">
-          <v-icon>menu</v-icon>
+          <v-icon class="menuicon">menu</v-icon>
         </v-btn>
       </template>
       <v-list>
@@ -42,27 +42,19 @@ export default Vue.extend({
 .menubutton {
   display: flex;
   align-items: center;
-}
-
-/*Mobile Layout*/
-@media (min-width: 280px) and (max-width: 599px) {
-  .burgermenu {
-    margin-top: 19px;
-    margin-right: 8px;
+  .menuicon {
+    font-size: 32px;
   }
-}
+  /*Mobile Layout - Tablet Layout*/
+  @media (min-width: 280px) and (max-width: 959px) {
+    .burgermenu {
+      margin-top: 19px;
+      margin-right: 8px;
 
-@media (min-width: 600px) and (max-width: 765px) {
-  .burgermenu {
-    margin-top: 19px;
-  }
-}
-
-/*Tablet Layout*/
-@media (min-width: 600px) and (max-width: 959px) {
-  .burgermenu {
-    margin-top: 19.5px;
-    margin-right: 8px;
+      .menuicon {
+        font-size: 40px;
+      }
+    }
   }
 }
 </style>
