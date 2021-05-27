@@ -66,7 +66,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import Header from "@/components/layout/Header.vue";
+import Header from "@/components/layout/SearchHeader.vue";
 import PostCard from "@/components/posts/PostCard.vue";
 import MapCard from "@/components/posts/MapCard.vue";
 import PostListItem from "@/components/posts/PostListItem.vue";

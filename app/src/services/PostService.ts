@@ -23,12 +23,15 @@ export interface SearchParameters {
 class PostService {
   private baseUrl = process.env.VUE_APP_SEARCH_URI;
 
-  public findBySelection(params: SearchParameters): Promise<PaginatedResponse<Post>> {
-
-    const builder = BuilderFactory()
+  /**
+   * Return a paginated list of posts fitting to the @SearchParameters 
+   * @param params @SearchParameters 
+   * @returns Promise<PaginatedResponse<Post>>
+   */
+  public findPosts(params: SearchParameters): Promise<PaginatedResponse<Post>> {
+    let builder = BuilderFactory()
       .from(params.from)
       .size(params.size)
-
       .andQuery("bool", (builder) => {
         params.searchValues
           .map((value) => value + "*")
@@ -43,11 +46,11 @@ class PostService {
         return builder;
       })
 
-    const complete_builder = params.international ?
-      this.findInternationalBySelection(builder, params.location) :
-      this.findNationalBySelection(builder, params.location, params.radius);
+    builder = params.international ?
+      this.addInternationalFilter(builder, params.location) :
+      this.addNationalFilter(builder, params.location, params.radius);
 
-    return this.performQuery<Post>(complete_builder);
+    return this.performPostsQuery<Post>(builder);
   }
 
 
@@ -67,11 +70,30 @@ class PostService {
       });
   }
 
-  private findNationalBySelection(
+  /**
+   * Return the number of national of international posts
+   * @param international boolean
+   * @returns Promise<number>
+   */
+  public countPosts(international: boolean): Promise<number> {
+    let builder = BuilderFactory()
+      .rawOption("track_total_hits", true)
+
+    builder = international ?
+      this.addInternationalFilter(builder) :
+      this.addNationalFilter(builder);
+
+    return this.performCountQuery(builder);
+  }
+
+  private addNationalFilter(
     builder: Bodybuilder,
-    location: Location | undefined,
-    radius: string | undefined
+    location: Location | undefined = undefined,
+    radius: string | undefined = undefined
   ): Bodybuilder {
+    // only national posts
+    builder = builder.notQuery("term", "categories", "international");
+
     if (location) {
       builder = builder.sort([{
         _geo_distance: {
@@ -96,31 +118,27 @@ class PostService {
             lat: location.lat,
             lon: location.lon,
           },
-        },
-      );
+        });
     }
 
-    // only national posts
-    builder = builder.notQuery("term", "categories", "international");
     return builder;
   }
 
-  private findInternationalBySelection(
+  private addInternationalFilter(
     builder: Bodybuilder,
-    location: Location | undefined
+    location: Location | undefined = undefined
   ): Bodybuilder {
     // only international posts (default)
     builder = builder.andQuery("term", "categories", "international");
 
-    if (location) {
-      if (location.country && location.country !== "Deutschland") {
-        builder = builder.andQuery("match", "post_struct.location.country", location.country);
-      }
+    if (location && location.country && location.country !== "Deutschland") {
+      builder = builder.andQuery("match", "post_struct.location.country", location.country);
     }
+
     return builder;
   }
 
-  private performQuery<T>(query: Bodybuilder): Promise<PaginatedResponse<T>> {
+  private performPostsQuery<T>(query: Bodybuilder): Promise<PaginatedResponse<T>> {
     return axios
       .post(this.baseUrl, query.build())
       .then(({ data }) => {
@@ -139,6 +157,16 @@ class PostService {
           },
         };
         return response;
+      })
+  }
+
+
+  private performCountQuery<T>(query: Bodybuilder): Promise<number> {
+    return axios
+      .post(this.baseUrl + "posts/?filter_path=hits.total", query.build())
+      .then(({ data }) => {
+        const count: number = data.hits.total.value
+        return count;
       })
   }
 }
