@@ -20,7 +20,7 @@ export interface SearchParameters {
   international: boolean;
 }
 
-class DataService {
+class PostService {
   private baseUrl = process.env.VUE_APP_SEARCH_URI;
 
   public findBySelection(params: SearchParameters): Promise<PaginatedResponse<Post>> {
@@ -44,14 +44,30 @@ class DataService {
       })
 
     const complete_builder = params.international ?
-      DataService.findInternationalBySelection(builder, params.location) :
-      DataService.findNationalBySelection(builder, params.location, params.radius);
+      this.findInternationalBySelection(builder, params.location) :
+      this.findNationalBySelection(builder, params.location, params.radius);
 
     return this.performQuery<Post>(complete_builder);
   }
 
 
-  private static findNationalBySelection(
+  public findById(id: string): Promise<Post | undefined> {
+    const builder = BuilderFactory()
+      .query('term', "_id", id);
+
+    return axios
+      .post(this.baseUrl, builder.build())
+      .then(({ data }) => {
+        if (!data.hits.hits.length) return undefined;
+        const entity = data.hits.hits.pop();
+        return {
+          id: entity._id,
+          ...entity._source,
+        } as Post;
+      });
+  }
+
+  private findNationalBySelection(
     builder: Bodybuilder,
     location: Location | undefined,
     radius: string | undefined
@@ -73,7 +89,7 @@ class DataService {
     }
 
     if (location && radius) {
-      builder = builder.filter("bool", "geo_distance",
+      builder = builder.filter("geo_distance",
         {
           distance: radius,
           geo_location: {
@@ -89,7 +105,7 @@ class DataService {
     return builder;
   }
 
-  private static findInternationalBySelection(
+  private findInternationalBySelection(
     builder: Bodybuilder,
     location: Location | undefined
   ): Bodybuilder {
@@ -127,6 +143,6 @@ class DataService {
   }
 }
 
-const dataServiceInstance = new DataService();
+const postServiceInstance = new PostService();
 
-export default dataServiceInstance;
+export default postServiceInstance;

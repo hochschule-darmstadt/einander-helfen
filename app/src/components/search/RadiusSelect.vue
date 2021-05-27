@@ -2,13 +2,12 @@
   <v-select
     class="radius_select"
     label="Umkreis"
-    item-value="value"
-    :items="radii"
+    :items="radiiArray"
     :dark="dark"
     :disabled="disabled"
     :attach="attachTo"
-    v-model="radius"
-    @change="onInputChange"
+    :value="radius"
+    @change="onChange"
     @keydown.enter="onEnter"
   />
 </template>
@@ -19,13 +18,12 @@ import Radius from "@/models/radius";
 import radii from "@/resources/radii";
 
 export default Vue.extend({
-  name: "Radius",
+  name: "RadiusSelect",
   props: {
     value: {
       type: String,
-      required: true,
     },
-    international: {
+    isInternational: {
       type: Boolean,
       default: true,
     },
@@ -40,8 +38,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      radii: radii as Radius[],
-      radius: this.value as string | null,
+      radius: {} as Radius,
     };
   },
   watch: {
@@ -49,13 +46,13 @@ export default Vue.extend({
     value(): void {
       this.setRadius();
     },
-    international(): void {
-      if (this.international) this.radius = null;
-    },
   },
   computed: {
     disabled(): boolean {
-      return this.international;
+      return this.isInternational;
+    },
+    radiiArray(): Radius[] {
+      return radii;
     },
   },
   mounted(): void {
@@ -63,15 +60,23 @@ export default Vue.extend({
   },
   methods: {
     setRadius() {
-      this.radius = this.value || this.radii[0].value;
-      this.$emit("input", this.radius);
+      if (this.radius.value != this.value) {
+        this.radius = this.getRadiusObject();
+      }
     },
-    onInputChange(): void {
-      this.$emit("input", this.radius);
+    onChange(inputValue) {
+      if (this.value != inputValue) {
+        this.$emit("input", inputValue);
+      }
     },
     onEnter(): void {
-      this.$emit("input", this.radius);
+      this.$emit("input", this.radius.value);
       this.$emit("enter");
+    },
+    getRadiusObject() {
+      return (
+        radii.find((radius: Radius) => radius.value == this.value) || radii[0]
+      );
     },
   },
 });

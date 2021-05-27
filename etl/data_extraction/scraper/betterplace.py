@@ -59,7 +59,7 @@ class BetterplaceScraper(Scraper):
             'opportunities': None,
             'organization': None,
             'contact': contact_text,
-            'link': None,
+            'link': url or None,
             'source': "betterplace.org",
             'geo_location':  {
                 'lat': lat,
@@ -145,4 +145,4 @@ class BetterplaceScraper(Scraper):
 
             time.sleep(self.delay)
 
-        self.get_finished_progress(index, 'FETCH')
+        self.set_progress_completed(index, 'FETCH')

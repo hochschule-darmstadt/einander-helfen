@@ -17,7 +17,6 @@ class JsonPost:
     @staticmethod
     def __remove_not_needed_data(json):
         """Removes data from json which should not be use in the comparison."""
-        JsonPost.logger.debug("__remove_not_needed_data()")
 
         if 'link' in json:
             del json['link']
