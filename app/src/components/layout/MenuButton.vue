@@ -1,6 +1,6 @@
 <template>
   <div class="menubutton">
-    <v-menu offset-y>
+    <v-menu offset-y fixed>
       <template v-slot:activator="{ on, attrs }">
         <v-btn v-bind="attrs" v-on="on" dark icon class="burgermenu">
           <v-icon>menu</v-icon>
