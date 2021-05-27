@@ -19,15 +19,15 @@
             Das Portal für Freiwilligenarbeit
           </p>
           <p class="subtitle font-weight-light white--text d-flex">
-            <span>
+            <span class="mr-1">
               Aktuell {{ nationalCount }}
               <span class="pl-1 pr-1">
                 <img class="areImage" :src="nationalImg" />
               </span>
-              nationale und
+              nationale und &nbsp;{{ " &nbsp;" }}
             </span>
             <span>
-              {{ internationalCount }}
+              &nbsp; {{ " " + internationalCount }}
               <span class="pl-1 pr-1">
                 <img class="areImage" :src="internationalImg" />
               </span>
