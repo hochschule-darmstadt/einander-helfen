@@ -23,9 +23,7 @@
       </v-btn>
 
       <!--display title, subtitle and image on the right side-->
-      <div class="headline">
-        {{ post.title }}
-      </div>
+      <div class="headline" v-html="post.title"></div>
     </v-card-title>
     <v-card-text class="content">
       <v-simple-table dense>
