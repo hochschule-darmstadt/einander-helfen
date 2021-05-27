@@ -93,6 +93,14 @@
                 >www.betterplace.org</a
               >
             </li>
+            <li>
+              <a
+                href="https://www.ehrenamt.sachsen.de"
+                target="_blank"
+                rel="noopener"
+                >www.ehrenamt.sachsen.de</a
+              >
+            </li>
           </ul>
           <p>
             <br />

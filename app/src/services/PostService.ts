@@ -20,7 +20,7 @@ export interface SearchParameters {
   international: boolean;
 }
 
-class PostsService {
+class PostService {
   private baseUrl = process.env.VUE_APP_SEARCH_URI;
 
   /**
@@ -51,6 +51,23 @@ class PostsService {
       this.addNationalFilter(builder, params.location, params.radius);
 
     return this.performPostsQuery<Post>(builder);
+  }
+
+
+  public findById(id: string): Promise<Post | undefined> {
+    const builder = BuilderFactory()
+      .query('term', "_id", id);
+
+    return axios
+      .post(this.baseUrl, builder.build())
+      .then(({ data }) => {
+        if (!data.hits.hits.length) return undefined;
+        const entity = data.hits.hits.pop();
+        return {
+          id: entity._id,
+          ...entity._source,
+        } as Post;
+      });
   }
 
   /**
@@ -94,13 +111,14 @@ class PostsService {
     }
 
     if (location && radius) {
-      builder = builder.filter("bool", "geo_distance", {
-        distance: radius,
-        geo_location: {
-          lat: location.lat,
-          lon: location.lon,
-        },
-      });
+      builder = builder.filter("geo_distance",
+        {
+          distance: radius,
+          geo_location: {
+            lat: location.lat,
+            lon: location.lon,
+          },
+        });
     }
 
     return builder;
@@ -153,6 +171,6 @@ class PostsService {
   }
 }
 
-const serviceInstance = new PostsService();
+const postServiceInstance = new PostService();
 
-export default serviceInstance;
+export default postServiceInstance;

@@ -16,7 +16,7 @@
             >
               <router-link
                 style="text-decoration: none; color: inherit"
-                :to="{ name: 'resultPage', query: { q: tag.to } }"
+                :to="{ name: 'posts', query: { q: tag.to } }"
               >
                 <v-img
                   class="white--text align-end mt-10"

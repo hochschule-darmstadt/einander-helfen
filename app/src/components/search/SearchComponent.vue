@@ -5,33 +5,34 @@
         <SearchBar
           tabindex="1"
           v-model="searchValue"
-          :tags="searchTags"
+          :tags="searchValues"
           :enable-no-data-message="true"
           @click.native="onSearchClick"
-          @enter="paramChanged"
+          @enter="onSearchValueEnter"
           @remove="removeTag"
         />
       </v-col>
 
       <v-col class="locationDiv" cols="12" :md="isFullwidth ? 12 : 6">
         <div>
-          <AreaSelect tabindex="2" v-model="area" :dark="dark" />
+          <AreaSelect tabindex="2" v-model="internationalValue" :dark="dark" />
           <LocationSearchBar
             tabindex="3"
             :dark="dark"
-            :international="international"
+            :isInternational="internationalValue"
             v-model="locationSearchValue"
-            @enter="paramChanged"
+            @enter="onLocationValueEnter"
             @click.native="onSearchClick"
           />
         </div>
         <div>
-          <Radius
+          <RadiusSelect
             tabindex="4"
             :dark="dark"
-            :international="international"
+            :isInternational="internationalValue"
             v-model="radius"
-            @enter="paramChanged"
+            @input="onRadiusChanged"
+            @enter="onRadiusChanged"
           />
           <SearchButton @click="executeSearch" tabindex="5" />
         </div>
@@ -43,11 +44,11 @@
 <script lang="ts">
 import Vue from "vue";
 import LocationSearchBar from "@/components/search/LocationSearchBar.vue";
-import Radius from "@/components/search/Radius.vue";
+import RadiusSelect from "@/components/search/RadiusSelect.vue";
 import SearchBar from "@/components/search/SearchBar.vue";
 import SearchButton from "@/components/search/SearchButton.vue";
 import AreaSelect from "@/components/search/AreaSelect.vue";
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 
 /**
  * Emits @Search onSearch triggered event
@@ -58,7 +59,7 @@ export default Vue.extend({
     SearchBar,
     AreaSelect,
     LocationSearchBar,
-    Radius,
+    RadiusSelect,
     SearchButton,
   },
   props: {
@@ -84,62 +85,99 @@ export default Vue.extend({
   data: function () {
     return {
       searchValue: "",
-      searchTags: [] as string[],
       locationSearchValue: "",
-      area: "germany",
+      internationalValue: false,
       radius: "",
-      secondSearch: false,
+      oldValue: "",
     };
   },
-  watch: {
-    radius() {
-      this.paramChanged();
-    },
-    area() {
-      this.paramChanged();
-    },
+  mounted() {
+    // load internation value on startup else change it later by watcher
+    this.internationalValue = this.isInternational;
   },
-  mounted(): void {
-    // load data from store
-    this.area = this.getInternational ? "international" : "germany";
-    this.radius = this.getRadius;
-    this.searchTags = this.getSearchValues;
-    this.locationSearchValue = this.getLocationText;
+  watch: {
+    // watch selectedRadius in store
+    selectedRadius(value: string) {
+      if (this.radius != value) this.radius = value;
+    },
+    // watch selectedLocation in store
+    selectedLocation() {
+      if (this.locationSearchValue != this.getLocationText())
+        this.locationSearchValue = this.getLocationText();
+    },
+    // watch isInternational in store
+    isInternational(value) {
+      this.internationalValue = value;
+    },
+    internationalValue() {
+      this.changeInternational();
+    },
   },
   computed: {
-    ...mapGetters("locationSearchModule", ["getRadius", "getLocationText"]),
-    ...mapGetters("textSearchModule", ["getSearchValues"]),
-    ...mapGetters(["getInternational"]),
-
-    international(): boolean {
-      return this.area === "international";
-    },
+    ...mapState("searchModule", [
+      "searchValues",
+      "selectedRadius",
+      "selectedLocation",
+      "isInternational",
+    ]),
     isFullwidth(): boolean {
       return !this.small;
     },
   },
   methods: {
-    ...mapActions("locationSearchModule", [
+    ...mapGetters("searchModule", ["getLocationText"]),
+    ...mapMutations("searchModule", [
       "setSelectedRadius",
       "setSelectedLocation",
+      "addSearchValue",
+      "removeSearchValue",
+      "setInternational",
     ]),
-    ...mapActions("textSearchModule", ["addSearchValue", "removeSearchValue"]),
-    ...mapActions(["setInternational", "updateURIFromState"]),
+    ...mapActions(["updateURIFromState"]),
 
-    paramChanged(): void {
-      if (this.direktsearch || this.secondSearch) this.executeSearch();
-      else this.secondSearch = true;
+    changeInternational(): void {
+      // clear radius and location on international change
+      this.radius = this.locationSearchValue = "";
+      // set default radius in store
+      this.setSelectedRadius();
+      // unset location in stre
+      this.setSelectedLocation();
+      // update search parameter in store
+      this.setInternational(this.internationalValue);
+      // execute serach if directsearch is enabled
+      if (this.direktsearch) {
+        this.executeSearch();
+      }
+    },
+    onSearchValueEnter(value: string): void {
+      if (value != this.searchValue) this.searchValue = value;
+      if (this.direktsearch || value == this.oldValue) {
+        this.executeSearch();
+      }
+      this.oldValue = value;
+    },
+    onLocationValueEnter(value: string): void {
+      if (value != this.locationSearchValue) this.locationSearchValue = value;
+      if (this.direktsearch || value == this.oldValue) {
+        this.executeSearch();
+      }
+      this.oldValue = value;
+    },
+    onRadiusChanged(value: string): void {
+      if (value != this.radius) {
+        this.radius = value;
+      }
+      // update state search parameter in store
+      this.setSelectedRadius(this.radius);
+      // execute serach if directsearch is enabled
+      if (this.direktsearch) {
+        this.executeSearch();
+      }
     },
     executeSearch(): void {
-      // add search value to tags
-      if (this.searchValue) this.searchTags.push(this.searchValue);
-      // update search parameter in store
+      // update state search parameter in store
       this.addSearchValue(this.searchValue);
-      this.setInternational(this.international);
       this.setSelectedLocation(this.locationSearchValue);
-      this.setSelectedRadius(this.radius);
-      // emit search event
-      this.$emit("search");
       // update uri
       this.updateURIFromState();
       // clear search field
@@ -165,7 +203,6 @@ export default Vue.extend({
     },
     removeTag(tag: string) {
       // remove tag
-      this.searchTags = this.searchTags.filter((item) => item != tag);
       this.removeSearchValue(tag);
       // update uri
       this.updateURIFromState();

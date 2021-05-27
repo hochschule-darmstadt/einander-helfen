@@ -46,7 +46,7 @@
 <script>
 import Vue from "vue";
 import MenuButton from "@/components/layout/MenuButton.vue";
-import DataService from "@/services/DataService";
+import PostService from "@/services/PostService";
 
 export default Vue.extend({
   name: "MainHeader",
@@ -56,18 +56,18 @@ export default Vue.extend({
   data: function () {
     return {
       nationalCount: 0,
-      nationalImg: require("@/assets/images/240px-Flag_of_Germany.png"),
+      nationalImg: require("@/assets/images/area/240px-Flag_of_Germany.png"),
       internationalCount: 0,
-      internationalImg: require("@/assets/images/240px-Earth_icon_2.png"),
+      internationalImg: require("@/assets/images/area/240px-Earth_icon_2.png"),
     };
   },
   mounted() {
     // load internationalCount
-    DataService.countPosts(true).then(
+    PostService.countPosts(true).then(
       (count) => (this.internationalCount = count)
     );
     // load nationalCount
-    DataService.countPosts(false).then((count) => (this.nationalCount = count));
+    PostService.countPosts(false).then((count) => (this.nationalCount = count));
   },
 });
 </script>
