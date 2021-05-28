@@ -2,16 +2,16 @@ label;synonyms
 Aufsicht;Beaufsichtigung,Aufsichtstätigkeiten
 Basteln;
 Begleitung;Begleitung zu Behörden,Begleitung zu Schulen,Begleitung zu Ärzten
-Behinderte;Demenzerkrankte,Beeinträchtigte (psychisch/geistig),Menschen mit Behinderung,Hilfe für Menschen mit Beeinträchtigungen,Behinderungen/besondere Bedürfnisse
+Behinderte;Behinderung,Demenzerkrankte,Beeinträchtigte (psychisch/geistig),Menschen mit Behinderung,Hilfe für Menschen mit Beeinträchtigungen,Behinderungen/besondere Bedürfnisse
 Beratung;
 Betheljahr;
 Betreuung;Pflege
 Bewegung;
 Bibliothek;Bibliotheks,Bücherausleihe
-Bildende Kunst;Darstellende Kunst,künstlerisch
 Bildung;Open and distance learning,Education and training,Pädagogik und Didaktik
 Bundesfreiwilligendienst;BFD - Bundesfreiwilligendienst,BFD
 Büro;Büroarbeiten
+Cafe;Service Cafe,Bistro
 Computer;IT,EDV-Kenntnisse,EDV
 Denker/in;Denkerin,Denker
 Denkmalpflege;
@@ -22,25 +22,24 @@ Elektriker;
 Europäisches Solidaritätskorps;ESK - Europäisches Solidaritätskorps,ESK
 Erste-Hilfe Kenntnisse;Erste-Hilfe
 Erwachsenenbildung;Erwachsene
-Fahrdienste (ev. mit eigenem KFZ);Fahrten,Fahrdienst
+Fahrdienste (ev. mit eigenem KFZ);Fahrten,Fahrdienst,Transport and mobility
 Familie;
 Feminismus;Chancengleichheit,Gleichstellung
 Fest;Mithilfe bei Festen,Feste
 Film;
-Flüchtlingscafe;
 Forschung;Forschung und Innovation,Naturwissenschaften
 Fotografie;Photographie,Fotographie
 Frauen- und Mädchenarbeit;Frauenarbeit,Mädchenarbeit
 Freiwilliges Soziales Jahr;FSJ - Freiwilliges Soziales Jahr,FSJ
 Freiwilliges Ökologisches Jahr;FÖJ - Freiwilliges Ökologisches Jahr,FÖJ
-Freizeit- und Kulturangebote;Freizeit,Kultur
+Freizeit;Freizeit- und Kulturangebote
 Frieden;Frieden und Entwicklung,Friedensarbeit,Friedensdienst im Ausland
 Führerschein;
-Geflüchtete;Flüchtlinge,Flüchtlinge & Migranten,Integration of refugees,Migrants' issues
-Geschichte;Historisches Erbe
+Geflüchtete;Flüchtlinge,Flüchtlinge & Migranten,Integration of refugees,Migrants' issues,Flüchtlingscafe
+Geschichte;Historisches Erbe,Denkmalpflege
 Gesellschaft;Citizenship and democratic participation
 Gesundheit;Gesundheitspflege,Gesundheit und Wohlbefinden
-Gleichberechtigung;Chancengleichheit,Gleichstellung,Equality
+Gleichberechtigung;Chancengleichheit,Gleichstellung,Equality,Feminismus
 Gruppenarbeit;Erfahrung in Gruppenarbeit
 Gruppenleitung;
 Handarbeit;Kreative Handarbeiten
@@ -58,7 +57,8 @@ Kommunikation;Kommunikationsbereitschaft,Kommunikativ,Kommunikative
 Konzeptionelle Fähigkeiten;Konzeption
 Kranke Menschen;Kranke
 Kreativ;Kreativität,Kreative,Kreativität und Kultur
-Kultur;Breitenkultur,Kulturelle Bildung,Brauchtum,Culture,Kreativität und Kultur
+Kultur;Breitenkultur,Kulturelle Bildung,Brauchtum,Culture,Kreativität und Kultur,Theater
+Kunst;Bildende Kunst,Darstellende Kunst,künstlerisch
 Literatur;Buch,Bücher
 Macher/in;Macherin,Macher
 Medien;Multimedien,Digitale Medien,Multimedia
@@ -69,7 +69,7 @@ Moderation;
 Musik;
 Nachbarschaft;Community development
 Nachhilfe;Hausaufgabenhilfe,Hausaufgabenbetreuung,Open and distance learning,Education and training
-NGO;Bürgeinitiative
+Bürgeinitiative;NGO,Nichtregierungsorganisation
 Notaufnahme;Not- und Erstaufnahmeeinrichtung,Erstaufnahme
 Organisation;
 Pädagogik;Pädagogische Fähigkeiten,pädagogisch,Pädagogische Kenntnisse
@@ -80,10 +80,9 @@ Psychisch;Psychische Belastbarkeit
 Psychologie;Psychologische Fähigkeiten,psychologisch,Psychologische Kenntnisse
 Rettungsdienste;Rettung,Rettungswesen
 Sachspenden;Spende,Spenden
-Schule;schulisch
+Schule;schulisch,Unterricht,unterrichten
 Selbsthilfegruppen;Selbsthilfe,Fürsorge und Selbsthilfe
 Senioren;Alte Menschen,Ältere Menschen,Senior*innen,Seniorenhilfe
-Service Cafe;Cafe,Bistro
 Sich unterhalten;
 Sicherheit;
 Sozial;Soziale,Soziale Kenntnisse,Soziale Dienste,Soziale Projekte,Social assistance and welfare,Sozialer Dialog
@@ -97,7 +96,6 @@ Tierbetreuung;Tier,Tiere
 Tierschutz;Tier,Tiere,Tierschutz & Umwelt
 Umwelt;Ökologische Kenntnisse,ökologisch,Ökologie,Natur und Umwelt,Umwelt- und Naturschutz sowie Nachhaltigkeit,Natur,Tierschutz & Umwelt,Umwelt und Klimawandel,Land- und Forstwirtschaft,Energie und Ressourcen
 Umzug;Umzugsunterstützung
-Unterricht;
 Vorlesen;Lesen
 Weiterbildung;Skills development,Unternehmerisches Lernen und unternehmerische Bildung
 weltwärts;
