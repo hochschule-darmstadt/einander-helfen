@@ -108,10 +108,12 @@ class EhrenamtSachsenScraper(Scraper):
 
         import time
 
-        search_page_url = f'{self.base_url}/engagementboerse/suche?filter=projects&location=address'
+        index = 1
+        index_max = None
+
+        search_page_url = f'{self.base_url}/engagementboerse/suche?filter=projects&location=address&page={index}'
         next_page_url = search_page_url
 
-        index = 1
         while next_page_url:
 
             response = self.soupify(next_page_url)
@@ -120,13 +122,13 @@ class EhrenamtSachsenScraper(Scraper):
             detail_a_tags = [x.a for x in response.find_all('h3', {'class': 'media-heading'})]
 
             # Get maximum number of pages
-            index_max = None
-            button_last = response.find('button', {'class': 'lnk-last'})
-            if button_last is not None:
-                last_page_link = button_last.parent['href']
-                index_max = re.match(r'.*page=([0-9]*)', last_page_link).group(1)
-            else:
-                index_max = index
+            if index_max is None:
+                button_last = response.find('button', {'class': 'lnk-last'})
+                if button_last is not None:
+                    last_page_link = button_last.parent['href']
+                    index_max = re.match(r'.*page=([0-9]*)', last_page_link).group(1)
+                else:
+                    index_max = index
 
             self.logger.debug(f'Fetched {len(detail_a_tags)} URLs from {next_page_url} [{index}/{index_max}]')
             self.update_fetching_progress(index, index_max)
@@ -144,10 +146,10 @@ class EhrenamtSachsenScraper(Scraper):
                     self.urls.append(current_link)
 
             # Get next result page
-            next_page_url = response.find('a', {'class': 'lnk-next'})
-            if next_page_url:
-                next_page_url = self.base_url + next_page_url['href']
-
-            index += 1
+            if index < int(index_max):
+                index += 1
+                next_page_url = self.base_url + f'/engagementboerse/suche?filter=projects&location=address&page={index}'
+            else:
+                next_page_url = None
 
             time.sleep(self.delay)
