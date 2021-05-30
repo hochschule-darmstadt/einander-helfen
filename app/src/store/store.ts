@@ -32,6 +32,30 @@ const store: StoreOptions<RootState> = {
       commit("searchModule/clearSearchParams");
       commit("postsModule/clearPostParams");
     },
+    findPosts({ commit, state }): Promise<Post[]> {
+      const location = state.searchModule.selectedLocation;
+      const searchValues = state.searchModule.searchValues;
+      const radius = state.searchModule.selectedRadius;
+
+      const from = state.postsModule.resultsFrom;
+      const size = state.postsModule.resultSetSize;
+      const international = state.searchModule.isInternational;
+
+      return new Promise((resolve) => {
+        PostService.findPosts({
+          searchValues,
+          location,
+          radius,
+          from,
+          size,
+          international,
+        }).then((result: PaginatedResponse<Post>) => {
+          commit("setTotalResultSize", result.meta.total);
+          commit("setPosts", result.data);
+          resolve(result.data);
+        });
+      });
+    },
     /**
      * Sets state values from values of the current route
      */
@@ -123,7 +147,7 @@ const store: StoreOptions<RootState> = {
      *  find posts from DataService by setted parameter
      */
     loadPosts({ state, dispatch, commit }): Promise<Post[]> {
-      return PostService.findBySelection({
+      return PostService.findPosts({
         searchValues: state.searchModule.searchValues,
         location: state.searchModule.selectedLocation,
         radius: state.searchModule.selectedRadius,

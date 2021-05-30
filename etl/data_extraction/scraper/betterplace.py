@@ -91,7 +91,7 @@ class BetterplaceScraper(Scraper):
                 'phone': None,
                 'email': None,
             },
-            'contact': parsed_object['contact'],
+            'contact': None,
             'link': parsed_object['link'],
             'source': parsed_object['source'],
             'geo_location': parsed_object['geo_location'],

@@ -101,6 +101,14 @@
                 >www.ehrenamt.sachsen.de</a
               >
             </li>
+            <li>
+              <a
+                href="https://www.dksb.de"
+                target="_blank"
+                rel="noopener"
+                >www.dksb.de</a
+              >
+            </li>
           </ul>
           <p>
             <br />
@@ -137,7 +145,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import Header from "@/components/layout/Header.vue";
+import Header from "@/components/layout/SearchHeader.vue";
 
 export default Vue.extend({
   name: "About",
