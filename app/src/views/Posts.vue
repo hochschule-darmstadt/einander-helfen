@@ -1,5 +1,5 @@
 <template>
-  <div class="posts-page">
+  <div class="posts-page" v-if="isInitialised">
     <Header />
     <section class="sitecontent row">
       <MapButton v-if="smartphone" v-model="showMap" />
@@ -90,6 +90,7 @@ export default Vue.extend({
     return {
       showMap: true,
       smartphone: false,
+      isInitialised: false,
     };
   },
   computed: {
@@ -104,9 +105,10 @@ export default Vue.extend({
     ]),
   },
   mounted(): void {
-    // get params from route query
+    // get params from route
     this.hydrateStateFromRoute()
       .then(() => {
+        this.isInitialised = true;
         // load posts by updated state parameter
         return this.loadPosts().then(() =>
           this.togglePostDetails(this.selectedPost)

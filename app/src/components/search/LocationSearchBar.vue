@@ -68,7 +68,9 @@ export default Vue.extend({
   watch: {
     /** change selection on value change */
     value(): void {
-      this.$nextTick(() => (this.location = this.value));
+      this.$nextTick(() => {
+        this.location = this.searchValue = this.value;
+      });
     },
     isInternational(): void {
       this.searchValue = "";
@@ -132,6 +134,7 @@ export default Vue.extend({
       // reduce to only one word
       this.searchValue = this.searchValue.split(" ")[0];
       this.$emit("input", this.location);
+      this.$emit("enter", this.location);
     },
     onEnter(): void {
       this.searchValue = this.location || "";
