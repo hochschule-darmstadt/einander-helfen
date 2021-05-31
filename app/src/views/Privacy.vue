@@ -1,4 +1,4 @@
-<!-- The page 'Datenschutzerkärung' containing the information about privacy on einander-helfen.org.-->
+<!-- The page 'Datenschutzerkärung' containing the data protection declaration of einander-helfen.org.-->
 
 <template>
   <div>
