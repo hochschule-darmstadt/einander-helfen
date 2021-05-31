@@ -43,6 +43,7 @@
           </h3>
         </div>
 
+        <!-- List item that represents a post. -->
         <PostListItem
           v-for="post in postsOnCurrentPage"
           :key="post.id"
@@ -165,7 +166,10 @@ export default Vue.extend({
       "loadPost",
     ]),
 
-    /** Opens a post if a post is given, else clear the selected post */
+    /** Opens a post if a post is given, else clear the selected post 
+     * 
+     * @param {Post} post: The currently selected post. Undefined if no post is selected.
+    */
     togglePostDetails(post: Post | undefined = undefined): void {
       // close map to show detail page if not smartphone
       if (post && !this.smartphone) this.showMap = false;
@@ -182,7 +186,7 @@ export default Vue.extend({
     openMap(): void {
       this.showMap = true;
     },
-    /** Resize handler for window Resize */
+    /** Resize handler for window Resize. Descides if the website should be shown in smartphone oder desktop view.*/
     onWindowResize(): void {
       // swtich to smartphone view
       if (!this.smartphone && window.innerWidth < 960) {
