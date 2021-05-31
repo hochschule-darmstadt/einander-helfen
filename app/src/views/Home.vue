@@ -1,4 +1,4 @@
-<!-- The page 'Home' and the entry point when visiting einander-helfen.org -->
+<!-- The page 'Home' and the entry point when visiting einander-helfen.org. It show a slide show of pictures, the SearchComponent and 4 examples of tags to search. -->
 
 <template>
   <div class="home">
