@@ -1,3 +1,4 @@
+<!-- The map of the page 'Post'. It contains the pins of the found posts.-->
 <template>
   <transition name="slide">
     <v-card

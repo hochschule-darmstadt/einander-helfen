@@ -1,3 +1,5 @@
+<!-- Details of a Post on the 'Post' page with information about the post and a link to the offering website. Only of the web view -->
+
 <template>
   <v-card v-show="show" class="post" tile v-if="post">
     <v-btn class="button-close" icon @click="closePost()">

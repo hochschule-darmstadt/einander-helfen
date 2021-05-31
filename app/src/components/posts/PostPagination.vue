@@ -1,3 +1,5 @@
+<!-- Pagination of the list of posts on the 'Post' page. -->
+
 <template>
   <div class="pagination-container text-center">
     <v-pagination

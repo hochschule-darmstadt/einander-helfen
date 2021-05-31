@@ -1,3 +1,5 @@
+<!-- The Footer is shown at the bottom of every page. It contains links to other pages of the website. -->
+
 <template>
   <v-footer color="#00254f" padless>
     <v-row justify="center" no-gutters>

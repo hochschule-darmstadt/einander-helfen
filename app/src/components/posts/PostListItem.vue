@@ -1,3 +1,5 @@
+<!-- The list of posts on the page 'post'. Also contains the details of the post in the mobile view. -->
+
 <template>
   <v-card class="post mb-3">
     <v-list-item

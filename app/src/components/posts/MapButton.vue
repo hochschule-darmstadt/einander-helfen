@@ -1,3 +1,5 @@
+<!-- Button to hide or show the map of the 'Post' page in the mobile view. -->
+
 <template>
   <div class="mb-2 btn-container">
     <v-btn class="btn-dark" dark block @click="open = !open">

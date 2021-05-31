@@ -1,3 +1,5 @@
+<!-- Button at the bottom right of every scrollable page in the mobile view. Scrolls to the top of the page. -->
+
 <template>
   <v-btn
     v-scroll="onScroll"

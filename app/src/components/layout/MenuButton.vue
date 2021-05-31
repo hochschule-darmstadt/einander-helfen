@@ -1,3 +1,5 @@
+<!-- The burger menu shown in the header of every page. Contains the navigation to every page of the website. -->
+
 <template>
   <div class="menubutton">
     <v-menu offset-y>

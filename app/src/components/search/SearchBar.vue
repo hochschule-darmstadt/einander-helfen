@@ -1,3 +1,5 @@
+<!-- Part of the SearchComponent to define keywords/tags for the search. -->
+
 <template>
   <div class="searchBar">
     <v-combobox

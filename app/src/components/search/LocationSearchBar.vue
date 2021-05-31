@@ -1,3 +1,5 @@
+<!-- Part of the SearchComponent to select a location for the search. It's possible to select a city or postalcode for national searches or a county for international searchers -->
+
 <template>
   <v-autocomplete
     class="location_search"

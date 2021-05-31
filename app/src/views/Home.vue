@@ -1,3 +1,5 @@
+<!-- The page 'Home' and the entry point when visiting einander-helfen.org -->
+
 <template>
   <div class="home">
     <Header />

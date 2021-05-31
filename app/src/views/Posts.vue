@@ -1,3 +1,5 @@
+<!-- The page 'Posts'. It shows all results of a search in a list and a map with pins showing the location of the posts.-->
+
 <template>
   <div class="posts-page">
     <Header />

@@ -1,3 +1,5 @@
+<!-- The page 'Datenschutzerkärung' containing the information about privacy on einander-helfen.org.-->
+
 <template>
   <div>
     <Header />

@@ -1,3 +1,5 @@
+<!-- Header of all pages except 'Home'. Contains all components for searching. -->
+
 <template>
   <header class="header_layout">
     <v-btn

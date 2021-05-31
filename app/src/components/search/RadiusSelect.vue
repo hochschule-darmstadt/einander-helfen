@@ -1,4 +1,6 @@
-<template>
+<!-- Part of the SearchComponent to limit the search by the distance of the results to the given location -->
+
+template>
   <v-select
     class="radius_select"
     label="Umkreis"
