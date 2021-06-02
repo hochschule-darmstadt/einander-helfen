@@ -134,7 +134,6 @@ export default Vue.extend({
       // reduce to only one word
       this.searchValue = this.searchValue.split(" ")[0];
       this.$emit("input", this.location);
-      // this.$emit("enter", this.location);
     },
     onEnter(): void {
       this.searchValue = this.location || "";
