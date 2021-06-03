@@ -1,7 +1,6 @@
 <template>
   <header class="header_layout">
     <v-btn
-      id="headerLogo"
       class="d-none d-sm-flex justify-center mr-4"
       height="70px"
       width="80px"
@@ -33,7 +32,7 @@ import SearchComponent from "@/components/search/SearchComponent.vue";
 import MenuButton from "@/components/layout/MenuButton.vue";
 
 export default Vue.extend({
-  name: "Header",
+  name: "SearchHeader",
   components: {
     SearchComponent,
     MenuButton,
@@ -41,6 +40,7 @@ export default Vue.extend({
   methods: {},
 });
 </script>
+
 <style lang="scss" scoped>
 .header_layout {
   padding: 12px;

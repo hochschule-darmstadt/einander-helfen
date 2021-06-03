@@ -120,7 +120,7 @@ class EuropeanYouthPortalScraper(Scraper):
                 index_max = int(index_max)+1
 
             self.logger.debug(f'Fetched {len(detail_page_a_tags)} URLs from {next_page_url} [{index}/{index_max}]')
-            self.get_progress_data_fetching(index, index_max)
+            self.update_fetching_progress(index, index_max)
 
             # Iterate links and add, if not already found
             for link_tag in detail_page_a_tags:

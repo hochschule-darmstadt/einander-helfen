@@ -32,7 +32,7 @@ export default Vue.extend({
       type: String,
       required: true,
     },
-    international: {
+    isInternational: {
       type: Boolean,
       default: true,
     },
@@ -54,12 +54,12 @@ export default Vue.extend({
   computed: {
     shownLocations(): Location[] {
       const q = this.searchValue || this.location || "";
-      return this.international
+      return this.isInternational
         ? LocationService.findCountryByName(q)
         : LocationService.findLocationByPlzOrName(q);
     },
     hintText(): string {
-      return this.international ? "Land" : "Ort oder PLZ";
+      return this.isInternational ? "Land" : "Ort oder PLZ";
     },
   },
   mounted(): void {
@@ -68,11 +68,11 @@ export default Vue.extend({
   watch: {
     /** change selection on value change */
     value(): void {
-      this.location = this.value;
+      this.$nextTick(() => (this.location = this.value));
     },
-    international(): void {
+    isInternational(): void {
       this.searchValue = "";
-      this.location = undefined;
+      this.location = "";
     },
   },
   methods: {
@@ -116,7 +116,7 @@ export default Vue.extend({
           this.searchValue = curValue;
           // emit event by clearing field
           if (!curValue) {
-            this.location = undefined;
+            this.location = "";
             this.$emit("input", this.location);
           }
         }
@@ -131,11 +131,11 @@ export default Vue.extend({
     onInputChange(): void {
       // reduce to only one word
       this.searchValue = this.searchValue.split(" ")[0];
+      this.$emit("input", this.location);
     },
     onEnter(): void {
       this.searchValue = this.location || "";
-      this.$emit("input", this.location);
-      this.$emit("enter");
+      this.$emit("enter", this.location);
     },
   },
 });

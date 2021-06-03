@@ -1,97 +1,48 @@
 import Vue from "vue";
 import Vuex, { StoreOptions } from "vuex";
-import DataService, { PaginatedResponse } from "../services/DataService";
 import router from "@/router";
+import { searchModule, SearchState } from "./Search";
+import { postsModule, PostsState } from "./Posts";
+import PostService, { PaginatedResponse } from "@/services/PostService";
 import Post from "@/models/post";
-import { textSearchModule } from "./TextSearch";
-import locationSearchModule from "./LocationSearch";
-import { RootState } from "./types";
+import radii from "@/resources/radii";
 
 Vue.use(Vuex);
 
+export interface RootState {
+  searchModule: SearchState;
+  postsModule: PostsState;
+  radiusExtended: boolean;
+  radiusExtendedFrom?: string;
+}
+
 const store: StoreOptions<RootState> = {
   modules: {
-    textSearchModule,
-    locationSearchModule,
+    searchModule,
+    postsModule,
   },
   state: {
-    posts: [] as Post[],
-    selectedPost: null,
-    page: 1 as number,
-    resultSetSize: 100,
-    totalResultSize: 0,
-    resultsFrom: 0,
-    hitsPerPage: 10, // must be a divider of resultSetSize, or the chunk loading gets complexer
-    international: false,
+    radiusExtended: false,
+    radiusExtendedFrom: undefined,
   } as RootState,
-  getters: {
-    postsOnCurrentPage(state): Post[] {
-      return state.posts.slice(
-        (state.page - 1) * state.hitsPerPage - state.resultsFrom,
-        state.page * state.hitsPerPage - state.resultsFrom
-      );
-    },
-    numberOfPages(state): number {
-      return Math.ceil(state.totalResultSize / state.hitsPerPage);
-    },
-    pageOfCurrentPost(state): number | null {
-      const postIndex = state.posts.findIndex(
-        (post) => state.selectedPost && post.id === state.selectedPost.id
-      );
-      if (postIndex < 0) {
-        return null;
-      }
-      const pageOffset = state.resultsFrom / state.hitsPerPage + 1; // pages are 1 indexed...
-      return Math.floor(postIndex / state.hitsPerPage) + pageOffset;
-    },
-    getInternational(state): boolean {
-      return state.international;
-    },
-  },
-  mutations: {
-    clearSearchParams(state): void {
-      state.textSearchModule.searchValues = [];
-      state.locationSearchModule.selectedRadius = undefined;
-      state.locationSearchModule.selectedLocation = undefined;
-      state.page = 1;
-      state.selectedPost = null;
-    },
-    setResultsFrom(state, value: number): void {
-      state.resultsFrom = value;
-    },
-    setTotalResultSize(state, value: number): void {
-      state.totalResultSize = value;
-    },
-    setPosts(state, value): void {
-      state.posts = value;
-    },
-    setSelectedPost(state, value: Post | null): void {
-      state.selectedPost = value;
-    },
-    setPage(state, value: number): void {
-      state.page = value;
-    },
-    setInternational(state, value: boolean): void {
-      state.international = value;
-    },
-  },
+  getters: {},
+  mutations: {},
   actions: {
     clearSearchParams({ commit }): void {
-      commit("clearSearchParams");
+      commit("searchModule/clearSearchParams");
+      commit("postsModule/clearPostParams");
     },
     findPosts({ commit, state }): Promise<Post[]> {
-      const location = state.locationSearchModule.selectedLocation;
-      const searchValues = state.textSearchModule.searchValues;
-      const radius =
-        state.locationSearchModule.alternateRadius ||
-        state.locationSearchModule.selectedRadius;
+      const location = state.searchModule.selectedLocation;
+      const searchValues = state.searchModule.searchValues;
+      const radius = state.searchModule.selectedRadius;
 
-      const from = state.resultsFrom;
-      const size = state.resultSetSize;
-      const international = state.international;
+      const from = state.postsModule.resultsFrom;
+      const size = state.postsModule.resultSetSize;
+      const international = state.searchModule.isInternational;
 
       return new Promise((resolve) => {
-        DataService.findBySelection({
+        PostService.findPosts({
           searchValues,
           location,
           radius,
@@ -105,108 +56,156 @@ const store: StoreOptions<RootState> = {
         });
       });
     },
-    setPage({ commit, dispatch, state }, page: number): void {
-      if (page < 1) {
-        page = 1;
-      }
-      // Calculate the new from parameter to load the next resultSet chunk if necessary
-      const currentPageIndex = (page - 1) * state.hitsPerPage; // these hu-mons start counting their pages at 1...
-      const currentLoadedChunk = {
-        min: state.resultsFrom,
-        max: state.resultsFrom + state.resultSetSize - 1, // again with these hu-mons and their count beginning at 1...
-      };
-      if (!inChunk(currentPageIndex, currentLoadedChunk)) {
-        // Calculate the needed offset
-        // rounding off to the next multiple of our resultSetSize
-        const from =
-          currentPageIndex - (currentPageIndex % state.resultSetSize);
-        commit("setResultsFrom", from);
-      }
-
-      commit("setPage", page);
-      dispatch("updateURIFromState");
-    },
-    setInternational({ commit }, international: boolean): void {
-      commit("setInternational", international);
-    },
-    setSelectedPost({ commit }, value: Post | null): void {
-      commit("setSelectedPost", value);
-    },
     /**
      * Sets state values from values of the current route
-     * @param param0
-     * @param route
-     * @returns
      */
     hydrateStateFromRoute({ commit, dispatch }): Promise<any> {
       const queryParams = router.currentRoute.query as any;
       const params = router.currentRoute.params;
 
       // Clear previous search parameters. The URI is our single source of truth!
-      commit("clearSearchParams");
-      if ("q" in queryParams && queryParams.q) {
-        dispatch("textSearchModule/addSearchValues", queryParams.q.split(","));
-      }
-      if ("area" in queryParams && queryParams.area) {
-        dispatch(
-          "setInternational",
-          queryParams.area.toLowerCase() === "international"
-        );
-      }
-      if ("location" in queryParams && queryParams.location) {
-        dispatch(
-          "locationSearchModule/setSelectedLocation",
-          queryParams.location
-        );
-      }
-      if ("radius" in queryParams && queryParams.radius) {
-        dispatch("locationSearchModule/setSelectedRadius", queryParams.radius);
-      }
-      if ("page" in queryParams && queryParams.page) {
-        dispatch("setPage", parseInt(queryParams.page, 10));
-      }
-      return dispatch("findPosts").then((posts: Post[]) => {
-        if ("id" in params && params.id) {
-          const selectedPost = posts.find((post) => post.id === params.id);
-          if (selectedPost) {
-            dispatch("setSelectedPost", selectedPost);
-          }
-        }
+      return dispatch("clearSearchParams").then(() => {
+        const promises = new Array<Promise<any>>();
+        // get query string
+        if ("q" in queryParams && queryParams.q)
+          promises.push(
+            dispatch("searchModule/addSearchValues", queryParams.q.split(","))
+          );
+        // get area value
+        if ("area" in queryParams && queryParams.area)
+          commit(
+            "searchModule/setInternational",
+            queryParams.area.toLowerCase() === "international"
+          );
+
+        // get location value
+        if ("location" in queryParams && queryParams.location)
+          commit("searchModule/setSelectedLocation", queryParams.location);
+
+        // get radius value
+        if ("radius" in queryParams && queryParams.radius)
+          commit("searchModule/setSelectedRadius", queryParams.radius);
+
+        // get page value
+        if ("page" in queryParams && queryParams.page)
+          promises.push(
+            dispatch(
+              "postsModule/setSelectedPage",
+              parseInt(queryParams.page, 10)
+            )
+          );
+
+        // get selected post id value
+        if ("id" in params && params.id)
+          promises.push(
+            dispatch("postsModule/setSelectedPostId", params.id)
+          );
+
+        // wati that all properties are set
+        return Promise.all(promises);
       });
     },
+
     /**
      * Updates url parameter with currently values from the store
      */
-    updateURIFromState({ state }): void {
+    updateURIFromState({ state, getters }): void {
       const query = {
         ...router.currentRoute.query,
-        q: state.textSearchModule.searchValues.join(","),
-        area: state.international ? "international" : "national",
-        location: state.locationSearchModule.selectedLocation
-          ? state.locationSearchModule.selectedLocation.title
-          : "",
-        radius: state.locationSearchModule.selectedRadius,
-        page: state.page.toString(),
+        q: state.searchModule.searchValues.join(","),
+        area: state.searchModule.isInternational ? "international" : "national",
+        location: getters['searchModule/getLocationText'],
+        radius: state.searchModule.selectedRadius,
+        page: state.postsModule.selectedPage.toString(),
       };
 
       let path = "/posts";
       // is there a post currently open? => reflect it in the route
-      if (state.selectedPost) {
-        path += "/" + state.selectedPost.id;
-      }
+      if (state.postsModule.selectedPostId)
+        path += "/" + state.postsModule.selectedPostId;
 
-      router
-        .push({
+      // only change route if query parameter change from current query parameter
+      if (
+        JSON.stringify(query) !== JSON.stringify(router.currentRoute.query) ||
+        router.currentRoute.path !== path
+      )
+        router.push({
           path,
           query,
+        });
+    },
+
+    /**
+     *  find a post from DataService by given id
+     */
+    loadPost(context, id: string): Promise<Post | undefined> {
+      return PostService.findById(id)
+        .then((post) => post);
+    },
+
+    /**
+     *  find posts from DataService by setted parameter
+     */
+    loadPosts({ state, dispatch, commit }): Promise<Post[]> {
+      return PostService.findPosts({
+        searchValues: state.searchModule.searchValues,
+        location: state.searchModule.selectedLocation,
+        radius: state.searchModule.selectedRadius,
+        from: state.postsModule.resultsFrom,
+        size: state.postsModule.resultSetSize,
+        international: state.searchModule.isInternational,
+      })
+        .then((result: PaginatedResponse<Post>) => {
+          state.postsModule.totalResultSize = result.meta.total;
+          return dispatch("postsModule/setPosts", result.data)
+            .then(() => result.data);
         })
-        .catch((err) => err);
+        .then((posts: Post[]) => {
+          // there is a full list of posts
+          if (posts.length) {
+            state.radiusExtended = state.radiusExtendedFrom ? true : false;
+
+            if (
+              state.radiusExtendedFrom !== state.searchModule.selectedRadius &&
+              !state.searchModule.selectedRadius
+            )
+              state.radiusExtended = false;
+
+            // set Open post if list contains only one post.
+            if (posts.length === 1) dispatch("postsModule/selectedPostId", posts[0].id);
+
+            return posts;
+          }
+          // if there are no posts in the list and // if a location and a radius is set
+          else if (
+            state.searchModule.selectedLocation &&
+            state.searchModule.selectedRadius
+          ) {
+            const radiusValueBeforeExtend = state.searchModule.selectedRadius;
+            // Wenn wir mit einem Radius um einen Ort suchen, den Radius vergroeßern und nochmal probieren!
+
+            // find radius index of radii
+            const currentRadiusIndex = radii.findIndex(
+              (r) => r.value === radiusValueBeforeExtend
+            );
+            // find next bigger radii
+            const nextBiggerRadiusValue =
+              radii[(currentRadiusIndex + 1) % radii.length].value;
+
+            // We want to notice whether the radius changed to inform the user
+            // but only if we did not already do so in order to not overwrite the value.
+            if (!state.radiusExtendedFrom) {
+              state.radiusExtendedFrom = radiusValueBeforeExtend;
+            }
+
+            // update radius
+            commit("searchModule/setSelectedRadius", nextBiggerRadiusValue);
+            // and load posts again
+            return this.dispatch("loadPosts");
+          }
+        });
     },
   },
 };
-
-function inChunk(x: number, chunk: { min: number; max: number }): boolean {
-  return x >= chunk.min && x <= chunk.max;
-}
 
 export default new Vuex.Store<RootState>(store);

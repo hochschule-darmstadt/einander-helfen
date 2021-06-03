@@ -22,7 +22,7 @@
 <script lang="ts">
 import Vue from "vue";
 
-interface Item {
+interface AreaItem {
   text: string;
   value: string;
   img: string;
@@ -34,8 +34,12 @@ interface Item {
 export default Vue.extend({
   name: "AreaSelect",
   props: {
+    /**
+     * value is used for v-model implementation.
+     * It defines if the area is international (true) or national/germany (false)
+     */
     value: {
-      type: String,
+      type: Boolean,
       required: true,
     },
     dark: {
@@ -53,14 +57,14 @@ export default Vue.extend({
         {
           text: "Deutschland",
           value: "germany",
-          img: require("@/assets/images/240px-Flag_of_Germany.png"),
+          img: require("@/assets/images/area/240px-Flag_of_Germany.png"),
         },
         {
           text: "International",
           value: "international",
-          img: require("@/assets/images/240px-Earth_icon_2.png"),
+          img: require("@/assets/images/area/240px-Earth_icon_2.png"),
         },
-      ] as Item[],
+      ] as AreaItem[],
       selection: "",
     };
   },
@@ -73,13 +77,18 @@ export default Vue.extend({
       this.setSelection();
     },
   },
+  computed: {
+    isInternational(): boolean {
+      return this.selection == this.items[1].value;
+    },
+  },
   methods: {
     setSelection(): void {
-      this.selection = this.value || this.items[0].value;
-      this.$emit("input", this.selection);
+      this.selection = this.value ? this.items[1].value : this.items[0].value;
+      this.$emit("input", this.isInternational);
     },
     onInputChange() {
-      this.$emit("input", this.selection);
+      this.$emit("input", this.isInternational);
     },
   },
 });

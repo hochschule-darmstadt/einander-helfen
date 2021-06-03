@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <Toolbar />
+    <Header />
     <Carousel />
 
     <v-container class="container">
@@ -16,7 +16,7 @@
             >
               <router-link
                 style="text-decoration: none; color: inherit"
-                :to="{ name: 'resultPage', query: { q: tag.to } }"
+                :to="{ name: 'posts', query: { q: tag.to } }"
               >
                 <v-img
                   class="white--text align-end mt-10"
@@ -42,7 +42,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import Toolbar from "@/components/layout/Toolbar.vue";
+import Header from "@/components/layout/MainHeader.vue";
 import Carousel from "@/components/layout/Carousel.vue";
 import SearchComponent from "@/components/search/SearchComponent.vue";
 import { mapActions } from "vuex";
@@ -50,7 +50,7 @@ import { mapActions } from "vuex";
 export default Vue.extend({
   components: {
     Carousel,
-    Toolbar,
+    Header,
     SearchComponent,
   },
   data: function () {

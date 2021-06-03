@@ -342,7 +342,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import Header from "@/components/layout/Header.vue";
+import Header from "@/components/layout/SearchHeader.vue";
 
 export default Vue.extend({
   name: "Privacy",

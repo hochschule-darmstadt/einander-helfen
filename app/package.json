@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "axios": "~0.21.1",
-    "es-query-builder": "github:hochschule-darmstadt/es-query-builder",
+    "bodybuilder": "^2.4.0",
     "leaflet": "~1.7.1",
     "leaflet-gesture-handling": "~1.2.1",
     "leaflet.markercluster": "~1.4.1",

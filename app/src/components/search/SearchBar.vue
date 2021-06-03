@@ -184,8 +184,7 @@ export default Vue.extend({
      * On searchbar enter
      */
     onEnter(): void {
-      this.$emit("input", this.searchValue);
-      this.$emit("enter");
+      this.$emit("enter", this.searchValue);
     },
     removeTag(tag: string): void {
       this.$emit("remove", tag);
@@ -197,7 +196,7 @@ export default Vue.extend({
 <style lang="scss" scoped>
 .searchBar {
   background: white;
-  border-radius: 28px;
+  border-radius: 25px;
   margin-right: 2%;
   width: inherit;
   display: flex;
