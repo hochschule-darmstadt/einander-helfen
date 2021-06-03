@@ -174,7 +174,7 @@ class LatLonEnhancer:
 
         loc = post['post_struct']['location']
         res = list({ele for ele in loc if loc[ele] and len(loc[ele]) > 0})
-        is_insufficient = len(res) < 2 and (len(res) == 0 or 'country' in res)
+        is_insufficient = len(res) <= 2 and (len(res) == 0 or 'country' in res)
         if is_insufficient:
             LatLonEnhancer.logger.debug('Incomplete structured fields: additionally using unstructured data')
         return is_insufficient
