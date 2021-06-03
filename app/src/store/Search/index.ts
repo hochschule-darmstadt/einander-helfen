@@ -46,18 +46,20 @@ export const searchModule: Module<SearchState, RootState> = {
     setSelectedLocation(state, location: string): void {
       if (!location)
         state.selectedLocation = undefined;
-      const locationObject = LocationService.findByTitle(location) || {
-        name: "",
-        plz: "",
-        title: "",
-        state: "",
-        lat: 0,
-        lon: 0,
-        rank: 0,
-        country: location,
-      };
+      else {
+        const locationObject = LocationService.findByTitle(location) || {
+          name: "",
+          plz: "",
+          title: "",
+          state: "",
+          lat: 0,
+          lon: 0,
+          rank: 0,
+          country: location,
+        };
 
-      state.selectedLocation = locationObject;
+        state.selectedLocation = locationObject;
+      }
     },
     setSelectedRadius(state, value: string): void {
       if (value)
