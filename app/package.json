@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build:production": "vue-cli-service build --mode production",
+    "build:staging": "vue-cli-service build --mode staging",
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit"
   },
@@ -16,6 +17,7 @@
     "leaflet.markercluster": "~1.4.1",
     "material-design-icons-iconfont": "~6.1.0",
     "vue": "~2.6.10",
+    "vue-matomo": "^4.0.0",
     "vue-router": "~3.4.9",
     "vue-slick-carousel": "~1.0.6",
     "vue2-leaflet": "~2.6.0",
@@ -41,8 +43,8 @@
     "eslint": "^7.24.0",
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-vue": "^7.9.0",
-    "material-design-icons-iconfont": "~6.1.0",
     "jest": "~26.6.3",
+    "material-design-icons-iconfont": "~6.1.0",
     "node-sass": "^5.0.0",
     "prettier": "^2.2.1",
     "sass": "^1.32.10",
