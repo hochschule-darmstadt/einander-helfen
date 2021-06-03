@@ -160,7 +160,7 @@ class PostService {
     });
   }
 
-  private performCountQuery<T>(query: Bodybuilder): Promise<number> {
+  private performCountQuery(query: Bodybuilder): Promise<number> {
     return axios
       .post(this.baseUrl + "posts/?filter_path=hits.total", query.build())
       .then(({ data }) => {
