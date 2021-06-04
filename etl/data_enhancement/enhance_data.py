@@ -31,6 +31,7 @@ class Enhancer:
             'european_youth_portal': self.__enhance_european_youth_portal,
             'betterplace': self.__enhance_betterplace,
             'ehrenamt_sachsen': self.__enhance_ehrenamt_sachsen,
+            'dksb_kinderschutzbund': self.__enhance_dksb_kinderschutzbund,
         }
 
     def run(self):
@@ -99,5 +100,11 @@ class Enhancer:
     def __enhance_ehrenamt_sachsen(self):
         """ domain specific enhancement for ehrenamt_sachsen """
         self.logger.debug("__enhance_ehrenamt_sachsen()")
+
+        e_tags.run(self.__data, self.__domain_name)
+
+    def __enhance_dksb_kinderschutzbund(self):
+        """ domain specific enhancement for dksb_kinderschutzbund """
+        self.logger.debug("__enhance_dksb_kinderschutzbund()")
 
         e_tags.run(self.__data, self.__domain_name)

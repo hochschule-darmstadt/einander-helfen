@@ -70,7 +70,9 @@ export default Vue.extend({
   watch: {
     /** change selection on value change */
     value(): void {
-      this.$nextTick(() => (this.location = this.value));
+      this.$nextTick(() => {
+        this.location = this.searchValue = this.value;
+      });
     },
     isInternational(): void {
       this.searchValue = "";

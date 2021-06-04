@@ -1,7 +1,7 @@
 <!-- Details of a Post on the 'Post' page with information about the post and a link to the offering website. Only of the web view -->
 
 <template>
-  <v-card v-show="show" class="post" tile v-if="post">
+  <v-card v-show="show" ref="card" class="post" tile v-if="post">
     <v-btn class="button-close" icon @click="closePost()">
       <v-icon>close</v-icon>
     </v-btn>
@@ -98,6 +98,14 @@ export default Vue.extend({
         { key: "source", label: "Quelle", link: "link" },
       ],
     };
+  },
+  watch: {
+    post() {
+      if (this.post && this.show) {
+        // scroll to top if post change
+        this.$el.scrollTop = 0;
+      }
+    },
   },
   methods: {
     openMap(): void {

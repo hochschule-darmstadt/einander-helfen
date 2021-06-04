@@ -152,12 +152,14 @@ class PostService {
     // only international posts (default)
     builder = builder.andQuery("term", "categories", "international");
 
-    if (location && location.country && location.country !== "Deutschland") {
-      builder = builder.andQuery(
-        "match",
-        "post_struct.location.country",
-        location.country
-      );
+    if (location) {
+      if (location.country && location.country !== "Deutschland") {
+        builder = builder.andQuery(
+          "match",
+          "post_struct.location.country.keyword",
+          location.country
+        );
+      }
     }
 
     return builder;

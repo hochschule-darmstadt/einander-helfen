@@ -103,6 +103,11 @@
                 >www.ehrenamt.sachsen.de</a
               >
             </li>
+            <li>
+              <a href="https://www.dksb.de" target="_blank" rel="noopener"
+                >www.dksb.de</a
+              >
+            </li>
           </ul>
           <p>
             <br />
