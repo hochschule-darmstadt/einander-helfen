@@ -1,3 +1,7 @@
+/**
+ * This store contains methods to find and load posts matching the search.
+ */
+
 import Vue from "vue";
 import Vuex, { StoreOptions } from "vuex";
 import router from "@/router";
@@ -107,7 +111,7 @@ const store: StoreOptions<RootState> = {
     },
 
     /**
-     * Updates url parameter with currently values from the store
+     * Updates url parameter with current values from the store
      */
     updateURIFromState({ state, getters }): void {
       const query = {
@@ -136,7 +140,7 @@ const store: StoreOptions<RootState> = {
     },
 
     /**
-     *  find a post from DataService by given id
+     *  Find a post from DataService by given id
      */
     loadPost(context, id: string): Promise<Post | undefined> {
       return PostService.findById(id)
@@ -144,7 +148,7 @@ const store: StoreOptions<RootState> = {
     },
 
     /**
-     *  find posts from DataService by setted parameter
+     *  Find posts from DataService by setted parameter
      */
     loadPosts({ state, dispatch, commit }): Promise<Post[]> {
       return PostService.findPosts({
