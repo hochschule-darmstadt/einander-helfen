@@ -97,9 +97,7 @@ const store: StoreOptions<RootState> = {
 
         // get selected post id value
         if ("id" in params && params.id)
-          promises.push(
-            dispatch("postsModule/setSelectedPostId", params.id)
-          );
+          promises.push(dispatch("postsModule/setSelectedPostId", params.id));
 
         // wati that all properties are set
         return Promise.all(promises);
@@ -114,7 +112,7 @@ const store: StoreOptions<RootState> = {
         ...router.currentRoute.query,
         q: state.searchModule.searchValues.join(","),
         area: state.searchModule.isInternational ? "international" : "national",
-        location: getters['searchModule/getLocationText'],
+        location: getters["searchModule/getLocationText"],
         radius: state.searchModule.selectedRadius,
         page: state.postsModule.selectedPage.toString(),
       };
@@ -139,8 +137,7 @@ const store: StoreOptions<RootState> = {
      *  find a post from DataService by given id
      */
     loadPost(context, id: string): Promise<Post | undefined> {
-      return PostService.findById(id)
-        .then((post) => post);
+      return PostService.findById(id).then((post) => post);
     },
 
     /**
@@ -157,8 +154,9 @@ const store: StoreOptions<RootState> = {
       })
         .then((result: PaginatedResponse<Post>) => {
           state.postsModule.totalResultSize = result.meta.total;
-          return dispatch("postsModule/setPosts", result.data)
-            .then(() => result.data);
+          return dispatch("postsModule/setPosts", result.data).then(
+            () => result.data
+          );
         })
         .then((posts: Post[]) => {
           // there is a full list of posts
@@ -172,7 +170,8 @@ const store: StoreOptions<RootState> = {
               state.radiusExtended = false;
 
             // set Open post if list contains only one post.
-            if (posts.length === 1) dispatch("postsModule/selectedPostId", posts[0].id);
+            if (posts.length === 1)
+              dispatch("postsModule/selectedPostId", posts[0].id);
 
             return posts;
           }
