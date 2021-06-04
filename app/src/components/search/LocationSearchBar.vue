@@ -79,7 +79,13 @@ export default Vue.extend({
   },
   methods: {
     /**
-     * used by the autocomplete component
+     * Filter all locations based on the user input to give proposals instead of giving the full location item list. 
+     * The postcode and location name are taken into account.
+     * 
+     * @param {any} item: The current location item to check if it matches the user input.
+     * @param {string} querText: The user input.
+     * @param {string} itemText: The text value of the item.
+     * @return {boolean}:  If the checked item should be display in the proposal list.
      */
     filterLocations(item: any, queryText: string, itemText: string): boolean {
       if (queryText) {
@@ -100,6 +106,10 @@ export default Vue.extend({
         );
       } else return true;
     },
+    /**
+     * This event is triggert after every new input key. It will update the valie of the LocationSearchBar 
+     * and if the whole input was deleted it will immediately start a search.
+     */
     locationOnKeyUp(evt): void {
       const handleDesktop =
         evt.code.startsWith("Key") ||
@@ -124,14 +134,18 @@ export default Vue.extend({
         }
       }
     },
+    /**
+     * Clear search value on focus.
+     */
     onFocus(evt): void {
-      // clear search value on focus
       if (!evt.target.value) {
         this.searchValue = "";
       }
     },
+    /**
+     * Reduce to only one word.
+     */
     onInputChange(): void {
-      // reduce to only one word
       this.searchValue = this.searchValue.split(" ")[0];
       this.$emit("input", this.location);
     },
