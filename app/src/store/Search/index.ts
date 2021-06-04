@@ -22,10 +22,9 @@ export const searchModule: Module<SearchState, RootState> = {
   getters: {
     getLocationText(state): string {
       if (state.selectedLocation) {
-        if (state.selectedLocation.title)
-          return state.selectedLocation.title;
+        if (state.selectedLocation.title) return state.selectedLocation.title;
         if (state.selectedLocation.country)
-          return state.selectedLocation.country
+          return state.selectedLocation.country;
       }
       return "";
     },
@@ -44,26 +43,25 @@ export const searchModule: Module<SearchState, RootState> = {
   },
   mutations: {
     setSelectedLocation(state, location: string): void {
-      if (!location)
-        state.selectedLocation = undefined;
-      const locationObject = LocationService.findByTitle(location) || {
-        name: "",
-        plz: "",
-        title: "",
-        state: "",
-        lat: 0,
-        lon: 0,
-        rank: 0,
-        country: location,
-      };
+      if (!location) state.selectedLocation = undefined;
+      else {
+        const locationObject = LocationService.findByTitle(location) || {
+          name: "",
+          plz: "",
+          title: "",
+          state: "",
+          lat: 0,
+          lon: 0,
+          rank: 0,
+          country: location,
+        };
 
-      state.selectedLocation = locationObject;
+        state.selectedLocation = locationObject;
+      }
     },
     setSelectedRadius(state, value: string): void {
-      if (value)
-        state.selectedRadius = value;
-      else
-        state.selectedRadius = getDefaultRadius().value;
+      if (value) state.selectedRadius = value;
+      else state.selectedRadius = getDefaultRadius().value;
     },
     addSearchValue(state, value: string): void {
       value = value.trim();

@@ -13,7 +13,6 @@ class CountryService {
     this.findCountries();
   }
 
-
   /**
    * This query finds all unique countries.
    * @return The elasticsearch querystring
@@ -21,10 +20,12 @@ class CountryService {
   private createQuery(): any {
     return Bodybuilder()
       .size(0)
-      .agg("terms",
+      .agg(
+        "terms",
         "post_struct.location.country.keyword",
         { size: 1000 },
-        "country")
+        "country"
+      )
       .build();
   }
 
@@ -33,24 +34,22 @@ class CountryService {
    */
   private findCountries(): Promise<any> {
     const query = this.createQuery();
-    return axios
-      .post(this.baseUrl, query)
-      .then(({ data }) => {
-        data.aggregations.country.buckets.map((elem: any) => {
-          if (elem.key !== "Deutschland") {
-            this.countries.push({
-              name: "",
-              plz: "",
-              title: elem.key,
-              state: "",
-              lat: 0,
-              lon: 0,
-              rank: 0,
-              country: elem.key,
-            });
-          }
-        });
-      })
+    return axios.post(this.baseUrl, query).then(({ data }) => {
+      data.aggregations.country.buckets.map((elem: any) => {
+        if (elem.key !== "Deutschland") {
+          this.countries.push({
+            name: "",
+            plz: "",
+            title: elem.key,
+            state: "",
+            lat: 0,
+            lon: 0,
+            rank: 0,
+            country: elem.key,
+          });
+        }
+      });
+    });
   }
 }
 
