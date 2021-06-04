@@ -159,7 +159,7 @@ export default Vue.extend({
     },
     /**
      * Retrieve the icon of a marker. If the post is selected the marker should be red. Otherwise it should be blue.
-     * 
+     *
      * @param {Post} post: Post whose marker is to be determined.
      * @return {Icon<IconOptions>}: The marker icon.
      */

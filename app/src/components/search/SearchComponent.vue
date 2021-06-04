@@ -153,9 +153,9 @@ export default Vue.extend({
       }
     },
     /**
-     * When pressing enter it sets the selected search value of a suggestion list as the value of the SearchBar. 
+     * When pressing enter it sets the selected search value of a suggestion list as the value of the SearchBar.
      * If directsearch is activated it will immediately start the search.
-     * 
+     *
      * @param {string} value: The selected value of the list.
      */
     onSearchValueEnter(value: string): void {
@@ -168,7 +168,7 @@ export default Vue.extend({
     /**
      * When pressing enter it sets the selected location of the suggestion list as the value of the LocationSearchBar.
      * If directsearch is activated it will immediately start the search.
-     * 
+     *
      * @param {string} value: The selected value of the list.
      */
     onLocationValueEnter(value: string): void {
@@ -181,7 +181,7 @@ export default Vue.extend({
     /**
      * Sets the selected radius as the value of the RadiusSelect.
      * If directsearch is activated it will immediately start the search.
-     * 
+     *
      * @param {string} value: The selected value of the list.
      */
     onRadiusChanged(value: string): void {

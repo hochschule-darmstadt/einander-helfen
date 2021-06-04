@@ -92,7 +92,7 @@ export default Vue.extend({
   computed: {
     /**
      * Gets all porposed tags (ranked) that match the user input.
-     * 
+     *
      * @return {string[]}: An array of all tags that are suitable for the user input.
      */
     searchProposals(): string[] {
@@ -122,7 +122,7 @@ export default Vue.extend({
   methods: {
     /**
      * Filters Tags by searchTerm.
-     * 
+     *
      * @param {Tag[]} proposals: An array of all existing tags.
      * @param {string} searchTerm: The searchTerm used to filter the proposals to be suitable to the user input.
      * @return {string[]}: An array of all suitable proposals.
@@ -149,10 +149,10 @@ export default Vue.extend({
       return stringArray;
     },
     /**
-     * Rank tags based on how they match searchTerm. Tags that start with serachTerm get rank 2. Tags that end with searchTerm get rank 1. 
+     * Rank tags based on how they match searchTerm. Tags that start with serachTerm get rank 2. Tags that end with searchTerm get rank 1.
      * All other Tags (with the searchTerm in the middle) get rank 0.5.
-     * 
-     * @param {string[]} tags: Tags that had a match with the searchTerm. 
+     *
+     * @param {string[]} tags: Tags that had a match with the searchTerm.
      *                         Don't use the complete tag list here because then not matching tags would get the rank 0.5.
      * @param {string[]} searchTerm: The given user input to search for.
      * @return {string[]}: A list of all given tags sorted by their tags.

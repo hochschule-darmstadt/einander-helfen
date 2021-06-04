@@ -130,8 +130,8 @@ export default Vue.extend({
     },
     /**
      * Calculates the haversine distance of the post to the search location.
-     * 
-     * @return {string}: A string containing the rounded distance + km or an empty string if no search location 
+     *
+     * @return {string}: A string containing the rounded distance + km or an empty string if no search location
      * or no geo location of the post ist given.
      */
     postDistance(post: Post): string {
