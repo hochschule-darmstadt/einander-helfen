@@ -278,7 +278,16 @@
           <li>User Agent des Browsers</li>
         </ul>
 
+        <br />
+        <p v-if="!optOutIframeExists()">
+          Das opt-out kann nicht angezeigt werden, weil es durch ihren Browser
+          blockiert wurde. Ihr Browser blockiert somit wahrscheinlich auch das
+          Tracking. Wenn sie auf Nummer sicher gehen wollen, sollten sie ihren
+          AdBlocker deaktivieren und die Seite neu laden, um manuell das Opt-out
+          durchzuführen.
+        </p>
         <iframe
+          id="opt-out-iframe"
           style="border: 0; height: 200px; width: 600px"
           src="https://einander-helfen.org/api/analytics/index.php?module=CoreAdminHome&action=optOut&language=de&backgroundColor=&fontColor=&fontSize=&fontFamily="
         ></iframe>
@@ -348,6 +357,14 @@ export default Vue.extend({
   name: "Privacy",
   components: {
     Header,
+  },
+  methods: {
+    optOutIframeExists(): boolean {
+      if (document.getElementById("opt-out-iframe")) {
+        return true;
+      }
+      return false;
+    },
   },
 });
 </script>
