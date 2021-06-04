@@ -22,7 +22,7 @@ class LocationService {
 
   /**
    * This method finds a specified location by the title.
-   * 
+   *
    * @param {string} title: The title of the searched location.
    */
   public findByTitle(title: string): Location | undefined {
@@ -34,7 +34,7 @@ class LocationService {
    * This method executes a query on the locations specified by a string.
    * If there is no input an empty array is returned.
    * Otherwise it searches for `Location`s where the name or plz starts with the input string.
-   * 
+   *
    * @param {string} searchValue: The input string for the query.
    * @return {Location[]}: A list of the top `this.selectedLocationAmount` `Location`s
    *          which have a diversity of `this.diversityValue` ordered by rank and name.
@@ -65,7 +65,7 @@ class LocationService {
    * This method executes a query on the countries specified by a string.
    * If there is no input an empty array is returned.
    * Otherwise it searches for countries where the name starts with the input string.
-   * 
+   *
    * @param {string} searchValue: The input string for the query.
    * @return {Location[]}: A list of the top `this.selectedLocationAmount` `Location`s
    *          which have a diversity of `this.diversityValue` ordered by country.
@@ -94,7 +94,7 @@ class LocationService {
 
   /**
    * This method executes a wildcard query on the locations.
-   * 
+   *
    * @return {Location[]}: A list of the top `this.selectedLocationAmount` `Location`s
    *          which have a diversity of `this.diversityValue` ordered by rank and name.
    */
@@ -111,7 +111,7 @@ class LocationService {
   /**
    * This method helps to sort any list of object by a specific property.
    * The method needs to be call inside of a `<T>.sort(dynamicSort('abc'))` method.
-   * 
+   *
    * @param property: The property the object should be sorted by.
    *                  If the property starts with '-' the result is inversed.
    * @return {any}: A number between -1 - 1:
@@ -137,7 +137,7 @@ class LocationService {
    * This method creates a subset of a `Location` array.
    * The subset has the size of `this.selectedLocationAmount` and
    * contains a maximum of `this.diversityValue` `Location`s with the same name.
-   * 
+   *
    * @param {Location[]}: locations Array of `Location`s
    * @return {Location[]}: The subset of `Location`s
    */
@@ -179,7 +179,7 @@ class LocationService {
 
   /**
    * This method counts the occurrence of a name in a location array.
-   * 
+   *
    * @param {Location[]}: locations Array of `Location`s
    * @param name: Name of a `Location`
    * @return {number}: The number of how many `Location`s in `locations` have the name `name`.

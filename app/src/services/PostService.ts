@@ -29,7 +29,7 @@ class PostService {
 
   /**
    * Return a paginated list of posts fitting to the @SearchParameters
-   * 
+   *
    * @param params @SearchParameters
    * @return {Promise<PaginatedResponse<Post>>}: The found posts
    */
@@ -58,8 +58,8 @@ class PostService {
 
   /**
    * Find a post by its ID.
-   * 
-   * @param {string} id: The ID of the post to find. 
+   *
+   * @param {string} id: The ID of the post to find.
    * @return {Promise<Post | undefined>}: The matching Post or undefined if no Post was found.
    */
   public findById(id: string): Promise<Post | undefined> {
@@ -77,7 +77,7 @@ class PostService {
 
   /**
    * Return the number of national or international posts
-   * 
+   *
    * @param {boolean} international: true if international posts are wanted. False if national posts are wanted.
    * @return {Promise<number>}: The number of existing posts
    */
@@ -93,10 +93,10 @@ class PostService {
 
   /**
    * Add a filter to only retrieve national posts.
-   * 
+   *
    * @param {Bodybuilder} builder: Builder for elastic search queries to add the filter to.
    * @param {Location} location: Location of the search.
-   * @param {string} radius: Radius of the search. 
+   * @param {string} radius: Radius of the search.
    * @return {Bodybuilder}: The @Bodybuilder with the new filter.
    */
   private addNationalFilter(
@@ -140,7 +140,7 @@ class PostService {
 
   /**
    * Add a filter to only retrieve international posts.
-   * 
+   *
    * @param {Bodybuilder} builder: Builder for elastic search queries to add the filter to.
    * @param {Location} location: Location of the search.
    * @return {Bodybuilder}: The @Bodybuilder with the new filter.
@@ -185,7 +185,7 @@ class PostService {
     });
   }
 
-  private performCountQuery<T>(query: Bodybuilder): Promise<number> {
+  private performCountQuery(query: Bodybuilder): Promise<number> {
     return axios
       .post(this.baseUrl + "posts/?filter_path=hits.total", query.build())
       .then(({ data }) => {
