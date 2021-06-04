@@ -24,7 +24,7 @@
               <span class="pl-1 pr-1">
                 <img class="areImage" :src="nationalImg" />
               </span>
-              nationale und 
+              nationale und
             </span>
             <span>
               {{ internationalCount }}
