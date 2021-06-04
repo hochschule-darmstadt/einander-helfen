@@ -1,3 +1,7 @@
+/**
+ * This service provides the countries of the database with Elastic Search queries.
+ */
+
 import axios from "axios";
 import Location from "@/models/location";
 import Bodybuilder from "bodybuilder";

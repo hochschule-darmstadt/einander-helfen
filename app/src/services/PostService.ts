@@ -1,3 +1,7 @@
+/**
+ * This service provides the methods to find posts in the database.
+ */
+
 import axios from "axios";
 import Location from "@/models/location";
 import Post from "@/models/post";
@@ -25,8 +29,9 @@ class PostService {
 
   /**
    * Return a paginated list of posts fitting to the @SearchParameters
+   * 
    * @param params @SearchParameters
-   * @returns Promise<PaginatedResponse<Post>>
+   * @return {Promise<PaginatedResponse<Post>>}: The found posts
    */
   public findPosts(params: SearchParameters): Promise<PaginatedResponse<Post>> {
     let builder = BuilderFactory()
@@ -51,6 +56,12 @@ class PostService {
     return this.performPostsQuery<Post>(builder);
   }
 
+  /**
+   * Find a post by its ID.
+   * 
+   * @param {string} id: The ID of the post to find. 
+   * @return {Promise<Post | undefined>}: The matching Post or undefined if no Post was found.
+   */
   public findById(id: string): Promise<Post | undefined> {
     const builder = BuilderFactory().query("term", "_id", id);
 
@@ -65,9 +76,10 @@ class PostService {
   }
 
   /**
-   * Return the number of national of international posts
-   * @param international boolean
-   * @returns Promise<number>
+   * Return the number of national or international posts
+   * 
+   * @param {boolean} international: true if international posts are wanted. False if national posts are wanted.
+   * @return {Promise<number>}: The number of existing posts
    */
   public countPosts(international: boolean): Promise<number> {
     let builder = BuilderFactory().rawOption("track_total_hits", true);
@@ -79,6 +91,14 @@ class PostService {
     return this.performCountQuery(builder);
   }
 
+  /**
+   * Add a filter to only retrieve national posts.
+   * 
+   * @param {Bodybuilder} builder: Builder for elastic search queries to add the filter to.
+   * @param {Location} location: Location of the search.
+   * @param {string} radius: Radius of the search. 
+   * @return {Bodybuilder}: The @Bodybuilder with the new filter.
+   */
   private addNationalFilter(
     builder: Bodybuilder,
     location: Location | undefined = undefined,
@@ -118,6 +138,13 @@ class PostService {
     return builder;
   }
 
+  /**
+   * Add a filter to only retrieve international posts.
+   * 
+   * @param {Bodybuilder} builder: Builder for elastic search queries to add the filter to.
+   * @param {Location} location: Location of the search.
+   * @return {Bodybuilder}: The @Bodybuilder with the new filter.
+   */
   private addInternationalFilter(
     builder: Bodybuilder,
     location: Location | undefined = undefined
