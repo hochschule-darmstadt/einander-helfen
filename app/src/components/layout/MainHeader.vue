@@ -24,10 +24,10 @@
               <span class="pl-1 pr-1">
                 <img class="areImage" :src="nationalImg" />
               </span>
-              nationale und &nbsp;{{ " &nbsp;" }}
+              nationale und 
             </span>
             <span>
-              &nbsp; {{ " " + internationalCount }}
+              {{ internationalCount }}
               <span class="pl-1 pr-1">
                 <img class="areImage" :src="internationalImg" />
               </span>
