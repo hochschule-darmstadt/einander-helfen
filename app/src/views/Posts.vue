@@ -188,7 +188,7 @@ export default Vue.extend({
     openMap(): void {
       this.showMap = true;
     },
-    /** Resize handler for window Resize. Descides if the website should be shown in smartphone oder desktop view.*/
+    /** Resize handler that changes properties based on the window size.*/
     onWindowResize(): void {
       // swtich to smartphone view
       if (!this.smartphone && window.innerWidth < 960) {

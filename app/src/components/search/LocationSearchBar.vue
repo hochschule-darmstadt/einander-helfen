@@ -109,8 +109,7 @@ export default Vue.extend({
       } else return true;
     },
     /**
-     * This event is triggert after every new input key. It will update the valie of the LocationSearchBar
-     * and if the whole input was deleted it will immediately start a search.
+     * This event is triggert after every new input key. It will emit an input event if the new value is empty.
      */
     locationOnKeyUp(evt): void {
       const handleDesktop =
@@ -145,7 +144,7 @@ export default Vue.extend({
       }
     },
     /**
-     * Reduce to only one word.
+     * Reduces the searchValue to only one word and emits an input event with the new location.
      */
     onInputChange(): void {
       this.searchValue = this.searchValue.split(" ")[0];

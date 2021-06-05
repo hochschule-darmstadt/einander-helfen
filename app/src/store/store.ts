@@ -138,14 +138,14 @@ const store: StoreOptions<RootState> = {
     },
 
     /**
-     *  Find a post from DataService by given id
+     *  Load a post from DataService by given id.
      */
     loadPost(context, id: string): Promise<Post | undefined> {
       return PostService.findById(id).then((post) => post);
     },
 
     /**
-     *  Find posts from DataService by setted parameter
+     *  Load posts from DataService by setted parameter.
      */
     loadPosts({ state, dispatch, commit }): Promise<Post[]> {
       return PostService.findPosts({

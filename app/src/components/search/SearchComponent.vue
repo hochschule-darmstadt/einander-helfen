@@ -197,7 +197,7 @@ export default Vue.extend({
         this.executeSearch();
       }
     },
-    /** Starts the search with the given parameters. They will be stored in store and in the URI. */
+    /** Starts the search with the given parameters. They will be stored in store and set in the URL. */
     executeSearch(): void {
       // update state search parameter in store
       this.addSearchValue(this.searchValue);
