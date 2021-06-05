@@ -47,6 +47,6 @@ router.beforeEach((to, from, next) => {
   const routeName = to.name || "";
   document.body.className = routeName;
   next();
-})
+});
 
 export default router;
