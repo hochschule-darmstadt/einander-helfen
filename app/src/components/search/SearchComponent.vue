@@ -136,6 +136,7 @@ export default Vue.extend({
       "setInternational",
     ]),
     ...mapActions(["updateURIFromState"]),
+    ...mapActions("postsModule", ["setSelectedPage"]),
 
     changeInternational(): void {
       // clear radius and location on international change
@@ -180,6 +181,8 @@ export default Vue.extend({
       // update state search parameter in store
       this.addSearchValue(this.searchValue);
       this.setSelectedLocation(this.locationSearchValue);
+      // reset the page to the default page after starting a search
+      this.setSelectedPage();
       // update uri
       this.updateURIFromState();
       // clear search field
@@ -206,6 +209,8 @@ export default Vue.extend({
     removeTag(tag: string) {
       // remove tag
       this.removeSearchValue(tag);
+      // reset the page to the default page after removing a tag
+      this.setSelectedPage();
       // update uri
       this.updateURIFromState();
     },
