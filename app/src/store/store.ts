@@ -145,10 +145,8 @@ const store: StoreOptions<RootState> = {
      */
     loadPosts({ state, dispatch, commit }): Promise<Post[]> {
       // clear extended properties
-      if (!state.radiusExtended)
-        state.radiusExtendedFrom = undefined;
-      else
-        state.radiusExtended = false;
+      if (!state.radiusExtended) state.radiusExtendedFrom = undefined;
+      else state.radiusExtended = false;
 
       return PostService.findPosts({
         searchValues: state.searchModule.searchValues,
@@ -167,9 +165,9 @@ const store: StoreOptions<RootState> = {
         .then((posts: Post[]) => {
           // there is a full list of posts
           if (posts.length) {
-
             // set Open post if list contains only one post.
-            if (posts.length === 1) dispatch("postsModule/setSelectedPostId", posts[0].id);
+            if (posts.length === 1)
+              dispatch("postsModule/setSelectedPostId", posts[0].id);
 
             return posts;
           }
@@ -191,19 +189,19 @@ const store: StoreOptions<RootState> = {
 
             // We want to notice whether the radius changed to inform the user
             // but only if we did not already do so in order to not overwrite the value.
-            const extendFrom = state.radiusExtendedFrom || radiusValueBeforeExtend;
+            const extendFrom =
+              state.radiusExtendedFrom || radiusValueBeforeExtend;
 
             // update radius
             commit("searchModule/setSelectedRadius", nextBiggerRadiusValue);
             // load posts again
-            return this.dispatch("loadPosts")
-              .then((posts) => {
-                // set extended properties after new posts are loaded
-                state.radiusExtended = true;
-                state.radiusExtendedFrom = extendFrom;
+            return this.dispatch("loadPosts").then((posts) => {
+              // set extended properties after new posts are loaded
+              state.radiusExtended = true;
+              state.radiusExtendedFrom = extendFrom;
 
-                return posts;
-              });
+              return posts;
+            });
           }
         });
     },
