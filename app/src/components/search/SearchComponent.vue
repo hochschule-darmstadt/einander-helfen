@@ -94,6 +94,11 @@ export default Vue.extend({
   mounted() {
     // load internation value on startup else change it later by watcher
     this.internationalValue = this.isInternational;
+    this.locationSearchValue = this.getLocationText();
+    this.radius = this.selectedRadius;
+
+    // add a watcher for international value after initialisation
+    this.$watch(() => this.internationalValue, this.changeInternational);
   },
   watch: {
     // watch selectedRadius in store
@@ -108,9 +113,6 @@ export default Vue.extend({
     // watch isInternational in store
     isInternational(value) {
       this.internationalValue = value;
-    },
-    internationalValue() {
-      this.changeInternational();
     },
   },
   computed: {
