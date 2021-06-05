@@ -1,4 +1,4 @@
-<!-- Button at the bottom right of every scrollable page. Scrolls to the top of the page. -->
+<!-- Button to scroll to the top of the page. -->
 
 <template>
   <v-btn

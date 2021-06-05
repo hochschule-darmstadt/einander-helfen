@@ -1,4 +1,4 @@
-<!-- Part of the SearchComponent to limit the search by the distance of the results to the given location -->
+<!-- Component to limit the search by the distance of the results to the given location -->
 
 <template>
   <v-select

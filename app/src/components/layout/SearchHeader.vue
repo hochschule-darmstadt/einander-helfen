@@ -1,4 +1,4 @@
-<!-- Header of all pages except 'Home'. Contains all components for searching. -->
+<!-- This Header contains the logo, all components for searching and the burger menu. -->
 
 <template>
   <header class="header_layout">

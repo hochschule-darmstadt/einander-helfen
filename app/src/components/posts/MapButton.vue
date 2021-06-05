@@ -1,4 +1,4 @@
-<!-- Button to hide or show the map of the 'Post' page in the mobile view. -->
+<!-- Toggle button to hide or show the map. -->
 
 <template>
   <div class="mb-2 btn-container">

@@ -1,4 +1,4 @@
-<!-- The Vue component that contains every necessary form elements to make a search. It is shown on the page 'Home' and on every other page in the header -->
+<!-- The Vue component that contains every necessary form elements to make a search. -->
 
 <template>
   <v-form class="searchbox" :class="{ fullwidth: isFullwidth }">

@@ -1,4 +1,4 @@
-<!-- The list of posts on the page 'post'. Also contains the details of the post in the mobile view. -->
+<!-- The list item of a post. It contains the title and location of a post. In the mobile view it also contains the details of the post. -->
 
 <template>
   <v-card class="post mb-3">

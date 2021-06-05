@@ -1,4 +1,4 @@
-<!-- Button inside of the SearchComponent to start the search. -->
+<!-- Button to start the search. -->
 
 <template>
   <v-btn class="mx-2" fab large color="primary" @click="$emit('click')">

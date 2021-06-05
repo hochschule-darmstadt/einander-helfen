@@ -1,4 +1,4 @@
-<!-- Details of a Post on the 'Post' page with information about the post and a link to the offering website. Only of the web view -->
+<!-- The card with the details of a post. It contains the information about the post and a link to the offering website. -->
 
 <template>
   <v-card v-show="show" ref="card" class="post" tile v-if="post">

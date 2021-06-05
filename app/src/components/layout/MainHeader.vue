@@ -1,4 +1,4 @@
-<!-- This Header is shown at the top of the page 'Home'. It contains the logo, the name of the website, some text and the burger menu.-->
+<!-- This Header contains the logo, the name of the website, some text and the burger menu.-->
 
 <template>
   <v-app-bar class="header" flat height="100px" color="#00254f">

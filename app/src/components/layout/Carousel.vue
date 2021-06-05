@@ -1,4 +1,4 @@
-<!-- The carousel can be found at the top of 'Home'. It contains images that are shown alternately every few seconds-->
+<!-- The carousel contains images that are shown alternately every few seconds.-->
 
 <template>
   <VueSlickCarousel
