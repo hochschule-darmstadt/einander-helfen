@@ -181,7 +181,7 @@ export default Vue.extend({
       // update state search parameter in store
       this.addSearchValue(this.searchValue);
       this.setSelectedLocation(this.locationSearchValue);
-      // reset the page to the default page
+      // reset the page to the default page after starting a search
       this.setSelectedPage();
       // update uri
       this.updateURIFromState();
@@ -209,6 +209,8 @@ export default Vue.extend({
     removeTag(tag: string) {
       // remove tag
       this.removeSearchValue(tag);
+      // reset the page to the default page after removing a tag
+      this.setSelectedPage();
       // update uri
       this.updateURIFromState();
     },
