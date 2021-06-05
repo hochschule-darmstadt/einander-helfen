@@ -46,7 +46,7 @@ export const postsModule: Module<PostsState, RootState> = {
     selectedPost(state): Post | undefined {
       if (!state.selectedPostId) return undefined;
       return state.posts.find((post) => post.id === state.selectedPostId);
-    }
+    },
   },
   mutations: {
     clearPostParams(state): void {
@@ -59,14 +59,16 @@ export const postsModule: Module<PostsState, RootState> = {
     switchPageToSelectedPost(state): void {
       if (state.selectedPostId && state.posts) {
         // update page if nessecary
-        const postIndex = state.posts.findIndex((post) => post.id === state.selectedPostId);
+        const postIndex = state.posts.findIndex(
+          (post) => post.id === state.selectedPostId
+        );
 
         if (postIndex > 0) {
           // if selectedPost is in posts set page to page of this selectedPost
           const pageOffset = state.resultsFrom / state.hitsPerPage + 1; // pages are 1 indexed
-          const pageOnPost = Math.floor(postIndex / state.hitsPerPage) + pageOffset;
-          if (state.selectedPage != pageOnPost)
-            state.selectedPage = pageOnPost;
+          const pageOnPost =
+            Math.floor(postIndex / state.hitsPerPage) + pageOffset;
+          if (state.selectedPage != pageOnPost) state.selectedPage = pageOnPost;
         } // else selectedPost not in posts => do nothing
       }
     },
@@ -76,7 +78,10 @@ export const postsModule: Module<PostsState, RootState> = {
       state.posts = posts;
       commit("switchPageToSelectedPost");
     },
-    setSelectedPostId({ state, commit }, postId: string | undefined = undefined): void {
+    setSelectedPostId(
+      { state, commit },
+      postId: string | undefined = undefined
+    ): void {
       state.selectedPostId = postId;
       commit("switchPageToSelectedPost");
     },
