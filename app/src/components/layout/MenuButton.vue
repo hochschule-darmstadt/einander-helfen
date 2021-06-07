@@ -29,6 +29,7 @@ export default Vue.extend({
     return {
       links: [
         { text: "Home", route: "/" },
+        { text: "Organisationen", route: "/companies" },
         { text: "Über uns", route: "/about" },
         { text: "Impressum", route: "/imprint" },
         { text: "Datenschutzerklärung", route: "/privacy" },
