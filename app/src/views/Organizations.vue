@@ -1,9 +1,9 @@
-<!-- The page 'Organisationen'. It provides links to other companies that offer voluntary work.-->
+<!-- The page 'Organisationen'. It provides links to other organizations that offer voluntary work.-->
 
 <template>
   <div>
     <Header />
-    <div class="companies">
+    <div class="organizations">
       <v-container justify="center" class="containerWithContent">
         <h1>Organisationen</h1>
         Sie haben nicht das gefunden, wonach Sie gesucht haben? Kein Problem!
@@ -15,15 +15,15 @@
             class="letterBox mb-4"
             v-for="letter in alphabet"
             :key="letter"
-            v-show="getLetterCompanies(letter).length > 0"
+            v-show="getLetterOrganizations(letter).length > 0"
           >
             <h2>{{ letter }}</h2>
             <div
-              v-for="company in getLetterCompanies(letter)"
-              :key="company.title"
+              v-for="organization in getLetterOrganizations(letter)"
+              :key="organization.title"
             >
-              <a class="companyLink" :href="company.url">
-                {{ company.title }}
+              <a class="organizationLink" :href="organization.url">
+                {{ organization.title }}
               </a>
               <br />
             </div>
@@ -37,11 +37,11 @@
 <script lang="ts">
 import Vue from "vue";
 import Header from "@/components/layout/SearchHeader.vue";
-import Company from "@/models/company";
-import companies from "@/resources/companies";
+import Organization from "@/models/organization";
+import organizations from "@/resources/organizations";
 
 export default Vue.extend({
-  name: "Companies",
+  name: "Organizations",
   components: {
     Header,
   },
@@ -51,24 +51,24 @@ export default Vue.extend({
     };
   },
   computed: {
-    companiesArray(): Company[] {
-      return companies;
+    organizationsArray(): Organization[] {
+      return organizations;
     },
   },
   methods: {
     /**
-     * Provides a caseinsensitive sorted list of all companies of the given letter.
+     * Provides a caseinsensitive sorted list of all organizations of the given letter.
      *
-     * @param {string} letter: The letter that the company's title must begin with. Caseinsensitive.
-     * @return {Company[]}: A sorted array with all companies that start with the given letter.
+     * @param {string} letter: The letter that the organization's title must begin with. Caseinsensitive.
+     * @return {Organization[]}: A sorted array with all organizations that start with the given letter.
      */
-    getLetterCompanies(letter: string): Company[] {
-      // Filter companies starting with the given letter
-      var letterCompanies = companies.filter((company) =>
-        company.title.toUpperCase().startsWith(letter)
+    getLetterOrganizations(letter: string): Organization[] {
+      // Filter organizations starting with the given letter
+      var letterOrganizations = organizations.filter((organization) =>
+        organization.title.toUpperCase().startsWith(letter)
       );
-      // Sort companies caseinsensitive
-      return letterCompanies.sort(function (a, b) {
+      // Sort organizations caseinsensitive
+      return letterOrganizations.sort(function (a, b) {
         return a.title.toLowerCase() < b.title.toLowerCase() ? -1 : 1;
       });
     },
@@ -83,7 +83,7 @@ export default Vue.extend({
   display: inline-block;
   width: 100%;
 }
-.companyLink {
+.organizationLink {
   text-decoration: none;
 }
 .urlList {
