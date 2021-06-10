@@ -97,9 +97,7 @@ const store: StoreOptions<RootState> = {
 
         // get selected post id value
         if ("id" in params && params.id)
-          promises.push(
-            dispatch("postsModule/setSelectedPostId", params.id)
-          );
+          promises.push(dispatch("postsModule/setSelectedPostId", params.id));
 
         // wati that all properties are set
         return Promise.all(promises);
@@ -114,7 +112,7 @@ const store: StoreOptions<RootState> = {
         ...router.currentRoute.query,
         q: state.searchModule.searchValues.join(","),
         area: state.searchModule.isInternational ? "international" : "national",
-        location: getters['searchModule/getLocationText'],
+        location: getters["searchModule/getLocationText"],
         radius: state.searchModule.selectedRadius,
         page: state.postsModule.selectedPage.toString(),
       };
@@ -139,14 +137,17 @@ const store: StoreOptions<RootState> = {
      *  find a post from DataService by given id
      */
     loadPost(context, id: string): Promise<Post | undefined> {
-      return PostService.findById(id)
-        .then((post) => post);
+      return PostService.findById(id).then((post) => post);
     },
 
     /**
      *  find posts from DataService by setted parameter
      */
     loadPosts({ state, dispatch, commit }): Promise<Post[]> {
+      // clear extended properties
+      if (!state.radiusExtended) state.radiusExtendedFrom = undefined;
+      else state.radiusExtended = false;
+
       return PostService.findPosts({
         searchValues: state.searchModule.searchValues,
         location: state.searchModule.selectedLocation,
@@ -157,22 +158,16 @@ const store: StoreOptions<RootState> = {
       })
         .then((result: PaginatedResponse<Post>) => {
           state.postsModule.totalResultSize = result.meta.total;
-          return dispatch("postsModule/setPosts", result.data)
-            .then(() => result.data);
+          return dispatch("postsModule/setPosts", result.data).then(
+            () => result.data
+          );
         })
         .then((posts: Post[]) => {
           // there is a full list of posts
           if (posts.length) {
-            state.radiusExtended = state.radiusExtendedFrom ? true : false;
-
-            if (
-              state.radiusExtendedFrom !== state.searchModule.selectedRadius &&
-              !state.searchModule.selectedRadius
-            )
-              state.radiusExtended = false;
-
             // set Open post if list contains only one post.
-            if (posts.length === 1) dispatch("postsModule/selectedPostId", posts[0].id);
+            if (posts.length === 1)
+              dispatch("postsModule/setSelectedPostId", posts[0].id);
 
             return posts;
           }
@@ -194,14 +189,19 @@ const store: StoreOptions<RootState> = {
 
             // We want to notice whether the radius changed to inform the user
             // but only if we did not already do so in order to not overwrite the value.
-            if (!state.radiusExtendedFrom) {
-              state.radiusExtendedFrom = radiusValueBeforeExtend;
-            }
+            const extendFrom =
+              state.radiusExtendedFrom || radiusValueBeforeExtend;
 
             // update radius
             commit("searchModule/setSelectedRadius", nextBiggerRadiusValue);
-            // and load posts again
-            return this.dispatch("loadPosts");
+            // load posts again
+            return this.dispatch("loadPosts").then((posts) => {
+              // set extended properties after new posts are loaded
+              state.radiusExtended = true;
+              state.radiusExtendedFrom = extendFrom;
+
+              return posts;
+            });
           }
         });
     },

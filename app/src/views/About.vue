@@ -102,10 +102,7 @@
               >
             </li>
             <li>
-              <a
-                href="https://www.dksb.de"
-                target="_blank"
-                rel="noopener"
+              <a href="https://www.dksb.de" target="_blank" rel="noopener"
                 >www.dksb.de</a
               >
             </li>
