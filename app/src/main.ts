@@ -9,7 +9,6 @@ import Vuetify from "vuetify";
 // import global css
 import "@/assets/styles/style.scss";
 
-
 // @ts-ignore
 import de from "vuetify/es5/locale/de.js";
 
