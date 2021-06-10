@@ -217,6 +217,7 @@ export default Vue.extend({
 
 <style lang="scss">
 /** global style */
+// modify leaflet copyright label style
 .copyright,
 .copy,
 .cpy,
