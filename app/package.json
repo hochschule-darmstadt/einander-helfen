@@ -7,7 +7,7 @@
     "build:production": "vue-cli-service build --mode production",
     "build:staging": "vue-cli-service build --mode staging",
     "lint": "vue-cli-service lint",
-    "lint:fix": "vue-cli-service lint --max-warnings 0",
+    "lint:fix": "vue-cli-service lint --max-warnings 0 --no-fix",
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
