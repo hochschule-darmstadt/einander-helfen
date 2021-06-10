@@ -217,7 +217,7 @@ export default Vue.extend({
   .map,
   .list {
     // full height minus header, footer and pagination height
-    height: calc(100vh - 300px);
+    height: calc(100vh - 325px);
   }
 
   .list {
