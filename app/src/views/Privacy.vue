@@ -279,19 +279,20 @@
         </ul>
 
         <br />
-        <p v-if="!optOutIframeExists()">
-          Das opt-out kann nicht angezeigt werden, weil es durch ihren Browser
-          blockiert wurde. Ihr Browser blockiert somit wahrscheinlich auch das
-          Tracking. Wenn sie auf Nummer sicher gehen wollen, sollten sie ihren
-          AdBlocker deaktivieren und die Seite neu laden, um manuell das Opt-out
-          durchzuführen.
-        </p>
+        <strong>
+          Es kann sein, dass die Option zur Deaktivierung der Analyse Ihrer
+          Aktionen (Tracking) nicht angezeigt werden kann, da es von Ihrem
+          Browser blockiert wird. Möglicherweise blockiert dieser dann ohnehin
+          das Tracking, sodass Sie Ihr Einverständnis dafür hier nicht mehr
+          entziehen müssen. Wenn Sie auf Nummer sicher gehen wollen, sollten Sie
+          Ihren AdBlocker deaktivieren und die Seite neu laden, um manuell die
+          Erlaubnis zum Tracken zu entziehen.
+        </strong>
         <iframe
           id="opt-out-iframe"
           style="border: 0; height: 200px; width: 600px"
           src="https://einander-helfen.org/api/analytics/index.php?module=CoreAdminHome&action=optOut&language=de&backgroundColor=&fontColor=&fontSize=&fontFamily="
-        ></iframe>
-
+        />
         <h3>Server-Log-Dateien</h3>
         <p>
           Der Provider der Seiten erhebt und speichert automatisch Informationen
@@ -357,14 +358,6 @@ export default Vue.extend({
   name: "Privacy",
   components: {
     Header,
-  },
-  methods: {
-    optOutIframeExists(): boolean {
-      if (document.getElementById("opt-out-iframe")) {
-        return true;
-      }
-      return false;
-    },
   },
 });
 </script>
