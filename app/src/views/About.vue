@@ -1,7 +1,7 @@
 <template>
   <div class="about">
     <Header />
-    <v-container>
+    <section class="container pt-6">
       <div>
         <h1>einander-helfen.org</h1>
         <p>
@@ -131,7 +131,7 @@
           </a>
         </p>
       </div>
-    </v-container>
+    </section>
   </div>
 </template>
 

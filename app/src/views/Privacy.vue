@@ -1,7 +1,7 @@
 <template>
   <div class="privacy">
     <Header />
-    <v-container>
+    <section class="container pt-6">
       <h1 class="wordbreak">
         Datenschutzerklärung (Data protection declaration, in German)
       </h1>
@@ -295,7 +295,7 @@
         - bleiben unberührt.
       </p>
       <p>Quelle: <a href="https://www.e-recht24.de">e-recht24.de</a></p>
-    </v-container>
+    </section>
   </div>
 </template>
 

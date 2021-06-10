@@ -1,7 +1,7 @@
 <template>
   <div class="imprint">
     <Header />
-    <v-container>
+    <section class="container pt-6">
       <h1>Impressum (legal notice, in German)</h1>
 
       <h2>Angaben gemäß § 5 TMG</h2>
@@ -77,7 +77,7 @@
 
       <h1>Quellenangabe / Bildquellen</h1>
       <ul class="mt-2 mb-5">
-        <li v-for="item in items" :key="item" class="mb-2">
+        <li v-for="(item, index) in items" :key="index" class="mb-2">
           <strong>{{ item.author }}</strong> - <i>{{ item.position }}</i>
           <br />
           <a class="wordbreak" :href="item.source">{{ item.source }}</a
@@ -85,7 +85,7 @@
           <p class="wordbreak">{{ item.license }}</p>
         </li>
       </ul>
-    </v-container>
+    </section>
   </div>
 </template>
 

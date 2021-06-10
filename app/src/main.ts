@@ -3,8 +3,13 @@ import App from "@/App.vue";
 import router from "@/router";
 import store from "@/store/store";
 
-// import vuetify
 import Vuetify from "vuetify";
+
+// import vuetify css
+import "vuetify/dist/vuetify.min.css";
+
+// import matierial design icons
+import "material-design-icons-iconfont/dist/material-design-icons.css";
 
 // import global css
 import "@/assets/styles/style.scss";
