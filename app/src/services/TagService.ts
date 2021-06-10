@@ -1,4 +1,4 @@
-import importedTags from "@/resources/tags/index";
+import importedTags from "@/assets/resources/tags/index";
 import Tag from "@/models/tag";
 
 /**
