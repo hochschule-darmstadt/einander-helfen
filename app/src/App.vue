@@ -1,24 +1,58 @@
 <template>
-  <v-app>
-    <Header/>
-    <v-content style="background: #00254f0c" >
+  <v-app class="app">
+    <v-main class="main">
       <router-view></router-view>
-    </v-content>
+    </v-main>
     <Footer />
+    <ScrollTopButton />
   </v-app>
 </template>
 
 <script lang="ts">
-import { Vue } from 'vue-property-decorator';
-import Toolbar from '@/components/layout/Toolbar.vue';
-import Footer from '@/components/layout/Footer.vue';
+import Vue from "vue";
+// import Toolbar from "@/components/layout/Toolbar.vue";
+import Footer from "@/components/layout/Footer.vue";
+import ScrollTopButton from "@/components/layout/ScrollTopButton.vue";
 
 export default Vue.extend({
+  name: "App",
   components: {
     Footer,
-    Toolbar
-  }
+    ScrollTopButton,
+    // Toolbar,
+  },
 });
 </script>
 
+<style lang="scss" scoped>
+.app {
+  background: #00254f0c !important;
+}
+</style>
 
+<style lang="scss">
+/** global style */
+@media screen and (min-width: 960px) {
+  body.posts {
+    overflow-y: hidden !important;
+    max-height: 100vh;
+
+    /* Hide scrollbar for IE, Edge and Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}
+
+.v-menu__content {
+  z-index: 1001 !important;
+  border-radius: 4px !important;
+}
+
+.btn-dark {
+  background-color: rgb(5, 76, 102) !important;
+}
+</style>

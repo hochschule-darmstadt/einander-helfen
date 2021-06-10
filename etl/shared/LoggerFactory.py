@@ -36,7 +36,7 @@ class LoggerFactory:
 
         # set up logging to logfile. all levels of messages will be logged to individual files, old contents will be
         # overwritten
-        file_handler = logging.FileHandler(os.path.join(ROOT_DIR, 'logs', f'{name}.log'), 'w+')
+        file_handler = logging.FileHandler(os.path.join(ROOT_DIR, 'logs', f'{name}.log'), 'w+', encoding='utf-8')
         file_handler.setFormatter(formatter_logfile)
         file_handler.setLevel(LoggerFactory.logfile_level)
 

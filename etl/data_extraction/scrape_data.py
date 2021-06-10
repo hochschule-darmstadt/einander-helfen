@@ -15,7 +15,7 @@ logger = LoggerFactory.get_general_logger()
 scraper_threads = []
 
 
-def execute_scraper(scraper_file_name: str):
+def execute_scraper(scraper_file_name: str, index: int):
     """Looks for the given file_name in the /data_extraction/scraper directory.
     Checks if the files contains a subclass of Scraper (/data_extraction/Scraper.py) and starts the run function.
     Writes the scraped data and errors during the scraping process data_extraction/data and data_extraction/errors."""
@@ -34,7 +34,7 @@ def execute_scraper(scraper_file_name: str):
             raise Exception(f'[{scraper_file_name}] Error: No sub-class of class Scraper found')
 
         # Create instance of the Scraper sub-class and execute the run method 
-        scraper_instance = scraper_class(scraper_file_name)
+        scraper_instance = scraper_class(scraper_file_name, index)
         scraper_instance.run()
 
     except Exception as err:
@@ -45,7 +45,7 @@ def run():
     """Starts a thread with the execute_scraper function for all overridden scraper subclasses in
     /data_extraction/scraper."""
     logger.debug("run()")
-    for file_entry in os.scandir(os.path.join(ROOT_DIR, 'data_extraction/scraper')):
+    for i, file_entry in enumerate(os.scandir(os.path.join(ROOT_DIR, 'data_extraction/scraper'))):
 
         if file_entry.is_file():
             scraper_module_name = os.path.splitext(
@@ -53,10 +53,14 @@ def run():
 
             # Create a thread with each file in the directory data_extraction/scraper
             # and execute the execute_scraper function with it
-            thread = threading.Thread(target=execute_scraper, args=(scraper_module_name,))
+            thread = threading.Thread(target=execute_scraper, args=(scraper_module_name, i,))
             thread.start()
             scraper_threads.append(thread)
 
     # Waits for all scraper_threads to finish
     for scraper_thread in scraper_threads:
         scraper_thread.join()
+
+    # Prevents double output of the last progress bar
+    print(' '*200)
+    logger.info("All crawlers were successfully executed")
