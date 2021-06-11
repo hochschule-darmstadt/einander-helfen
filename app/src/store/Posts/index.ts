@@ -74,7 +74,7 @@ export const postsModule: Module<PostsState, RootState> = {
     },
     resetTotalResults(state): void {
       state.totalResultSize = 0;
-    }
+    },
   },
   actions: {
     setPosts({ state, commit }, posts: Post[]): void {
