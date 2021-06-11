@@ -23,7 +23,7 @@
           @openMap="openMap"
         />
         <v-skeleton-loader
-          v-if="isLoading"
+          v-if="showMap && isLoading"
           height="100%"
           width="100%"
           type="image"
