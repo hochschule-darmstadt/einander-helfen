@@ -8,7 +8,7 @@
           :tags="searchValues"
           :enable-no-data-message="true"
           @click.native="onSearchClick"
-          @enter="paramChanged"
+          @enter="onSearchValueEnter"
           @remove="removeTag"
         />
       </v-col>
@@ -19,9 +19,9 @@
           <LocationSearchBar
             tabindex="3"
             :dark="dark"
-            :isInternational="isInternational"
+            :isInternational="internationalValue"
             v-model="locationSearchValue"
-            @enter="paramChanged"
+            @enter="onLocationValueEnter"
             @click.native="onSearchClick"
           />
         </div>
@@ -29,10 +29,10 @@
           <RadiusSelect
             tabindex="4"
             :dark="dark"
-            :isInternational="isInternational"
+            :isInternational="internationalValue"
             v-model="radius"
-            @input="paramChanged"
-            @enter="paramChanged"
+            @input="onRadiusChanged"
+            @enter="onRadiusChanged"
           />
           <SearchButton @click="executeSearch" tabindex="5" />
         </div>
@@ -88,25 +88,17 @@ export default Vue.extend({
       locationSearchValue: "",
       internationalValue: false,
       radius: "",
-      secondSearch: false,
+      oldValue: "",
     };
   },
-  mounted(): void {
-    this.$nextTick(() =>
-      // set watcher after data initialisation
-      this.$watch(
-        // watch these parameters to detect change
-        () => (
-          this.internationalValue,
-          // and to be sure that a different value is returned every time
-          Date.now()
-        ),
-        // and execute paramChanged if a parameter change
-        () => {
-          this.paramChanged();
-        }
-      )
-    );
+  mounted() {
+    // load internation value on startup else change it later by watcher
+    this.internationalValue = this.isInternational;
+    this.locationSearchValue = this.getLocationText();
+    this.radius = this.selectedRadius;
+
+    // add a watcher for international value after initialisation
+    this.$watch(() => this.internationalValue, this.changeInternational);
   },
   watch: {
     // watch selectedRadius in store
@@ -116,8 +108,9 @@ export default Vue.extend({
     // watch selectedLocation in store
     selectedLocation() {
       if (this.locationSearchValue != this.getLocationText())
-        this.locationSearchValue = this.getLocationText() || "";
+        this.locationSearchValue = this.getLocationText();
     },
+    // watch isInternational in store
     isInternational(value) {
       this.internationalValue = value;
     },
@@ -143,19 +136,53 @@ export default Vue.extend({
       "setInternational",
     ]),
     ...mapActions(["updateURIFromState"]),
+    ...mapActions("postsModule", ["setSelectedPage"]),
 
-    paramChanged(): void {
-      if (this.direktsearch || this.secondSearch) this.executeSearch();
-      else this.secondSearch = true;
+    changeInternational(): void {
+      // clear radius and location on international change
+      this.radius = this.locationSearchValue = "";
+      // set default radius in store
+      this.setSelectedRadius();
+      // unset location in stre
+      this.setSelectedLocation();
+      // update search parameter in store
+      this.setInternational(this.internationalValue);
+      // execute serach if directsearch is enabled
+      if (this.direktsearch) {
+        this.executeSearch();
+      }
+    },
+    onSearchValueEnter(value: string): void {
+      if (value != this.searchValue) this.searchValue = value;
+      if (this.direktsearch || value == this.oldValue) {
+        this.executeSearch();
+      }
+      this.oldValue = value;
+    },
+    onLocationValueEnter(value: string): void {
+      if (value != this.locationSearchValue) this.locationSearchValue = value;
+      if (this.direktsearch || value == this.oldValue) {
+        this.executeSearch();
+      }
+      this.oldValue = value;
+    },
+    onRadiusChanged(value: string): void {
+      if (value != this.radius) {
+        this.radius = value;
+      }
+      // update state search parameter in store
+      this.setSelectedRadius(this.radius);
+      // execute serach if directsearch is enabled
+      if (this.direktsearch) {
+        this.executeSearch();
+      }
     },
     executeSearch(): void {
-      // update search parameter in store
+      // update state search parameter in store
       this.addSearchValue(this.searchValue);
       this.setSelectedLocation(this.locationSearchValue);
-      this.setSelectedRadius(this.radius);
-      this.setInternational(this.internationalValue);
-      // emit search event
-      this.$emit("search");
+      // reset the page to the default page after starting a search
+      this.setSelectedPage();
       // update uri
       this.updateURIFromState();
       // clear search field
@@ -182,6 +209,8 @@ export default Vue.extend({
     removeTag(tag: string) {
       // remove tag
       this.removeSearchValue(tag);
+      // reset the page to the default page after removing a tag
+      this.setSelectedPage();
       // update uri
       this.updateURIFromState();
     },

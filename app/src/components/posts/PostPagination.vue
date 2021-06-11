@@ -56,7 +56,7 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 .pagination-container {
-  margin-top: 2%;
+  margin-top: 1%;
   margin-bottom: 1%;
 }
 </style>

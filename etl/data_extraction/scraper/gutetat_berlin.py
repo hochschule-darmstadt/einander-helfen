@@ -8,10 +8,10 @@ from data_extraction.Scraper import Scraper
 class GuteTatBerlinScraper(Scraper):
     """Scrapes the website gute-tat.de for the region berlin."""
 
-    def __init__(self, name):
+    def __init__(self, name, index):
         """Constructor of GuteTatBerlinScraper."""
 
-        super().__init__(name)
+        super().__init__(name, index)
         self.base_url = 'https://ehrenamtsmanager.gute-tat.de/oberflaeche/'
         self.website_url = 'www.gute-tat.de'
 
@@ -127,7 +127,7 @@ class GuteTatBerlinScraper(Scraper):
             detail_links = [x for x in search_page.find_all('a', {'class': 'links'})][:-1]
 
             self.logger.debug(f'Fetched {len(detail_links)} URLs from {search_page_url} [{index}/{end_page}]')
-            self.get_progress_data_fetching(index, end_page)
+            self.update_fetching_progress(index, end_page)
 
             for detail_link in detail_links:
                 current_link = self.base_url + detail_link['href']

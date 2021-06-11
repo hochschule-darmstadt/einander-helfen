@@ -1,5 +1,5 @@
 <template>
-  <div class="posts-page">
+  <div class="posts-page" v-if="isInitialised">
     <Header />
     <section class="sitecontent row">
       <MapButton v-if="smartphone" v-model="showMap" />
@@ -8,16 +8,18 @@
       <v-flex class="map xs12 md6 order-md2">
         <!-- Map -->
         <MapCard
+          :show="!smartphone || showMap"
           :posts="posts"
           :selectedPost="selectedPost"
-          @openPost="openPostDetails"
+          @openPost="togglePostDetails"
         />
         <!-- detail card if not smartphone -->
         <PostCard
+          v-if="!smartphone"
           class="map-overlay"
-          v-show="!showMap && !smartphone"
+          :show="!showMap"
           :post="selectedPost"
-          @close="closePostDetails"
+          @close="togglePostDetails"
           @openMap="openMap"
         />
         <v-skeleton-loader v-if="isLoading" type="card-avatar" />
@@ -46,6 +48,7 @@
             </div>
           </template>
 
+      
           <template v-if="!posts.length">
             <div class="text-center pt-12">
               <h3 class="font-weight-bold">
@@ -76,7 +79,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import Header from "@/components/layout/Header.vue";
+import Header from "@/components/layout/SearchHeader.vue";
 import PostCard from "@/components/posts/PostCard.vue";
 import MapCard from "@/components/posts/MapCard.vue";
 import PostListItem from "@/components/posts/PostListItem.vue";
@@ -103,11 +106,12 @@ export default Vue.extend({
       showMap: true,
       smartphone: false,
       isLoading: false,
+      isInitialised: false,
     };
   },
   computed: {
-    ...mapState("postsModule", ["selectedPost", "posts", "resultsFrom"]),
-    ...mapGetters("postsModule", ["postsOnCurrentPage", "selectedPostId"]),
+    ...mapState("postsModule", ["selectedPostId", "posts", "resultsFrom"]),
+    ...mapGetters("postsModule", ["postsOnCurrentPage", "selectedPost"]),
     ...mapState(["radiusExtended", "radiusExtendedFrom"]),
     ...mapState("searchModule", [
       "selectedLocation",
@@ -115,14 +119,21 @@ export default Vue.extend({
       "searchValues",
       "isInternational",
     ]),
-    ...mapGetters("searchModule", []),
   },
-  created(): void {
-    // get params from route query and execute findPosts
+  mounted(): void {
+    // get params from route
     this.hydrateStateFromRoute()
       .then(() => {
+        this.isInitialised = true;
+        // load posts by updated state parameter
+        return this.loadPosts().then(() =>
+          this.togglePostDetails(this.selectedPost)
+        );
+      })
+      // set properties
+      .then(() => {
         // check if device is smartphone view
-        if (window.matchMedia("(max-width: 960px)").matches) {
+        if (window.matchMedia("(max-width: 959px)").matches) {
           this.showMap = false;
           this.smartphone = true;
         }
@@ -130,7 +141,11 @@ export default Vue.extend({
         if (this.selectedPost) {
           this.showMap = false;
         }
+
+        // set resize event handler
+        window.addEventListener("resize", this.onWindowResize);
       })
+      // add watcher after parameters are loaded from route
       .then(() => {
         this.$watch(
           // watch all parameters which are used to find posts
@@ -143,12 +158,13 @@ export default Vue.extend({
             // and to be sure that a different value is returned every time
             Date.now()
           ),
-          // and execute findPosts if a parameter change
-          () => this.loadPosts()
+          () => {
+            // clear selected post by parameter change
+            this.togglePostDetails();
+            // and execute loadPosts if a parameter change
+            this.loadPosts();
+          }
         );
-
-        // set resize event handler
-        window.addEventListener("resize", this.onWindowResize);
       });
   },
   beforeDestroy(): void {
@@ -157,24 +173,24 @@ export default Vue.extend({
   },
   methods: {
     ...mapMutations("searchModule", ["setSelectedRadius"]),
-    ...mapActions("postsModule", ["setSelectedPost"]),
-    ...mapActions(["hydrateStateFromRoute", "updateURIFromState", "loadPosts"]),
+    ...mapActions("postsModule", ["setSelectedPostId"]),
+    ...mapActions([
+      "hydrateStateFromRoute",
+      "updateURIFromState",
+      "loadPosts",
+      "loadPost",
+    ]),
 
-    openPostDetails(post: Post): void {
+    /** Opens a post if a post is given, else clear the selected post */
+    togglePostDetails(post: Post | undefined = undefined): void {
       // close map to show detail page if not smartphone
-      if (!this.smartphone) this.showMap = false;
-      // set selected post
-      this.setSelectedPost(post).then(() =>
-        // update uri with post
-        this.updateURIFromState()
-      );
-    },
-    closePostDetails(): void {
+      if (post && !this.smartphone) this.showMap = false;
       // show map if not smartphone
-      if (!this.smartphone) this.showMap = true;
-      // remove selected post
-      this.setSelectedPost(undefined).then(() =>
-        // update uri without post
+      if (!post && !this.smartphone) this.showMap = true;
+      // set selected post id or set undefined in store
+      const id = post ? post.id : undefined;
+      this.setSelectedPostId(id).then(() =>
+        // update uri
         this.updateURIFromState()
       );
     },
@@ -185,14 +201,16 @@ export default Vue.extend({
     /** Resize handler for window Resize */
     onWindowResize(): void {
       // swtich to smartphone view
-      if (!this.smartphone && window.innerWidth <= 960) {
+      if (!this.smartphone && window.innerWidth < 960) {
         this.smartphone = true;
         this.showMap = false;
       }
       // switch to desktop view
-      else if (this.smartphone && window.innerWidth > 960) {
+      else if (this.smartphone && window.innerWidth >= 960) {
         this.smartphone = false;
-        if (!this.selectedPost) this.showMap = true;
+        if (!this.selectedPost) {
+          this.showMap = true;
+        }
       }
     },
   },
@@ -200,7 +218,12 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-@media (min-width: 960px) {
+@media screen and (max-width: 959px) {
+  .map {
+    overflow: hidden;
+  }
+}
+@media screen and (min-width: 960px) {
   .posts-page {
     display: flex;
     flex-direction: column;
@@ -210,7 +233,7 @@ export default Vue.extend({
   .map,
   .list {
     // full height minus header, footer and pagination height
-    height: calc(100vh - 340px);
+    height: calc(100vh - 325px);
   }
 
   .list {

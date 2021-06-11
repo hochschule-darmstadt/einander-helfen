@@ -1,5 +1,5 @@
 <template>
-  <v-card class="post" tile v-if="post">
+  <v-card v-show="show" ref="card" class="post" tile v-if="post">
     <v-btn class="button-close" icon @click="closePost()">
       <v-icon>close</v-icon>
     </v-btn>
@@ -23,9 +23,7 @@
       </v-btn>
 
       <!--display title, subtitle and image on the right side-->
-      <div class="headline">
-        {{ post.title }}
-      </div>
+      <div class="headline" v-html="post.title"></div>
     </v-card-title>
     <v-card-text class="content">
       <v-simple-table dense>
@@ -77,6 +75,10 @@ export default Vue.extend({
     post: {
       type: Object as () => Post,
     },
+    show: {
+      type: Boolean,
+      default: true,
+    },
   },
   data: function () {
     return {
@@ -95,6 +97,14 @@ export default Vue.extend({
       ],
     };
   },
+  watch: {
+    post() {
+      if (this.post && this.show) {
+        // scroll to top if post change
+        this.$el.scrollTop = 0;
+      }
+    },
+  },
   methods: {
     openMap(): void {
       this.$emit("openMap", this.post);
@@ -110,6 +120,7 @@ export default Vue.extend({
 .post {
   padding: 20px 0px;
   height: 100%;
+  width: 100%;
   overflow-y: auto;
 
   .button-close {
@@ -121,7 +132,7 @@ export default Vue.extend({
     align-items: center;
     flex-wrap: unset;
     .button-map {
-      margin-left: 20px;
+      margin-left: 10px;
       margin-right: 20px;
 
       &.disabled {

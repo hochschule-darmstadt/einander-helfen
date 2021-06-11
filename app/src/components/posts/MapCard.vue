@@ -1,33 +1,40 @@
 <template>
-  <v-card class="map" :style="{ height: map.height, width: map.width }" tile>
-    <v-btn
-      v-if="selectedPost != undefined"
-      class="button-details"
-      dark
-      @click="openPost(selectedPost)"
+  <transition name="slide">
+    <v-card
+      v-show="show"
+      class="map"
+      :style="{ height: map.height, width: map.width }"
+      tile
     >
-      <v-icon>info</v-icon> Details
-    </v-btn>
-    <LMap
-      ref="map"
-      :center="map.center"
-      :zoom="map.zoom"
-      :options="{ gestureHandling: true }"
-    >
-      <LTileLayer :url="map.url" :attribution="map.attribution" />
-      <LMarckerCluster>
-        <Lmarker
-          v-for="post in postWithGeoLocation"
-          :key="post.id"
-          :icon="getMarker(post)"
-          :lat-lng="[post.geo_location.lat, post.geo_location.lon]"
-          @click="openPost(post)"
-        >
-          <LTooltip :content="post.title" />
-        </Lmarker>
-      </LMarckerCluster>
-    </LMap>
-  </v-card>
+      <v-btn
+        v-if="selectedPost != undefined"
+        class="button-details"
+        dark
+        @click="openPost(selectedPost)"
+      >
+        <v-icon>info</v-icon> Details
+      </v-btn>
+      <LMap
+        ref="map"
+        :center="map.center"
+        :zoom="map.zoom"
+        :options="{ gestureHandling: true }"
+      >
+        <LTileLayer :url="map.url" :attribution="map.attribution" />
+        <LMarckerCluster>
+          <Lmarker
+            v-for="post in postWithGeoLocation"
+            :key="post.id"
+            :icon="getMarker(post)"
+            :lat-lng="[post.geo_location.lat, post.geo_location.lon]"
+            @click="openPost(post)"
+          >
+            <LTooltip :content="post.title" />
+          </Lmarker>
+        </LMarckerCluster>
+      </LMap>
+    </v-card>
+  </transition>
 </template>
 
 <script lang="ts">
@@ -44,7 +51,7 @@ import { GestureHandling } from "leaflet-gesture-handling";
 L.Map.addInitHook("addHandler", "gestureHandling", GestureHandling);
 
 /**
- * Emits @openPost if single post is clickt
+ * Emits @openPost if single post is clicked
  */
 export default Vue.extend({
   name: "MapCard",
@@ -62,6 +69,10 @@ export default Vue.extend({
     },
     selectedPost: {
       type: Object as () => Post,
+    },
+    show: {
+      type: Boolean,
+      default: true,
     },
   },
   data: function () {
@@ -100,19 +111,24 @@ export default Vue.extend({
     posts() {
       this.rerenderMap();
     },
+    show() {
+      this.rerenderMap();
+    },
   },
   mounted(): void {
     this.rerenderMap();
   },
   methods: {
     rerenderMap(): void {
-      this.$nextTick(() => {
-        (this.$refs.map as LMap).mapObject.invalidateSize();
+      if (this.show) {
         this.$nextTick(() => {
-          this.fitMapBounds();
-          this.setMapLocation();
+          (this.$refs.map as LMap).mapObject.invalidateSize();
+          this.$nextTick(() => {
+            this.fitMapBounds();
+            this.setMapLocation();
+          });
         });
-      });
+      }
     },
     setMapLocation(): void {
       if (this.selectedPost) {
@@ -120,9 +136,7 @@ export default Vue.extend({
           this.selectedPost.geo_location.lat,
           this.selectedPost.geo_location.lon,
         ] as LatLngTuple;
-        this.$nextTick(() => {
-          (this.$refs.map as LMap).setCenter(location);
-        });
+        (this.$refs.map as LMap).setCenter(location);
       }
     },
     /**
@@ -176,9 +190,27 @@ export default Vue.extend({
     color: #000 !important;
   }
 }
-@media only screen and (max-width: 960px) {
+@media only screen and (max-width: 959px) {
   .button-details {
     display: none;
+  }
+  .map {
+    height: 50vh !important;
+    margin-bottom: 1rem;
+
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide-enter-active,
+  .slide-leave-enter {
+    transition: all 0.5s ease-in-out;
+    transform: translateY(0);
+  }
+  .slide-enter,
+  .slide-leave-to {
+    transition: all 0.5s ease-in-out;
+    transform: translateY(-100%);
   }
 }
 </style>

@@ -68,11 +68,13 @@ export default Vue.extend({
   watch: {
     /** change selection on value change */
     value(): void {
-      this.location = this.value;
+      this.$nextTick(() => {
+        this.location = this.searchValue = this.value;
+      });
     },
     isInternational(): void {
       this.searchValue = "";
-      this.location = undefined;
+      this.location = "";
     },
   },
   methods: {
@@ -116,7 +118,7 @@ export default Vue.extend({
           this.searchValue = curValue;
           // emit event by clearing field
           if (!curValue) {
-            this.location = undefined;
+            this.location = "";
             this.$emit("input", this.location);
           }
         }
@@ -131,11 +133,11 @@ export default Vue.extend({
     onInputChange(): void {
       // reduce to only one word
       this.searchValue = this.searchValue.split(" ")[0];
+      this.$emit("input", this.location);
     },
     onEnter(): void {
       this.searchValue = this.location || "";
-      this.$emit("input", this.location);
-      this.$emit("enter");
+      this.$emit("enter", this.location);
     },
   },
 });

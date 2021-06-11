@@ -92,8 +92,8 @@
 </template>
 
 <script lang="ts">
-import Header from "@/components/layout/Header.vue";
 import Vue from "vue";
+import Header from "@/components/layout/SearchHeader.vue";
 
 export default Vue.extend({
   components: { Header },
