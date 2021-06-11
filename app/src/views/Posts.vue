@@ -48,15 +48,6 @@
             </div>
           </template>
 
-      
-          <template v-if="!posts.length">
-            <div class="text-center pt-12">
-              <h3 class="font-weight-bold">
-                Es wurden keine Suchergebnisse zu Ihrer Suchanfrage gefunden.
-              </h3>
-            </div>
-          </template>
-
           <PostListItem
             v-for="post in postsOnCurrentPage"
             :key="post.id"
@@ -65,11 +56,17 @@
             :showDetail="smartphone"
             :location="selectedLocation"
             @click="
-              selectedPostId === post.id
-                ? closePostDetails()
-                : openPostDetails(post)
+              togglePostDetails(selectedPostId === post.id ? undefined : post)
             "
           />
+
+          <template v-if="!posts.length">
+            <div class="text-center pt-12">
+              <h3 class="font-weight-bold">
+                Es wurden keine Suchergebnisse zu Ihrer Suchanfrage gefunden.
+              </h3>
+            </div>
+          </template>
         </template>
       </v-flex>
     </section>
