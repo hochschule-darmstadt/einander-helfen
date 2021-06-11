@@ -94,6 +94,11 @@ export default Vue.extend({
   mounted() {
     // load internation value on startup else change it later by watcher
     this.internationalValue = this.isInternational;
+    this.locationSearchValue = this.getLocationText();
+    this.radius = this.selectedRadius;
+
+    // add a watcher for international value after initialisation
+    this.$watch(() => this.internationalValue, this.changeInternational);
   },
   watch: {
     // watch selectedRadius in store
@@ -108,9 +113,6 @@ export default Vue.extend({
     // watch isInternational in store
     isInternational(value) {
       this.internationalValue = value;
-    },
-    internationalValue() {
-      this.changeInternational();
     },
   },
   computed: {
@@ -134,6 +136,7 @@ export default Vue.extend({
       "setInternational",
     ]),
     ...mapActions(["updateURIFromState"]),
+    ...mapActions("postsModule", ["setSelectedPage"]),
 
     changeInternational(): void {
       // clear radius and location on international change
@@ -178,6 +181,8 @@ export default Vue.extend({
       // update state search parameter in store
       this.addSearchValue(this.searchValue);
       this.setSelectedLocation(this.locationSearchValue);
+      // reset the page to the default page after starting a search
+      this.setSelectedPage();
       // update uri
       this.updateURIFromState();
       // clear search field
@@ -204,6 +209,8 @@ export default Vue.extend({
     removeTag(tag: string) {
       // remove tag
       this.removeSearchValue(tag);
+      // reset the page to the default page after removing a tag
+      this.setSelectedPage();
       // update uri
       this.updateURIFromState();
     },

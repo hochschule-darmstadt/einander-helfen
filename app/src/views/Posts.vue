@@ -1,5 +1,5 @@
 <template>
-  <div class="posts-page">
+  <div class="posts-page" v-if="isInitialised">
     <Header />
     <section class="sitecontent row">
       <MapButton v-if="smartphone" v-model="showMap" />
@@ -66,7 +66,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import Header from "@/components/layout/Header.vue";
+import Header from "@/components/layout/SearchHeader.vue";
 import PostCard from "@/components/posts/PostCard.vue";
 import MapCard from "@/components/posts/MapCard.vue";
 import PostListItem from "@/components/posts/PostListItem.vue";
@@ -90,6 +90,7 @@ export default Vue.extend({
     return {
       showMap: true,
       smartphone: false,
+      isInitialised: false,
     };
   },
   computed: {
@@ -104,9 +105,10 @@ export default Vue.extend({
     ]),
   },
   mounted(): void {
-    // get params from route query
+    // get params from route
     this.hydrateStateFromRoute()
       .then(() => {
+        this.isInitialised = true;
         // load posts by updated state parameter
         return this.loadPosts().then(() =>
           this.togglePostDetails(this.selectedPost)
@@ -215,7 +217,7 @@ export default Vue.extend({
   .map,
   .list {
     // full height minus header, footer and pagination height
-    height: calc(100vh - 300px);
+    height: calc(100vh - 325px);
   }
 
   .list {
