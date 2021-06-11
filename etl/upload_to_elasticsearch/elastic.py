@@ -86,11 +86,13 @@ def _reindex_elastic():
             'index': index
         }
     }
+    try:
+        result = client.reindex(request_body, wait_for_completion=True, refresh=True, request_timeout=60)
 
-    result = client.reindex(request_body, wait_for_completion=True, refresh=True)
-
-    logger.info(f'Reindex info: {result["total"]} documents reindexed in {result["took"]} milliseconds')
-    logger.info(f'Failures: {result["failures"]}')
+        logger.info(f'Reindex info: {result["total"]} documents reindexed in {result["took"]} milliseconds')
+        logger.info(f'Failures: {result["failures"]}')
+    except Exception as err:
+        logger.exception(str(err))
 
     logger.info('Finished Reindexing!')
 
