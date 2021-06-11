@@ -7,14 +7,21 @@
         </v-btn>
       </template>
       <v-list>
-        <v-list-item
-          v-for="(link, index) in links"
-          :key="index"
-          router
-          :to="link.route"
-        >
-          <v-list-item-title>{{ link.text }}</v-list-item-title>
-        </v-list-item>
+        <template v-for="(link, index) in links">
+          <v-list-item
+            :key="link.text"
+            router
+            :to="link.route"
+            color="#00254f"
+            class="mr-2"
+          >
+            <v-list-item-icon>
+              <v-icon v-if="link.icon" v-text="link.icon" />
+            </v-list-item-icon>
+            <v-list-item-title v-text="link.text" />
+          </v-list-item>
+          <v-divider v-if="index < links.length - 1" :key="link.icon" />
+        </template>
       </v-list>
     </v-menu>
   </div>
@@ -23,15 +30,20 @@
 <script lang="ts">
 import Vue from "vue";
 
+// icons can be found here: https://fonts.google.com/icons
 export default Vue.extend({
   name: "MenuButton",
   data: function () {
     return {
       links: [
-        { text: "Home", route: "/" },
-        { text: "Über uns", route: "/about" },
-        { text: "Impressum", route: "/imprint" },
-        { text: "Datenschutzerklärung", route: "/privacy" },
+        { text: "Home", route: "/", icon: "home" },
+        { text: "Über uns", route: "/about", icon: "group" },
+        { text: "Impressum", route: "/imprint", icon: "gavel" },
+        {
+          text: "Datenschutzerklärung",
+          route: "/privacy",
+          icon: "privacy_tip",
+        },
       ],
     };
   },
