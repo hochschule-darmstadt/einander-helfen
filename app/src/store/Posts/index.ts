@@ -72,6 +72,9 @@ export const postsModule: Module<PostsState, RootState> = {
         } // else selectedPost not in posts => do nothing
       }
     },
+    resetTotalResults(state): void {
+      state.totalResultSize = 0;
+    }
   },
   actions: {
     setPosts({ state, commit }, posts: Post[]): void {

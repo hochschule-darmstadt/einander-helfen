@@ -15,14 +15,21 @@
         />
         <!-- detail card if not smartphone -->
         <PostCard
-          v-if="!smartphone"
+          v-if="!smartphone && !isLoading"
           class="map-overlay"
           :show="!showMap"
           :post="selectedPost"
           @close="togglePostDetails"
           @openMap="openMap"
         />
-        <v-skeleton-loader v-if="isLoading" type="card-avatar" />
+        <v-skeleton-loader
+          v-if="isLoading"
+          height="100%"
+          width="100%"
+          type="image"
+          light
+          class="map-overlay map-loader"
+        />
       </v-flex>
 
       <!--left side content for desktop-->
@@ -102,7 +109,7 @@ export default Vue.extend({
     return {
       showMap: true,
       smartphone: false,
-      isLoading: false,
+      isLoading: true,
       isInitialised: false,
     };
   },
@@ -122,10 +129,11 @@ export default Vue.extend({
     this.hydrateStateFromRoute()
       .then(() => {
         this.isInitialised = true;
+        this.isLoading = true;
         // load posts by updated state parameter
-        return this.loadPosts().then(() =>
-          this.togglePostDetails(this.selectedPost)
-        );
+        return this.loadPosts()
+          .then(() => this.togglePostDetails(this.selectedPost))
+          .finally(() => (this.isLoading = false));
       })
       // set properties
       .then(() => {
@@ -142,8 +150,9 @@ export default Vue.extend({
         // set resize event handler
         window.addEventListener("resize", this.onWindowResize);
       })
-      // add watcher after parameters are loaded from route
+      // do stuff after parameters are loaded from route
       .then(() => {
+        // add watcher to fire load event if search parameter have changed
         this.$watch(
           // watch all parameters which are used to find posts
           () => (
@@ -151,15 +160,28 @@ export default Vue.extend({
             this.isInternational,
             this.selectedLocation,
             this.selectedRadius,
-            this.resultsFrom,
             // and to be sure that a different value is returned every time
             Date.now()
           ),
           () => {
-            // clear selected post by parameter change
+            this.isLoading = true;
+            // clear selected post
             this.togglePostDetails();
-            // and execute loadPosts if a parameter change
-            this.loadPosts();
+            // clear total result
+            this.resetTotalResults();
+            // and execute loadPosts
+            this.loadPosts().finally(() => (this.isLoading = false));
+          }
+        );
+        // results from is changes if the page is changed a new junk must be laoded
+        this.$watch(
+          () => (this.resultsFrom, Date.now()),
+          () => {
+            this.isLoading = true;
+            // clear selected post
+            this.togglePostDetails();
+            // and execute loadPosts
+            this.loadPosts().finally(() => (this.isLoading = false));
           }
         );
       });
@@ -170,6 +192,7 @@ export default Vue.extend({
   },
   methods: {
     ...mapMutations("searchModule", ["setSelectedRadius"]),
+    ...mapMutations("postsModule", ["resetTotalResults"]),
     ...mapActions("postsModule", ["setSelectedPostId"]),
     ...mapActions([
       "hydrateStateFromRoute",
@@ -177,7 +200,6 @@ export default Vue.extend({
       "loadPosts",
       "loadPost",
     ]),
-
     /** Opens a post if a post is given, else clear the selected post */
     togglePostDetails(post: Post | undefined = undefined): void {
       // close map to show detail page if not smartphone
@@ -228,6 +250,7 @@ export default Vue.extend({
     justify-content: space-between;
   }
   .map,
+  .map-loader v-deep .v-skeleton-loader__image,
   .list {
     // full height minus header, footer and pagination height
     height: calc(100vh - 325px);
@@ -248,6 +271,12 @@ export default Vue.extend({
       z-index: 1000;
       position: absolute;
       top: 0;
+    }
+  }
+  .map-loader {
+    background-color: white;
+    &::v-deep > div {
+      height: 100% !important;
     }
   }
 }
