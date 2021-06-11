@@ -6,7 +6,7 @@
     <v-container class="container">
       <SearchComponent class="searchcomponent" />
 
-      <ImageCard :cols="3" :cards="volunteerTags" />
+      <ImageCard :cards="volunteerTags" />
     </v-container>
   </div>
 </template>
