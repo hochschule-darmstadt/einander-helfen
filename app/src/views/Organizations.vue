@@ -76,7 +76,7 @@ export default Vue.extend({
 });
 </script>
 
-<style>
+<style lang="scss" scoped>
 @import "./../styles/ContainerWithContent.css";
 
 .letterBox {
