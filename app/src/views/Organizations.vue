@@ -10,7 +10,7 @@
         Die untensetehende Liste enthält weiterführende Links zu anderen
         Organisationen, die ebenfalls nationale und internationale ehrenamtliche
         Tätigkeiten zur Verfügung stellen.
-        <div class="urlList mt-4">
+        <div class="organizationList mt-4">
           <div
             class="letterBox mb-4"
             v-for="letter in alphabet"
@@ -86,19 +86,8 @@ export default Vue.extend({
 .organizationLink {
   text-decoration: none;
 }
-.urlList {
-  column-count: 3;
-}
-
-@media (max-width: 960px) {
-  .urlList {
-    column-count: 2;
-  }
-}
-
-@media (max-width: 599px) {
-  .urlList {
-    column-count: 1;
-  }
+.organizationList {
+  column-width: 20em;
+  column-gap: 6em;
 }
 </style>
