@@ -1,3 +1,5 @@
+<!-- The page 'Über uns'. It describes einander-helfen.org and how it works.-->
+
 <template>
   <div>
     <Header />

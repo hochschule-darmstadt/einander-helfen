@@ -1,3 +1,6 @@
+/**
+ * The routing of the pages of einander-helfen.org
+ */
 import Vue from "vue";
 import Router from "vue-router";
 
