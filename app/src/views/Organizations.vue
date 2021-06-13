@@ -22,7 +22,11 @@
               v-for="organization in getLetterOrganizations(letter)"
               :key="organization.title"
             >
-              <a class="organizationLink" :href="organization.url">
+              <a
+                class="organizationLink"
+                :href="organization.url"
+                target="_blank"
+              >
                 {{ organization.title }}
               </a>
               <br />
@@ -79,15 +83,21 @@ export default Vue.extend({
 <style lang="scss" scoped>
 @import "./../styles/ContainerWithContent.css";
 
+.organizationList {
+  column-width: 20em;
+  column-gap: 6em;
+}
+
 .letterBox {
   display: inline-block;
   width: 100%;
 }
+
 .organizationLink {
   text-decoration: none;
 }
-.organizationList {
-  column-width: 20em;
-  column-gap: 6em;
+
+.organizationLink:hover {
+  text-decoration: underline;
 }
 </style>
