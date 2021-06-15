@@ -279,6 +279,7 @@
         </ul>
 
         <br />
+
         <strong>
           Es kann sein, dass die Option zur Deaktivierung der Analyse Ihrer
           Aktionen (Tracking) nicht angezeigt werden kann, da es von Ihrem
@@ -288,6 +289,9 @@
           Ihren AdBlocker deaktivieren und die Seite neu laden, um manuell die
           Erlaubnis zum Tracken zu entziehen.
         </strong>
+
+        <br />
+
         <iframe
           id="opt-out-iframe"
           style="border: 0; height: 200px; width: 600px"
