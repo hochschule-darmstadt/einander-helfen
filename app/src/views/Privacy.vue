@@ -297,6 +297,9 @@
           style="border: 0; height: 200px; width: 600px"
           src="https://einander-helfen.org/api/analytics/index.php?module=CoreAdminHome&action=optOut&language=de&backgroundColor=&fontColor=&fontSize=&fontFamily="
         />
+
+        <br />
+
         <h3>Server-Log-Dateien</h3>
         <p>
           Der Provider der Seiten erhebt und speichert automatisch Informationen
