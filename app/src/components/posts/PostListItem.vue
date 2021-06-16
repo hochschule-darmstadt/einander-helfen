@@ -1,3 +1,5 @@
+<!-- The list item of a post. It contains the title and location of a post. In the mobile view it also contains the details of the post. -->
+
 <template>
   <v-card class="post mb-3">
     <v-list-item
@@ -126,6 +128,12 @@ export default Vue.extend({
     onClick() {
       this.$emit("click", this.post);
     },
+    /**
+     * Calculates the haversine distance of the post to the search location.
+     *
+     * @return {string}: A string containing the rounded distance + km or an empty string if no search location
+     * or no geo location of the post ist given.
+     */
     postDistance(post: Post): string {
       if (!this.location || !post.geo_location) {
         return "";
@@ -142,6 +150,9 @@ export default Vue.extend({
         return "";
       }
     },
+    /**
+     * Haversine formula to calculate the distance between two points on a sphere based on longitude and latitude.
+     */
     haversineDistance([lat1, lon1], [lat2, lon2]): number {
       const toRadian = (angle) => (Math.PI / 180) * angle;
       const distance = (a, b) => (Math.PI / 180) * (a - b);

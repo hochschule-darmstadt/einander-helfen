@@ -1,3 +1,5 @@
+<!-- Button to scroll to the top of the page. -->
+
 <template>
   <v-btn
     v-scroll="onScroll"
@@ -25,6 +27,9 @@ export default Vue.extend({
     };
   },
   methods: {
+    /**
+     * Allows fab to be shown if the user has scrolled down at least 20px.
+     */
     onScroll(e) {
       if (typeof window === "undefined") return;
       const top = window.pageYOffset || e.target.scrollTop || 0;

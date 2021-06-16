@@ -1,3 +1,5 @@
+<!-- Component to define keywords/tags for the search. -->
+
 <template>
   <div class="searchBar">
     <v-combobox
@@ -88,6 +90,11 @@ export default Vue.extend({
     },
   },
   computed: {
+    /**
+     * Gets all porposed tags (ranked) that match the user input.
+     *
+     * @return {string[]}: An array of all tags that are suitable for the user input.
+     */
     searchProposals(): string[] {
       if (!this.searchValue || this.searchValue.length < 1) {
         return [];
@@ -96,13 +103,14 @@ export default Vue.extend({
         this.allSearchProposals.filter((el) => "label" in el),
         this.searchValue
       );
-      const rankedListOfOrderedTerms = this.rankTerms(
+      const rankedListOfOrderedTerms = this.rankTags(
         listOfMatchingTerms,
         this.searchValue
       );
 
       return rankedListOfOrderedTerms;
     },
+    /** Don't show a list of proposals for tags based on the given user input. */
     showNoData(): boolean {
       return (
         this.enableNoDataMessage &&
@@ -113,14 +121,18 @@ export default Vue.extend({
   },
   methods: {
     /**
-     * Filters Tags by searchTerm and return list of proposals
+     * Filters Tags by searchTerm.
+     *
+     * @param {Tag[]} proposals: An array of all existing tags.
+     * @param {string} searchTerm: The searchTerm used to filter the proposals to be suitable to the user input.
+     * @return {string[]}: An array of all suitable proposals.
      */
-    filterProposals(proposals: Tag[], searchTerm: string): string[] {
+    filterProposals(tags: Tag[], searchTerm: string): string[] {
       const stringArray: string[] = [];
       searchTerm = searchTerm.toLowerCase();
 
-      proposals
-        // remove already defined tagas
+      tags
+        // remove already defined tags
         .filter((tag) => !this.tags.includes(tag.label))
         // filter proposals by tag label or one synonym matches the searchTerm
         .forEach((tag) => {
@@ -137,33 +149,39 @@ export default Vue.extend({
       return stringArray;
     },
     /**
-     * Rank terms by a searchterm
+     * Rank tags based on how they match searchTerm. Tags that start with serachTerm get rank 2. Tags that end with searchTerm get rank 1.
+     * All other Tags (with the searchTerm in the middle) get rank 0.5.
+     *
+     * @param {string[]} tags: Tags that had a match with the searchTerm.
+     *                         Don't use the complete tag list here because then not matching tags would get the rank 0.5.
+     * @param {string[]} searchTerm: The given user input to search for.
+     * @return {string[]}: A list of all given tags sorted by their tags.
      */
-    rankTerms(terms: string[], searchTerm: string): string[] {
-      return terms
-        .map((term) => {
+    rankTags(tags: string[], searchTerm: string): string[] {
+      return tags
+        .map((tag) => {
           // 2x on start; 1x on end, 0.5x in the middle
-          const rank = term.toLowerCase().startsWith(searchTerm.toLowerCase())
+          const rank = tag.toLowerCase().startsWith(searchTerm.toLowerCase())
             ? 2
             : this.isSuccessiveMatch(
-                term.toLowerCase(),
+                tag.toLowerCase(),
                 searchTerm.toLowerCase()
               )
             ? 1
             : 0.5;
           return {
-            label: term,
+            label: tag,
             rank,
           };
         })
         .sort((a, b) => Math.sign(b.rank - a.rank))
         .map((obj) => obj.label);
     },
-    isSuccessiveMatch(term: string, searchTerm: string): boolean {
-      const sucArr = term.split(" ");
+    isSuccessiveMatch(tags: string, searchTerm: string): boolean {
+      const sucArr = tags.split(" ");
       if (sucArr.length < 2) return false;
 
-      // Remove the first term we only want to match successive terms
+      // Remove the first tag we only want to match successive tags.
       sucArr.shift();
       return !!sucArr.find((element) => {
         return element.startsWith(searchTerm);
@@ -181,11 +199,14 @@ export default Vue.extend({
       this.$emit("input", this.searchValue);
     },
     /**
-     * On searchbar enter
+     * Fires an 'enter' event after searchbar enter.
      */
     onEnter(): void {
       this.$emit("enter", this.searchValue);
     },
+    /**
+     * Fires a 'remove' event when removing a tag.
+     */
     removeTag(tag: string): void {
       this.$emit("remove", tag);
     },
