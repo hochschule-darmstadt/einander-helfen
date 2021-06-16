@@ -1,3 +1,5 @@
+<!-- The page 'Datenschutzerkärung' containing the data protection declaration of einander-helfen.org.-->
+
 <template>
   <div>
     <Header />

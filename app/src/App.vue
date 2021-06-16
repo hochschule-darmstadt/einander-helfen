@@ -1,3 +1,5 @@
+<!-- Root of the whole application. It defines the template of the website and contains global styles -->
+
 <template>
   <v-app class="app">
     <v-main class="main">

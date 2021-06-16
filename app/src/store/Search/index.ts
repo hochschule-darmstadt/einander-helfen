@@ -1,3 +1,7 @@
+/**
+ * This store contains all parameters and methods related to searches.
+ */
+
 import { Module } from "vuex";
 import Location from "@/models/location";
 import LocationService from "@/services/LocationService";
