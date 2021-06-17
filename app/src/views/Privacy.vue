@@ -245,85 +245,85 @@
 
       <h2>3. Datenerfassung auf unserer Website</h2>
 
-        <h3>Nutzungsstatistiken</h3>
+      <h3>Nutzungsstatistiken</h3>
 
-        <p>
-          Diese Webseite verwendet Matomo, eine Open Source, selbstgehostete
-          Software um anonyme Nutzungsdaten für diese Webseite zu sammeln. Die
-          Daten zum Verhalten der Besucher werden gesammelt um eventuelle
-          Probleme wie nicht gefundene Seiten, Suchmaschinenprobleme oder
-          unbeliebte Seiten herauszufinden. Sobald die Daten (Anzahl der
-          Besucher die Fehlerseiten oder nur eine Seite sehen, usw.) verarbeitet
-          werden, erzeugt Matomo Berichte für die Webseitenbetreiber, damit
-          diese darauf reagieren können. (Layoutveränderungen, neue Inhalte,
-          usw.). Die Daten werden lediglich auf den Servern von
-          einander-helfen.org gespeichert und nicht an Dritte weitergegeben.
-        </p>
+      <p>
+        Diese Webseite verwendet Matomo, eine Open Source, selbstgehostete
+        Software um anonyme Nutzungsdaten für diese Webseite zu sammeln. Die
+        Daten zum Verhalten der Besucher werden gesammelt um eventuelle Probleme
+        wie nicht gefundene Seiten, Suchmaschinenprobleme oder unbeliebte Seiten
+        herauszufinden. Sobald die Daten (Anzahl der Besucher die Fehlerseiten
+        oder nur eine Seite sehen, usw.) verarbeitet werden, erzeugt Matomo
+        Berichte für die Webseitenbetreiber, damit diese darauf reagieren
+        können. (Layoutveränderungen, neue Inhalte, usw.). Die Daten werden
+        lediglich auf den Servern von einander-helfen.org gespeichert und nicht
+        an Dritte weitergegeben.
+      </p>
 
-        <p>Matomo verarbeitet die folgenden Daten:</p>
-        <ul>
-          <li>
-            Anonymisierte IP-Adressen indem die letzten 2 bytes entfernt werden
-            (also 198.51.0.0 anstatt 198.51.100.54)
-          </li>
-          <li>Sprache des Nutzers anhand der Browsereinstellung</li>
-          <li>Datum und Uhrzeit</li>
-          <li>Titel der aufgerufenen Seite</li>
-          <li>URL der aufgerufenen Seite</li>
-          <li>URL der vorhergehenden Seite (sofern diese das erlaubt)</li>
-          <li>Bildschirmauflösung</li>
-          <li>Lokale Zeit</li>
-          <li>Externe Links</li>
-          <li>Dauer des Seitenaufbaus</li>
-          <li>User Agent des Browsers</li>
-        </ul>
+      <p>Matomo verarbeitet die folgenden Daten:</p>
+      <ul>
+        <li>
+          Anonymisierte IP-Adressen indem die letzten 2 bytes entfernt werden
+          (also 198.51.0.0 anstatt 198.51.100.54)
+        </li>
+        <li>Sprache des Nutzers anhand der Browsereinstellung</li>
+        <li>Datum und Uhrzeit</li>
+        <li>Titel der aufgerufenen Seite</li>
+        <li>URL der aufgerufenen Seite</li>
+        <li>URL der vorhergehenden Seite (sofern diese das erlaubt)</li>
+        <li>Bildschirmauflösung</li>
+        <li>Lokale Zeit</li>
+        <li>Externe Links</li>
+        <li>Dauer des Seitenaufbaus</li>
+        <li>User Agent des Browsers</li>
+      </ul>
 
-        <br />
+      <br />
 
-        <strong>
-          Es kann sein, dass die Option zur Deaktivierung der Analyse Ihrer
-          Aktionen (Tracking) nicht angezeigt werden kann, da es von Ihrem
-          Browser blockiert wird. Möglicherweise blockiert dieser dann ohnehin
-          das Tracking, sodass Sie Ihr Einverständnis dafür hier nicht mehr
-          entziehen müssen. Wenn Sie auf Nummer sicher gehen wollen, sollten Sie
-          Ihren AdBlocker deaktivieren und die Seite neu laden, um manuell die
-          Erlaubnis zum Tracken zu entziehen.
-        </strong>
+      <strong>
+        Es kann sein, dass die Option zur Deaktivierung der Analyse Ihrer
+        Aktionen (Tracking) nicht angezeigt werden kann, da es von Ihrem Browser
+        blockiert wird. Möglicherweise blockiert dieser dann ohnehin das
+        Tracking, sodass Sie Ihr Einverständnis dafür hier nicht mehr entziehen
+        müssen. Wenn Sie auf Nummer sicher gehen wollen, sollten Sie Ihren
+        AdBlocker deaktivieren und die Seite neu laden, um manuell die Erlaubnis
+        zum Tracken zu entziehen.
+      </strong>
 
-        <br />
+      <br />
 
-        <iframe
-          id="opt-out-iframe"
-          style="border: 0; height: 200px; width: 600px"
-          src="https://einander-helfen.org/api/analytics/index.php?module=CoreAdminHome&action=optOut&language=de&backgroundColor=&fontColor=&fontSize=&fontFamily="
-        />
+      <iframe
+        id="opt-out-iframe"
+        style="border: 0; height: 200px; width: 600px"
+        src="https://einander-helfen.org/api/analytics/index.php?module=CoreAdminHome&action=optOut&language=de&backgroundColor=&fontColor=&fontSize=&fontFamily="
+      />
 
-        <br />
+      <br />
 
-        <h3>Server-Log-Dateien</h3>
-        <p>
-          Der Provider der Seiten erhebt und speichert automatisch Informationen
-          in so genannten Server-Log-Dateien, die Ihr Browser automatisch an uns
-          übermittelt. Dies sind:
-        </p>
-        <ul>
-          <li>Browsertyp und Browserversion</li>
-          <li>verwendetes Betriebssystem</li>
-          <li>Referrer URL</li>
-          <li>Hostname des zugreifenden Rechners</li>
-          <li>Uhrzeit der Serveranfrage</li>
-          <li>IP-Adresse</li>
-        </ul>
-        <p>
-          Eine Zusammenführung dieser Daten mit anderen Datenquellen wird nicht
-          vorgenommen.
-        </p>
-        <p>
-          Die Erfassung dieser Daten erfolgt auf Grundlage von Art. 6 Abs. 1
-          lit. f DSGVO. Der Websitebetreiber hat ein berechtigtes Interesse an
-          der technisch fehlerfreien Darstellung und der Optimierung seiner
-          Website - hierzu müssen die Server-Log-Files erfasst werden.
-        </p>
+      <h3>Server-Log-Dateien</h3>
+      <p>
+        Der Provider der Seiten erhebt und speichert automatisch Informationen
+        in so genannten Server-Log-Dateien, die Ihr Browser automatisch an uns
+        übermittelt. Dies sind:
+      </p>
+      <ul>
+        <li>Browsertyp und Browserversion</li>
+        <li>verwendetes Betriebssystem</li>
+        <li>Referrer URL</li>
+        <li>Hostname des zugreifenden Rechners</li>
+        <li>Uhrzeit der Serveranfrage</li>
+        <li>IP-Adresse</li>
+      </ul>
+      <p>
+        Eine Zusammenführung dieser Daten mit anderen Datenquellen wird nicht
+        vorgenommen.
+      </p>
+      <p>
+        Die Erfassung dieser Daten erfolgt auf Grundlage von Art. 6 Abs. 1 lit.
+        f DSGVO. Der Websitebetreiber hat ein berechtigtes Interesse an der
+        technisch fehlerfreien Darstellung und der Optimierung seiner Website -
+        hierzu müssen die Server-Log-Files erfasst werden.
+      </p>
 
       <h3>Anfrage per E-Mail, Telefon oder Telefax</h3>
       <p>
