@@ -1,3 +1,5 @@
+<!-- The page 'Impressum'. It contains contact details, sources and information about liability -->
+
 <template>
   <div>
     <Header />

@@ -1,3 +1,5 @@
+<!-- This Header contains the logo, the name of the website, some text and the burger menu.-->
+
 <template>
   <v-app-bar class="header" flat height="100px" color="#00254f">
     <v-layout justify-space-between no-gutters color="#00254f">

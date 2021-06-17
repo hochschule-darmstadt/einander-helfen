@@ -1,3 +1,5 @@
+<!-- Button to start the search. -->
+
 <template>
   <v-btn class="mx-2" fab large color="primary" @click="$emit('click')">
     <v-icon>search</v-icon>

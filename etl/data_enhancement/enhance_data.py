@@ -32,6 +32,7 @@ class Enhancer:
             'betterplace': self.__enhance_betterplace,
             'ehrenamt_sachsen': self.__enhance_ehrenamt_sachsen,
             'dksb_kinderschutzbund': self.__enhance_dksb_kinderschutzbund,
+            'sozialeinsatz': self.__enhance_sozialeinsatz
         }
 
     def run(self):
@@ -106,5 +107,11 @@ class Enhancer:
     def __enhance_dksb_kinderschutzbund(self):
         """ domain specific enhancement for dksb_kinderschutzbund """
         self.logger.debug("__enhance_dksb_kinderschutzbund()")
+
+        e_tags.run(self.__data, self.__domain_name)
+
+    def __enhance_sozialeinsatz(self):
+        """ domain specific enhancement for sozialeinsatz """
+        self.logger.debug("__enhance_sozialeinsatz()")
 
         e_tags.run(self.__data, self.__domain_name)
