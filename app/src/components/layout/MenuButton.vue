@@ -8,19 +8,13 @@
           <v-icon class="menuicon">menu</v-icon>
         </v-btn>
       </template>
-      <v-list>
+      <v-list class="pa-0">
         <template v-for="(link, index) in links">
-          <v-list-item
-            :key="link.text"
-            router
-            :to="link.route"
-            color="#00254f"
-            class="mr-2"
-          >
+          <v-list-item :key="link.text" router :to="link.route" color="#00254f">
             <v-list-item-icon>
               <v-icon v-if="link.icon" v-text="link.icon" />
             </v-list-item-icon>
-            <v-list-item-title v-text="link.text" />
+            <v-list-item-title class="pr-2" v-text="link.text" />
           </v-list-item>
           <v-divider v-if="index < links.length - 1" :key="link.icon" />
         </template>
