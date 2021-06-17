@@ -1,3 +1,5 @@
+<!-- This Header contains the logo, all components for searching and the burger menu. -->
+
 <template>
   <header class="header_layout">
     <v-btn
@@ -57,10 +59,10 @@ export default Vue.extend({
 </style>
 
 <style lang="scss">
-/** 
-* global style 
-* some hacks for optimal use of space in header
-*/
+/** global style */
+
+// some hacks for optimal use of space in header
+// only needed if the search component is used in this header
 @media screen and (max-width: 599px) {
   .header_layout {
     .locationDiv {

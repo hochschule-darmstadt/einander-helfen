@@ -1,3 +1,5 @@
+<!-- The carousel contains images that are shown alternately every few seconds.-->
+
 <template>
   <VueSlickCarousel
     :dots="true"

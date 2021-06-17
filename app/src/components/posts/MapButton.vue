@@ -1,3 +1,5 @@
+<!-- Toggle button to hide or show the map. -->
+
 <template>
   <div class="mb-2 btn-container">
     <v-btn class="btn-dark" dark block @click="open = !open">
