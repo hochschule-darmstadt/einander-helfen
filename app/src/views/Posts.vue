@@ -151,7 +151,7 @@ export default Vue.extend({
         // set resize event handler
         window.addEventListener("resize", this.onWindowResize);
       })
-      // do stuff after parameters are loaded from route
+      // add watcher after parameters are loaded from route
       .then(() => {
         // add watcher to fire load event if search parameter have changed
         this.$watch(
