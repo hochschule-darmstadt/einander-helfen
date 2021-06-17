@@ -1,3 +1,6 @@
+/**
+ * This store contains all parameters and methods related to posts.
+ */
 import { Module } from "vuex";
 import Post from "@/models/post";
 import { RootState } from "../store";
@@ -72,6 +75,9 @@ export const postsModule: Module<PostsState, RootState> = {
         } // else selectedPost not in posts => do nothing
       }
     },
+    resetTotalResults(state): void {
+      state.totalResultSize = 0;
+    },
   },
   actions: {
     setPosts({ state, commit }, posts: Post[]): void {
@@ -85,6 +91,9 @@ export const postsModule: Module<PostsState, RootState> = {
       state.selectedPostId = postId;
       commit("switchPageToSelectedPost");
     },
+    /**
+     * Set the currently shown page. If the page is not included in the already loaded chunk a new chunk will be loaded.
+     */
     setSelectedPage({ state }, page = 1): void {
       const inChunk = (
         x: number,

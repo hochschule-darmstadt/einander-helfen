@@ -1,3 +1,7 @@
+/**
+ * This store contains methods to find and load posts matching the search.
+ */
+
 import Vue from "vue";
 import Vuex, { StoreOptions } from "vuex";
 import router from "@/router";
@@ -5,7 +9,7 @@ import { searchModule, SearchState } from "./Search";
 import { postsModule, PostsState } from "./Posts";
 import PostService, { PaginatedResponse } from "@/services/PostService";
 import Post from "@/models/post";
-import radii from "@/resources/radii";
+import radii from "@/assets/resources/radii";
 
 Vue.use(Vuex);
 
@@ -105,7 +109,7 @@ const store: StoreOptions<RootState> = {
     },
 
     /**
-     * Updates url parameter with currently values from the store
+     * Updates url parameter with current values from the store
      */
     updateURIFromState({ state, getters }): void {
       const query = {
@@ -134,19 +138,22 @@ const store: StoreOptions<RootState> = {
     },
 
     /**
-     *  find a post from DataService by given id
+     *  Load a post from DataService by given id.
      */
     loadPost(context, id: string): Promise<Post | undefined> {
       return PostService.findById(id).then((post) => post);
     },
 
     /**
-     *  find posts from DataService by setted parameter
+     *  Load posts from DataService by setted parameter.
      */
     loadPosts({ state, dispatch, commit }): Promise<Post[]> {
       // clear extended properties
       if (!state.radiusExtended) state.radiusExtendedFrom = undefined;
       else state.radiusExtended = false;
+
+      // clear old posts
+      state.postsModule.posts = [];
 
       return PostService.findPosts({
         searchValues: state.searchModule.searchValues,

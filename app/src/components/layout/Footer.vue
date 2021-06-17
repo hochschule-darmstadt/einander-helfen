@@ -1,3 +1,5 @@
+<!-- The Footer contains links to other important pages of the website. -->
+
 <template>
   <v-footer color="#00254f" padless>
     <v-row justify="center" no-gutters>

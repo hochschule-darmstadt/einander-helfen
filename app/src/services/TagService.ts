@@ -1,4 +1,8 @@
-import importedTags from "@/resources/tags/index";
+/**
+ * This service provides the methods to find tags in the database with Elastic Search.
+ */
+
+import importedTags from "@/assets/resources/tags/index";
 import Tag from "@/models/tag";
 
 /**
