@@ -17,50 +17,65 @@
         />
         <!-- detail card if not smartphone -->
         <PostCard
-          v-if="!smartphone"
+          v-if="!smartphone && !isLoading"
           class="map-overlay"
           :show="!showMap"
           :post="selectedPost"
           @close="togglePostDetails"
           @openMap="openMap"
         />
+        <v-skeleton-loader
+          v-if="showMap && isLoading"
+          height="100%"
+          width="100%"
+          type="image"
+          light
+          class="map-overlay map-loader"
+        />
       </v-flex>
 
       <!--left side content for desktop-->
       <v-flex class="list sm12 md6 order-md1">
-        <div v-if="radiusExtended" class="text-center pt-12 pb-12">
-          <h3 class="font-weight-bold">
-            Zu Ihrer Suchanfrage mit einem Radius von
-            {{ radiusExtendedFrom }} haben wir keine Treffer gefunden.
-            <template v-if="selectedRadius">
-              Folgende Ergebnisse werden in einem Umkreis von
-              {{ selectedRadius }} gefunden.
-            </template>
-            <template v-else>
-              Folgende Ergebnisse werden in einem Umkreis von mehr als 50 km
-              gefunden.
-            </template>
-          </h3>
-        </div>
+        <template v-if="isLoading">
+          <PostListItemSkeleton v-for="i in 3" :key="i" />
+        </template>
+        <template v-else>
+          <template v-if="radiusExtended">
+            <div class="text-center pt-12 pb-12">
+              <h3 class="font-weight-bold">
+                Zu Ihrer Suchanfrage mit einem Radius von
+                {{ radiusExtendedFrom }} haben wir keine Treffer gefunden.
+                <template v-if="selectedRadius">
+                  Folgende Ergebnisse werden in einem Umkreis von
+                  {{ selectedRadius }} gefunden.
+                </template>
+                <template v-else>
+                  Folgende Ergebnisse werden in einem Umkreis von mehr als 50 km
+                  gefunden.
+                </template>
+              </h3>
+            </div>
+          </template>
 
-        <!-- List item that represents a post. -->
-        <PostListItem
-          v-for="post in postsOnCurrentPage"
-          :key="post.id"
-          :post="post"
-          :active="post.id == selectedPostId"
-          :showDetail="smartphone"
-          :location="selectedLocation"
-          @click="
-            togglePostDetails(selectedPostId === post.id ? undefined : post)
-          "
-        />
+          <!-- List item that represents a post. -->
+          <PostListItem
+            v-for="post in postsOnCurrentPage"
+            :key="post.id"
+            :post="post"
+            :active="post.id == selectedPostId"
+            :showDetail="smartphone"
+            :location="selectedLocation"
+            @click="
+              togglePostDetails(selectedPostId === post.id ? undefined : post)
+            "
+          />
 
-        <div class="text-center pt-12" v-if="!posts.length">
-          <h3 class="font-weight-bold">
-            Es wurden keine Suchergebnisse zu Ihrer Suchanfrage gefunden.
-          </h3>
-        </div>
+          <div class="text-center pt-12" v-if="!posts.length">
+            <h3 class="font-weight-bold">
+              Es wurden keine Suchergebnisse zu Ihrer Suchanfrage gefunden.
+            </h3>
+          </div>
+        </template>
       </v-flex>
     </section>
     <PostPagination />
@@ -73,6 +88,7 @@ import Header from "@/components/layout/SearchHeader.vue";
 import PostCard from "@/components/posts/PostCard.vue";
 import MapCard from "@/components/posts/MapCard.vue";
 import PostListItem from "@/components/posts/PostListItem.vue";
+import PostListItemSkeleton from "@/components/posts/PostListItemSkeleton.vue";
 import PostPagination from "@/components/posts/PostPagination.vue";
 import MapButton from "@/components/posts/MapButton.vue";
 
@@ -88,11 +104,13 @@ export default Vue.extend({
     PostCard,
     MapCard,
     PostListItem,
+    PostListItemSkeleton,
   },
   data: function () {
     return {
       showMap: true,
       smartphone: false,
+      isLoading: true,
       isInitialised: false,
     };
   },
@@ -112,10 +130,11 @@ export default Vue.extend({
     this.hydrateStateFromRoute()
       .then(() => {
         this.isInitialised = true;
+        this.isLoading = true;
         // load posts by updated state parameter
-        return this.loadPosts().then(() =>
-          this.togglePostDetails(this.selectedPost)
-        );
+        return this.loadPosts()
+          .then(() => this.togglePostDetails(this.selectedPost))
+          .finally(() => (this.isLoading = false));
       })
       // set properties
       .then(() => {
@@ -134,6 +153,7 @@ export default Vue.extend({
       })
       // add watcher after parameters are loaded from route
       .then(() => {
+        // add watcher to fire load event if search parameter have changed
         this.$watch(
           // watch all parameters which are used to find posts
           () => (
@@ -141,15 +161,28 @@ export default Vue.extend({
             this.isInternational,
             this.selectedLocation,
             this.selectedRadius,
-            this.resultsFrom,
             // and to be sure that a different value is returned every time
             Date.now()
           ),
           () => {
-            // clear selected post by parameter change
+            this.isLoading = true;
+            // clear selected post
             this.togglePostDetails();
-            // and execute loadPosts if a parameter change
-            this.loadPosts();
+            // clear total result
+            this.resetTotalResults();
+            // and execute loadPosts
+            this.loadPosts().finally(() => (this.isLoading = false));
+          }
+        );
+        // results from is changes if the page is changed a new junk must be laoded
+        this.$watch(
+          () => (this.resultsFrom, Date.now()),
+          () => {
+            this.isLoading = true;
+            // clear selected post
+            this.togglePostDetails();
+            // and execute loadPosts
+            this.loadPosts().finally(() => (this.isLoading = false));
           }
         );
       });
@@ -160,6 +193,7 @@ export default Vue.extend({
   },
   methods: {
     ...mapMutations("searchModule", ["setSelectedRadius"]),
+    ...mapMutations("postsModule", ["resetTotalResults"]),
     ...mapActions("postsModule", ["setSelectedPostId"]),
     ...mapActions([
       "hydrateStateFromRoute",
@@ -167,7 +201,6 @@ export default Vue.extend({
       "loadPosts",
       "loadPost",
     ]),
-
     /** Opens a post if a post is given, else clear the selected post
      *
      * @param {Post} post: The currently selected post. Undefined if no post is selected.
@@ -221,6 +254,7 @@ export default Vue.extend({
     justify-content: space-between;
   }
   .map,
+  .map-loader v-deep .v-skeleton-loader__image,
   .list {
     // full height minus header, footer and pagination height
     height: calc(100vh - 325px);
@@ -241,6 +275,12 @@ export default Vue.extend({
       z-index: 1000;
       position: absolute;
       top: 0;
+    }
+  }
+  .map-loader {
+    background-color: white;
+    &::v-deep > div {
+      height: 100% !important;
     }
   }
 }

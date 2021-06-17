@@ -152,6 +152,9 @@ const store: StoreOptions<RootState> = {
       if (!state.radiusExtended) state.radiusExtendedFrom = undefined;
       else state.radiusExtended = false;
 
+      // clear old posts
+      state.postsModule.posts = [];
+
       return PostService.findPosts({
         searchValues: state.searchModule.searchValues,
         location: state.searchModule.selectedLocation,
