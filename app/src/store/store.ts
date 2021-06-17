@@ -9,7 +9,7 @@ import { searchModule, SearchState } from "./Search";
 import { postsModule, PostsState } from "./Posts";
 import PostService, { PaginatedResponse } from "@/services/PostService";
 import Post from "@/models/post";
-import radii from "@/resources/radii";
+import radii from "@/assets/resources/radii";
 
 Vue.use(Vuex);
 

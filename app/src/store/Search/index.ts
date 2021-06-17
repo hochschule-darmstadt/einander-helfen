@@ -6,7 +6,7 @@ import { Module } from "vuex";
 import Location from "@/models/location";
 import LocationService from "@/services/LocationService";
 import { RootState } from "../store";
-import { getDefaultRadius } from "@/resources/radii";
+import { getDefaultRadius } from "@/assets/resources/radii";
 
 export interface SearchState {
   searchValues: string[];

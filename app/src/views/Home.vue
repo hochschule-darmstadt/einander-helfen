@@ -5,11 +5,11 @@
     <Header />
     <Carousel />
 
-    <v-container class="container">
+    <section class="container">
       <SearchComponent class="searchcomponent" />
 
       <ImageCard :cols="3" :cards="volunteerTags" />
-    </v-container>
+    </section>
   </div>
 </template>
 
@@ -68,46 +68,5 @@ export default Vue.extend({
 <style lang="scss" scoped>
 .searchcomponent {
   margin: 3em 0;
-}
-
-.container {
-  margin: auto;
-}
-
-@media (min-width: 800px) {
-  .container {
-    max-width: 1450px;
-  }
-}
-
-@media (min-width: 960px) {
-  .container {
-    width: 960px;
-    max-width: none;
-  }
-}
-
-@media (min-width: 1100px) {
-  .container {
-    width: 1100px;
-  }
-}
-
-@media (min-width: 1300px) {
-  .container {
-    width: 1300px;
-  }
-}
-
-@media (min-width: 1618px) {
-  .container {
-    width: 1618px;
-  }
-}
-
-@media (min-width: 1904px) {
-  .container {
-    width: 85%;
-  }
 }
 </style>

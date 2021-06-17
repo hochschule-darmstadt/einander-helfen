@@ -4,14 +4,19 @@ import router from "@/router";
 import store from "@/store/store";
 
 import Vuetify from "vuetify";
+
+// import vuetify css
+import "vuetify/dist/vuetify.min.css";
+
+// import matierial design icons
 import "material-design-icons-iconfont/dist/material-design-icons.css";
+import VueMatomo from "vue-matomo";
+
+// import global css
+import "@/assets/styles/style.scss";
 
 // @ts-ignore
 import de from "vuetify/es5/locale/de.js";
-import "vuetify/dist/vuetify.min.css";
-
-import "material-design-icons-iconfont/dist/material-design-icons.css";
-import VueMatomo from "vue-matomo";
 
 Vue.config.productionTip = false;
 

@@ -3,7 +3,7 @@
  */
 
 import Location from "@/models/location";
-import locationArray from "@/resources/locations/index";
+import locationArray from "@/assets/resources/locations/index";
 import CountryService from "@/services/CountryService";
 
 class LocationService {

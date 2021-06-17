@@ -17,7 +17,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Radius from "@/models/radius";
-import radii from "@/resources/radii";
+import radii from "@/assets/resources/radii";
 
 export default Vue.extend({
   name: "RadiusSelect",
