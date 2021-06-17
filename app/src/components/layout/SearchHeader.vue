@@ -1,3 +1,5 @@
+<!-- This Header contains the logo, all components for searching and the burger menu. -->
+
 <template>
   <header class="header_layout">
     <v-btn

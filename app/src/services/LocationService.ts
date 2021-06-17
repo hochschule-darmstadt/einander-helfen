@@ -1,3 +1,7 @@
+/**
+ * This service provides the methods to find cities in the database with Elastic Search.
+ */
+
 import Location from "@/models/location";
 import locationArray from "@/assets/resources/locations/index";
 import CountryService from "@/services/CountryService";
@@ -18,7 +22,8 @@ class LocationService {
 
   /**
    * This method finds a specified location by the title.
-   * @param title The title of the searched location.
+   *
+   * @param {string} title: The title of the searched location.
    */
   public findByTitle(title: string): Location | undefined {
     if (!title) return undefined;
@@ -29,8 +34,9 @@ class LocationService {
    * This method executes a query on the locations specified by a string.
    * If there is no input an empty array is returned.
    * Otherwise it searches for `Location`s where the name or plz starts with the input string.
-   * @param searchValue   The input string for the query.
-   * @returns A list of the top `this.selectedLocationAmount` `Location`s
+   *
+   * @param {string} searchValue: The input string for the query.
+   * @return {Location[]}: A list of the top `this.selectedLocationAmount` `Location`s
    *          which have a diversity of `this.diversityValue` ordered by rank and name.
    */
   public findLocationByPlzOrName(searchValue: string): Location[] {
@@ -59,8 +65,9 @@ class LocationService {
    * This method executes a query on the countries specified by a string.
    * If there is no input an empty array is returned.
    * Otherwise it searches for countries where the name starts with the input string.
-   * @param searchValue   The input string for the query.
-   * @returns A list of the top `this.selectedLocationAmount` `Location`s
+   *
+   * @param {string} searchValue: The input string for the query.
+   * @return {Location[]}: A list of the top `this.selectedLocationAmount` `Location`s
    *          which have a diversity of `this.diversityValue` ordered by country.
    */
   public findCountryByName(searchValue: string): Location[] {
@@ -87,7 +94,8 @@ class LocationService {
 
   /**
    * This method executes a wildcard query on the locations.
-   * @returns A list of the top `this.selectedLocationAmount` `Location`s
+   *
+   * @return {Location[]}: A list of the top `this.selectedLocationAmount` `Location`s
    *          which have a diversity of `this.diversityValue` ordered by rank and name.
    */
   private findLocationWildcard(): Location[] {
@@ -103,9 +111,10 @@ class LocationService {
   /**
    * This method helps to sort any list of object by a specific property.
    * The method needs to be call inside of a `<T>.sort(dynamicSort('abc'))` method.
-   * @param property  The property the object should be sorted by.
+   *
+   * @param property: The property the object should be sorted by.
    *                  If the property starts with '-' the result is inversed.
-   * @returns A number between -1 - 1:
+   * @return {any}: A number between -1 - 1:
    *          - -1:   b comes before a.
    *          - 0:    a and b are equal.
    *          - 1:    a comes before b.
@@ -128,8 +137,9 @@ class LocationService {
    * This method creates a subset of a `Location` array.
    * The subset has the size of `this.selectedLocationAmount` and
    * contains a maximum of `this.diversityValue` `Location`s with the same name.
-   * @param locations Array of `Location`s
-   * @returns The subset of `Location`s
+   *
+   * @param {Location[]}: locations Array of `Location`s
+   * @return {Location[]}: The subset of `Location`s
    */
   private diversitySplice(locations: Location[]): Location[] {
     if (!locations || locations.length === 0) {
@@ -169,9 +179,10 @@ class LocationService {
 
   /**
    * This method counts the occurrence of a name in a location array.
-   * @param locations Array of `Location`s
-   * @param name      Name of a `Location`
-   * @returns The number of how many `Location`s in `locations` have the name `name`.
+   *
+   * @param {Location[]}: locations Array of `Location`s
+   * @param name: Name of a `Location`
+   * @return {number}: The number of how many `Location`s in `locations` have the name `name`.
    */
   private diversityNameOccurrence(locations: Location[], name): number {
     let count = 0;

@@ -1,3 +1,5 @@
+<!-- Component to limit the search by the distance of the results to the given location -->
+
 <template>
   <v-select
     class="radius_select"
@@ -73,6 +75,9 @@ export default Vue.extend({
       this.$emit("input", this.radius.value);
       this.$emit("enter");
     },
+    /**
+     * Retrieve the equivalnt Radius object from radii.json based on the value of the radius input.
+     */
     getRadiusObject() {
       return (
         radii.find((radius: Radius) => radius.value == this.value) || radii[0]

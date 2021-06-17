@@ -1,3 +1,5 @@
+<!-- The page 'Über uns'. It describes einander-helfen.org and how it works.-->
+
 <template>
   <div class="about">
     <Header />
@@ -100,6 +102,14 @@
           <li>
             <a href="https://www.dksb.de" target="_blank" rel="noopener"
               >www.dksb.de</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://www.sozialeinsatz.de"
+              target="_blank"
+              rel="noopener"
+              >www.sozialeinsatz.de</a
             >
           </li>
         </ul>
