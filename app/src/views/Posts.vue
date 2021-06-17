@@ -57,29 +57,24 @@
             </div>
           </template>
 
-        <!-- List item that represents a post. -->
-        <PostListItem
-          v-for="post in postsOnCurrentPage"
-          :key="post.id"
-          :post="post"
-          :active="post.id == selectedPostId"
-          :showDetail="smartphone"
-          :location="selectedLocation"
-          @click="
-            togglePostDetails(selectedPostId === post.id ? undefined : post)
-          "
-        />
+          <!-- List item that represents a post. -->
+          <PostListItem
+            v-for="post in postsOnCurrentPage"
+            :key="post.id"
+            :post="post"
+            :active="post.id == selectedPostId"
+            :showDetail="smartphone"
+            :location="selectedLocation"
+            @click="
+              togglePostDetails(selectedPostId === post.id ? undefined : post)
+            "
+          />
 
-        <div class="text-center pt-12" v-if="!posts.length">
-          <h3 class="font-weight-bold">
-            Es wurden keine Suchergebnisse zu Ihrer Suchanfrage gefunden.
-          </h3>
-        </div>
-              <h3 class="font-weight-bold">
-                Es wurden keine Suchergebnisse zu Ihrer Suchanfrage gefunden.
-              </h3>
-            </div>
-          </template>
+          <div class="text-center pt-12" v-if="!posts.length">
+            <h3 class="font-weight-bold">
+              Es wurden keine Suchergebnisse zu Ihrer Suchanfrage gefunden.
+            </h3>
+          </div>
         </template>
       </v-flex>
     </section>
