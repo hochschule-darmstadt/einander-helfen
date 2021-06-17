@@ -1,40 +1,34 @@
 <!-- The page 'Organisationen'. It provides links to other organizations that offer voluntary work.-->
 
 <template>
-  <div>
+  <div class="organizations">
     <Header />
-    <div class="organizations">
-      <v-container justify="center" class="containerWithContent">
-        <h1>Organisationen</h1>
-        Sie haben nicht das gefunden, wonach Sie gesucht haben? Kein Problem!
-        Die untensetehende Liste enthält weiterführende Links zu anderen
-        Organisationen, die ebenfalls nationale und internationale ehrenamtliche
-        Tätigkeiten zur Verfügung stellen.
-        <div class="organizationList mt-4">
+    <section class="container pt-6">
+      <h1>Organisationen</h1>
+      Sie haben nicht das gefunden, wonach Sie gesucht haben? Kein Problem! Die
+      untensetehende Liste enthält weiterführende Links zu anderen
+      Organisationen, die ebenfalls nationale und internationale ehrenamtliche
+      Tätigkeiten zur Verfügung stellen.
+      <div class="organizationList mt-4">
+        <div
+          class="letterBox mb-4"
+          v-for="letter in alphabet"
+          :key="letter"
+          v-show="getLetterOrganizations(letter).length > 0"
+        >
+          <h2>{{ letter }}</h2>
           <div
-            class="letterBox mb-4"
-            v-for="letter in alphabet"
-            :key="letter"
-            v-show="getLetterOrganizations(letter).length > 0"
+            v-for="organization in getLetterOrganizations(letter)"
+            :key="organization.title"
           >
-            <h2>{{ letter }}</h2>
-            <div
-              v-for="organization in getLetterOrganizations(letter)"
-              :key="organization.title"
-            >
-              <a
-                class="organizationLink"
-                :href="organization.url"
-                target="_blank"
-              >
-                {{ organization.title }}
-              </a>
-              <br />
-            </div>
+            <a class="link" :href="organization.url" target="blank">
+              {{ organization.title }}
+            </a>
+            <br />
           </div>
         </div>
-      </v-container>
-    </div>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -81,8 +75,6 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-@import "./../styles/ContainerWithContent.css";
-
 .organizationList {
   column-width: 20em;
   column-gap: 6em;
@@ -93,11 +85,10 @@ export default Vue.extend({
   width: 100%;
 }
 
-.organizationLink {
+.link {
   text-decoration: none;
-}
-
-.organizationLink:hover {
-  text-decoration: underline;
+  &:hover {
+    text-decoration: underline;
+  }
 }
 </style>
