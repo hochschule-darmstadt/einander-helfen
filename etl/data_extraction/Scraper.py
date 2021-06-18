@@ -23,7 +23,7 @@ class Scraper:
     # Delay between requests
     delay = 0.5
 
-    def __init__(self, name, index):
+    def __init__(self, name):
         """Constructor of the scraper."""
 
         # Scraper name -> Overwritten by name of the scraper file

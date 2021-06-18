@@ -15,7 +15,7 @@ logger = LoggerFactory.get_general_logger()
 scraper_threads = []
 
 
-def execute_scraper(scraper_file_name: str, index: int):
+def execute_scraper(scraper_file_name: str):
     """Looks for the given file_name in the /data_extraction/scraper directory.
     Checks if the files contains a subclass of Scraper (/data_extraction/Scraper.py) and starts the run function.
     Writes the scraped data and errors during the scraping process data_extraction/data and data_extraction/errors."""
@@ -34,7 +34,7 @@ def execute_scraper(scraper_file_name: str, index: int):
             raise Exception(f'[{scraper_file_name}] Error: No sub-class of class Scraper found')
 
         # Create instance of the Scraper sub-class and execute the run method 
-        scraper_instance = scraper_class(scraper_file_name, index)
+        scraper_instance = scraper_class(scraper_file_name)
         scraper_instance.run()
 
     except Exception as err:
@@ -53,7 +53,7 @@ def run():
 
             # Create a thread with each file in the directory data_extraction/scraper
             # and execute the execute_scraper function with it
-            thread = threading.Thread(target=execute_scraper, args=(scraper_module_name, i,))
+            thread = threading.Thread(target=execute_scraper, args=(scraper_module_name,))
             thread.start()
             scraper_threads.append(thread)
 

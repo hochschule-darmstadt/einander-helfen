@@ -8,10 +8,10 @@ from data_extraction.Scraper import Scraper
 class GuteTatBerlinScraper(Scraper):
     """Scrapes the website gute-tat.de for the region berlin."""
 
-    def __init__(self, name, index):
+    def __init__(self, name):
         """Constructor of GuteTatBerlinScraper."""
 
-        super().__init__(name, index)
+        super().__init__(name)
         self.base_url = 'https://ehrenamtsmanager.gute-tat.de/oberflaeche/'
         self.website_url = 'www.gute-tat.de'
 
