@@ -12,7 +12,7 @@ from data_enhancement import enhance_data as enhance_data
 from data_extraction.scrape_data import run as run_extraction
 from shared.utils import write_data_to_json, read_data_from_json
 from shared.LoggerFactory import LoggerFactory
-from data_management.DataManager import DataManager
+from data_management.data_manager import DataManager
 
 
 logger = LoggerFactory.get_general_logger()

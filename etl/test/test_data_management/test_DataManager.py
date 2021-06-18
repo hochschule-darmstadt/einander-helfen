@@ -4,7 +4,7 @@ import os
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 os.environ['ROOT_DIR'] = ROOT_DIR
 
-from data_management.DataManager import DataManager
+from data_management.data_manager import DataManager
 
 
 class TestDataManager(unittest.TestCase):
