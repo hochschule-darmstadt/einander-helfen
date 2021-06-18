@@ -11,11 +11,11 @@ class JsonPost:
         """Constructor of JsonPost."""
 
         self.json = json
-        self.mod_json = self.__remove_not_needed_data(deepcopy(json))
+        self.mod_json = self._remove_not_needed_data(deepcopy(json))
         self.is_duplicate = False
 
     @staticmethod
-    def __remove_not_needed_data(json):
+    def _remove_not_needed_data(json):
         """Removes data from json which should not be use in the comparison."""
 
         if 'link' in json:

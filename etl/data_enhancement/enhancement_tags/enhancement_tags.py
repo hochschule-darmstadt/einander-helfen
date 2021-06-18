@@ -10,7 +10,7 @@ logger = LoggerFactory.get_enhancement_logger()
 
 def run(data, domain):
     """ calls functions for extracting and ranking tags """
-    logger.debug("run()")
+    logger.debug('run()')
 
     find_new_tags(data, domain)
     rank_tags(data, domain)
@@ -18,10 +18,10 @@ def run(data, domain):
 
 def load_tags_from_file():
     """loads given tags from csv file and returns them in a dict"""
-    logger.debug("load_tags_from_file()")
+    logger.debug('load_tags_from_file()')
 
     loaded_tags = {}
-    logger.debug(f"load_tags_from_file - path: {os.path.join(ROOT_DIR,'data_enhancement', 'Tags-einander-helfen.csv')}")
+    logger.debug(f'load_tags_from_file - path: {os.path.join(ROOT_DIR,"data_enhancement", "Tags-einander-helfen.csv")}')
     with open(os.path.join(ROOT_DIR, 'data_enhancement', 'Tags-einander-helfen.csv'), newline='',
               encoding='utf-8') as csvfile:
         reader = csv.DictReader(csvfile, delimiter=';')
@@ -35,7 +35,7 @@ def load_tags_from_file():
 
 def get_synonyms_as_list(values):
     """converts the synonyms to a list"""
-    logger.debug("get_synonyms_as_list()")
+    logger.debug('get_synonyms_as_list()')
 
     synonyms = []
     for val in values:
@@ -47,7 +47,7 @@ def get_synonyms_as_list(values):
 def find_new_tags(file, domain):
     """scans categories of crawled data to find tags not existing in the given csv
     writes new found tags to output directory as new_tags.json"""
-    logger.debug("find_new_tags()")
+    logger.debug('find_new_tags()')
 
     loaded_tags = load_tags_from_file()
     synonyms = get_synonyms_as_list(loaded_tags.values())
@@ -58,9 +58,9 @@ def find_new_tags(file, domain):
             if category not in loaded_tags.keys() and category not in synonyms:
                 new_tags.append(category)
     new_tags = list(set(new_tags))
-    output_path = os.path.join(ROOT_DIR, 'data_enhancement/output', f"new_tags_{domain}{'.json'}")
+    output_path = os.path.join(ROOT_DIR, 'data_enhancement/output', f'new_tags_{domain}{".json"}')
     write_data_to_json(output_path, new_tags)
-    logger.info("Wrote new tags to '" + output_path + "'")
+    logger.info('Wrote new tags to \'' + output_path + '\'')
 
 
 def rank_tags(file, domain):
@@ -68,7 +68,7 @@ def rank_tags(file, domain):
     # todo: find occurrences of synonyms and add to label count,
     #       print to json file in the same format like the tag ontology csv file,
     #       make a new index for the ranked tag ontology for frontend access
-    logger.debug("rank_tags()")
+    logger.debug('rank_tags()')
 
     loaded_tags = load_tags_from_file()
     labels = loaded_tags.keys()
@@ -87,6 +87,6 @@ def rank_tags(file, domain):
                         tag_ranking.update({tag: new_value})
     sorted_tags = sorted(tag_ranking.items(), key=lambda x: x[1], reverse=True)
     tag_ranking = dict(sorted_tags)
-    output_path = os.path.join(ROOT_DIR, 'data_enhancement', 'output', f"ranked_tags_{domain}{'.json'}")
+    output_path = os.path.join(ROOT_DIR, 'data_enhancement', 'output', f'ranked_tags_{domain}{".json"}')
     write_data_to_json(output_path, tag_ranking)
-    logger.info("Wrote ranked tags to '" + output_path + "'")
+    logger.info('Wrote ranked tags to \'' + output_path + '\'')
