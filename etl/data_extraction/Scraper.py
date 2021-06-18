@@ -3,6 +3,8 @@ import sys
 import time
 
 import requests
+import lxml
+from lxml.html.clean import Cleaner
 from bs4 import BeautifulSoup
 from tqdm import tqdm
 
@@ -41,6 +43,8 @@ class Scraper:
 
         self.progress_bar = None
 
+        self._init_cleaner()
+
     def run(self):
         """Runs the Scraper.
         Step 1: Adding URLs
@@ -78,7 +82,13 @@ class Scraper:
         try:
             detail_page = self.soupify(url)
             parsed_data = self.parse(detail_page, url)
+
+            keys_to_skip = ['categories', 'link', 'source', 'geo_location', 'post_struct']
+
             if parsed_data is not None:
+                for key in parsed_data.keys():
+                    if key not in keys_to_skip and parsed_data[key] is not None and len(parsed_data[key]) > 2:
+                        parsed_data[key] = self.sanitize_html(parsed_data[key])
                 append_data_to_json(os.path.join(ROOT_DIR, 'data_extraction/data', f'{self.name}.json'), parsed_data)
 
         except Exception as err:
@@ -163,6 +173,16 @@ class Scraper:
 
         return BeautifulSoup(value, 'lxml').text
 
+    def sanitize_html(self, value):
+        """Cleans html tags from css and javascript content"""
+        self.logger.debug("sanitize_html()")
+
+        cleaned_value = str(self.cleaner.clean_html(value))
+        if cleaned_value.startswith('<p>') and cleaned_value.endswith('</p>'):
+            cleaned_value = cleaned_value[3:-4]
+
+        return cleaned_value
+
     def update_fetching_progress(self, current, total):
         """ Updates progress data of fetching process for crawler and triggers print of progeess bar"""
         self.logger.debug("get_progress_data_fetching()")
@@ -217,3 +237,16 @@ class Scraper:
         self.progress_bar.set_description(f'[{phase}ED] {self.name}')
         self.progress_bar.close()
         self.progress_bar = None
+
+    def _init_cleaner(self):
+        self.cleaner = Cleaner()
+        self.cleaner.scripts = True  # Removes any <script> tags.
+        self.cleaner.javascript = True  # Removes any Javascript, like an onclick attribute. Also removes stylesheets as they could contain Javascript.
+        self.cleaner.style = True  # Removes any style tags.
+        self.cleaner.inline_style = True  # Removes any style attributes. Defaults to the value of the style option.
+        self.cleaner.frames = True  # Removes any frame-related tags
+        self.cleaner.forms = True  # Removes any form tags
+        self.cleaner.annoying_tags = True  # Tags that aren't wrong, but are annoying.
+        self.cleaner.remove_unknown_tags = True  # Remove any tags that aren't standard parts of HTML.
+        self.cleaner.comments = True  # Removes any comments.
+        self.cleaner.links = False  # Do not remove links.
