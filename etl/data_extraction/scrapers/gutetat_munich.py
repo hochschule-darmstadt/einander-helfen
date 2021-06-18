@@ -1,5 +1,5 @@
-from data_extraction.Scraper import Scraper
-from scraper.gutetat_berlin import GuteTatBerlinScraper
+from data_extraction.scraper import Scraper
+from scrapers.gutetat_berlin import GuteTatBerlinScraper
 
 
 class GuteTatMunichScraper(GuteTatBerlinScraper, Scraper):

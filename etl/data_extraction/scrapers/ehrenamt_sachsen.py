@@ -1,6 +1,6 @@
 import re
 
-from data_extraction.Scraper import Scraper
+from data_extraction.scraper import Scraper
 
 
 class EhrenamtSachsenScraper(Scraper):
@@ -11,7 +11,7 @@ class EhrenamtSachsenScraper(Scraper):
 
     def parse(self, response, url):
         """Handles the soupified response of a detail page in the predefined way and returns it"""
-        self.logger.debug("parse()")
+        self.logger.debug('parse()')
 
         content = response.find('div', {'id': 'main-content-wrapper'})
         title = content.find('h1', {'id': 'page-title'})
@@ -51,7 +51,7 @@ class EhrenamtSachsenScraper(Scraper):
             'organization': None,
             'contact': None,
             'link': url,
-            'source': "www.ehrenamt.sachsen.de",
+            'source': 'www.ehrenamt.sachsen.de',
             'geo_location': None,
         }
 
@@ -104,7 +104,7 @@ class EhrenamtSachsenScraper(Scraper):
 
     def add_urls(self):
         """Adds all URLs of detail pages, found on the search pages, for the crawl function to scrape"""
-        self.logger.debug("add_urls()")
+        self.logger.debug('add_urls()')
 
         import time
 
@@ -137,10 +137,10 @@ class EhrenamtSachsenScraper(Scraper):
             for link_tag in detail_a_tags:
                 current_link = self.base_url + link_tag['href']
                 if current_link in self.urls:
-                    self.logger.debug(f"func: add_urls, 'body:'page_index: {index},"
-                                      f" search_page: {search_page_url}, "
-                                      f"duplicate_index: {current_link}, "
-                                      f"duplicate_index: {self.urls.index(current_link)}")
+                    self.logger.debug(f'func: add_urls, page_index: {index},'
+                                      f' search_page: {search_page_url}, '
+                                      f'duplicate_index: {current_link}, '
+                                      f'duplicate_index: {self.urls.index(current_link)}')
 
                 else:
                     self.urls.append(current_link)

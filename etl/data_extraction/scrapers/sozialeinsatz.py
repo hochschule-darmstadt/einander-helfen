@@ -1,7 +1,7 @@
 import math
 import re
 
-from data_extraction.Scraper import Scraper
+from data_extraction.scraper import Scraper
 
 
 class SozialeinsatzScraper(Scraper):
@@ -120,7 +120,7 @@ class SozialeinsatzScraper(Scraper):
             for link_tag in detail_a_tags:
                 current_link = self.base_url + link_tag['href']
                 if current_link in self.urls:
-                    self.logger.debug(f"func: add_urls, 'body:'page_index: {index},"
+                    self.logger.debug(f'func: add_urls, page_index: {index},'
                                       f' search_page: {search_page_url}, '
                                       f'duplicate_index: {current_link}, '
                                       f'duplicate_index: {self.urls.index(current_link)}')

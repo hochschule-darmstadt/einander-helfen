@@ -4,7 +4,7 @@ import threading
 from importlib import import_module
 from inspect import getmembers, isclass
 
-from data_extraction.Scraper import Scraper
+from data_extraction.scraper import Scraper
 from shared.LoggerFactory import LoggerFactory
 
 # Root Directory (/etl)
@@ -19,10 +19,10 @@ def execute_scraper(scraper_file_name: str):
     """Looks for the given file_name in the /data_extraction/scraper directory.
     Checks if the files contains a subclass of Scraper (/data_extraction/Scraper.py) and starts the run function.
     Writes the scraped data and errors during the scraping process data_extraction/data and data_extraction/errors."""
-    logger.debug("execute_scraper()")
-    logger.info(f"execute_scraper for {scraper_file_name}")
+    logger.debug('execute_scraper()')
+    logger.info(f'execute_scraper for {scraper_file_name}')
     try:
-        scraper_module = import_module(f'data_extraction.scraper.{scraper_file_name}')
+        scraper_module = import_module(f'data_extraction.scrapers.{scraper_file_name}')
         scraper_class = None
 
         # Looks for a derived sub-class of class 'Scraper' in imported module
@@ -44,8 +44,8 @@ def execute_scraper(scraper_file_name: str):
 def run():
     """Starts a thread with the execute_scraper function for all overridden scraper subclasses in
     /data_extraction/scraper."""
-    logger.debug("run()")
-    for i, file_entry in enumerate(os.scandir(os.path.join(ROOT_DIR, 'data_extraction/scraper'))):
+    logger.debug('run()')
+    for i, file_entry in enumerate(os.scandir(os.path.join(ROOT_DIR, 'data_extraction/scrapers'))):
 
         if file_entry.is_file():
             scraper_module_name = os.path.splitext(
@@ -63,4 +63,4 @@ def run():
 
     # Prevents double output of the last progress bar
     print(' '*200)
-    logger.info("All crawlers were successfully executed")
+    logger.info('All crawlers were successfully executed')
