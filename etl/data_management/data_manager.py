@@ -2,7 +2,7 @@ import os
 import time
 import datetime
 import shutil
-from shared.LoggerFactory import LoggerFactory
+from shared.logger_factory import LoggerFactory
 from shared.utils import read_data_from_json, write_data_to_json
 
 ROOT_DIR = os.environ['ROOT_DIR']

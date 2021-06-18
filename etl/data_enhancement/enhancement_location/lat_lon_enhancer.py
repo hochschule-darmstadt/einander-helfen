@@ -2,7 +2,7 @@ from geopy.geocoders import Nominatim
 import csv
 import time
 import os
-from shared.LoggerFactory import LoggerFactory
+from shared.logger_factory import LoggerFactory
 from data_enhancement.enhancement_location.request_string_cleaner import RequestStringCleaner
 
 

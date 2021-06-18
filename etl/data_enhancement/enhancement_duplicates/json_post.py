@@ -1,5 +1,5 @@
 from copy import deepcopy
-from shared.LoggerFactory import LoggerFactory
+from shared.logger_factory import LoggerFactory
 
 
 class JsonPost:

@@ -29,10 +29,10 @@ class LoggerFactory:
             return LoggerFactory.logger_dict[name]
 
         # set up general formatting for displayed log messages
-        formatter_display = logging.Formatter('%(asctime)s [%(levelname)s]:\t %(message)s', "%Y-%m-%d %H:%M:%S")
+        formatter_display = logging.Formatter('%(asctime)s [%(levelname)s]:\t %(message)s', '%Y-%m-%d %H:%M:%S')
         # prettier 2 line print and module information for logfile
         formatter_logfile = logging.Formatter('%(asctime)s [%(levelname)s]\n\t\t\t\t\t[%(module)s]:\t %(message)s',
-                                              "%Y-%m-%d %H:%M:%S")
+                                              '%Y-%m-%d %H:%M:%S')
 
         # set up logging to logfile. all levels of messages will be logged to individual files, old contents will be
         # overwritten

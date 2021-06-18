@@ -5,7 +5,7 @@ from importlib import import_module
 from inspect import getmembers, isclass
 
 from data_extraction.scraper import Scraper
-from shared.LoggerFactory import LoggerFactory
+from shared.logger_factory import LoggerFactory
 
 # Root Directory (/etl)
 ROOT_DIR = os.environ['ROOT_DIR']

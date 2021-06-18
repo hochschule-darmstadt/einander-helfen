@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 from tqdm import tqdm
 
 from shared.utils import append_data_to_json, write_data_to_json
-from shared.LoggerFactory import LoggerFactory
+from shared.logger_factory import LoggerFactory
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 

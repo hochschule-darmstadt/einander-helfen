@@ -1,5 +1,5 @@
 from data_enhancement.enhancement_duplicates.json_post import JsonPost
-from shared.LoggerFactory import LoggerFactory
+from shared.logger_factory import LoggerFactory
 
 logger = LoggerFactory.get_enhancement_logger()
 

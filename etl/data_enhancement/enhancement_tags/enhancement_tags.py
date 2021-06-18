@@ -2,7 +2,7 @@ import csv
 import os
 
 from shared.utils import write_data_to_json
-from shared.LoggerFactory import LoggerFactory
+from shared.logger_factory import LoggerFactory
 
 ROOT_DIR = os.environ['ROOT_DIR']
 logger = LoggerFactory.get_enhancement_logger()

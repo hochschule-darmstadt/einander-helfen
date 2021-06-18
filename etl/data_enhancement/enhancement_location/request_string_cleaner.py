@@ -1,6 +1,6 @@
 import re
 from bs4 import BeautifulSoup
-from shared.LoggerFactory import LoggerFactory
+from shared.logger_factory import LoggerFactory
 
 
 class RequestStringCleaner:
