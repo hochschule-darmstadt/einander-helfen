@@ -1,6 +1,6 @@
 import re
 
-from data_extraction.Scraper import Scraper
+from data_extraction.scraper import Scraper
 
 
 class BetterplaceScraper(Scraper):
@@ -11,7 +11,7 @@ class BetterplaceScraper(Scraper):
 
     def parse(self, response, url):
         """Handles the soupified response of a detail page in the predefined way and returns it"""
-        self.logger.debug("parse()")
+        self.logger.debug('parse()')
 
         title = response.find('div', {'class': 'job-description-content-header'}).h1.text.strip() \
             if response.find('div', {'class': 'job-description-content-header'}) is not None \
@@ -31,7 +31,7 @@ class BetterplaceScraper(Scraper):
             if len(a_list) > 0:
                 contact_text = '<br>'.join(a_list)
 
-        location_spans = content.find("h4", string=re.compile(r'Wo du hilfst.*')).parent.find_all('span')
+        location_spans = content.find('h4', string=re.compile(r'Wo du hilfst.*')).parent.find_all('span')
 
         lat = None
         lon = None
@@ -60,7 +60,7 @@ class BetterplaceScraper(Scraper):
             'organization': None,
             'contact': contact_text,
             'link': url or None,
-            'source': "betterplace.org",
+            'source': 'betterplace.org',
             'geo_location':  {
                 'lat': lat,
                 'lon': lon,
@@ -107,7 +107,7 @@ class BetterplaceScraper(Scraper):
 
     def add_urls(self):
         """Adds all URLs of detail pages, found on the search pages, for the crawl function to scrape"""
-        self.logger.debug("add_urls()")
+        self.logger.debug('add_urls()')
 
         import time
 
@@ -128,10 +128,10 @@ class BetterplaceScraper(Scraper):
             for link_tag in detail_a_tags:
                 current_link = self.base_url + link_tag['href']
                 if current_link in self.urls:
-                    self.logger.debug(f"func: add_urls, 'body:'page_index: {index},"
-                                      f" search_page: {search_page_url}, "
-                                      f"duplicate_index: {current_link}, "
-                                      f"duplicate_index: {self.urls.index(current_link)}")
+                    self.logger.debug(f'func: add_urls, page_index: {index},'
+                                      f' search_page: {search_page_url}, '
+                                      f'duplicate_index: {current_link}, '
+                                      f'duplicate_index: {self.urls.index(current_link)}')
 
                 else:
                     self.urls.append(current_link)

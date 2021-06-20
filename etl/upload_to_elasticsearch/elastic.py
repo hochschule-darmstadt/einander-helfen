@@ -6,7 +6,7 @@ import time
 from elasticsearch import Elasticsearch
 
 from shared.utils import read_data_from_json
-from shared.LoggerFactory import LoggerFactory
+from shared.logger_factory import LoggerFactory
 
 ROOT_DIR = os.environ['ROOT_DIR']
 client = Elasticsearch([{'host': '127.0.0.1', 'port': 9200}])
