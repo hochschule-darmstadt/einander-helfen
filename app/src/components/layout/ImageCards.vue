@@ -1,6 +1,6 @@
 <template>
   <v-row justify="center">
-    <v-col xs="12" sm="6" md="3" v-for="card in cards" :key="card.title">
+    <v-col xs="12" sm="6" md="6" lg="3" v-for="card in cards" :key="card.title">
       <v-hover v-slot:default="{ hover }">
         <v-card
           class="mx-auto"
