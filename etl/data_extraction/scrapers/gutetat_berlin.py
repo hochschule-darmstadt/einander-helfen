@@ -2,16 +2,16 @@ import math
 import re
 import time
 
-from data_extraction.Scraper import Scraper
+from data_extraction.scraper import Scraper
 
 
 class GuteTatBerlinScraper(Scraper):
     """Scrapes the website gute-tat.de for the region berlin."""
 
-    def __init__(self, name, index):
+    def __init__(self, name):
         """Constructor of GuteTatBerlinScraper."""
 
-        super().__init__(name, index)
+        super().__init__(name)
         self.base_url = 'https://ehrenamtsmanager.gute-tat.de/oberflaeche/'
         self.website_url = 'www.gute-tat.de'
 
@@ -20,20 +20,20 @@ class GuteTatBerlinScraper(Scraper):
 
     def parse(self, response, url):
         """Transforms the soupified response of a detail page in a predefined way and returns it."""
-        self.logger.debug("parse()")
+        self.logger.debug('parse()')
 
         main_table = response.find('table')
         project_address_attr = main_table.find_all('tr')[23:30]
         project_address_str = ''
         for tr in project_address_attr:
             project_address_str += str(tr)
-        project_address_str = "<table>" + project_address_str + "</table>"
+        project_address_str = '<table>' + project_address_str + '</table>'
 
         contact_attr = main_table.find_all('tr')[34:47]
         contact_str = ''
         for tr in contact_attr:
             contact_str += str(tr)
-        contact_str = "<table>" + contact_str + "</table>"
+        contact_str = '<table>' + contact_str + '</table>'
 
         parsed_object = {
             'title': response.find('strong', text='Name des Projekts:').parent.parent.find_all('td')[1].text or None,
@@ -69,7 +69,7 @@ class GuteTatBerlinScraper(Scraper):
             'title': self.clean_string(parsed_object['title']) or None,
             'categories': [],
             'location': {
-                'country': "Deutschland",
+                'country': 'Deutschland',
                 'zipcode': self.clean_string(location_plzort[0]) or None,
                 'city': self.clean_string(location_plzort[1]) or None,
                 'street': self.clean_string(location_street) or None,
@@ -107,9 +107,9 @@ class GuteTatBerlinScraper(Scraper):
 
     def add_urls(self):
         """Adds URLs to an array which is later iterated over and scraped each."""
-        self.logger.debug("add_urls()")
+        self.logger.debug('add_urls()')
 
-        end_page = self.__fetch_end_page()
+        end_page = self._fetch_end_page()
 
         for index in range(1, end_page + 1):
             time.sleep(self.delay)
@@ -132,16 +132,16 @@ class GuteTatBerlinScraper(Scraper):
             for detail_link in detail_links:
                 current_link = self.base_url + detail_link['href']
                 if current_link in self.urls:
-                    self.logger.debug(f"func: add_urls, 'body:'page_index: {index},"
-                                      f" search_page: {search_page_url}, "
-                                      f"duplicate_index: {current_link}, "
-                                      f"duplicate_index: {self.urls.index(current_link)}")
+                    self.logger.debug(f'func: add_urls, page_index: {index},'
+                                      f' search_page: {search_page_url}, '
+                                      f'duplicate_index: {current_link}, '
+                                      f'duplicate_index: {self.urls.index(current_link)}')
                 else:
                     self.urls.append(current_link)
 
-    def __fetch_end_page(self):
+    def _fetch_end_page(self):
         """Fetches the number of pages from the search result page for the add_urls function."""
-        self.logger.debug("__fetch_end_page()")
+        self.logger.debug('_fetch_end_page()')
 
         entries_per_page = 30
 

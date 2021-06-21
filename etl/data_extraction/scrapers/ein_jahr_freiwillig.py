@@ -1,4 +1,4 @@
-from data_extraction.Scraper import Scraper
+from data_extraction.scraper import Scraper
 
 import re
 import math
@@ -126,7 +126,7 @@ class EinJahrFreiwillig(Scraper):
 
     def add_urls(self):
         """Adds all URLs of detail pages, found on the search pages, for the crawl function to scrape"""
-        self.logger.debug("add_urls()")
+        self.logger.debug('add_urls()')
         import time
 
         search_page_url = f'{self.base_url}/de/suche/ort?geo%5Bvalue%5D=10&geo%5Bsource_configuration' \
@@ -153,10 +153,10 @@ class EinJahrFreiwillig(Scraper):
             for link_tag in detail_link_tags:
                 current_link = self.base_url + link_tag['href']
                 if current_link in self.urls:
-                    self.logger.debug(f"func: add_urls, 'body:'page_index: {index},"
-                                      f" search_page: {search_page_url}, "
-                                      f"duplicate_index: {current_link}, "
-                                      f"duplicate_index: {self.urls.index(current_link)}")
+                    self.logger.debug(f'func: add_urls, page_index: {index},'
+                                      f' search_page: {search_page_url}, '
+                                      f'duplicate_index: {current_link}, '
+                                      f'duplicate_index: {self.urls.index(current_link)}')
                 else:
                     self.urls.append(current_link)
 

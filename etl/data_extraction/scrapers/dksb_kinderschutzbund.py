@@ -1,6 +1,6 @@
 import re
 
-from data_extraction.Scraper import Scraper
+from data_extraction.scraper import Scraper
 
 
 class DKSBScraper(Scraper):
@@ -11,7 +11,7 @@ class DKSBScraper(Scraper):
 
     def parse(self, response, url):
         """Handles the soupified response of a detail page in the predefined way and returns it"""
-        self.logger.debug("parse()")
+        self.logger.debug('parse()')
 
         content = response.find('div', {'class': 'remodal-content'})
         title_h2 = content.find('h2', {'class': 'subHeadline'})
@@ -53,7 +53,7 @@ Wenn Sie ehrenamtlich beim DKSB mitarbeiten, lernen Sie gleichgesinnte Menschen 
             'organization': None,
             'contact': contact,
             'link': url or None,
-            'source': 'https://www.dksb.de',
+            'source': 'www.dksb.de',
             'geo_location': None,
         }
 
@@ -98,7 +98,7 @@ Wenn Sie ehrenamtlich beim DKSB mitarbeiten, lernen Sie gleichgesinnte Menschen 
         for list_entry in detail_list_entries:
             current_link = self.base_url + '/template/php/dksbvorort/details.php?key=' + list_entry['name']
             if current_link in self.urls:
-                self.logger.debug(f"func: add_urls, 'body:'page_index: 1,"
+                self.logger.debug(f'func: add_urls, page_index: 1,'
                                   f' search_page: {search_page_url}, '
                                   f'duplicate_index: {current_link}, '
                                   f'duplicate_index: {self.urls.index(current_link)}')

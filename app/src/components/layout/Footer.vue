@@ -1,3 +1,5 @@
+<!-- The Footer contains links to other important pages of the website. -->
+
 <template>
   <v-footer color="#00254f" padless>
     <v-row justify="center" no-gutters>
@@ -25,6 +27,7 @@ export default Vue.extend({
   data: function () {
     return {
       links: [
+        { text: "Organisationen", route: "/organizations" },
         { text: "Über uns", route: "/about" },
         { text: "Impressum", route: "/imprint" },
         { text: "Datenschutzerklärung", route: "/privacy" },

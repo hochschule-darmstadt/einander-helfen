@@ -1,6 +1,6 @@
 import re
 
-from data_extraction.Scraper import Scraper
+from data_extraction.scraper import Scraper
 
 
 class WeltwaertsScraper(Scraper):
@@ -11,7 +11,7 @@ class WeltwaertsScraper(Scraper):
 
     def parse(self, response, url):
         """Handles the soupified response of a detail page in the predefined way and returns it"""
-        self.logger.debug("parse()")
+        self.logger.debug('parse()')
 
         param_box = response.find('div', {'class': 'parameter__box'})
 
@@ -32,7 +32,7 @@ class WeltwaertsScraper(Scraper):
                 pass
 
         parsed_object = {
-            'title': param_box.find("h1").decode_contents().strip() or None,
+            'title': param_box.find('h1').decode_contents().strip() or None,
             'categories': ['International'],
             'location': param_box.find('li').find('span',
                                                   {'class': 'parameter__value'}).decode_contents().strip() or None,
@@ -50,14 +50,14 @@ class WeltwaertsScraper(Scraper):
                 'div').p.decode_contents().strip() or None,
             'contact': contact.decode_contents().strip() or None,
             'link': url or None,
-            'source': "www.weltwaerts.de",
+            'source': 'www.weltwaerts.de',
             'geo_location': {
                 'lat': lat,
                 'lon': lon,
             } if lat and lon else None,  # If longitude and latitude are None, geo_location is set to None
         }
 
-        contact_split = self.__extract_contact_data(contact, parsed_object['contact'])
+        contact_split = self._extract_contact_data(contact, parsed_object['contact'])
 
         parsed_object['post_struct'] = {
             'title': parsed_object['title'],
@@ -93,7 +93,7 @@ class WeltwaertsScraper(Scraper):
 
     def add_urls(self):
         """Adds all URLs of detail pages, found on the search pages, for the crawl function to scrape"""
-        self.logger.debug("add_urls()")
+        self.logger.debug('add_urls()')
 
         import time
 
@@ -123,10 +123,10 @@ class WeltwaertsScraper(Scraper):
             for link_tag in detail_link_tags:
                 current_link = self.base_url + '/' + link_tag['href']
                 if current_link in self.urls:
-                    self.logger.debug(f"func: add_urls, 'body:'page_index: {index},"
-                                      f" search_page: {search_page_url}, "
-                                      f"duplicate_index: {current_link}, "
-                                      f"duplicate_index: {self.urls.index(current_link)}")
+                    self.logger.debug(f'func: add_urls, page_index: {index},'
+                                      f' search_page: {search_page_url}, '
+                                      f'duplicate_index: {current_link}, '
+                                      f'duplicate_index: {self.urls.index(current_link)}')
 
                 else:
                     self.urls.append(current_link)
@@ -140,9 +140,9 @@ class WeltwaertsScraper(Scraper):
 
             time.sleep(self.delay)
 
-    def __extract_contact_data(self, contact_html, contact_raw):
+    def _extract_contact_data(self, contact_html, contact_raw):
         """Extracts the contact data"""
-        self.logger.debug("__extract_contact_data()")
+        self.logger.debug('_extract_contact_data()')
 
         contact = {
             'name': None,
@@ -150,7 +150,7 @@ class WeltwaertsScraper(Scraper):
             'city': None,
             'street': None,
             'phone': None,
-            'email': contact_html.find('a', href=re.compile("mailto:.*"))['href'].replace('mailto:', '').strip() or None
+            'email': contact_html.find('a', href=re.compile('mailto:.*'))['href'].replace('mailto:', '').strip() or None
         }
 
         # Removing HTML-Tags

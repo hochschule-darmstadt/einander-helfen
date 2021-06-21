@@ -1,3 +1,6 @@
+/**
+ * The routing of the pages of einander-helfen.org
+ */
 import Vue from "vue";
 import Router from "vue-router";
 
@@ -28,6 +31,11 @@ const routes = [
     path: "/about",
     name: "about",
     component: () => import("@/views/About.vue"),
+  },
+  {
+    path: "/organizations",
+    name: "organizations",
+    component: () => import("@/views/Organizations.vue"),
   },
   {
     path: "*",

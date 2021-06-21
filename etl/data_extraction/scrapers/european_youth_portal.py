@@ -1,6 +1,6 @@
 import re
 
-from data_extraction.Scraper import Scraper
+from data_extraction.scraper import Scraper
 
 
 class EuropeanYouthPortalScraper(Scraper):
@@ -11,7 +11,7 @@ class EuropeanYouthPortalScraper(Scraper):
 
     def parse(self, response, url):
         """Handles the soupified response of a detail page in the predefined way and returns it"""
-        self.logger.debug("parse()")
+        self.logger.debug('parse()')
 
         param_box = response.find('div', {'class': 'eyp-standard-block'})
 
@@ -50,7 +50,7 @@ class EuropeanYouthPortalScraper(Scraper):
             'organization': organization_link or None,
             'contact': None,
             'link': url or None,
-            'source': "europa.eu",
+            'source': 'www.europa.eu',
             'geo_location': None,
         }
 
@@ -94,7 +94,7 @@ class EuropeanYouthPortalScraper(Scraper):
 
     def add_urls(self):
         """Adds all URLs of detail pages, found on the search pages, for the crawl function to scrape"""
-        self.logger.debug("add_urls()")
+        self.logger.debug('add_urls()')
 
         import time
 
@@ -106,7 +106,7 @@ class EuropeanYouthPortalScraper(Scraper):
 
             response = self.soupify(next_page_url)
 
-            card_divs = response.find_all("div", {"class": "eyp-card block-is-flex box"})
+            card_divs = response.find_all('div', {'class': 'eyp-card block-is-flex box'})
 
             # Get <a> tags of individual results
             detail_page_a_tags = [x.find('a', href=re.compile('/youth/volunteering/organisation')) for x in card_divs]
@@ -126,10 +126,10 @@ class EuropeanYouthPortalScraper(Scraper):
             for link_tag in detail_page_a_tags:
                 current_link = self.base_url + '/' + link_tag['href']
                 if current_link in self.urls:
-                    self.logger.debug(f"func: add_urls, 'body:'page_index: {index},"
-                                      f" search_page: {search_page_url}, "
-                                      f"duplicate_index: {current_link}, "
-                                      f"duplicate_index: {self.urls.index(current_link)}")
+                    self.logger.debug(f'func: add_urls, page_index: {index},'
+                                      f' search_page: {search_page_url}, '
+                                      f'duplicate_index: {current_link}, '
+                                      f'duplicate_index: {self.urls.index(current_link)}')
 
                 else:
                     self.urls.append(current_link)
