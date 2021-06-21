@@ -2,7 +2,7 @@ from geopy.geocoders import Nominatim
 import csv
 import time
 import os
-from shared.LoggerFactory import LoggerFactory
+from shared.logger_factory import LoggerFactory
 from data_enhancement.enhancement_location.request_string_cleaner import RequestStringCleaner
 
 
@@ -15,24 +15,23 @@ class LatLonEnhancer:
     dict_file = os.path.join(os.getenv('ROOT_DIR'), 'data_enhancement',
                              'enhancement_location', 'geocoder_lat_lon.csv')
     blacklist_file = os.path.join(os.getenv('ROOT_DIR'), 'data_enhancement',
-                             'enhancement_location', 'geocoder_blacklist.csv')
+                                  'enhancement_location', 'geocoder_blacklist.csv')
 
     lat_lon_dict = {}
     lat_lon_blacklist = []
 
     def __init__(self):
         """Initializes the enhancer."""
-        self.__setup()
+        self._setup()
         self.geo_locator = Nominatim(user_agent='einander-helfen.org')
-        self.__load_local_storage()
-        self.request_string_cleaner = RequestStringCleaner()
+        self._load_local_storage()
 
-    def __setup(self):
+    def _setup(self):
         """Checks if the local storage file exists and creates it if it is missing"""
-        LatLonEnhancer.logger.debug('__setup()')
+        LatLonEnhancer.logger.debug('_setup()')
 
         if not os.path.exists(self.dict_file):
-            LatLonEnhancer.logger.warn(f'Create missing geocoder_lat_lon.csv as {self.dict_file}')
+            LatLonEnhancer.logger.warning(f'Create missing geocoder_lat_lon.csv as {self.dict_file}')
             open(self.dict_file, 'x', encoding='utf-8')
 
     def enhance(self, post):
@@ -41,10 +40,10 @@ class LatLonEnhancer:
         # If object has lat lon: return object
         if None is post['geo_location']:
 
-            prioritized_request_list = self.get_prioritized_request_strings(post)
+            prioritized_request_list = self._get_prioritized_request_strings(post)
 
             for request_string in prioritized_request_list:
-                lat_lon = self.__check_local_storage(request_string)
+                lat_lon = self._check_local_storage(request_string)
 
                 if lat_lon is None:
                     if request_string in self.lat_lon_blacklist:
@@ -53,36 +52,36 @@ class LatLonEnhancer:
                         continue
 
                     try:
-                        lat_lon = self.__handle_api_requests(request_string)
+                        lat_lon = self._handle_api_requests(request_string)
                     except Exception as err:
                         LatLonEnhancer.logger.exception(str(err))
 
                     if lat_lon is not None:
-                        self.__add_new_entry(request_string, lat_lon)
+                        self._add_new_entry(request_string, lat_lon)
                         post['geo_location'] = lat_lon
                         post['post_struct']['geo_location'] = lat_lon
                         LatLonEnhancer.logger.debug(f'Enhanced lat lon for {post}')
                         break
                     else:
-                        self.__add_new_entry_to_blacklist(request_string)
+                        self._add_new_entry_to_blacklist(request_string)
                 else:
                     post['geo_location'] = lat_lon
                     post['post_struct']['geo_location'] = lat_lon
                     LatLonEnhancer.logger.debug(f'Used cache to enhance lat lon for {post}')
                     break
 
-    def __check_local_storage(self, request_string):
+    def _check_local_storage(self, request_string):
         """Checks if local storage contains a result for the query. If it does, the geo_location object is returned.
            Returns None if local storage doesn't contain a result for the request"""
-        LatLonEnhancer.logger.debug('__check_local_storage()')
+        LatLonEnhancer.logger.debug('_check_local_storage()')
 
         if request_string in self.lat_lon_dict:
             return self.lat_lon_dict[request_string]
         return None
 
-    def __load_local_storage(self):
+    def _load_local_storage(self):
         """Reads local storage file (.csv) into class attribute"""
-        LatLonEnhancer.logger.debug('__load_local_storage()')
+        LatLonEnhancer.logger.debug('_load_local_storage()')
 
         # Initialize the file, if it is not
         with open(self.dict_file, 'a', newline='', encoding='utf-8') as csvfile:
@@ -105,7 +104,7 @@ class LatLonEnhancer:
         except IOError:
             LatLonEnhancer.logger.warn('Blacklist file could not be opened.')
 
-    def __add_new_entry(self, request_string, geo_location):
+    def _add_new_entry(self, request_string, geo_location):
         """Adds new entry to local storage"""
 
         self.lat_lon_dict[request_string] = geo_location
@@ -115,7 +114,7 @@ class LatLonEnhancer:
 
         LatLonEnhancer.logger.info(f'Added geo location of \'{request_string}\' to the dictionary')
 
-    def __add_new_entry_to_blacklist(self, request_string):
+    def _add_new_entry_to_blacklist(self, request_string):
         """Adds new entry to local blacklist"""
 
         self.lat_lon_blacklist.append(request_string)
@@ -125,9 +124,9 @@ class LatLonEnhancer:
 
         LatLonEnhancer.logger.info(f'Added \'{request_string}\' to the location blacklist')
 
-    def __handle_api_requests(self, request_string):
+    def _handle_api_requests(self, request_string):
         """Executes the API request"""
-        LatLonEnhancer.logger.debug(f'__handle_api_requests({request_string})')
+        LatLonEnhancer.logger.debug(f'_handle_api_requests({request_string})')
 
         if request_string != '':
             location = self.geo_locator.geocode(request_string)
@@ -138,13 +137,13 @@ class LatLonEnhancer:
                 return geo_location
         return None
 
-    def get_prioritized_request_strings(self, post):
+    def _get_prioritized_request_strings(self, post):
         """Build a prioritized list of API request string"""
 
         prioritized_request_list = []
 
         if LatLonEnhancer.has_insufficient_information(post):
-            prioritized_request_list.append(self.request_string_cleaner.clean_request_string(post['location']))
+            prioritized_request_list.append(RequestStringCleaner.clean_request_string(post['location']))
 
         struct_data = post['post_struct']
 
@@ -164,7 +163,7 @@ class LatLonEnhancer:
                                                                           struct_data[field]['country'] else ''
                 request_string = request_string.strip()
 
-        prioritized_request_list.append(self.request_string_cleaner.clean_request_string(request_string))
+        prioritized_request_list.append(RequestStringCleaner.clean_request_string(request_string))
 
         return prioritized_request_list
 
@@ -187,6 +186,7 @@ def add_lat_lon(data):
     enhancer = LatLonEnhancer()
     for post in data:
         try:
+            post['post_struct']['map_address'] = None
             enhancer.enhance(post)
         except Exception as err:
             LatLonEnhancer.logger.exception(str(err))

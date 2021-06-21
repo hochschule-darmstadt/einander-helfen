@@ -33,6 +33,7 @@ export default Vue.extend({
     return {
       links: [
         { text: "Home", route: "/", icon: "home" },
+        { text: "Organisationen", route: "/organizations" },
         { text: "Über uns", route: "/about", icon: "group" },
         { text: "Impressum", route: "/imprint", icon: "gavel" },
         {
