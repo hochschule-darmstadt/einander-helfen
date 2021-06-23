@@ -1,7 +1,7 @@
 <!-- This Header contains the logo, all components for searching and the burger menu. -->
 
 <template>
-  <header class="header" :class="{ expanded: expanded }">
+  <header class="sticky_header" :class="{ expanded: expanded, fixed: fixed }">
     <div class="header_layout">
       <v-btn
         class="d-none d-sm-flex justify-center mr-4"
@@ -50,21 +50,59 @@ export default Vue.extend({
     SearchComponent,
     MenuButton,
   },
+  props: {
+    fixed: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data: function () {
     return {
-      expanded: false,
+      expanded: !this.fixed,
+      scrollPosition: 0,
     };
+  },
+  watch: {
+    fixed() {
+      this.expanded = !this.fixed;
+    },
+  },
+  mounted() {
+    window.addEventListener("scroll", this.updateScroll);
+  },
+  beforeDestroy() {
+    window.removeEventListener("scroll", this.updateScroll);
+  },
+  methods: {
+    updateScroll() {
+      const trashhold = 10; // px
+      if (this.scrollPosition + trashhold < window.scrollY) {
+        this.expanded = false;
+        this.scrollPosition = window.scrollY;
+      } else if (this.scrollPosition > window.scrollY) {
+        this.scrollPosition = window.scrollY;
+      }
+    },
   },
 });
 </script>
 
 <style lang="scss" scoped>
-.header {
-  padding: 12px 12px 0 12px;
+.sticky_header {
+  padding: 12px;
   background: #00254f;
   width: 100%;
-  // TODO: add transition
 
+  &.fixed {
+    position: fixed;
+    top: 0;
+    z-index: 1;
+    & + section {
+      position: relative;
+      top: 100px;
+    }
+  }
+  // TODO: add transition
   .header_layout {
     display: flex;
     flex-direction: row;
@@ -79,7 +117,8 @@ export default Vue.extend({
   .expantion_area {
     text-align: center;
     width: 100%;
-    margin-top: -5px;
+    margin-top: -8px;
+    margin-bottom: -8px;
     .icon {
       color: white;
     }
@@ -99,6 +138,10 @@ export default Vue.extend({
 
 <style lang="scss">
 /** global style */
+// To move the next element after the header down if the header is sticky
+.sticky_header.fixed + .container {
+  padding-top: 200px !important;
+}
 
 // some hacks for optimal use of space in header
 // only needed if the search component is used in this header
