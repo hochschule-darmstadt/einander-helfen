@@ -3,10 +3,7 @@
 <template>
   <div class="posts-page" v-if="isInitialised">
     <Header :fixed="isSmartphone" />
-    <section
-      class="container row"
-      :style="{ 'padding-top': headerSpace + 'px' }"
-    >
+    <section class="container row" :style="containerStyle">
       <MapButton v-if="isSmartphone" v-model="showMap" />
 
       <!-- right side content for desktop-->
@@ -128,12 +125,17 @@ export default Vue.extend({
       "searchValues",
       "isInternational",
     ]),
+    // calc container style for mobile
+    containerStyle(): any {
+      return this.isSmartphone
+        ? { "padding-top": this.headerSpace + "px" }
+        : {};
+    },
   },
   watch: {
     searchValues() {
-      this.$nextTick(() => {
-        this.calcHeaderSpace();
-      });
+      // recalc header space after search tags change
+      this.$nextTick(() => this.calcHeaderSpace());
     },
   },
   mounted(): void {
@@ -158,7 +160,7 @@ export default Vue.extend({
         if (this.selectedPost) {
           this.showMap = false;
         }
-        // calc the header height
+        // calc the header height to move the container down
         this.calcHeaderSpace();
         // set resize event handler
         window.addEventListener("resize", this.onWindowResize);
@@ -238,10 +240,12 @@ export default Vue.extend({
      * calc the header height to move the content area about this value
      */
     calcHeaderSpace(): void {
+      // get header element
       const searchCol = document.getElementsByClassName(
         "searchCol"
       )[0] as HTMLElement;
       if (searchCol) {
+        // calc container padding
         const height = searchCol.offsetHeight;
         this.headerSpace = (height || 60) + 60;
       }
