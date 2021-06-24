@@ -26,8 +26,4 @@ export default Vue.extend({
 });
 </script>
 
-<style lang="scss" scoped>
-.app {
-  background: #00254f0c !important;
-}
-</style>
+<style lang="scss" scoped></style>
