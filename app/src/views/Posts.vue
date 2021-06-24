@@ -3,7 +3,10 @@
 <template>
   <div class="posts-page" v-if="isInitialised">
     <Header :fixed="isSmartphone" />
-    <section class="container row">
+    <section
+      class="container row"
+      :style="{ 'padding-top': headerSpace + 'px' }"
+    >
       <MapButton v-if="isSmartphone" v-model="showMap" />
 
       <!-- right side content for desktop-->
@@ -112,6 +115,7 @@ export default Vue.extend({
       isSmartphone: false,
       isLoading: true,
       isInitialised: false,
+      headerSpace: 130,
     };
   },
   computed: {
@@ -124,6 +128,13 @@ export default Vue.extend({
       "searchValues",
       "isInternational",
     ]),
+  },
+  watch: {
+    searchValues() {
+      this.$nextTick(() => {
+        this.calcHeaderSpace();
+      });
+    },
   },
   mounted(): void {
     // get params from route
@@ -147,7 +158,8 @@ export default Vue.extend({
         if (this.selectedPost) {
           this.showMap = false;
         }
-
+        // calc the header height
+        this.calcHeaderSpace();
         // set resize event handler
         window.addEventListener("resize", this.onWindowResize);
       })
@@ -220,6 +232,19 @@ export default Vue.extend({
     /** Show the map  */
     openMap(): void {
       this.showMap = true;
+    },
+    /**
+     * To move the next element after the header down,
+     * calc the header height to move the content area about this value
+     */
+    calcHeaderSpace(): void {
+      const searchCol = document.getElementsByClassName(
+        "searchCol"
+      )[0] as HTMLElement;
+      if (searchCol) {
+        const height = searchCol.offsetHeight;
+        this.headerSpace = (height || 60) + 60;
+      }
     },
     /** Resize handler that changes properties based on the window size.*/
     onWindowResize(): void {

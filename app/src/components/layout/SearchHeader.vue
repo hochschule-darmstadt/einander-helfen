@@ -159,11 +159,6 @@ export default Vue.extend({
 
 <style lang="scss">
 /** global style */
-// To move the next element after the header down if the header is sticky
-.sticky_header.fixed + .container {
-  // TODO: the cap is big if no tag is set
-  padding-top: 130px !important;
-}
 
 // some hacks for optimal use of space in header
 // only needed if the search component is used in this header
