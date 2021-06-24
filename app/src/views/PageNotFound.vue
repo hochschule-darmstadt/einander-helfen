@@ -4,7 +4,7 @@
   <div class="pageNotFound">
     <Header />
     <section class="container pt-6 text-center fill-height">
-      <img src="/images/robot.png" class="mb-6" :width="width"/>
+      <img src="/images/robot.png" class="mb-6" :width="width" />
       <h1>Seite konnte nicht gefunden werden</h1>
       <p class="mt-3 mb-8">
         Es tut uns Leid. Die von Ihnen gesuchte Seite existiert nicht (mehr).
@@ -29,15 +29,19 @@ export default Vue.extend({
     Header,
   },
   computed: {
-      width () {
-        switch (this.$vuetify.breakpoint.name) {
-          case 'xs': return '100'
-          case 'sm': return '150'
-          case 'md': return '250'
-          default: return '300'
-        }
-      },
-  }
+    width() {
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+          return "100";
+        case "sm":
+          return "150";
+        case "md":
+          return "250";
+        default:
+          return "300";
+      }
+    },
+  },
 });
 </script>
 
@@ -55,5 +59,4 @@ export default Vue.extend({
   justify-content: center;
   flex-direction: column;
 }
-
 </style>
