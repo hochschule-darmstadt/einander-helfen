@@ -24,6 +24,7 @@
       </v-btn>
 
       <SearchComponent
+        ref="searchBar"
         class="search_bar"
         dark
         direktsearch
@@ -67,12 +68,20 @@ export default Vue.extend({
       this.expanded = !this.fixed;
     },
   },
+  computed: {
+    focusedElement(): Element | null {
+      return document.activeElement;
+    },
+  },
   mounted() {
     window.addEventListener("scroll", this.updateScroll);
+    this.$el.addEventListener("focusin", this.focusChanged);
   },
   beforeDestroy() {
     window.removeEventListener("scroll", this.updateScroll);
+    this.$el.removeEventListener("focusin", this.focusChanged);
   },
+
   methods: {
     updateScroll() {
       const trashhold = 10; // px
@@ -81,6 +90,20 @@ export default Vue.extend({
         this.scrollPosition = window.scrollY;
       } else if (this.scrollPosition > window.scrollY) {
         this.scrollPosition = window.scrollY;
+      }
+    },
+    focusChanged(event) {
+      if (this.fixed) {
+        // get the focused element
+        const el = event.target;
+        // get the searchbar element
+        const searchbar = this.$refs["searchBar"] as Vue;
+        if (!searchbar) return;
+        // check if the searchbar contains the focused element
+        const focused = searchbar.$el.contains(el);
+        if (focused) {
+          this.expanded = true;
+        }
       }
     },
   },
@@ -96,12 +119,10 @@ export default Vue.extend({
   &.fixed {
     position: fixed;
     top: 0;
-    z-index: 1;
-    & + section {
-      position: relative;
-      top: 100px;
-    }
+    // must be higher than the z-index of the map
+    z-index: 1001;
   }
+
   // TODO: add transition
   .header_layout {
     display: flex;
@@ -140,7 +161,8 @@ export default Vue.extend({
 /** global style */
 // To move the next element after the header down if the header is sticky
 .sticky_header.fixed + .container {
-  padding-top: 200px !important;
+  // TODO: the cap is big if no tag is set
+  padding-top: 130px !important;
 }
 
 // some hacks for optimal use of space in header
