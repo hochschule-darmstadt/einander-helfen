@@ -19,7 +19,7 @@
         ref="map"
         :center="map.center"
         :zoom="map.zoom"
-        :options="{ gestureHandling: true }"
+        :options="{ gestureHandling: useGestureHandling }"
       >
         <LTileLayer :url="map.url" :attribution="map.attribution" />
         <LMarckerCluster>
@@ -79,7 +79,7 @@ export default Vue.extend({
   data: function () {
     return {
       map: {
-        url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        url: "https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png",
         attribution:
           '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
         center: [51.5, 10.5],
@@ -103,6 +103,12 @@ export default Vue.extend({
      */
     postWithGeoLocation(): any {
       return this.posts.filter((post) => post.geo_location !== null);
+    },
+    useGestureHandling(): boolean {
+      if (this.isMobile()) {
+        return true;
+      }
+      return false;
     },
   },
   watch: {
@@ -172,6 +178,12 @@ export default Vue.extend({
     },
     openPost(post: Post): void {
       this.$emit("openPost", post);
+    },
+    isMobile(): boolean {
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        return true;
+      }
+      return false;
     },
   },
 });
