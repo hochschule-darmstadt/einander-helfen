@@ -35,6 +35,7 @@ class PostService {
    */
   public findPosts(params: SearchParameters): Promise<PaginatedResponse<Post>> {
     let builder = BuilderFactory()
+      .rawOption("track_total_hits", true)
       .from(params.from)
       .size(params.size)
       .andQuery("bool", (builder) => {
