@@ -123,7 +123,6 @@ export default Vue.extend({
     z-index: 1001;
   }
 
-  // TODO: add transition
   .header_layout {
     display: flex;
     flex-direction: row;
