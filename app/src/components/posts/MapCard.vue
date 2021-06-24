@@ -19,7 +19,7 @@
         ref="map"
         :center="map.center"
         :zoom="map.zoom"
-        :options="{ gestureHandling: true }"
+        :options="{ gestureHandling: useGestureHandling }"
       >
         <LTileLayer :url="map.url" :attribution="map.attribution" />
         <LMarckerCluster>
@@ -104,6 +104,12 @@ export default Vue.extend({
     postWithGeoLocation(): any {
       return this.posts.filter((post) => post.geo_location !== null);
     },
+    useGestureHandling(): boolean {
+      if (this.isMobile()) {
+        return true;
+      }
+      return false;
+    },
   },
   watch: {
     selectedPost() {
@@ -172,6 +178,12 @@ export default Vue.extend({
     },
     openPost(post: Post): void {
       this.$emit("openPost", post);
+    },
+    isMobile(): boolean {
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        return true;
+      }
+      return false;
     },
   },
 });
