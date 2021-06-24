@@ -35,7 +35,7 @@
       </v-flex>
 
       <!--left side content for desktop-->
-      <v-flex class="list sm12 md6 order-md1">
+      <v-flex class="list sm12 md6 order-md1 customScrollbar">
         <template v-if="isLoading">
           <PostListItemSkeleton v-for="i in 3" :key="i" />
         </template>
