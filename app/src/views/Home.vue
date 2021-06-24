@@ -8,7 +8,7 @@
     <section class="container">
       <SearchComponent class="searchcomponent" />
 
-      <ImageCard :cols="3" :cards="volunteerTags" />
+      <ImageCard :cards="volunteerTags" />
     </section>
   </div>
 </template>
@@ -17,7 +17,7 @@
 import Vue from "vue";
 import Header from "@/components/layout/MainHeader.vue";
 import Carousel from "@/components/layout/Carousel.vue";
-import ImageCard, { Card } from "@/components/layout/ImageCard.vue";
+import ImageCard, { Card } from "@/components/layout/ImageCards.vue";
 import SearchComponent from "@/components/search/SearchComponent.vue";
 import { mapActions } from "vuex";
 
