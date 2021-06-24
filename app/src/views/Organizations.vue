@@ -6,7 +6,7 @@
     <section class="container pt-6">
       <h1>Organisationen</h1>
       Sie haben nicht das gefunden, wonach Sie gesucht haben? Kein Problem! Die
-      untensetehende Liste enthält weiterführende Links zu anderen
+      untenstehende Liste enthält weiterführende Links zu anderen
       Organisationen, die ebenfalls nationale und internationale ehrenamtliche
       Tätigkeiten zur Verfügung stellen.
       <div class="organizationList mt-4">

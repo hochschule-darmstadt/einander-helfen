@@ -174,6 +174,12 @@ export default Vue.extend({
             "https://www.pexels.com/de-de/foto/lebensmittel-mann-menschen-frau-3772534/",
           license: "https://www.pexels.com/de-de/lizenz/",
         },
+        {
+          position: "Icon auf der PageNotFound Seite",
+          author: "https://www.freepik.com",
+          source: "https://www.flaticon.com/free-icon/robot_3398613",
+          license: "https://www.freepikcompany.com/legal",
+        },
       ],
     };
   },
