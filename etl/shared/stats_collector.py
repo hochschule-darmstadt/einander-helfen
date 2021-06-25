@@ -1,5 +1,7 @@
 import os
 
+from reporting.report_generator import ReportGenerator
+
 ROOT_DIR = os.environ['ROOT_DIR']
 
 
@@ -26,10 +28,9 @@ class StatsCollector:
 
     @staticmethod
     def create_summary():
-        for key in StatsCollector.collectors.keys():
-            print(StatsCollector.collectors[key].to_string())
-        print(StatsCollector.timestamps)
-
+        rg = ReportGenerator()
+        rg.set_stats(StatsCollector.collectors, StatsCollector.timestamps)
+        rg.build_report()
 
 class Stats:
 
@@ -74,9 +75,3 @@ class Stats:
 
     def inc_enhancement_missing_coordinates(self):
         self.enhancement_missing_coordinates += 1
-
-    def to_string(self):
-        return f"""Scraper: {self.name} || Successful: {self.crawling_successful}, empty: {self.crawling_empty}, fetching errors: {len(self.error_messages[StatsCollector.ERROR_TYPE_FETCHING])}, parsing errors: {len(self.error_messages[StatsCollector.ERROR_TYPE_PARSING])}
-        Enhancement || Duplicates: {self.enhancement_duplicates}, new tags: {self.enhancement_new_tags}, errors: {len(self.error_messages[StatsCollector.ERROR_TYPE_ENHANCEMENT])}
-        Times || Crawling duration: {self.timestamps['crawling_duration']}, enhancement duration: {self.timestamps['enhancement_duration']} 
-    """
