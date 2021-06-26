@@ -32,13 +32,14 @@ class StatsCollector:
         rg.set_stats(StatsCollector.collectors, StatsCollector.timestamps)
         rg.build_report()
 
+
 class Stats:
 
     def __init__(self, name):
         self.name = name
         self.timestamps = {
-            'crawling_duration': None,
-            'enhancement_duration': None
+            'crawling_duration': 0,
+            'enhancement_duration': 0
         }
         self.crawling_successful = 0
         self.crawling_empty = 0

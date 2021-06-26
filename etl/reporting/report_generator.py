@@ -1,3 +1,4 @@
+import os
 import time
 import pandas as pd
 import datapane as dp
@@ -45,27 +46,45 @@ class ReportGenerator:
 
         blocks = [dp.HTML(report_header)]
         groups = []
-        detail_blocks = []
         for key in self.stats.keys():
-            # labels = self.crawl_df[key].to_list()
-            total = self.crawl_df[key].sum()
-            plot = self.crawl_df.plot.pie(y=key, figsize=(5, 5), colors=self.crawl_df.index.to_series().apply(lambda x: colors[x]).drop_duplicates(), autopct=(lambda p: '{:.0f}'.format(p * total / 100)), ylabel="", labels=None)
+            try:
+                total = self.crawl_df[key].sum()
+                plot = self.crawl_df.plot.pie(y=key, figsize=(5, 5), colors=self.crawl_df.index.to_series().apply(lambda x: colors[x]).drop_duplicates(), autopct=(lambda p: '{:.0f}'.format(p * total / 100) if p > 0 else ''), ylabel='', labels=None)
 
-            crawling_duration = time.strftime('%H:%M:%S', time.gmtime(int(float(self.stats[key].timestamps['crawling_duration']))))
-            enhancement_duration = time.strftime('%H:%M:%S', time.gmtime(int(float(self.stats[key].timestamps['enhancement_duration']))))
-            crawler_infos = f"""
+                crawling_duration = time.strftime('%H:%M:%S', time.gmtime(int(float(self.stats[key].timestamps['crawling_duration']))))
+                enhancement_duration = time.strftime('%H:%M:%S', time.gmtime(int(float(self.stats[key].timestamps['enhancement_duration']))))
+                crawler_infos = f"""
 <html>
+<div style="border: 1px solid black; padding-top: 0px; padding-left: 32px; padding-bottom: 16px">
 <h2>{key}</h2>
 
 <b>Crawling duration: </b> {crawling_duration}
 <br>
 <b>Enhancement duration: </b> {enhancement_duration}
+<br>
+</div>
 </html>
 """
-            inner_group = dp.Group(dp.HTML(crawler_infos), dp.Plot(plot), columns=1)
-            groups.append(inner_group)
+                no_results = f"""
+<html>
+<div style="border: 1px solid darkred; padding-top: 0px; padding-left: 32px; padding-bottom: 16px">
+<h2>{key}</h2>
+<i>No results from this crawler.</i>
+<br>
+</div>
+</html>
+"""
+                if total > 0:
+                    inner_group = dp.Group(dp.HTML(crawler_infos), dp.Plot(plot), columns=1)
+                else:
+                    inner_group = dp.Group(dp.HTML(no_results), columns=1)
+                groups.append(inner_group)
+            except Exception as e:
+                print(key + ": " + str(e))
 
         blocks.append(dp.Group(blocks=groups, columns=3))
 
         r = dp.Report(blocks=blocks)
+        if not os.path.exists('reporting/data/'):
+            os.makedirs('reporting/data/')
         r.save(path='reporting/data/report.html')
