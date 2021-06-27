@@ -21,13 +21,14 @@ from data_management.data_manager import DataManager
 logger = LoggerFactory.get_general_logger()
 
 now = datetime.now()
-StatsCollector.timestamps['crawling_started'] = now.strftime('%Y-%m-%d %H:%M:%S')
+StatsCollector.date = now.strftime('%Y-%m-%d')
+StatsCollector.timestamps['crawling_started'] = now.strftime('%H:%M:%S (%d. %m. %Y)')
 # Runs the extraction process and writes the scraped data to data_extraction/data directory
 run_extraction()
 
 now = datetime.now()
-StatsCollector.timestamps['crawling_ended'] = now.strftime('%Y-%m-%d %H:%M:%S')
-StatsCollector.timestamps['enhancement_started'] = now.strftime('%Y-%m-%d %H:%M:%S')
+StatsCollector.timestamps['crawling_ended'] = now.strftime('%H:%M:%S (%d. %m. %Y)')
+StatsCollector.timestamps['enhancement_started'] = now.strftime('%H:%M:%S (%d. %m. %Y)')
 
 for file in os.scandir(os.path.join(ROOT_DIR, 'data_extraction/data')):
     file_name = os.path.splitext(file.name)[0]
@@ -47,7 +48,7 @@ for file in os.scandir(os.path.join(ROOT_DIR, 'data_extraction/data')):
     write_data_to_json(os.path.join(ROOT_DIR, 'data_enhancement/data', f'{file_name}.json'), enhanced_data)
 
 now = datetime.now()
-StatsCollector.timestamps['enhancement_ended'] = now.strftime('%Y-%m-%d %H:%M:%S')
+StatsCollector.timestamps['enhancement_ended'] = now.strftime('%H:%M:%S (%d. %m. %Y)')
 
 DataManager.run_backup_process()
 

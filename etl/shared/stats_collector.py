@@ -12,6 +12,7 @@ class StatsCollector:
     ERROR_TYPE_ENHANCEMENT = 'enhancement_errors'
 
     collectors = {}
+    date = None
     timestamps = {
         'crawling_started': None,
         'crawling_ended': None,
@@ -29,7 +30,7 @@ class StatsCollector:
     @staticmethod
     def create_summary():
         rg = ReportGenerator()
-        rg.set_stats(StatsCollector.collectors, StatsCollector.timestamps)
+        rg.set_stats(StatsCollector.collectors, StatsCollector.timestamps, StatsCollector.date)
         rg.build_report()
 
 
