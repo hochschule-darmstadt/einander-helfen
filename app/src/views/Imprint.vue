@@ -134,9 +134,9 @@ export default Vue.extend({
         },
         {
           position: "Auf der Startseite zweites Bild im Karussel",
-          author: "geralt",
+          author: "timkraaijvanger",
           source:
-            "https://pixabay.com/de/photos/hilfe-hand-anbieten-verzweiflung-3049553/",
+            "https://pixabay.com/de/photos/kind-kleinkind-süß-blondine-blume-3089906/",
           license: "https://pixabay.com/de/service/terms/#license",
         },
         {
