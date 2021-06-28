@@ -31,7 +31,6 @@ const vuetify = new Vuetify({
   },
 });
 
-
 new Vue({
   router,
   store,
