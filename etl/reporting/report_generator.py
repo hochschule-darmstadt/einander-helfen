@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 import base64
 import io
 
+ROOT_DIR = os.environ['ROOT_DIR']
+
 
 class ReportGenerator:
 
@@ -34,7 +36,7 @@ class ReportGenerator:
 
     def build_report(self):
         template = ''
-        with open('reporting/report_template.html', 'r') as template_file:
+        with open(os.path.join(ROOT_DIR, 'reporting/report_template.html'), 'r') as template_file:
             template = template_file.read()
 
         report_header = f"""
@@ -86,21 +88,13 @@ class ReportGenerator:
                     pic_bytes.seek(0)
                     pic_base64 = base64.b64encode(pic_bytes.read())
                     report_content += '<div class="plot"><img src="data:image/png;base64, ' + pic_base64.decode() + '" alt="Plot" /></div>\n'
-                #  else:
-                #    report_content += f"""
-                #    <div class="crawler-summary">
-                #    <h2>{key}</h2>
-                #    <i>No results from this crawler.</i>
-                #    <br>
-                #    </div>
-                #    """
                 report_content += '</div>\n'
             except Exception as e:
                 print(key + ": " + str(e))
 
         template = template.replace('{{REPORT}}', report_content)
 
-        if not os.path.exists('reporting/data/'):
-            os.makedirs('reporting/data/')
-        with open('reporting/data/report.html', 'w') as output:
+        if not os.path.exists(os.path.join(ROOT_DIR, 'reporting/data/')):
+            os.makedirs(os.path.join(ROOT_DIR, 'reporting/data/'))
+        with open(os.path.join(ROOT_DIR, 'reporting/data/report.html'), 'w') as output:
             output.write(template)
