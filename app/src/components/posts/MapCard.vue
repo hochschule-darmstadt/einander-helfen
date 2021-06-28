@@ -1,3 +1,4 @@
+<!-- The card with the map. It contains the pins of the found posts.-->
 <template>
   <transition name="slide">
     <v-card
@@ -18,7 +19,7 @@
         ref="map"
         :center="map.center"
         :zoom="map.zoom"
-        :options="{ gestureHandling: true }"
+        :options="{ gestureHandling: useGestureHandling }"
       >
         <LTileLayer :url="map.url" :attribution="map.attribution" />
         <LMarckerCluster>
@@ -78,7 +79,7 @@ export default Vue.extend({
   data: function () {
     return {
       map: {
-        url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        url: "https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png",
         attribution:
           '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
         center: [51.5, 10.5],
@@ -102,6 +103,12 @@ export default Vue.extend({
      */
     postWithGeoLocation(): any {
       return this.posts.filter((post) => post.geo_location !== null);
+    },
+    useGestureHandling(): boolean {
+      if (this.isMobile()) {
+        return true;
+      }
+      return false;
     },
   },
   watch: {
@@ -130,6 +137,9 @@ export default Vue.extend({
         });
       }
     },
+    /**
+     * Sets the center of the map to the selected post.
+     */
     setMapLocation(): void {
       if (this.selectedPost) {
         const location = [
@@ -140,7 +150,7 @@ export default Vue.extend({
       }
     },
     /**
-     * Sets the viewpost of the map to all marks
+     * Sets the viewpost of the map to see all marks.
      */
     fitMapBounds(): void {
       if (this.posts.length) {
@@ -153,6 +163,12 @@ export default Vue.extend({
         (this.$refs.map as LMap).fitBounds(markers);
       }
     },
+    /**
+     * Retrieve the icon of a marker. If the post is selected the marker should be red. Otherwise it should be blue.
+     *
+     * @param {Post} post: Post whose marker is to be determined.
+     * @return {Icon<IconOptions>}: The marker icon.
+     */
     getMarker(post: Post): Icon<IconOptions> {
       // get marker for selectedPost
       if (this.selectedPost && post.id === this.selectedPost.id)
@@ -162,6 +178,12 @@ export default Vue.extend({
     },
     openPost(post: Post): void {
       this.$emit("openPost", post);
+    },
+    isMobile(): boolean {
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        return true;
+      }
+      return false;
     },
   },
 });
@@ -217,6 +239,7 @@ export default Vue.extend({
 
 <style lang="scss">
 /** global style */
+// modify leaflet copyright label style
 .copyright,
 .copy,
 .cpy,

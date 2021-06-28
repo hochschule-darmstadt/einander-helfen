@@ -2,7 +2,7 @@ import os
 import time
 import datetime
 import shutil
-from shared.LoggerFactory import LoggerFactory
+from shared.logger_factory import LoggerFactory
 from shared.utils import read_data_from_json, write_data_to_json
 
 ROOT_DIR = os.environ['ROOT_DIR']
@@ -49,14 +49,14 @@ class DataManager:
     @staticmethod
     def timestamp_to_datestring(timestamp):
         """Converts unix timestamp into datestring"""
-        DataManager.logger.debug("timestamp_to_datestring()")
+        DataManager.logger.debug('timestamp_to_datestring()')
 
         return datetime.datetime.fromtimestamp(timestamp).strftime(DataManager.mask_timestamp)
 
     @staticmethod
     def datestring_to_timestamp(datestring):
         """Converts datestring into unix timestamp"""
-        DataManager.logger.debug("datestring_to_timestamp()")
+        DataManager.logger.debug('datestring_to_timestamp()')
 
         return time.mktime(datetime.datetime.strptime(datestring, DataManager.mask_timestamp).timetuple())
 
@@ -64,15 +64,15 @@ class DataManager:
     def save_upload_data_origin(upload_data_origin):
         """Saves the information about the origin of the data inside the upload folder into a text file"""
         file = open(DataManager.file_upload_data_origin, 'w', encoding='utf-8')
-        file.write(f"last upload: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
-        file.write(f"Source for upload data:")
+        file.write(f'last upload: {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}\n')
+        file.write(f'Source for upload data:')
         file.write(upload_data_origin)
         file.close()
 
     @staticmethod
     def copy_from_backup(backup):
         """Copies all the files from a backup into the upload folder and documents the files origin"""
-        DataManager.logger.debug("copy_from_backup()")
+        DataManager.logger.debug('copy_from_backup()')
 
         path_backup = os.path.join(DataManager.backup_directory, backup)
         for file in os.listdir(path_backup):
@@ -82,12 +82,12 @@ class DataManager:
     @staticmethod
     def backup_current_data():
         """Creates a backup for the data in einander-helfen/etl/data_enhancement/data with current date as timestamp"""
-        DataManager.logger.debug("backup_current_data()")
+        DataManager.logger.debug('backup_current_data()')
 
         backup_location = os.path.join(DataManager.backup_directory, DataManager.timestamp_to_datestring(time.time()))
 
         if os.path.exists(backup_location):
-            DataManager.logger.warning("There already exists a backup from today, deleting old backup")
+            DataManager.logger.warning('There already exists a backup from today, deleting old backup')
             shutil.rmtree(backup_location)
         os.makedirs(backup_location)
 
@@ -100,7 +100,7 @@ class DataManager:
     @staticmethod
     def get_sorted_list_of_backups():
         """ returns a list containing all the backup folders in a sorted order from old to new"""
-        DataManager.logger.debug("get_sorted_list_of_backups()")
+        DataManager.logger.debug('get_sorted_list_of_backups()')
 
         backups = os.listdir(DataManager.backup_directory)
         backup_timestamps = list()
@@ -116,20 +116,20 @@ class DataManager:
     @staticmethod
     def remove_old_backups():
         """Checks if the backup folder contains more than the maximum of set backups and deletes surplus"""
-        DataManager.logger.debug("remove_old_backups()")
+        DataManager.logger.debug('remove_old_backups()')
 
         backups = DataManager.get_sorted_list_of_backups()
         if len(backups) > DataManager.max_number_of_backups:
-            DataManager.logger.info(f"More than {DataManager.max_number_of_backups} backups exist({len(backups)})"
-                                    f", deleting {len(backups)- DataManager.max_number_of_backups} backup(s)")
+            DataManager.logger.info(f'More than {DataManager.max_number_of_backups} backups exist({len(backups)})'
+                                    f', deleting {len(backups)- DataManager.max_number_of_backups} backup(s)')
             for file in backups[:len(backups)-DataManager.max_number_of_backups]:
-                DataManager.logger.info(f"Deleting backup {file}")
+                DataManager.logger.info(f'Deleting backup {file}')
                 shutil.rmtree(os.path.join(DataManager.backup_directory, file))
 
     @staticmethod
     def clear_upload():
         """Clears the upload folder as preparation for the fresh upload data"""
-        DataManager.logger.debug("clear_upload()")
+        DataManager.logger.debug('clear_upload()')
 
         shutil.rmtree(DataManager.upload_directory)
         os.makedirs(DataManager.upload_directory)
@@ -137,7 +137,7 @@ class DataManager:
     @staticmethod
     def get_eligible_backups():
         """Returns list of backups that are eligible as a fallback"""
-        DataManager.logger.debug("get_eligible_backups()")
+        DataManager.logger.debug('get_eligible_backups()')
 
         if len(DataManager.get_sorted_list_of_backups()) < DataManager.fallback_depth:
             DataManager.fallback_depth = len(DataManager.get_sorted_list_of_backups())
@@ -148,7 +148,7 @@ class DataManager:
         """Copies files from all backups within fallback depth into upload folder, the most recent backup is the last to
         get copied. As a result, upload now contains all files from the most recent scrape and any additional files
         from older backups within fallback range."""
-        DataManager.logger.debug("initialise_upload_data()")
+        DataManager.logger.debug('initialise_upload_data()')
 
         for backup_folder in backups[-DataManager.fallback_depth-1:]:
             DataManager.copy_from_backup(backup_folder)
@@ -156,22 +156,22 @@ class DataManager:
     @staticmethod
     def build_string_data_origin():
         """Builds string with summary of which backup files in the upload folder are taken from"""
-        DataManager.logger.debug("build_string_data_origin()")
+        DataManager.logger.debug('build_string_data_origin()')
 
         max_length = 0
         for entry in DataManager.data_origin:
             if len(entry) > max_length:
                 max_length = len(entry)
-        string_data_origin = ""
+        string_data_origin = ''
         for entry in DataManager.data_origin:
             string_data_origin = string_data_origin+"\n" + \
-                                 f"{entry.rjust(max_length)} : {DataManager.data_origin[entry]}"
+                                 f'{entry.rjust(max_length)} : {DataManager.data_origin[entry]}'
         return string_data_origin
 
     @staticmethod
     def compose_upload():
         """Composes the upload according to the general behaviour described for this class and the set parameters"""
-        DataManager.logger.debug("compose_upload()")
+        DataManager.logger.debug('compose_upload()')
 
         DataManager.clear_upload()
         eligible_backups = DataManager.get_eligible_backups()
@@ -186,38 +186,38 @@ class DataManager:
                                                                       upload_file))
 
                     if len(data_in_upload) < DataManager.threshold*len(data_in_backup):
-                        DataManager.logger.info(f"{upload_file} contains less than 75% of the posts in backup "
-                                                f"'{backup}' ({len(data_in_upload)} posts vs {len(data_in_backup)} "
-                                                f"posts). Current data for {upload_file} will be replaced with backup "
-                                                f"data")
+                        DataManager.logger.info(f'{upload_file} contains less than 75% of the posts in backup '
+                                                f'\'{backup}\' ({len(data_in_upload)} posts vs {len(data_in_backup)} '
+                                                f'posts). Current data for {upload_file} will be replaced with backup '
+                                                f'data')
                         write_data_to_json(os.path.join(DataManager.upload_directory, upload_file), data_in_backup)
                         DataManager.data_origin[upload_file] = backup
         upload_data_origin = DataManager.build_string_data_origin()
         DataManager.save_upload_data_origin(upload_data_origin)
-        DataManager.logger.info(f"Source for upload data: {upload_data_origin}")
+        DataManager.logger.info(f'Source for upload data: {upload_data_origin}')
 
     @staticmethod
     def init():
         """Sets up the required folders and corrects set parameters if needed"""
-        DataManager.logger.debug("init()")
+        DataManager.logger.debug('init()')
 
         if not os.path.exists(DataManager.backup_directory):
-            DataManager.logger.info("Creating backup directory")
+            DataManager.logger.info('Creating backup directory')
             os.makedirs(DataManager.backup_directory)
         if not os.path.exists(DataManager.upload_directory):
-            DataManager.logger.info("Creating upload directory")
+            DataManager.logger.info('Creating upload directory')
             os.makedirs(DataManager.upload_directory)
 
         if DataManager.fallback_depth > DataManager.max_number_of_backups:
-            DataManager.logger.warning(f"fallback depth exceeds maximal number of backups ("
-                                       f"{DataManager.fallback_depth} > {DataManager.max_number_of_backups}), "
-                                       f"fallback depth will be limited to number of backups")
+            DataManager.logger.warning(f'fallback depth exceeds maximal number of backups ('
+                                       f'{DataManager.fallback_depth} > {DataManager.max_number_of_backups}), '
+                                       f'fallback depth will be limited to number of backups')
             DataManager.fallback_depth = DataManager.max_number_of_backups
 
     @staticmethod
     def run_backup_process():
         """Runs the datamangement process for creating backups"""
-        DataManager.logger.debug("run_backup_process()")
+        DataManager.logger.debug('run_backup_process()')
 
         DataManager.init()
         DataManager.backup_current_data()
@@ -226,7 +226,7 @@ class DataManager:
     @staticmethod
     def run_compose_upload_process():
         """Runs the datamangement process for composing the upload"""
-        DataManager.logger.debug("run_compose_upload_process()")
+        DataManager.logger.debug('run_compose_upload_process()')
 
         DataManager.init()
         DataManager.compose_upload()

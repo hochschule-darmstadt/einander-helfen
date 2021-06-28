@@ -2,7 +2,7 @@ import math
 import time
 
 from bs4 import BeautifulSoup
-from data_extraction.Scraper import Scraper
+from data_extraction.scraper import Scraper
 
 
 class EhrenamtHessenScraper(Scraper):
@@ -10,13 +10,13 @@ class EhrenamtHessenScraper(Scraper):
 
     def parse(self, response, url):
         """Handles the soupified response of a detail page in the predefined way and returns it."""
-        self.logger.debug("parse()")
+        self.logger.debug('parse()')
 
         tab = response.find('a', {'href': '?param&searchTab=jobentries&entryTypeId=5&showEntryTypeFilterSelect=false'})
         tab_parent_div = tab.parent
         tab_classes = tab_parent_div['class']
         if 'active' not in tab_classes:
-            self.logger.debug(f"\'{url}\' is not volunteering work'")
+            self.logger.debug(f'\'{url}\' is not volunteering work')
             return None
 
         location_of = response.find('div', {'class': 'legendLeft'}, text='Ort Ihres Ehrenamts')
@@ -58,7 +58,7 @@ class EhrenamtHessenScraper(Scraper):
 
         parsed_object = {
             'title': response.find('h3', {'class': 'ItemTitle'}).text or None,
-            'categories': self.__extract_categories(response),
+            'categories': self._extract_categories(response),
             'location': location or None,
             'task': task or None,
             'target_group': None,
@@ -98,8 +98,8 @@ class EhrenamtHessenScraper(Scraper):
             'timing': None,
             'effort': None,
             'opportunities': None,
-            'organization': self.__extract_sub_data(parsed_object['organization']),
-            'contact': self.__extract_sub_data(parsed_object['contact']),
+            'organization': self._extract_sub_data(parsed_object['organization']),
+            'contact': self._extract_sub_data(parsed_object['contact']),
             'link': parsed_object['link'] or None,
             'source': parsed_object['source'] or None,
             'geo_location': parsed_object['geo_location'],
@@ -110,24 +110,24 @@ class EhrenamtHessenScraper(Scraper):
             organization = parsed_object['organization']
             organization = organization.replace('_self', '_blank')
             organization = organization.replace('/index.cfm', 'https://www.ehrenamtssuche-hessen.de/index.cfm')
-            organization = self.__fix_mail_to_links(organization)
+            organization = self._fix_mail_to_links(organization)
             parsed_object['organization'] = organization
 
         if parsed_object['contact'] is not None:
             contact = parsed_object['contact']
-            contact = self.__fix_target_blank(contact)
+            contact = self._fix_target_blank(contact)
             parsed_object['contact'] = contact
 
         if parsed_object['task'] is not None:
             task = parsed_object['task']
-            task = self.__fix_target_blank(task)
+            task = self._fix_target_blank(task)
             parsed_object['task'] = task
 
         return parsed_object
 
     def add_urls(self):
         """Adds all URLs of detail pages, found on the search pages, for the crawl function to scrape."""
-        self.logger.debug("add_urls()")
+        self.logger.debug('add_urls()')
 
         end_page = self.fetch_end_page()
 
@@ -145,17 +145,17 @@ class EhrenamtHessenScraper(Scraper):
             for detail_link in detail_links:
                 current_link = self.base_url + detail_link['href']
                 if current_link in self.urls:
-                    self.logger.debug(f"func: add_urls, 'body:'page_index: {index},"
-                                      f" search_page: {search_page_url}, "
-                                      f"duplicate_index: {current_link}, "
-                                      f"duplicate_index: {self.urls.index(current_link)}")
+                    self.logger.debug(f'func: add_urls, page_index: {index},'
+                                      f' search_page: {search_page_url}, '
+                                      f'duplicate_index: {current_link}, '
+                                      f'duplicate_index: {self.urls.index(current_link)}')
                 else:
                     self.urls.append(current_link)
 
     def fetch_end_page(self):
         """Domain-specific Function.
         Fetches the number of pages from the search result page for the add_urls function."""
-        self.logger.debug("fetch_end_page()")
+        self.logger.debug('fetch_end_page()')
 
         search_page_url = f'{self.base_url}/entry_search_result.cfm?locationId=0&entryTypeId=5'
         search_page = self.soupify(search_page_url)
@@ -167,9 +167,9 @@ class EhrenamtHessenScraper(Scraper):
 
         return end_page
 
-    def __extract_categories(self, response):
+    def _extract_categories(self, response):
         """Extracts the categories from corresponding field."""
-        self.logger.debug("__extract_categories()")
+        self.logger.debug('_extract_categories()')
 
         cat_list = []
         categories_html = response.find('div', {'class': 'legendLeft'}, text='Kategorien')
@@ -186,9 +186,9 @@ class EhrenamtHessenScraper(Scraper):
 
         return cat_list
 
-    def __extract_sub_data(self, value):
+    def _extract_sub_data(self, value):
         """Extracts name, street, zipcode, city, phone and email from a given string."""
-        self.logger.debug("__extract_sub_data()")
+        self.logger.debug('_extract_sub_data()')
 
         if value is None:
             return {
@@ -257,9 +257,9 @@ class EhrenamtHessenScraper(Scraper):
             'email': email or None,
         }
 
-    def __fix_mail_to_links(self, data):
+    def _fix_mail_to_links(self, data):
         """ implements ehrenamtsuche specific fixes for mailto links in organisation field """
-        self.logger.debug("__fix_mail_to_links()")
+        self.logger.debug('_fix_mail_to_links()')
 
         soup = BeautifulSoup(data, 'html.parser')
         links = soup.findAll('a')
@@ -269,9 +269,9 @@ class EhrenamtHessenScraper(Scraper):
         data = soup.decode()
         return data
 
-    def __fix_target_blank(self, data):
+    def _fix_target_blank(self, data):
         """ implements ehrenamtsuche specific fixes for mailto links in task and contact field """
-        self.logger.debug("__fix_target_blank()")
+        self.logger.debug('_fix_target_blank()')
 
         soup = BeautifulSoup(data, 'html.parser')
         links = soup.findAll('a')

@@ -1,5 +1,5 @@
 from datetime import datetime
-from shared.LoggerFactory import LoggerFactory
+from shared.logger_factory import LoggerFactory
 import json
 import os
 

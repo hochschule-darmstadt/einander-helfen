@@ -1,6 +1,6 @@
 <template>
   <v-row justify="center">
-    <v-col :cols="cols" v-for="card in cards" :key="card.title">
+    <v-col xs="12" sm="6" md="6" lg="3" v-for="card in cards" :key="card.title">
       <v-hover v-slot:default="{ hover }">
         <v-card
           class="mx-auto"
@@ -46,11 +46,6 @@ export default Vue.extend({
     cards: {
       type: Array as () => Card[],
       required: true,
-    },
-    /** Sets the default number of columns the component extends. Available options are 1 -> 12 and auto. */
-    cols: {
-      type: Number,
-      default: 3,
     },
   },
 });

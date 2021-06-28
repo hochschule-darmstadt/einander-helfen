@@ -1,13 +1,15 @@
+<!-- The page 'Home' and the entry point when visiting einander-helfen.org. It show a slide show of pictures, the SearchComponent and 4 examples of tags to search. -->
+
 <template>
   <div class="home">
     <Header />
     <Carousel />
 
-    <v-container class="container">
+    <section class="container">
       <SearchComponent class="searchcomponent" />
 
-      <ImageCard :cols="3" :cards="volunteerTags" />
-    </v-container>
+      <ImageCard :cards="volunteerTags" />
+    </section>
   </div>
 </template>
 
@@ -15,7 +17,7 @@
 import Vue from "vue";
 import Header from "@/components/layout/MainHeader.vue";
 import Carousel from "@/components/layout/Carousel.vue";
-import ImageCard, { Card } from "@/components/layout/ImageCard.vue";
+import ImageCard, { Card } from "@/components/layout/ImageCards.vue";
 import SearchComponent from "@/components/search/SearchComponent.vue";
 import { mapActions } from "vuex";
 
@@ -66,46 +68,5 @@ export default Vue.extend({
 <style lang="scss" scoped>
 .searchcomponent {
   margin: 3em 0;
-}
-
-.container {
-  margin: auto;
-}
-
-@media (min-width: 800px) {
-  .container {
-    max-width: 1450px;
-  }
-}
-
-@media (min-width: 960px) {
-  .container {
-    width: 960px;
-    max-width: none;
-  }
-}
-
-@media (min-width: 1100px) {
-  .container {
-    width: 1100px;
-  }
-}
-
-@media (min-width: 1300px) {
-  .container {
-    width: 1300px;
-  }
-}
-
-@media (min-width: 1618px) {
-  .container {
-    width: 1618px;
-  }
-}
-
-@media (min-width: 1904px) {
-  .container {
-    width: 85%;
-  }
 }
 </style>
