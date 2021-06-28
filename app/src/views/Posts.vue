@@ -2,22 +2,22 @@
 
 <template>
   <div class="posts-page" v-if="isInitialised">
-    <Header />
-    <section class="sitecontent row">
-      <MapButton v-if="smartphone" v-model="showMap" />
+    <Header :fixed="isSmartphone" />
+    <section class="container row" :style="containerStyle">
+      <MapButton v-if="isSmartphone" v-model="showMap" />
 
       <!-- right side content for desktop-->
       <v-flex class="map xs12 md6 order-md2">
         <!-- Map -->
         <MapCard
-          :show="!smartphone || showMap"
+          :show="!isSmartphone || showMap"
           :posts="posts"
           :selectedPost="selectedPost"
           @openPost="togglePostDetails"
         />
-        <!-- detail card if not smartphone -->
+        <!-- detail card if not isSmartphone -->
         <PostCard
-          v-if="!smartphone && !isLoading"
+          v-if="!isSmartphone && !isLoading"
           class="map-overlay"
           :show="!showMap"
           :post="selectedPost"
@@ -63,7 +63,7 @@
             :key="post.id"
             :post="post"
             :active="post.id == selectedPostId"
-            :showDetail="smartphone"
+            :showDetail="isSmartphone"
             :location="selectedLocation"
             @click="
               togglePostDetails(selectedPostId === post.id ? undefined : post)
@@ -109,9 +109,10 @@ export default Vue.extend({
   data: function () {
     return {
       showMap: true,
-      smartphone: false,
+      isSmartphone: false,
       isLoading: true,
       isInitialised: false,
+      headerSpace: 130,
     };
   },
   computed: {
@@ -124,6 +125,18 @@ export default Vue.extend({
       "searchValues",
       "isInternational",
     ]),
+    // calc container style for mobile
+    containerStyle(): any {
+      return this.isSmartphone
+        ? { "padding-top": this.headerSpace + "px" }
+        : {};
+    },
+  },
+  watch: {
+    searchValues() {
+      // recalc header space after search tags change
+      this.$nextTick(() => this.calcHeaderSpace());
+    },
   },
   mounted(): void {
     // get params from route
@@ -138,16 +151,17 @@ export default Vue.extend({
       })
       // set properties
       .then(() => {
-        // check if device is smartphone view
+        // check if device is isSmartphone view
         if (window.matchMedia("(max-width: 959px)").matches) {
           this.showMap = false;
-          this.smartphone = true;
+          this.isSmartphone = true;
         }
         // close map if a post is open
         if (this.selectedPost) {
           this.showMap = false;
         }
-
+        // calc the header height to move the container down
+        this.calcHeaderSpace();
         // set resize event handler
         window.addEventListener("resize", this.onWindowResize);
       })
@@ -206,10 +220,10 @@ export default Vue.extend({
      * @param {Post} post: The currently selected post. Undefined if no post is selected.
      */
     togglePostDetails(post: Post | undefined = undefined): void {
-      // close map to show detail page if not smartphone
-      if (post && !this.smartphone) this.showMap = false;
-      // show map if not smartphone
-      if (!post && !this.smartphone) this.showMap = true;
+      // close map to show detail page if not isSmartphone
+      if (post && !this.isSmartphone) this.showMap = false;
+      // show map if not isSmartphone
+      if (!post && !this.isSmartphone) this.showMap = true;
       // set selected post id or set undefined in store
       const id = post ? post.id : undefined;
       this.setSelectedPostId(id).then(() =>
@@ -221,16 +235,31 @@ export default Vue.extend({
     openMap(): void {
       this.showMap = true;
     },
+    /**
+     * To move the next element after the header down,
+     * calc the header height to move the content area about this value
+     */
+    calcHeaderSpace(): void {
+      // get header element
+      const searchCol = document.getElementsByClassName(
+        "searchCol"
+      )[0] as HTMLElement;
+      if (searchCol) {
+        // calc container padding
+        const height = searchCol.offsetHeight;
+        this.headerSpace = (height || 60) + 60;
+      }
+    },
     /** Resize handler that changes properties based on the window size.*/
     onWindowResize(): void {
-      // swtich to smartphone view
-      if (!this.smartphone && window.innerWidth < 960) {
-        this.smartphone = true;
+      // swtich to isSmartphone view
+      if (!this.isSmartphone && window.innerWidth < 960) {
+        this.isSmartphone = true;
         this.showMap = false;
       }
       // switch to desktop view
-      else if (this.smartphone && window.innerWidth >= 960) {
-        this.smartphone = false;
+      else if (this.isSmartphone && window.innerWidth >= 960) {
+        this.isSmartphone = false;
         if (!this.selectedPost) {
           this.showMap = true;
         }
@@ -284,38 +313,14 @@ export default Vue.extend({
     }
   }
 }
-.sitecontent {
+
+.posts-page .container {
   @media (max-width: 959px) {
-    width: 100%;
     padding: 12px;
-    margin-right: auto;
-    margin-left: auto;
   }
   @media (min-width: 960px) {
-    width: 960px;
-    margin: auto;
-    max-width: none;
     margin-top: 2%;
     padding: 0 5px;
-  }
-  @media (min-width: 1100px) {
-    width: 1100px;
-    margin: auto;
-    margin-top: 2%;
-  }
-  @media (min-width: 1300px) {
-    width: 1300px;
-    margin: auto;
-    margin-top: 2%;
-  }
-  @media (min-width: 1618px) {
-    width: 1618px;
-    margin-top: 2%;
-  }
-  @media (min-width: 1904px) {
-    width: 85%;
-    margin: auto;
-    margin-top: 2%;
   }
 }
 </style>

@@ -15,7 +15,12 @@
         />
       </v-col>
 
-      <v-col class="locationDiv" cols="12" :md="isFullwidth ? 12 : 6">
+      <v-col
+        class="locationDiv"
+        cols="12"
+        :md="isFullwidth ? 12 : 6"
+        :class="{ 'd-none': !expanded }"
+      >
         <div>
           <AreaSelect tabindex="2" v-model="internationalValue" :dark="dark" />
           <LocationSearchBar
@@ -82,6 +87,13 @@ export default Vue.extend({
     dark: {
       type: Boolean,
       default: false,
+    },
+    /**
+     * If false some elements are hiden
+     */
+    expanded: {
+      type: Boolean,
+      default: true,
     },
   },
   data: function () {
