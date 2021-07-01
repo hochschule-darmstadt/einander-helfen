@@ -1,11 +1,15 @@
 import os
 
 from reporting.report_generator import ReportGenerator
+from shared.logger_factory import LoggerFactory
 
 ROOT_DIR = os.environ['ROOT_DIR']
 
+logger = LoggerFactory.get_general_logger()
+
 
 class StatsCollector:
+    """ Providing static methods for collecting ETL statistics """
 
     ERROR_TYPE_FETCHING = 'fetching_errors'
     ERROR_TYPE_PARSING = 'parsing_errors'
@@ -22,6 +26,7 @@ class StatsCollector:
 
     @staticmethod
     def get_stats_collector(name):
+        """ Returns a Stats object for the given crawler name. """
         if name in StatsCollector.collectors:
             return StatsCollector.collectors[name]
         StatsCollector.collectors[name] = Stats(name)
@@ -29,12 +34,18 @@ class StatsCollector:
 
     @staticmethod
     def create_summary():
+        """ Builds a HTML report from the collected statistics """
+        logger.debug('create_summary()')
         rg = ReportGenerator()
         rg.set_stats(StatsCollector.collectors, StatsCollector.timestamps, StatsCollector.date)
-        rg.build_report()
+        try:
+            rg.build_report()
+        except Exception as e:
+            logger.exception(f'Exception during report creation: {str(e)}')
 
 
 class Stats:
+    """ Class holding ETL statistics for a single crawler. """
 
     def __init__(self, name):
         self.name = name
@@ -52,6 +63,7 @@ class Stats:
                                StatsCollector.ERROR_TYPE_ENHANCEMENT: []}
 
     def add_error_message(self, error_type, message):
+        """ Adds an error message of the given type """
         if error_type in [StatsCollector.ERROR_TYPE_FETCHING,
                           StatsCollector.ERROR_TYPE_PARSING,
                           StatsCollector.ERROR_TYPE_ENHANCEMENT]:

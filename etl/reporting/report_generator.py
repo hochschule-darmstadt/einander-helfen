@@ -9,6 +9,7 @@ ROOT_DIR = os.environ['ROOT_DIR']
 
 
 class ReportGenerator:
+    """ Helper for generating HTML reports from collected ETL statistics """
 
     def __init__(self):
         self.stats = {}
@@ -17,6 +18,7 @@ class ReportGenerator:
         self.crawl_df = None
 
     def set_stats(self, stats, timestamps, run_date):
+        """ Set the required statistics """
         self.stats = stats
         self.timestamps = timestamps
         self.run_date = run_date
@@ -35,6 +37,7 @@ class ReportGenerator:
         self.crawl_df = pd.DataFrame(tmp_dict, index=['successful', 'empty', 'failed', 'duplicates', 'missing coordinates'])
 
     def build_report(self):
+        """ Builds a HTML report and creates a report file """
         template = ''
         with open(os.path.join(ROOT_DIR, 'reporting/report_template.html'), 'r') as template_file:
             template = template_file.read()
