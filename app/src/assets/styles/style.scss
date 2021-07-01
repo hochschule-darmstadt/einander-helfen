@@ -49,8 +49,11 @@
 
 html,
 body {
-  background: #00254f0c !important;
 
   // use custom scrollbar as main scrollbar
   @extend .customScrollbar;
+}
+
+.app {
+  background: #00254f0c !important;
 }
