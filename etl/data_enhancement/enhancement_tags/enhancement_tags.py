@@ -3,6 +3,7 @@ import os
 
 from shared.utils import write_data_to_json
 from shared.logger_factory import LoggerFactory
+from shared.stats_collector import StatsCollector
 
 ROOT_DIR = os.environ['ROOT_DIR']
 logger = LoggerFactory.get_enhancement_logger()
@@ -12,7 +13,12 @@ def run(data, domain):
     """ calls functions for extracting and ranking tags """
     logger.debug('run()')
 
-    find_new_tags(data, domain)
+    stats = StatsCollector.get_stats_collector(domain)
+
+    new_tags = find_new_tags(data, domain)
+    if new_tags is not None:
+        stats.set_enhancement_new_tags(len(new_tags))
+
     rank_tags(data, domain)
 
 
@@ -61,6 +67,8 @@ def find_new_tags(file, domain):
     output_path = os.path.join(ROOT_DIR, 'data_enhancement/output', f'new_tags_{domain}{".json"}')
     write_data_to_json(output_path, new_tags)
     logger.info('Wrote new tags to \'' + output_path + '\'')
+
+    return new_tags
 
 
 def rank_tags(file, domain):

@@ -9,6 +9,7 @@ from tqdm import tqdm
 
 from shared.utils import append_data_to_json, write_data_to_json
 from shared.logger_factory import LoggerFactory
+from shared.stats_collector import StatsCollector
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -37,6 +38,9 @@ class Scraper:
         # logger for Scraper
         self.logger = LoggerFactory.get_logger(name)
 
+        # stats for Scraper
+        self.stats = StatsCollector.get_stats_collector(name)
+
         # start time of logger
         self.start = None
 
@@ -59,6 +63,7 @@ class Scraper:
 
         except Exception as err:
             self.logger.exception(f'fn : add_urls, body {str(err)}')
+            self.stats.add_error_message(StatsCollector.ERROR_TYPE_FETCHING, str(err))
 
         # Clean existing results
         write_data_to_json(os.path.join(ROOT_DIR, 'data_extraction/data', f'{self.name}.json'), [])
@@ -69,6 +74,7 @@ class Scraper:
             self.crawl(url, i + 1)
 
         crawling_time = '{:.2f}'.format((time.time() - self.start))
+        self.stats.set_crawling_duration(crawling_time)
         self.logger.debug(f'[{self.name}] took {crawling_time} seconds to crawl {len(self.urls)}'
                           f' pages from {self.base_url}')
 
@@ -88,9 +94,13 @@ class Scraper:
                     if key not in keys_to_skip and parsed_data[key] is not None and len(parsed_data[key]) > 2:
                         parsed_data[key] = self.sanitize_html(parsed_data[key])
                 append_data_to_json(os.path.join(ROOT_DIR, 'data_extraction/data', f'{self.name}.json'), parsed_data)
+                self.stats.inc_crawling_successful()
+            else:
+                self.stats.inc_crawling_empty_posts()
 
         except Exception as err:
             self.logger.exception(f'fn : parse, body {str(err)}, index: {index}, url:{url}')
+            self.stats.add_error_message(StatsCollector.ERROR_TYPE_PARSING, str(err))
 
         self.logger.debug(f'[{self.name}] Scraping page #{index} ended')
         self.update_crawling_progress(index, len(self.urls))

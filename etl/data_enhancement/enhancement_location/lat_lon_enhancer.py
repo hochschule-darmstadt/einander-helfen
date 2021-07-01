@@ -3,6 +3,7 @@ import csv
 import time
 import os
 from shared.logger_factory import LoggerFactory
+from shared.stats_collector import StatsCollector
 from data_enhancement.enhancement_location.request_string_cleaner import RequestStringCleaner
 
 
@@ -20,9 +21,10 @@ class LatLonEnhancer:
     lat_lon_dict = {}
     lat_lon_blacklist = []
 
-    def __init__(self):
+    def __init__(self, stats):
         """Initializes the enhancer."""
         self._setup()
+        self.stats = stats
         self.geo_locator = Nominatim(user_agent='einander-helfen.org')
         self._load_local_storage()
 
@@ -55,6 +57,7 @@ class LatLonEnhancer:
                         lat_lon = self._handle_api_requests(request_string)
                     except Exception as err:
                         LatLonEnhancer.logger.exception(str(err))
+                        self.stats.add_error_message(StatsCollector.ERROR_TYPE_ENHANCEMENT, str(err))
 
                     if lat_lon is not None:
                         self._add_new_entry(request_string, lat_lon)
@@ -179,14 +182,19 @@ class LatLonEnhancer:
         return is_insufficient
 
 
-def add_lat_lon(data):
+def add_lat_lon(data, domain):
     """ sets up LatLon Enhancer and runs it for data """
     LatLonEnhancer.logger.debug('add_lat_lon()')
 
-    enhancer = LatLonEnhancer()
+    stats = StatsCollector.get_stats_collector(domain)
+
+    enhancer = LatLonEnhancer(stats)
     for post in data:
         try:
             post['post_struct']['map_address'] = None
             enhancer.enhance(post)
         except Exception as err:
             LatLonEnhancer.logger.exception(str(err))
+            stats.add_error_message(StatsCollector.ERROR_TYPE_ENHANCEMENT, str(err))
+        if post['geo_location'] is None:
+            stats.inc_enhancement_missing_coordinates()
