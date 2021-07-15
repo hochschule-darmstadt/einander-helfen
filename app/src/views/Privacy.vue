@@ -243,21 +243,6 @@
         Spam-E-Mails, vor.
       </p>
 
-      <h3>Nutzungsstatistiken</h3>
-
-      <p>
-        Diese Webseite verwendet
-        <a href="https://matomo.org" target="_blank">Matomo</a>, um anonyme
-        Nutzungsdaten der Webseitenbesucher zu analysieren. Matomo ist dabei
-        selbstgehostet und datenschutzfreundlich konfiguriert, womit die Cookie
-        Nutzung deaktiviert ist. Außerdem erfolgt keine Übermittlung anonymer
-        Nutzungsdaten an Dritte. Weitere Informationen zum Datenschutz unter
-        Matomo finden Sie unter
-        <a href="https://matomo.org/faq/new-to-piwik/" target="_blank"
-          >https://matomo.org/faq/new-to-piwik/</a
-        >
-      </p>
-
       <h3>Server-Log-Dateien</h3>
       <p>
         Der Provider der Seiten erhebt und speichert automatisch Informationen
