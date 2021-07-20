@@ -38,8 +38,8 @@ class Enhancer:
         """ run general enhancements and load domainspecific enhancement. """
         self.logger.info(f'Run general enhancement for {self._domain_name}')
 
-        e_exact_duplicates.remove_duplicates(self._data)
-        add_lat_lon(self._data)
+        e_exact_duplicates.remove_duplicates(self._data, self._domain_name)
+        add_lat_lon(self._data, self._domain_name)
         self._run_for_domain(self._domain_name)
         return self._data
 

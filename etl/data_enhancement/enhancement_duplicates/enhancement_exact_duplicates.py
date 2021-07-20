@@ -1,13 +1,16 @@
 from data_enhancement.enhancement_duplicates.json_post import JsonPost
 from shared.logger_factory import LoggerFactory
+from shared.stats_collector import StatsCollector
 
 logger = LoggerFactory.get_enhancement_logger()
 
 
-def remove_duplicates(data):
+def remove_duplicates(data, domain):
     """Removes exact duplicates from the json list.
     The URL is ignored in the comparison."""
     logger.debug('remove_duplicates()')
+
+    stats = StatsCollector.get_stats_collector(domain)
 
     posts_by_title = {}
     duplicates = []
@@ -25,6 +28,7 @@ def remove_duplicates(data):
         _one_to_one_comparison(posts, duplicates)
 
     logger.info(f'Found {len(duplicates)} duplicates')
+    stats.set_enhancement_duplicates(len(duplicates))
 
     for duplicate in duplicates:
         logger.debug(f'\'{duplicate["title"]}\' is a duplicate')
