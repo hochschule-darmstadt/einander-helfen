@@ -1,14 +1,14 @@
-<!-- The page 'Organisationen'. It provides links to other organizations that offer voluntary work.-->
+<!-- The page 'Anbieter'. It provides links to other organizations that offer voluntary work.-->
 
 <template>
   <div class="organizations">
     <Header />
     <section class="container pt-6">
-      <h1>Organisationen</h1>
+      <h1>Anbieter</h1>
       Sie haben nicht das gefunden, wonach Sie gesucht haben? Kein Problem! Die
-      untenstehende Liste enthält weiterführende Links zu anderen
-      Organisationen, die ebenfalls nationale und internationale ehrenamtliche
-      Tätigkeiten zur Verfügung stellen.
+      untenstehende Liste enthält weiterführende Links zu anderen Anbietern, die
+      ebenfalls nationale und internationale ehrenamtliche Tätigkeiten zur
+      Verfügung stellen.
       <div class="organizationList mt-4">
         <div
           class="letterBox mb-4"
