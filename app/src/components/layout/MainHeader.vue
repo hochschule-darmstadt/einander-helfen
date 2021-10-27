@@ -18,7 +18,7 @@
         </v-col>
         <v-col class="sloganCol">
           <p class="title font-weight-bold font-weight-light white--text">
-            Das Portal für Freiwilligenarbeit
+            Meine Freiwilligenarbeit finden
           </p>
           <p class="subtitle font-weight-light white--text d-flex">
             <span class="mr-1">
