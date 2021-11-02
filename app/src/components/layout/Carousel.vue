@@ -41,6 +41,12 @@ img {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  cursor: pointer;
+  -webkit-user-drag: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
 }
 .slick-arrow {
   display: none !important ;
