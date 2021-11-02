@@ -52,8 +52,8 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-.mx-auto{
-  .v-image{
+.mx-auto {
+  .v-image {
     border-radius: 4px;
   }
 }
