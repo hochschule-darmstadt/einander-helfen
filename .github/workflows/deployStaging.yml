@@ -4,6 +4,9 @@ on:
    push:
       branches:
          - staging
+      paths:
+         - app/**
+         - '!app/README.md'
 
 jobs:
    deploy:
