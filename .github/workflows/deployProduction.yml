@@ -17,9 +17,20 @@ jobs:
            with:
               node-version: 14.x
 
+         - name: Restore package cache
+           uses: actions/cache@v2
+           id: cache
+           with:
+              path: |
+                 ./app/node_modules
+              key: ${{ runner.os }}-yarn-${{ hashFiles('./app/yarn.lock') }}
+              restore-keys: |
+                 ${{ runner.os }}-yarn-
+
          - name: install dependencies
            working-directory: ./app
-           run: yarn install --pure-lockfile --non-interactive
+           if: steps.yarn-cache.outputs.cache-hit != 'true'
+           run: yarn --frozen-lockfile --non-interactive
 
          - name: build Vue app
            working-directory: ./app
