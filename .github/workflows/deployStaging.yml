@@ -6,15 +6,24 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
-      - name: build
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: setup node
         uses: actions/setup-node@v1
         with:
-          node-version: 12.x
-      - run: ls -la
-      - run: cd app && npm install && npm run build:staging
+          node-version: 14.x
+
+      - name: install dependencies
+        working-directory: ./app
+        run: yarn install --pure-lockfile --non-interactive
+
+      - name: build Vue app
+        working-directory: ./app
+        run: yarn build:staging
+
       - name: rsync deployments
         uses: burnett01/rsync-deployments@4.1
         with:
