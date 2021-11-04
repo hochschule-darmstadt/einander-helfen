@@ -1,57 +1,46 @@
-# This is a basic workflow to help you get started with Actions
-
 name: CI
 
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
 on:
-  push:
-    branches: [staging, master]
-  pull_request:
-    branches: [staging, master]
+   push:
+      branches: [staging, master]
+   pull_request:
+      branches: [staging, master]
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-20.04
+   build:
+      runs-on: ubuntu-20.04
+      steps:
+         - name: checkout
+           uses: actions/checkout@v2
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - name: checkout
-        uses: actions/checkout@v2
+         - name: setup node
+           uses: actions/setup-node@v1
+           with:
+              node-version: 14.x
 
-      - name: setup node
-        uses: actions/setup-node@v1
-        with:
-          node-version: 14.x
+         - name: install dependencies
+           working-directory: ./app
+           run: yarn install --pure-lockfile --non-interactive
 
-      - name: install dependencies
-        working-directory: ./app
-        run: yarn install --pure-lockfile --non-interactive
+         - name: build Vue app
+           working-directory: ./app
+           run: yarn build:production
 
-      - name: build Vue app
-        working-directory: ./app
-        run: yarn build:production
+   lint:
+      runs-on: ubuntu-latest
+      steps:
+         - name: checkout
+           uses: actions/checkout@v2
 
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - name: checkout
-        uses: actions/checkout@v2
+         - name: setup node
+           uses: actions/setup-node@v1
+           with:
+              node-version: 14.x
 
-      - name: setup node
-        uses: actions/setup-node@v1
-        with:
-          node-version: 14.x
+         - name: install dependencies
+           working-directory: ./app
+           run: yarn install --pure-lockfile --non-interactive
 
-      - name: install dependencies
-        working-directory: ./app
-        run: yarn install --pure-lockfile --non-interactive
-
-      - name: lint Vue app
-        working-directory: ./app
-        run: yarn lint
+         - name: lint Vue app
+           working-directory: ./app
+           run: yarn lint

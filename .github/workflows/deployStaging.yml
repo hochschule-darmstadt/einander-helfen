@@ -1,35 +1,36 @@
 name: DEPLOY_STAGING
+
 on:
-  push:
-    branches:
-      - staging
+   push:
+      branches:
+         - staging
 
 jobs:
-  deploy:
-    runs-on: ubuntu-20.04
-    steps:
-      - name: checkout
-        uses: actions/checkout@v2
+   deploy:
+      runs-on: ubuntu-20.04
+      steps:
+         - name: checkout
+           uses: actions/checkout@v2
 
-      - name: setup node
-        uses: actions/setup-node@v1
-        with:
-          node-version: 14.x
+         - name: setup node
+           uses: actions/setup-node@v1
+           with:
+              node-version: 14.x
 
-      - name: install dependencies
-        working-directory: ./app
-        run: yarn install --pure-lockfile --non-interactive
+         - name: install dependencies
+           working-directory: ./app
+           run: yarn install --pure-lockfile --non-interactive
 
-      - name: build Vue app
-        working-directory: ./app
-        run: yarn build:staging
+         - name: build Vue app
+           working-directory: ./app
+           run: yarn build:staging
 
-      - name: rsync deployments
-        uses: burnett01/rsync-deployments@4.1
-        with:
-          switches: -avzr --delete
-          path: app/dist/
-          remote_path: ${{ secrets.DEPLOYMENT_PATH }}
-          remote_host: ${{ secrets.DEPLOYMENT_SERVER_STAGING }}
-          remote_user: ${{ secrets.DEPLOYMENT_USER }}
-          remote_key: ${{ secrets.DEPLOYMENT_KEY }}
+         - name: rsync deployments
+           uses: burnett01/rsync-deployments@4.1
+           with:
+              switches: -avzr --delete
+              path: app/dist/
+              remote_path: ${{ secrets.DEPLOYMENT_PATH }}
+              remote_host: ${{ secrets.DEPLOYMENT_SERVER_STAGING }}
+              remote_user: ${{ secrets.DEPLOYMENT_USER }}
+              remote_key: ${{ secrets.DEPLOYMENT_KEY }}
