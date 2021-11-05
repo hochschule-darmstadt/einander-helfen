@@ -13,27 +13,27 @@
             />
           </v-app-bar-nav-icon>
           <p class="headline pl-5 font-weight-light white--text">
-            einander-helfen.org
+            {{$t('home.title')}}
           </p>
         </v-col>
         <v-col class="sloganCol">
           <p class="title font-weight-bold font-weight-light white--text">
-            Das Portal für Freiwilligenarbeit
+            {{ $t("home.description") }}
           </p>
           <p class="subtitle font-weight-light white--text d-flex">
             <span class="mr-1">
-              Aktuell {{ nationalCount }}
+              {{ $t("home.header.description1") }} {{ nationalCount }}
               <span class="pl-1 pr-1">
                 <img class="areImage" :src="nationalImg" />
               </span>
-              nationale und
+              {{ $t("home.header.description2") }}
             </span>
             <span>
               {{ internationalCount }}
               <span class="pl-1 pr-1">
                 <img class="areImage" :src="internationalImg" />
               </span>
-              internationale Stellenangebote zur Auswahl
+              {{ $t("home.header.description3") }}
             </span>
           </p>
         </v-col>

@@ -1,0 +1,12 @@
+{
+  "message": "hello",
+  "home": {
+    "title": "einander-helfen.org",
+    "description": "Das Portal für Freiwilligenarbeit",
+    "header" : {
+      "description1": "Aktuell",
+      "descriptopn2": "nationale und",
+      "description3": "internationale Stellenangebote zur Auswahl"
+    }
+  }
+}
