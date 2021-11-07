@@ -13,6 +13,7 @@ __pycache__
 *.sln
 *.sw*
 etl/**/*.json
+!etl/.devcontainer/**/*.json
 etl/**/*.csv
 etl/**/*.log
 etl/logs
