@@ -1,5 +1,5 @@
 #!/bin/bash
-lockfile=/var/tmp/ETLlock
+lockfile=./ETLlock
 
 if ( set -o noclobber; echo "$$" > "$lockfile") 2> /dev/null; then
 
