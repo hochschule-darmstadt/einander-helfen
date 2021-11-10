@@ -159,8 +159,8 @@ export default Vue.extend({
       immediate: true,
       handler() {
         document.title = "Über uns - Einander Helfen";
-      }
-    }
+      },
+    },
   },
 });
 </script>

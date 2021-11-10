@@ -34,8 +34,8 @@ export default Vue.extend({
       immediate: true,
       handler() {
         document.title = "Einander Helfen";
-      }
-    }
+      },
+    },
   },
   data: function () {
     return {

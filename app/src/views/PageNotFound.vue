@@ -33,8 +33,8 @@ export default Vue.extend({
       immediate: true,
       handler() {
         document.title = "Seite nicht gefunden - Einander Helfen";
-      }
-    }
+      },
+    },
   },
   computed: {
     width() {

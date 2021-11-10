@@ -328,8 +328,8 @@ export default Vue.extend({
       immediate: true,
       handler() {
         document.title = "Datenschutz - Einander Helfen";
-      }
-    }
+      },
+    },
   },
 });
 </script>

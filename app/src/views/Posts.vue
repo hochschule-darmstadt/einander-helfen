@@ -141,8 +141,8 @@ export default Vue.extend({
       immediate: true,
       handler() {
         document.title = "Angebotssuche - Einander Helfen";
-      }
-    }
+      },
+    },
   },
   mounted(): void {
     // get params from route

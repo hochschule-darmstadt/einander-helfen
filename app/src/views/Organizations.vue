@@ -48,8 +48,8 @@ export default Vue.extend({
       immediate: true,
       handler() {
         document.title = "Anbieter - Einander Helfen";
-      }
-    }
+      },
+    },
   },
   data() {
     return {
