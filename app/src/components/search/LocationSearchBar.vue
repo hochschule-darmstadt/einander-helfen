@@ -7,7 +7,7 @@
     item-text="title"
     item-value="title"
     auto-select-first
-    v-bind:label="[this.isInternational ? $t('locationSearchBar.country') : $t('locationSearchBar.location')]"
+    :label="hintText"
     :filter="filterLocations"
     :items="shownLocations"
     :dark="dark"
@@ -61,7 +61,7 @@ export default Vue.extend({
         : LocationService.findLocationByPlzOrName(q);
     },
     hintText(): string {
-      return this.isInternational ? "Land" : "Ort oder PLZ";
+      return this.isInternational ? this.$t('locationSearchBar.country') as string : this.$t('locationSearchBar.location') as string;
     },
   },
   mounted(): void {

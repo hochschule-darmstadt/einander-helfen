@@ -176,6 +176,16 @@
   "locationSearchBar":{
     "country":"Land",
     "location":"Ort oder PLZ"
-
+  },
+  "areaSelect":{
+    "germany":"Deutschland",
+    "international":"International"
+  },
+  "radiusSelect":{
+    "radius":"Umkreis",
+    "allOver":"Überall"
+  },
+  "postPagination":{
+    "results":"Ergebnisse"
   }
 }

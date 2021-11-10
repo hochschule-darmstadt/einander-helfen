@@ -57,12 +57,12 @@ export default Vue.extend({
     return {
       items: [
         {
-          text: "Deutschland",
+          text: this.$t("areaSelect.germany"),
           value: "germany",
           img: require("@/assets/images/area/240px-Flag_of_Germany.png"),
         },
         {
-          text: "International",
+          text: this.$t("areaSelect.international"),
           value: "international",
           img: require("@/assets/images/area/240px-Earth_icon_2.png"),
         },
