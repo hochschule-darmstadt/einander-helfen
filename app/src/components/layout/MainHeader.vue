@@ -37,7 +37,11 @@
             </span>
           </p>
         </v-col>
+        <v-col class="langCol">
+          
+        </v-col>
         <v-col class="menuCol">
+          <LanguageSelection />
           <MenuButton />
         </v-col>
       </v-row>
@@ -45,15 +49,17 @@
   </v-app-bar>
 </template>
 
-<script>
+<script lang="ts">
 import Vue from "vue";
 import MenuButton from "@/components/layout/MenuButton.vue";
 import PostService from "@/services/PostService";
+import LanguageSelection from "@/components/language/LanguageSelection.vue";
 
 export default Vue.extend({
   name: "MainHeader",
   components: {
     MenuButton,
+    LanguageSelection,
   },
   data: function () {
     return {

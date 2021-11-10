@@ -187,5 +187,10 @@
   },
   "postPagination":{
     "results":"Ergebnisse"
+  },
+  "languageSelection":{
+    "german":"Deutsch",
+    "english":"Englisch",
+    "languageChoice":"Sprache"
   }
 }
