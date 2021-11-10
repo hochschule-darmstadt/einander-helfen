@@ -97,6 +97,14 @@ import Header from "@/components/layout/SearchHeader.vue";
 
 export default Vue.extend({
   components: { Header },
+  watch: {
+    title: {
+      immediate: true,
+      handler() {
+        document.title = "Impressum - Einander Helfen";
+      }
+    }
+  },
   data(): {
     items: any;
   } {

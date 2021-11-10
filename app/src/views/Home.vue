@@ -29,6 +29,14 @@ export default Vue.extend({
     SearchComponent,
     ImageCard,
   },
+  watch: {
+    title: {
+      immediate: true,
+      handler() {
+        document.title = "Einander Helfen";
+      }
+    }
+  },
   data: function () {
     return {
       volunteerTags: [
