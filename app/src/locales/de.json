@@ -8,5 +8,79 @@
       "description2": "nationale und",
       "description3": "internationale Stellenangebote zur Auswahl"
     }
+  },
+  "about":{
+    "description1":"ist das schnelle Suchportal für Freiwilligenarbeit und ehrenamtliche Tätigkeiten: Mit einer Fülle von unterschiedlichen Angeboten auf der ganzen Welt.",
+    "howItWorksHeadline":"Und so funktioniert's:",
+    "howItWorksDescription1":"Sie suchen ein Stellenangebot für Freiwilligenarbeit oder Ehrenamt innerhalb Deutschlands? Dann tragen Sie ein Stichwort im Suchen-Feld ein und geben die Postleitzahl oder den Ortsnamen des eigenen Standorts an. Vergessen Sie dabei nicht den Umkreis einzuschränken! Sofort werden alle Angebote in der Karte und in der Liste angezeigt. Ein Angebot auswählen (in der Liste oder auf der Karte) und schon werden die dazugehörigen Details angezeigt. Mit einem weiteren Klick ist man auf der Seite des Anbieters - mit weiteren Informationen. Sie können die Suche auch durch mehrere Stichworte einschränken.",
+    "howItWorksDescription2":"Sie suchen ein Stellenangebot für internationalen Freiwilligendienst? Dann klicken Sie auf die Deutschlandflagge und wählen stattdessen \"International\" aus. Geben Sie nun Ihr gewünschtes Land an und tragen ein Stichwort im Suchen-Feld ein. Sofort werden alle Angebote in der Karte und in der Liste angezeigt. Ein Angebot auswählen (in der Liste oder auf der Karte) und schon werden die dazugehörigen Details angezeigt. Mit einem weiteren Klick ist man auf der Seite des Anbieters - mit weiteren Informationen. Sie können die Suche auch durch mehrere Stichworte einschränken.",
+    "providerDescription1":"fasst Angebote von mehreren Anbietern auf der ganzen Welt zusammen und erlaubt es, bequem über alle zu suchen. Aktuell werden folgende Anbieter abgedeckt:",
+    "moreProvidersFollow":"More providers follow",
+    "suggestionsForImprovement":"Haben Sie Verbesserungsvorschläge oder fehlt Ihnen etwas? Dann kontaktieren Sie uns gerne unter",
+    "whoWeAre":"Wer wir sind:",
+    "whoWeAreDescription1":"Wir sind ein ehrenamtliches Team und haben die Seite mit viel Initiative und Eigenarbeit entwickelt. Die Software ist Open Source",
+    "whoWeAreDescription2":"und wurde initial von einem Team von Studierenden programmiert. Wir freuen uns auf Anregungen und Verbesserungsvorschläge unter"
+  },
+  "imprint":{
+    "imprintHeadline":"Impressum (legal notice, in German)",
+    "informationAccordingTo":"Angaben gemäß § 5 TMG",
+    "contact":"Kontakt",
+    "liabilityForContentsHeadline":"Haftung für Inhalte",
+    "liabilityForContentsDescription1":"Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.",
+    "liabilityForContentsDescription2":"Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen Gesetzen bleiben hiervon unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt der Kenntnis einer konkreten Rechtsverletzung möglich. Bei Bekanntwerden von entsprechenden Rechtsverletzungen werden wir diese Inhalte umgehend entfernen.",
+    "liabilityForLinksHeadline":"Haftung für Links",
+    "liabilityForLinksDescription1":"Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße überprüft. Rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar.",
+    "liabilityForLinksDescription2":"Eine permanente inhaltliche Kontrolle der verlinkten Seiten ist jedoch ohne konkrete Anhaltspunkte einer Rechtsverletzung nicht zumutbar. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Links umgehend entfernen.",
+    "copyrightHeadline":"Urheberrecht",
+    "copyrightHeadlineDescription1":"Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers. Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet.",
+    "copyrightHeadlineDescription2":"Soweit die Inhalte auf dieser Seite nicht vom Betreiber erstellt wurden, werden die Urheberrechte Dritter beachtet. Insbesondere werden Inhalte Dritter als solche gekennzeichnet. Sollten Sie trotzdem auf eine Urheberrechtsverletzung aufmerksam werden, bitten wir um einen entsprechenden Hinweis. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Inhalte umgehend entfernen.",
+    "source":"Quelle:",
+    "sourceReference":"Quellenangabe / Bildquellen",
+    "sourceReferenceItems":{
+      "iitBombay":{
+        "position": "Logo von einander-helfen.org",
+        "license":"Der Urheberrechtsinhaber dieser Datei, das IIT Bombay, gestattet die Nutzung für jeden Zweck, vorausgesetzt, der Urheberrechtsinhaber wird ordnungsgemäß genannt. Die Weitergabe, die Bearbeitung, die kommerzielle Nutzung und jede andere Nutzung ist gestattet."
+      },
+      "sKopp":{
+        "position": "Im Dropdownmenü links neben \"Deutschland\" (Deutschlandflagge)",
+        "license":"Dieses Bild einer einfachen Geometrie ist nicht urheberrechtsfähig und daher gemeinfrei, da es ausschließlich aus Informationen besteht, die Allgemeingut sind und keine originäre Urheberschaft enthalten."
+      },
+      "tommasoSansone":{
+        "position": "Im Dropdownmenü links neben \"International\" (Weltkugel)",
+        "license":"Diese Datei wird unter der Creative Commons CC0 1.0 Universal Public Domain Dedication zur Verfügung gestellt. Die Person, die ein Werk mit dieser Urkunde verbunden hat, hat das Werk der Allgemeinheit gewidmet, indem sie auf alle Rechte an dem Werk weltweit nach dem Urheberrechtsgesetz verzichtet, einschließlich aller verwandten und benachbarten Rechte, soweit dies gesetzlich zulässig ist. Sie können das Werk vervielfältigen, verändern, verbreiten und aufführen, auch zu kommerziellen Zwecken, ohne um Erlaubnis zu fragen."
+      },
+      "truthseeker":{
+        "position": "Auf der Startseite erstes Bild im Karussel",
+        "license":""
+      },
+      "timkraaijvanger":{
+        "position": "Auf der Startseite zweites Bild im Karussel",
+        "license":""
+      },
+      "anemone":{
+        "position": "Auf der Startseite drittes Bild im Karussel",
+        "license":""
+      },
+      "cottonbro":{
+        "position": "Auf der Startseite unten das Bild auf der ersten Kachel",
+        "license":""
+      },
+      "andreaPiacquadio":{
+        "position": "Auf der Startseite unten das Bild auf der zweiten Kachel",
+        "license":""
+      },
+      "fauxels":{
+        "position": "Auf der Startseite unten das Bild auf der vierten Kachel",
+        "license":""
+      },
+      "andreaPiacquadio2":{
+        "position": "Auf der Startseite unten das Bild auf der dritten Kachel",
+        "license":""
+      },
+      "freepik":{
+        "position": "Icon auf der PageNotFound Seite",
+        "license":""
+      }
+    }
   }
 }
