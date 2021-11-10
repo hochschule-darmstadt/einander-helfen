@@ -6,7 +6,7 @@
       style="background: white"
       rounded
       color="black"
-      placeholder="z. B. Jugendarbeit"
+      v-bind:placeholder="$t('searchBar.searchBarPlaceholder')"
       item-text="tag"
       autocomplete="off"
       append-icon=""
@@ -20,8 +20,8 @@
         <v-list-item>
           <v-list-item-content>
             <v-list-item-title>
-              Drücken Sie
-              <kbd>Enter</kbd> für eine Freitextsuche mit Ihrer Eingabe
+              {{ $t("searchBar.searchBarText1") }}
+              <kbd>{{ $t("searchBar.searchBarEnter") }}</kbd> {{ $t("searchBar.searchBarText2") }}
               <v-chip>"{{ searchValue }}"</v-chip>
             </v-list-item-title>
           </v-list-item-content>

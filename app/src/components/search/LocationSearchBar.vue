@@ -7,7 +7,7 @@
     item-text="title"
     item-value="title"
     auto-select-first
-    :label="hintText"
+    v-bind:label="[this.isInternational ? $t('locationSearchBar.country') : $t('locationSearchBar.location')]"
     :filter="filterLocations"
     :items="shownLocations"
     :dark="dark"
