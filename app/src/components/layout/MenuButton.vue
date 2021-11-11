@@ -27,20 +27,17 @@
 import Vue from "vue";
 
 // icons can be found here: https://fonts.google.com/icons
+//$t may look like an error, but it isn't
 export default Vue.extend({
   name: "MenuButton",
   data: function () {
     return {
       links: [
-        { text: "Home", route: "/", icon: "home" },
-        { text: "Anbieter", route: "/organizations", icon: "groups" },
-        { text: "Über uns", route: "/about", icon: "group" },
-        { text: "Impressum", route: "/imprint", icon: "gavel" },
-        {
-          text: "Datenschutzerklärung",
-          route: "/privacy",
-          icon: "privacy_tip",
-        },
+        { text: this.$t("home.menu.home"), route: "/", icon: "home" },
+        { text: this.$t("home.menu.provider"), route: "/organizations", icon: "groups" },
+        { text: this.$t("home.menu.aboutUs"), route: "/about", icon: "group" },
+        { text: this.$t("home.menu.impressum"), route: "/imprint", icon: "gavel" },
+        { text: this.$t("home.menu.privacyPolicy"), route: "/privacy", icon: "privacy_tip" },
       ],
     };
   },

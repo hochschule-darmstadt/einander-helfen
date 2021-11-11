@@ -33,22 +33,22 @@ export default Vue.extend({
     return {
       volunteerTags: [
         {
-          title: "Arbeit mit Kindern",
+          title: this.$t("home.cards.workWithKids"),
           to: "Kinder",
           img: require("@/assets/images/macherIN.jpeg"),
         },
         {
-          title: "Arbeit mit Jugendlichen",
+          title: this.$t("home.cards.workWithTeenagers"),
           to: "Jugend",
           img: require("@/assets/images/denkerIN.jpeg"),
         },
         {
-          title: "Arbeit mit Senioren",
+          title: this.$t("home.cards.workWithSeniors"),
           to: "Senioren",
           img: require("@/assets/images/sozial.jpeg"),
         },
         {
-          title: "Betreuung",
+          title: this.$t("home.cards.care"),
           to: "Betreuung",
           img: require("@/assets/images/jugend.jpeg"),
         },

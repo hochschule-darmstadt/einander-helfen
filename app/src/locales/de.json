@@ -1,5 +1,4 @@
 {
-  "message": "hello",
   "home": {
     "title": "einander-helfen.org",
     "description": "Das Portal für Freiwilligenarbeit",
@@ -7,6 +6,25 @@
       "description1": "Aktuell",
       "description2": "nationale und",
       "description3": "internationale Stellenangebote zur Auswahl"
+    },
+    "footer": {
+      "providerCap": "ANBIETER",
+      "aboutUsCap": "ÜBER UNS",
+      "impressumCap": "IMPRESSUM",
+      "privacyPolicyCap": "DATENSCHUTZERKLÄRUNG"
+    },
+    "menu": {
+      "home": "Home",
+      "provider": "Anbieter",
+      "aboutUs": "Über uns",
+      "impressum": "Impressum",
+      "privacyPolicy": "Datenschutzerklärung"
+    },
+    "cards": {
+       "workWithKids": "Arbeit mit Kindern",
+       "workWithTeenagers": "Arbeit mit Jugendlichen",
+       "workWithSeniors": "Arbeit mit Senioren",
+       "care": "Betreuung"
     }
   },
   "about":{
@@ -15,7 +33,7 @@
     "howItWorksDescription1":"Sie suchen ein Stellenangebot für Freiwilligenarbeit oder Ehrenamt innerhalb Deutschlands? Dann tragen Sie ein Stichwort im Suchen-Feld ein und geben die Postleitzahl oder den Ortsnamen des eigenen Standorts an. Vergessen Sie dabei nicht den Umkreis einzuschränken! Sofort werden alle Angebote in der Karte und in der Liste angezeigt. Ein Angebot auswählen (in der Liste oder auf der Karte) und schon werden die dazugehörigen Details angezeigt. Mit einem weiteren Klick ist man auf der Seite des Anbieters - mit weiteren Informationen. Sie können die Suche auch durch mehrere Stichworte einschränken.",
     "howItWorksDescription2":"Sie suchen ein Stellenangebot für internationalen Freiwilligendienst? Dann klicken Sie auf die Deutschlandflagge und wählen stattdessen \"International\" aus. Geben Sie nun Ihr gewünschtes Land an und tragen ein Stichwort im Suchen-Feld ein. Sofort werden alle Angebote in der Karte und in der Liste angezeigt. Ein Angebot auswählen (in der Liste oder auf der Karte) und schon werden die dazugehörigen Details angezeigt. Mit einem weiteren Klick ist man auf der Seite des Anbieters - mit weiteren Informationen. Sie können die Suche auch durch mehrere Stichworte einschränken.",
     "providerDescription1":"fasst Angebote von mehreren Anbietern auf der ganzen Welt zusammen und erlaubt es, bequem über alle zu suchen. Aktuell werden folgende Anbieter abgedeckt:",
-    "moreProvidersFollow":"More providers follow",
+    "moreProvidersFollow":"Weitere Anbieter folgen",
     "suggestionsForImprovement":"Haben Sie Verbesserungsvorschläge oder fehlt Ihnen etwas? Dann kontaktieren Sie uns gerne unter",
     "whoWeAre":"Wer wir sind:",
     "whoWeAreDescription1":"Wir sind ein ehrenamtliches Team und haben die Seite mit viel Initiative und Eigenarbeit entwickelt. Die Software ist Open Source",
