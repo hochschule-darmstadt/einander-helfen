@@ -15,6 +15,7 @@ __pycache__
 etl/**/*.json
 etl/**/*.csv
 etl/**/*.log
+etl/**/*.tar.gz
 etl/logs
 etl/test/**/logs
 /etl/data_management/upload/
