@@ -43,6 +43,7 @@
       },
       "sKopp":{
         "position": "Im Dropdownmenü links neben \"Deutschland\" (Deutschlandflagge)",
+        "author":"SKopp, Madden und andere User",
         "license":"Dieses Bild einer einfachen Geometrie ist nicht urheberrechtsfähig und daher gemeinfrei, da es ausschließlich aus Informationen besteht, die Allgemeingut sind und keine originäre Urheberschaft enthalten."
       },
       "tommasoSansone":{
@@ -50,36 +51,28 @@
         "license":"Diese Datei wird unter der Creative Commons CC0 1.0 Universal Public Domain Dedication zur Verfügung gestellt. Die Person, die ein Werk mit dieser Urkunde verbunden hat, hat das Werk der Allgemeinheit gewidmet, indem sie auf alle Rechte an dem Werk weltweit nach dem Urheberrechtsgesetz verzichtet, einschließlich aller verwandten und benachbarten Rechte, soweit dies gesetzlich zulässig ist. Sie können das Werk vervielfältigen, verändern, verbreiten und aufführen, auch zu kommerziellen Zwecken, ohne um Erlaubnis zu fragen."
       },
       "truthseeker":{
-        "position": "Auf der Startseite erstes Bild im Karussel",
-        "license":""
+        "position": "Auf der Startseite erstes Bild im Karussel"
       },
       "timkraaijvanger":{
-        "position": "Auf der Startseite zweites Bild im Karussel",
-        "license":""
+        "position": "Auf der Startseite zweites Bild im Karussel"
       },
       "anemone":{
-        "position": "Auf der Startseite drittes Bild im Karussel",
-        "license":""
+        "position": "Auf der Startseite drittes Bild im Karussel"
       },
       "cottonbro":{
-        "position": "Auf der Startseite unten das Bild auf der ersten Kachel",
-        "license":""
+        "position": "Auf der Startseite unten das Bild auf der ersten Kachel"
       },
       "andreaPiacquadio":{
-        "position": "Auf der Startseite unten das Bild auf der zweiten Kachel",
-        "license":""
+        "position": "Auf der Startseite unten das Bild auf der zweiten Kachel"
       },
       "fauxels":{
-        "position": "Auf der Startseite unten das Bild auf der vierten Kachel",
-        "license":""
+        "position": "Auf der Startseite unten das Bild auf der vierten Kachel"
       },
       "andreaPiacquadio2":{
-        "position": "Auf der Startseite unten das Bild auf der dritten Kachel",
-        "license":""
+        "position": "Auf der Startseite unten das Bild auf der dritten Kachel"
       },
       "freepik":{
-        "position": "Icon auf der PageNotFound Seite",
-        "license":""
+        "position": "Icon auf der PageNotFound Seite"
       }
     }
   },
