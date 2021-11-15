@@ -2,6 +2,12 @@
   "home": {
     "title": "einander-helfen.org",
     "description": "Das Portal für Freiwilligenarbeit",
+    "searchCategory": {
+      "kids": "Kinder",
+      "teenagers": "Jugend",
+      "seniors": "Senioren",
+      "care": "Betreuung"
+    },
     "header" : {
       "description1": "Aktuell",
       "description2": "nationale und",
