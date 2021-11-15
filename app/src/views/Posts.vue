@@ -140,7 +140,7 @@ export default Vue.extend({
     title: {
       immediate: true,
       handler() {
-        document.title = "Angebotssuche - Einander Helfen";
+        document.title = "Ergebnisse - Einander Helfen";
       },
     },
   },
