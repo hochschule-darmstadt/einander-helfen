@@ -42,7 +42,7 @@ export default Vue.extend({
         {
           text: this.$t("languageSelection.english"),
           value: "en",
-          img: require("@/assets/images/area/240px-Earth_icon_2.png"),
+          img: require("@/assets/images/language/320px-Flag_of_the_United_States.svg.png"),
         },
       ] as Language[]
     };
