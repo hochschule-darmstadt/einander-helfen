@@ -11,12 +11,12 @@
     @change="onInputChange"
   >
     <template v-slot:item="{ item }">
-      <img class="areaImage" alt="areaImage" :src="item.img" />
+      <img class="areaImage" :alt="item.alt" :src="item.img" />
       <v-spacer />
       <span>{{ item.text }}</span>
     </template>
     <template v-slot:selection="{ item }">
-      <img class="areaImageSelected" alt="areaImageSelected" :src="item.img" />
+      <img class="areaImageSelected" :alt="item.alt" :src="item.img" />
     </template>
   </v-select>
 </template>
@@ -25,6 +25,7 @@
 import Vue from "vue";
 
 interface AreaItem {
+  alt: string;
   text: string;
   value: string;
   img: string;
@@ -57,11 +58,13 @@ export default Vue.extend({
     return {
       items: [
         {
+          alt: "Flagge-Deutschland",
           text: "Deutschland",
           value: "germany",
           img: require("@/assets/images/area/240px-Flag_of_Germany.png"),
         },
         {
+          alt: "Flagge-International",
           text: "International",
           value: "international",
           img: require("@/assets/images/area/240px-Earth_icon_2.png"),
