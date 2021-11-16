@@ -66,7 +66,7 @@
         "license":"The copyright owner of this file, IIT Bombay, permits its use for any purpose provided the copyright owner is properly credited. Redistribution, adaptation, commercial use and any other use is permitted."
       },
       "sKopp":{
-        "position": "In the drop-down menu to the left of \"Germany\" (German flag)",
+        "position": "In the drop-down menu to the left of \"Germany\" (German flag) and in the drop-down menu language to the left of \"Germany\" (Germany flag)",
         "author":"SKopp, Madden and other users",
         "license":"This image of a simple geometry is not copyrightable and therefore in the public domain because it consists solely of information that is in the public domain and does not contain any original authorship."
       },
@@ -97,6 +97,10 @@
       },
       "freepik":{
         "position": "Icon on the PageNotFound page"
+      },
+      "dbenbenn":{
+        "position": "In the drop-down menu language to the left of \"English\" (USA flag)",
+        "license":"This image is ineligible for copyright and therefore is in the public domain, because it consists entirely of information that is common property and contains no original authorship."
       }
     }
   },
