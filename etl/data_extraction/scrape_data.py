@@ -15,14 +15,14 @@ logger = LoggerFactory.get_general_logger()
 scraper_threads = []
 
 
-def execute_scraper(scraper_file_name: str):
+def execute_scraper(scraper_file_name: str, context: str):
     """Looks for the given file_name in the /data_extraction/scraper directory.
     Checks if the files contains a subclass of Scraper (/data_extraction/Scraper.py) and starts the run function.
     Writes the scraped data and errors during the scraping process data_extraction/data and data_extraction/errors."""
     logger.debug('execute_scraper()')
     logger.info(f'execute_scraper for {scraper_file_name}')
     try:
-        scraper_module = import_module(f'data_extraction.scrapers.{scraper_file_name}')
+        scraper_module = import_module(f'data_extraction.scrapers.{context}.{scraper_file_name}')
         scraper_class = None
 
         # Looks for a derived sub-class of class 'Scraper' in imported module
@@ -41,11 +41,14 @@ def execute_scraper(scraper_file_name: str):
         logger.exception(err)
 
 
-def run():
+def run(context: str):
     """Starts a thread with the execute_scraper function for all overridden scraper subclasses in
     /data_extraction/scraper."""
     logger.debug('run()')
-    for i, file_entry in enumerate(os.scandir(os.path.join(ROOT_DIR, 'data_extraction/scrapers'))):
+
+    scrapers_path = 'data_extraction/scrapers/' + context
+
+    for i, file_entry in enumerate(os.scandir(os.path.join(ROOT_DIR, scrapers_path))):
 
         if file_entry.is_file():
             scraper_module_name = os.path.splitext(
@@ -53,7 +56,7 @@ def run():
 
             # Create a thread with each file in the directory data_extraction/scraper
             # and execute the execute_scraper function with it
-            thread = threading.Thread(target=execute_scraper, args=(scraper_module_name,))
+            thread = threading.Thread(target=execute_scraper, args=(scraper_module_name, context,))
             thread.start()
             scraper_threads.append(thread)
 

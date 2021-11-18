@@ -1,6 +1,7 @@
 import os
 import sys
 import time
+import argparse
 from datetime import datetime
 
 # Root Directory (/etl)
@@ -20,11 +21,18 @@ from data_management.data_manager import DataManager
 
 logger = LoggerFactory.get_general_logger()
 
+parser = argparse.ArgumentParser(prog='main.py')
+parser.add_argument('--context', '-c', nargs='?', help='Set the location context')
+args = parser.parse_args()
+context = args.context.lower()
+
+logger.info('Selected location context: ' + args.context)
+
 now = datetime.now()
 StatsCollector.date = now.strftime('%Y-%m-%d')
 StatsCollector.timestamps['crawling_started'] = now.strftime('%H:%M:%S (%d. %m. %Y)')
 # Runs the extraction process and writes the scraped data to data_extraction/data directory
-run_extraction()
+run_extraction(context)
 
 now = datetime.now()
 StatsCollector.timestamps['crawling_ended'] = now.strftime('%H:%M:%S (%d. %m. %Y)')
@@ -40,7 +48,7 @@ for file in os.scandir(os.path.join(ROOT_DIR, 'data_extraction/data')):
 
     # Enhance data
     start = time.time()
-    enhanced_data = enhance_data.Enhancer(data, file_name).run()
+    enhanced_data = enhance_data.Enhancer(data, file_name, context).run()
     enhance_time = '{:.2f}'.format((time.time() - start))
     stats.set_enhancement_duration(enhance_time)
 
