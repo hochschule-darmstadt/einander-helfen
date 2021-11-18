@@ -24,7 +24,10 @@ logger = LoggerFactory.get_general_logger()
 parser = argparse.ArgumentParser(prog='main.py')
 parser.add_argument('--context', '-c', nargs='?', help='Set the location context')
 args = parser.parse_args()
-context = args.context.lower()
+
+context = 'de'
+if args.context is not None:
+    context = args.context.lower()
 
 logger.info('Selected location context: ' + args.context)
 
@@ -38,7 +41,7 @@ now = datetime.now()
 StatsCollector.timestamps['crawling_ended'] = now.strftime('%H:%M:%S (%d. %m. %Y)')
 StatsCollector.timestamps['enhancement_started'] = now.strftime('%H:%M:%S (%d. %m. %Y)')
 
-for file in os.scandir(os.path.join(ROOT_DIR, 'data_extraction/data')):
+for file in os.scandir(os.path.join(ROOT_DIR, f'data_extraction/data/{context}')):
     file_name = os.path.splitext(file.name)[0]
 
     stats = StatsCollector.get_stats_collector(file_name)
@@ -53,11 +56,11 @@ for file in os.scandir(os.path.join(ROOT_DIR, 'data_extraction/data')):
     stats.set_enhancement_duration(enhance_time)
 
     # Write enhanced data to files
-    write_data_to_json(os.path.join(ROOT_DIR, 'data_enhancement/data', f'{file_name}.json'), enhanced_data)
+    write_data_to_json(os.path.join(ROOT_DIR, f'data_enhancement/data/{context}', f'{file_name}.json'), enhanced_data)
 
 now = datetime.now()
 StatsCollector.timestamps['enhancement_ended'] = now.strftime('%H:%M:%S (%d. %m. %Y)')
 
-DataManager.run_backup_process()
+DataManager.run_backup_process(context)
 
 StatsCollector.create_summary()

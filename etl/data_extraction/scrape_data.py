@@ -34,7 +34,7 @@ def execute_scraper(scraper_file_name: str, context: str):
             raise Exception(f'[{scraper_file_name}] Error: No sub-class of class Scraper found')
 
         # Create instance of the Scraper sub-class and execute the run method 
-        scraper_instance = scraper_class(scraper_file_name)
+        scraper_instance = scraper_class(scraper_file_name, context)
         scraper_instance.run()
 
     except Exception as err:

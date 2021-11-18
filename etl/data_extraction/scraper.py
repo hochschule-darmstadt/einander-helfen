@@ -23,11 +23,14 @@ class Scraper:
     # Delay between requests
     delay = 0.5
 
-    def __init__(self, name):
+    def __init__(self, name, context):
         """Constructor of the scraper."""
 
         # Scraper name -> Overwritten by name of the scraper file
         self.name = name
+
+        # Scraper location context
+        self.context = context
 
         # The URLs which will be parsed and scraped  
         self.urls = []
@@ -66,7 +69,7 @@ class Scraper:
             self.stats.add_error_message(StatsCollector.ERROR_TYPE_FETCHING, str(err))
 
         # Clean existing results
-        write_data_to_json(os.path.join(ROOT_DIR, 'data_extraction/data', f'{self.name}.json'), [])
+        write_data_to_json(os.path.join(ROOT_DIR, f'data_extraction/data/{self.context}', f'{self.name}.json'), [])
 
         # Iterate over URLs and crawl each page
         for i, url in enumerate(self.urls):
@@ -93,7 +96,7 @@ class Scraper:
                 for key in parsed_data.keys():
                     if key not in keys_to_skip and parsed_data[key] is not None and len(parsed_data[key]) > 2:
                         parsed_data[key] = self.sanitize_html(parsed_data[key])
-                append_data_to_json(os.path.join(ROOT_DIR, 'data_extraction/data', f'{self.name}.json'), parsed_data)
+                append_data_to_json(os.path.join(ROOT_DIR, f'data_extraction/data/{self.context}', f'{self.name}.json'), parsed_data)
                 self.stats.inc_crawling_successful()
             else:
                 self.stats.inc_crawling_empty_posts()

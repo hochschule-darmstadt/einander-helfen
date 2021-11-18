@@ -11,7 +11,7 @@ if ( set -o noclobber; echo "$$" > "$lockfile") 2> /dev/null; then
         while getopts :hc: flag
         do
           case "${flag}" in
-            h) echo "Switch context with flag -c (e.g. 'DE' or 'US')";exit;;
+            h) echo "Switch context with flag -c ['DE' (Default), 'US']";exit;;
             c) context=${OPTARG};;
           esac
         done
@@ -32,7 +32,7 @@ if ( set -o noclobber; echo "$$" > "$lockfile") 2> /dev/null; then
         cp enhanced_output.tar.gz /var/www/html
 
         # execute elastic upload
-        python3 ../execute_elastic_upload.py
+        python3 ../execute_elastic_upload.py -c "$context"
 
         # clean up after yourself, and release your trap
         rm -f "$lockfile"

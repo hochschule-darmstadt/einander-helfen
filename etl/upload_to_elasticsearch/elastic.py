@@ -23,16 +23,16 @@ index_configuration = {
 }
 
 
-def run_elastic_upload():
+def run_elastic_upload(context):
     logger.debug('run_elastic_upload()')
-    _create_temp_index()
+    _create_temp_index(context)
     _reset_old_index()
     time.sleep(5)  # Timeout is necessary to prevent document loss during reindex
     _reindex_elastic()
     _delete_tmp_index()
 
 
-def _create_temp_index():
+def _create_temp_index(context):
     logger.debug('_create_temp_index()')
     logger.info('Starting temporary Index Process!')
 
@@ -42,7 +42,7 @@ def _create_temp_index():
     client.indices.create(index=tmp_index, body=index_configuration)
     logger.info('Finished temporary Indexing!')
 
-    for file in os.scandir(os.path.join(ROOT_DIR, 'data_management/upload')):
+    for file in os.scandir(os.path.join(ROOT_DIR, f'data_management/upload/{context}')):
         logger.info(f'{file.name}: Starting data upload')
         # read enhanced data for indexing
         data = read_data_from_json(file.path)

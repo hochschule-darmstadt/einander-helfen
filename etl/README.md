@@ -11,14 +11,43 @@ The scripts which will extract the data from the corresponding websites for the 
 
 # Execution
 - The crawling and enhancement are executed by running:
-    `python3 main.py` from the etl directory
+    ```bash
+    # Run german context 
+    python3 main.py 
+    python3 main.py -c DE
+    
+    # Run us context 
+    python3 main.py -c US
+    ```
 - The indexing to the post index can be executed by running:
-    `python3 execute_elastic_upload.py`
+    ```bash
+    # Run german context 
+    python3 execute_elastic_upload.py 
+    python3 execute_elastic_upload.py -c DE
+    
+    # Run us context 
+    python3 execute_elastic_upload.py -c US
+    ```
 - Both steps are automatically executed by a cron job on the live server which executes the bash script located in the scripts folder:
-    `run_etl.sh`
-- [Deprecated] At the end of the cron job, the enhanced data is getting archived in a package and made available for file transfer,
+    ```bash
+    # Run german context 
+    run_etl.sh 
+    run_etl.sh -c DE
+    
+    # Run us context 
+    run_etl.sh -c US
+    ```
+- **[Deprecated]** At the end of the cron job, the enhanced data is getting archived in a package and made available for file transfer,
     if you want to use this data on the live server, the `get_data_from_staging.sh` script needs to be executed on the live server.
-- [Deprecated] Afterwards the data can be uploaded to the live index by executing the `upload_to_elastic.sh` script.
+- **[Deprecated]** Afterwards the data can be uploaded to the live index by executing:
+    ```bash
+    # Run german context 
+    upload_to_elastic.sh 
+    upload_to_elastic.sh -c DE
+    
+    # Run us context 
+    upload_to_elastic.sh -c US
+    ```
 
 
 

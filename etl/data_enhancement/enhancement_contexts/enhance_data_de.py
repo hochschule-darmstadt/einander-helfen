@@ -29,7 +29,7 @@ def _enhance_ehrenamt_hessen(self):
     """ domain specific enhancement for ehrenamtsuche hessen """
     self.logger.debug('_enhance_ehrenamt_hessen()')
 
-    e_tags.run(self._data, self._domain_name)
+    e_tags.run(self._data, self._domain_name, self._context)
 
 
 def _enhance_weltwaerts(self):
@@ -50,21 +50,21 @@ def _enhance_ein_jahr_freiwillig(self):
     """ domain specific enhancement for ein-jahr-freiwillig """
     self.logger.debug('_enhance_ein_jahr_freiwillig()')
 
-    e_tags.run(self._data, self._domain_name)
+    e_tags.run(self._data, self._domain_name, self._context)
 
 
 def _enhance_bundesfreiwilligendienst(self):
     """ domain specific enhancement for bundesfreiwilligendienst """
     self.logger.debug('_enhance_bundesfreiwilligendienst()')
 
-    e_tags.run(self._data, self._domain_name)
+    e_tags.run(self._data, self._domain_name, self._context)
 
 
 def _enhance_european_youth_portal(self):
     """ domain specific enhancement for european_youth_portal """
     self.logger.debug('_enhance_european_youth_portal()')
 
-    e_tags.run(self._data, self._domain_name)
+    e_tags.run(self._data, self._domain_name, self._context)
 
     translate_english_countries(self._data)
 
@@ -73,25 +73,25 @@ def _enhance_betterplace(self):
     """ domain specific enhancement for betterplace """
     self.logger.debug('_enhance_betterplace()')
 
-    e_tags.run(self._data, self._domain_name)
+    e_tags.run(self._data, self._domain_name, self._context)
 
 
 def _enhance_ehrenamt_sachsen(self):
     """ domain specific enhancement for ehrenamt_sachsen """
     self.logger.debug('_enhance_ehrenamt_sachsen()')
 
-    e_tags.run(self._data, self._domain_name)
+    e_tags.run(self._data, self._domain_name, self._context)
 
 
 def _enhance_dksb_kinderschutzbund(self):
     """ domain specific enhancement for dksb_kinderschutzbund """
     self.logger.debug('_enhance_dksb_kinderschutzbund()')
 
-    e_tags.run(self._data, self._domain_name)
+    e_tags.run(self._data, self._domain_name, self._context)
 
 
 def _enhance_sozialeinsatz(self):
     """ domain specific enhancement for sozialeinsatz """
     self.logger.debug('_enhance_sozialeinsatz()')
 
-    e_tags.run(self._data, self._domain_name)
+    e_tags.run(self._data, self._domain_name, self._context)
