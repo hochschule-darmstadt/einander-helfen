@@ -1,7 +1,9 @@
 # Vue.js Typescript Boilerplate
+
 This project should be a good kickstart for Vue.js projects using TypeScript.
 
 ## Features
+
 - [x] TypeScript
 - [x] SCSS
 - [x] TSLint with Airbnb style
@@ -14,26 +16,32 @@ This project should be a good kickstart for Vue.js projects using TypeScript.
 - [ ] Setup e2e tests with Nightwatch
 
 ## Commands
+
 Install
+
 ```
-npm i
+yarn
 ```
 
 run
+
 ```
-npm run serve
-npm run build
+yarn serve
+yarn build
 ```
 
 develop
+
 ```
-npm run lint
-npm run test
-npm run test:unit
+yarn lint
+yarn test
+yarn test:unit
 ```
 
 # TSLint
+
 This project includes a tslint config with AirBnb style. For a better experience, install VSCode Ext `TSLint Vue-TSX` and add Custom Setting:
+
 ```
 "tslint.enable": true,
 "tslint.autoFixOnSave": true,
