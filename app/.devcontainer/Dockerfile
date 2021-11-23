@@ -1,3 +1,9 @@
 FROM mcr.microsoft.com/vscode/devcontainers/javascript-node:0-14-bullseye
 
-RUN apt update && apt install python -y
+RUN apt update
+
+# for node-gyp (needed for sass compiler)
+RUN apt install python -y 
+
+# for webp/avif generation
+RUN apt install imagemagick -y
