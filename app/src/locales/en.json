@@ -46,20 +46,6 @@
     "whoWeAreDescription2":"and was originally programmed by a team of students. We look forward to your suggestions and ideas for improvement at"
   },
   "imprint":{
-    "imprintHeadline":"Imprint (in German: Impressum)",
-    "informationAccordingTo":"Information according to § 5 TMG",
-    "contact":"Contact",
-    "liabilityForContentsHeadline":"Content liabilities",
-    "liabilityForContentsDescription1":"As a service provider, we are responsible for our own content on these pages in accordance with general legislation pursuant to Section 7 (1) of the German Telemedia Act (TMG). However, according to §§ 8 to 10 TMG, we are not obliged as a service provider to monitor transmitted or stored third-party information or to investigate circumstances that indicate illegal activity.",
-    "liabilityForContentsDescription2":"Obligations to remove or block the use of information in accordance with general laws remain unaffected by this. However, liability in this regard is only possible from the time of knowledge of a concrete infringement. If we become aware of corresponding infringements, we will remove this content immediately.",
-    "liabilityForLinksHeadline":"Liability for links",
-    "liabilityForLinksDescription1":"Our service contains links to external websites of third parties, on whose contents we have no influence. Therefore, we cannot take over any liability for these external contents. The respective provider or operator of the pages is always responsible for the content of the linked pages. The linked pages were checked for possible legal violations at the time of linking. Illegal contents were not recognisable at the time of linking.",
-    "liabilityForLinksDescription2":"However, a permanent control of the contents of the linked pages is not reasonable without concrete evidence of a violation of the law. If we become aware of any infringements of the law, we will remove such links immediately.",
-    "copyrightHeadline":"Copyright",
-    "copyrightHeadlineDescription1":"The contents and works created by the site operators on these pages are subject to German copyright law. Duplication, processing, distribution and any kind of exploitation outside the limits of copyright law require the written consent of the respective author or creator. Downloads and copies of this site are only permitted for private, non-commercial use.",
-    "copyrightHeadlineDescription2":"As far as the content on this page was not created by the operator, the copyrights of third parties are respected. In particular, third-party content is identified as such. Should you nevertheless become aware of a copyright infringement, please inform us accordingly. If we become aware of any infringements, we will remove such content immediately.",
-    "source":"Source:",
-    "sourceReference":"Source References / Image References",
     "sourceReferenceItems":{
       "iitBombay":{
         "position": "Logo from einander-helfen.org",
