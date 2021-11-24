@@ -162,6 +162,8 @@ class LatLonEnhancer:
                                                                           struct_data[field]['zipcode'] else ''
                 request_string += struct_data[field]['city'] + ', ' if 'city' in struct_data[field] and \
                                                                        struct_data[field]['city'] else ''
+                request_string += struct_data[field]['region'] + ', ' if 'region' in struct_data[field] and \
+                                                                          struct_data[field]['country'] else ''
                 request_string += struct_data[field]['country'] + ', ' if 'country' in struct_data[field] and \
                                                                           struct_data[field]['country'] else ''
                 request_string = request_string.strip()
