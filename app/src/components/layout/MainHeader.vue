@@ -12,15 +12,15 @@
               src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Heart-hand-shake.svg/256px-Heart-hand-shake.svg.png"
             />
           </v-app-bar-nav-icon>
-          <p class="headline pl-5 font-weight-light white--text">
+          <span class="headline pl-5 font-weight-light white--text">
             einander-helfen.org
-          </p>
+          </span>
         </v-col>
         <v-col class="sloganCol">
-          <p class="title font-weight-bold font-weight-light white--text">
+          <span class="title font-weight-bold font-weight-light white--text">
             Das Portal für Freiwilligenarbeit
-          </p>
-          <p class="subtitle font-weight-light white--text d-flex">
+          </span>
+          <span class="subtitle font-weight-light white--text d-flex">
             <span class="mr-1">
               Aktuell {{ nationalCount }}
               <span class="pl-1 pr-1">
@@ -35,7 +35,7 @@
               </span>
               internationale Stellenangebote zur Auswahl
             </span>
-          </p>
+          </span>
         </v-col>
         <v-col class="menuCol">
           <MenuButton />
@@ -76,7 +76,7 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 .header {
-  p {
+  span {
     margin-bottom: unset;
   }
 
