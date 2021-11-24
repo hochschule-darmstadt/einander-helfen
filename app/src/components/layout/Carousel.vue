@@ -9,15 +9,15 @@
   >
     <picture>
       <source media="(max-width: 768px)" srcset="/images/header/1_phone.jpg" />
-      <img src="/images/header/1.jpg" />
+      <img alt="Seniorenbetreuung" src="/images/header/1.jpg" />
     </picture>
     <picture>
       <source media="(max-width: 768px)" srcset="/images/header/2_phone.jpg" />
-      <img src="/images/header/2.jpg" />
+      <img alt="Arbeit mit Kindern" src="/images/header/2.jpg" />
     </picture>
     <picture>
       <source media="(max-width: 768px)" srcset="/images/header/3_phone.jpg" />
-      <img src="/images/header/3.jpg" />
+      <img alt="Teamwork" src="/images/header/3.jpg" />
     </picture>
   </VueSlickCarousel>
 </template>
