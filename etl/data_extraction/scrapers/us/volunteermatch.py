@@ -46,12 +46,6 @@ class VolunteermatchScraper(Scraper):
         if categories_tag is not None:
             for cat_entry in categories_tag:
                 categories.append(cat_entry['title'].strip())
-        
-        # Get skills
-        skills_box = content.find('section', {'class': 'logistics__section--skills'}).find('ul')
-        if skills_box is not None:
-            for skill in skills_box.find_all('li'):
-                categories.append(skill.decode_contents().strip())
 
         # Get target groups
         target_group_box = content.find('section', {'class': 'logistics__section--friendlies'}).find('ul')
@@ -65,13 +59,21 @@ class VolunteermatchScraper(Scraper):
 
         # Get requirements
         requirements_box = content.find('section', {'class': 'logistics__section--requirements'}).find('ul')
-        requirements_raw = requirements = None
+        requirements_raw = None
+        requirements = []
         if requirements_box is not None:
             requirements_raw = requirements_box.prettify()
-            requirements = []
             for requirement in requirements_box.find_all('li'):
                 requirements.append(requirement.decode_contents().strip())
-            requirements = ', '.join(requirements)
+        
+        # Get skills
+        skills_box = content.find('section', {'class': 'logistics__section--skills'}).find('ul')
+        if skills_box is not None:
+            requirements_raw = (requirements_raw if requirements_raw else '')  + skills_box.prettify()
+            for skill in skills_box.find_all('li'):
+                requirements.append(skill.decode_contents().strip())
+
+        requirements = ', '.join(requirements)
 
         # Get timing
         timing = content.find('section', {'class': 'logistics__section--when'}).find('div', {'class': 'para'}).decode_contents().strip()
