@@ -137,6 +137,12 @@ export default Vue.extend({
       // recalc header space after search tags change
       this.$nextTick(() => this.calcHeaderSpace());
     },
+    title: {
+      immediate: true,
+      handler() {
+        document.title = "Ergebnisse - Einander Helfen";
+      },
+    },
   },
   mounted(): void {
     // get params from route
