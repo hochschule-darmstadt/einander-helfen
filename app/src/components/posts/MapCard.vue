@@ -30,7 +30,11 @@
             :lat-lng="[post.geo_location.lat, post.geo_location.lon]"
             @click="openPost(post)"
           >
-            <LTooltip :content="post.title" />
+            <LTooltip>
+              <span :class="{ 'is-long': post.title.length >= 75 }">
+                {{ post.title }}
+              </span>
+            </LTooltip>
           </Lmarker>
         </LMarckerCluster>
       </LMap>
@@ -249,5 +253,11 @@ strong[class^="copy"] {
   clear: both;
   padding: 10px 0px;
   display: none;
+}
+.leaflet-tooltip .is-long {
+  display: block;
+  min-width: 13vw;
+  max-width: 20vw;
+  white-space: normal;
 }
 </style>
