@@ -37,9 +37,6 @@
             </span>
           </p>
         </v-col>
-        <v-col class="langCol">
-          
-        </v-col>
         <v-col class="menuCol">
           <MenuButton />
         </v-col>
