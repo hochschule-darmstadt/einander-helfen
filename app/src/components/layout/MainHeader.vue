@@ -41,7 +41,6 @@
           
         </v-col>
         <v-col class="menuCol">
-          <LanguageSelection />
           <MenuButton />
         </v-col>
       </v-row>
@@ -53,18 +52,16 @@
 import Vue from "vue";
 import MenuButton from "@/components/layout/MenuButton.vue";
 import PostService from "@/services/PostService";
-import LanguageSelection from "@/components/language/LanguageSelection.vue";
 
 export default Vue.extend({
   name: "MainHeader",
   components: {
-    MenuButton,
-    LanguageSelection,
+    MenuButton
   },
   data: function () {
     return {
       nationalCount: 0,
-      nationalImg: require("@/assets/images/area/240px-Flag_of_Germany.png"),
+      nationalImg: require("@/assets/images/area/"+this.$i18n.locale+"-Flag.png"),
       internationalCount: 0,
       internationalImg: require("@/assets/images/area/240px-Earth_icon_2.png"),
     };

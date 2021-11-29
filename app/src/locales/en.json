@@ -1,4 +1,5 @@
 {
+  "local":"usa",
   "home": {
     "title": "einander-helfen.org",
     "description": "The portal for volunteering",
@@ -185,7 +186,7 @@
     "location":"City or postcode"
   },
   "areaSelect":{
-    "germany":"Germany",
+    "local":"USA",
     "international":"International"
   },
   "radiusSelect":{

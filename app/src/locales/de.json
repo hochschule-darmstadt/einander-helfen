@@ -1,4 +1,5 @@
 {
+  "local":"germany",
   "home": {
     "title": "einander-helfen.org",
     "description": "Das Portal für Freiwilligenarbeit",
@@ -199,7 +200,7 @@
     "location":"Ort oder PLZ"
   },
   "areaSelect":{
-    "germany":"Deutschland",
+    "local":"Deutschland",
     "international":"International"
   },
   "radiusSelect":{

@@ -54,20 +54,37 @@ export default Vue.extend({
     },
   },
   data: function () {
-    return {
-      items: [
+    let  items: AreaItem[]=[];
+
+    if(this.$t("local")==="germany"){
+      items= [
         {
-          text: this.$t("areaSelect.germany"),
-          value: "germany",
-          img: require("@/assets/images/area/240px-Flag_of_Germany.png"),
+          text: this.$t("areaSelect.local"),
+          value: this.$t("local"),
+          img: require("@/assets/images/area/"+this.$i18n.locale+"-Flag.png"),
         },
         {
           text: this.$t("areaSelect.international"),
           value: "international",
           img: require("@/assets/images/area/240px-Earth_icon_2.png"),
         },
-      ] as AreaItem[],
-      selection: "",
+      ];
+    }
+    else
+    {
+      items= [
+        {
+          text: this.$t("areaSelect.local"),
+          value: this.$t("local"),
+          img: require("@/assets/images/area/"+this.$i18n.locale+"-Flag.png"),
+        }
+      ]
+    }
+
+
+    return {
+      items,
+      selection: ""
     };
   },
   mounted(): void {

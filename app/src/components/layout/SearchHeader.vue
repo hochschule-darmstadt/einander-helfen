@@ -31,7 +31,6 @@
         small
         :expanded="expanded"
       />
-      <LanguageSelection />
       <MenuButton />
     </div>
     <div class="expantion_area d-sm-none" @click="expanded = !expanded">
@@ -44,14 +43,12 @@
 import Vue from "vue";
 import SearchComponent from "@/components/search/SearchComponent.vue";
 import MenuButton from "@/components/layout/MenuButton.vue";
-import LanguageSelection from "@/components/language/LanguageSelection.vue";
 
 export default Vue.extend({
   name: "SearchHeader",
   components: {
     SearchComponent,
-    MenuButton,
-    LanguageSelection
+    MenuButton
   },
   props: {
     fixed: {
