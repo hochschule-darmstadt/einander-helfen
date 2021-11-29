@@ -79,6 +79,11 @@ export default Vue.extend({
   p {
     margin-bottom: unset;
   }
+  span {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
 
   .logoCol {
     display: flex;
