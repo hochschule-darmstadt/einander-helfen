@@ -5,5 +5,5 @@ RUN apt update
 # for node-gyp (needed for sass compiler)
 RUN apt install python -y 
 
-# for webp/avif generation
+# for webp generation
 RUN apt install imagemagick -y
