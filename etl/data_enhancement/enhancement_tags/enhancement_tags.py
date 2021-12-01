@@ -83,13 +83,17 @@ def rank_tags(file, domain, context):
 
     loaded_tags = load_tags_from_file(context)
     labels = loaded_tags.keys()
-    synonyms = get_synonyms_as_list(loaded_tags.values())
     tag_ranking = {}
     for post in file:
         if post['task'] is not None:
             list_of_words = post['task'].split()
             for tag in labels:
                 count = list_of_words.count(tag)
+
+                synonyms = loaded_tags[tag]
+                for synonym in synonyms:
+                    count += list_of_words.count(synonym)
+
                 if count > 0:
                     if not tag_ranking.get(tag):
                         tag_ranking.update({tag: count})
