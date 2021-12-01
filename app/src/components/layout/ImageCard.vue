@@ -9,7 +9,7 @@
         style="text-decoration: none; color: inherit"
         :to="{
           name: 'posts',
-          path: card.post.id,
+          params: { id: card.post.id },
           query: { q: query },
         }"
       >
@@ -50,9 +50,15 @@ export default Vue.extend({
       required: true,
     },
   },
+  data: function () {
+    return {
+      postLoaded: false,
+    };
+  },
   computed: {
     query(): string {
-      if (this.card.search.length > 1) {
+      console.log(this.card.search);
+      if (this.card.search.length < 1) {
         return "";
       }
       if (this.card.search.length === 1) {

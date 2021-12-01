@@ -8,7 +8,7 @@
     <section class="container">
       <SearchComponent class="searchcomponent" />
 
-      <ImageCards :v-if="postLoaded" :cards="volunteerTags" />
+      <ImageCards v-if="postLoaded" :cards="volunteerTags" />
     </section>
   </div>
 </template>
@@ -66,10 +66,12 @@ export default Vue.extend({
   created() {
     // clear search params on home load
     this.clearSearchParams();
+    this.loadPosts();
   },
   methods: {
     ...mapActions(["clearSearchParams"]),
     async getPost(searchValue: string[]): Promise<Post> {
+      console.log(searchValue);
       const searchParams: SearchParameters = {
         searchValues: searchValue,
         from: 1,
@@ -77,13 +79,15 @@ export default Vue.extend({
         international: false,
       };
       const PaginatedPosts = await PostService.findPosts(searchParams);
-      return PaginatedPosts[0];
+      console.log(PaginatedPosts);
+      return PaginatedPosts.data[0];
     },
     async loadPosts(): Promise<void> {
       this.postLoaded = false;
       const postsWithIndexPromise = this.volunteerTags.map(
         async (volunteerTag, index) => {
           const post = await this.getPost(volunteerTag.search);
+          console.log(post);
           return {
             index,
             post,
@@ -91,6 +95,8 @@ export default Vue.extend({
         }
       );
       const postsWithIndex = await Promise.all(postsWithIndexPromise);
+      console.log(postsWithIndex);
+
       postsWithIndex.forEach((postWithIndex) => {
         this.volunteerTags[postWithIndex.index].post = postWithIndex.post;
       });
