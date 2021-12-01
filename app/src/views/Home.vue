@@ -71,7 +71,6 @@ export default Vue.extend({
   methods: {
     ...mapActions(["clearSearchParams"]),
     async getPost(searchValue: string[]): Promise<Post> {
-      console.log(searchValue);
       const searchParams: SearchParameters = {
         searchValues: searchValue,
         from: 1,
@@ -79,7 +78,6 @@ export default Vue.extend({
         international: false,
       };
       const PaginatedPosts = await PostService.findPosts(searchParams);
-      console.log(PaginatedPosts);
       return PaginatedPosts.data[0];
     },
     async loadPosts(): Promise<void> {
@@ -95,7 +93,6 @@ export default Vue.extend({
         }
       );
       const postsWithIndex = await Promise.all(postsWithIndexPromise);
-      console.log(postsWithIndex);
 
       postsWithIndex.forEach((postWithIndex) => {
         this.volunteerTags[postWithIndex.index].post = postWithIndex.post;

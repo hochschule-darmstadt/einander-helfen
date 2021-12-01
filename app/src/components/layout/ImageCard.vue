@@ -24,6 +24,12 @@
               class="justify-center black--text"
               v-html="card.title"
             />
+
+            <v-card-subtitle class="post-text">
+              <strong v-html="card.post.title" />
+              <br />
+              <span class="text--primary" v-html="card.post.task" />
+            </v-card-subtitle>
           </v-card>
         </v-img>
       </router-link>
@@ -72,4 +78,10 @@ export default Vue.extend({
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.post-text {
+  display: -webkit-box !important;
+  max-height: 100px;
+  transition: all 0.4s 0.2s;
+}
+</style>
