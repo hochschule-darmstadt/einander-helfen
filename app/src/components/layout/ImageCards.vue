@@ -11,19 +11,23 @@
             style="text-decoration: none; color: inherit"
             :to="{ name: 'posts', query: { q: card.to } }"
           >
-            <v-img
+            <picture
               class="white--text align-end mt-10"
               height="300px"
               :key="card.title"
-              :src="card.img"
             >
-              <v-card class="no-radius">
-                <v-card-title
-                  class="justify-center black--text"
-                  v-html="card.title"
-                />
-              </v-card>
-            </v-img>
+              <source :srcset="`${card.imgBasePath}.webp`" type="image/webp" />
+              <img
+                :src="`${card.imgBasePath}.jpeg`"
+                style="height: 100%; width: 100%; object-fit: cover"
+              />
+            </picture>
+            <v-card class="no-radius">
+              <v-card-title
+                class="justify-center black--text"
+                v-html="card.title"
+              />
+            </v-card>
           </router-link>
         </v-card>
       </v-hover>
@@ -37,7 +41,7 @@ import Vue from "vue";
 export interface Card {
   title: string;
   to: string;
-  img: string;
+  imgBasePath: string;
 }
 
 export default Vue.extend({
