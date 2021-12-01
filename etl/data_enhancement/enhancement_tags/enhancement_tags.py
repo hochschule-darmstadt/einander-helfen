@@ -22,20 +22,23 @@ def run(data, domain, context):
     rank_tags(data, domain, context)
 
 
-def load_tags_from_file():
+def load_tags_from_file(context):
     """loads given tags from csv file and returns them in a dict"""
     logger.debug('load_tags_from_file()')
 
+    tag_file = f'{context}-Tags-einander-helfen.csv'
+
     loaded_tags = {}
-    logger.debug(f'load_tags_from_file - path: {os.path.join(ROOT_DIR,"data_enhancement", "Tags-einander-helfen.csv")}')
-    with open(os.path.join(ROOT_DIR, 'data_enhancement', 'Tags-einander-helfen.csv'), newline='',
-              encoding='utf-8') as csvfile:
-        reader = csv.DictReader(csvfile, delimiter=';')
-        for row in reader:
-            if row['synonyms'] is not None:
-                loaded_tags[row['label']] = row['synonyms'].split(',')
-            else:
-                loaded_tags[row['label']] = []
+    logger.debug(f'load_tags_from_file - path: {os.path.join(ROOT_DIR,"data_enhancement", tag_file)}')
+    if os.path.exists(os.path.join(ROOT_DIR,"data_enhancement", tag_file)):
+        with open(os.path.join(ROOT_DIR, 'data_enhancement', tag_file), newline='',
+                encoding='utf-8') as csvfile:
+            reader = csv.DictReader(csvfile, delimiter=';')
+            for row in reader:
+                if row['synonyms'] is not None:
+                    loaded_tags[row['label']] = row['synonyms'].split(',')
+                else:
+                    loaded_tags[row['label']] = []
     return loaded_tags
 
 
@@ -55,7 +58,7 @@ def find_new_tags(file, domain, context):
     writes new found tags to output directory as new_tags.json"""
     logger.debug('find_new_tags()')
 
-    loaded_tags = load_tags_from_file()
+    loaded_tags = load_tags_from_file(context)
     synonyms = get_synonyms_as_list(loaded_tags.values())
 
     new_tags = []
@@ -78,7 +81,7 @@ def rank_tags(file, domain, context):
     #       make a new index for the ranked tag ontology for frontend access
     logger.debug('rank_tags()')
 
-    loaded_tags = load_tags_from_file()
+    loaded_tags = load_tags_from_file(context)
     labels = loaded_tags.keys()
     synonyms = get_synonyms_as_list(loaded_tags.values())
     tag_ranking = {}
