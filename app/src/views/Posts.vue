@@ -61,6 +61,7 @@
           <PostListItem
             v-for="post in postsOnCurrentPage"
             :key="post.id"
+            :id="post.id"
             :post="post"
             :active="post.id == selectedPostId"
             :showDetail="isSmartphone"
@@ -232,10 +233,15 @@ export default Vue.extend({
       if (!post && !this.isSmartphone) this.showMap = true;
       // set selected post id or set undefined in store
       const id = post ? post.id : undefined;
-      this.setSelectedPostId(id).then(() =>
+      this.setSelectedPostId(id).then(() => {
         // update uri
-        this.updateURIFromState()
-      );
+        this.updateURIFromState();
+        const item = document.getElementById(id ? id : "");
+
+        if (item) {
+          item.scrollIntoView(true);
+        }
+      });
     },
     /** Show the map  */
     openMap(): void {
