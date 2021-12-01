@@ -4,7 +4,8 @@ import VueI18n, { LocaleMessages } from "vue-i18n";
 Vue.use(VueI18n);
 
 //GLOBALE LOCALE
-const LOCALE: "de" | "en" = "de";
+type RegisteredLocales = "de" | "en";
+const GLOBALLOCALE: RegisteredLocales = "de";
 //WILL BE USED THROUGHOUT THE APP
 
 
@@ -26,12 +27,12 @@ function loadLocaleMessages(): LocaleMessages {
 }
 
 export default new VueI18n({
-  locale: LOCALE,
+  locale: GLOBALLOCALE,
   fallbackLocale: "de",
   silentFallbackWarn: true,
   messages: loadLocaleMessages(),
 });
 
-export const Locale = (): "de" | "en" => {
-  return LOCALE;
+export const getLocale = (): RegisteredLocales => {
+  return GLOBALLOCALE;
 };

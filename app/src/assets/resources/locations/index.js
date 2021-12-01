@@ -1,13 +1,8 @@
-import { Locale } from "../../../i18n";
-
-console.log("locale is: " + Locale());
+import { getLocale } from "../../../i18n";
 
 const locations =
-  Locale() === "de"
+  getLocale() === "de"
     ? require("./de_plz_ort_state_lat_lon_rank.csv")
     : require("./en_plz_ort_state_lat_lon_rank.csv");
-
-console.log("locations coming up");
-console.log(locations);
 
 export default locations;
