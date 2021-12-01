@@ -13,7 +13,7 @@
             />
           </v-app-bar-nav-icon>
           <p class="headline pl-5 font-weight-light white--text">
-            {{$t('home.title')}}
+            {{ $t("home.title") }}
           </p>
         </v-col>
         <v-col class="sloganCol">
@@ -53,12 +53,12 @@ import PostService from "@/services/PostService";
 export default Vue.extend({
   name: "MainHeader",
   components: {
-    MenuButton
+    MenuButton,
   },
   data: function () {
     return {
       nationalCount: 0,
-      nationalImg: require("@/assets/images/area/"+this.$i18n.locale+"-Flag.png"),
+      nationalImg: require(`@/assets/images/area/${this.$i18n.locale}-Flag.png`),
       internationalCount: 0,
       internationalImg: require("@/assets/images/area/240px-Earth_icon_2.png"),
     };

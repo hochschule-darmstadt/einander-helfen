@@ -3,6 +3,11 @@ import VueI18n, { LocaleMessages } from "vue-i18n";
 
 Vue.use(VueI18n);
 
+//GLOBALE LOCALE
+const LOCALE: "de" | "en" = "de";
+//WILL BE USED THROUGHOUT THE APP
+
+
 function loadLocaleMessages(): LocaleMessages {
   const locales = require.context(
     "./locales",
@@ -21,8 +26,12 @@ function loadLocaleMessages(): LocaleMessages {
 }
 
 export default new VueI18n({
-  locale: "en",
+  locale: LOCALE,
   fallbackLocale: "de",
   silentFallbackWarn: true,
   messages: loadLocaleMessages(),
 });
+
+export const Locale = (): "de" | "en" => {
+  return LOCALE;
+};

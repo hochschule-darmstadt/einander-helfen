@@ -96,12 +96,17 @@ export default Vue.extend({
   },
   computed: {
     isInternational(): boolean {
-      return this.selection == this.items[1].value;
+      return this.items.length > 1
+        ? this.selection == this.items[1].value
+        : this.selection == this.items[0].value;
     },
   },
   methods: {
     setSelection(): void {
-      this.selection = this.value ? this.items[1].value : this.items[0].value;
+      this.selection =
+        this.value && this.items.length > 1
+          ? this.items[1].value
+          : this.items[0].value;
       this.$emit("input", this.isInternational);
     },
     onInputChange() {
