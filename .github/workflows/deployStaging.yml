@@ -3,7 +3,7 @@ name: DEPLOY_STAGING
 on:
    push:
       branches:
-         - 432/cloud-deployment # FIXME
+         - 432/cloud-deployment
       paths:
          - app/**
          - '!app/README.md'
