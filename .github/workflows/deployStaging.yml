@@ -3,7 +3,10 @@ name: DEPLOY_STAGING
 on:
    push:
       branches:
-         - 432/cloud-deployment
+         - staging
+      paths:
+         - app/**
+         - '!app/README.md'
 
 jobs:
    deploy:
