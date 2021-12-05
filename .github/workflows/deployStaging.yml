@@ -4,9 +4,6 @@ on:
    push:
       branches:
          - 432/cloud-deployment
-      paths:
-         - app/**
-         - '!app/README.md'
 
 jobs:
    deploy:
