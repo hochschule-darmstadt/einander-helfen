@@ -17,7 +17,7 @@ if ( set -o noclobber; echo "$$" > "$lockfile") 2> /dev/null; then
         done
 
         #changing working dir
-        cd /home/etl/einander-helfen/etl/scripts
+        cd /home/einander-helfen/etl/scripts
 
         # Installing required python packages
         pip3 install -r ../requirements.txt
