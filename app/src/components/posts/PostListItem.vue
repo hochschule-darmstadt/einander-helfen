@@ -61,7 +61,7 @@
                 {{ post[column.key] }}
               </a>
             </span>
-            <spanZz v-else v-html="post[column.key]" />
+            <span v-else v-html="post[column.key]" />
           </div>
         </template>
       </v-card-text>
