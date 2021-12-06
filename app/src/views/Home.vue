@@ -74,11 +74,11 @@ export default Vue.extend({
       const searchParams: SearchParameters = {
         searchValues: searchValue,
         from: 1,
-        size: 1,
+        size: 10,
         international: false,
       };
       const PaginatedPosts = await PostService.findPosts(searchParams);
-      return PaginatedPosts.data[0];
+      return PaginatedPosts.data[Math.floor(Math.random() * 10)];
     },
     async loadPosts(): Promise<void> {
       this.postLoaded = false;

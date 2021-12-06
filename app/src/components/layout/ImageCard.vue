@@ -19,19 +19,27 @@
           :key="card.title"
           :src="card.img"
         >
-          <v-card class="no-radius">
+          <v-card
+            class="no-radius"
+            style="border-bottom-right-radius: 0; border-bottom-left-radius: 0"
+          >
             <v-card-title
+              style="padding-bottom: 0"
               class="justify-center black--text"
-              v-html="card.title"
-            />
-
-            <v-card-subtitle class="post-text">
-              <strong v-html="card.post.title" />
-              <br />
-              <span class="text--primary" v-html="card.post.task" />
-            </v-card-subtitle>
+            >
+              <h2 style="color: #2f3640" v-html="card.title"></h2>
+            </v-card-title>
           </v-card>
         </v-img>
+        <v-card-subtitle>
+          <h3
+            style="padding-bottom: 0.7rem; text-align: center"
+            v-html="card.post.title"
+          />
+          <strong v-html="removeHtmlTags(card.post.location)" />
+          <br />
+          <span class="text--primary" v-html="makePostShort(card.post.task)" />
+        </v-card-subtitle>
       </router-link>
     </v-card>
   </v-hover>
@@ -61,6 +69,24 @@ export default Vue.extend({
       postLoaded: false,
     };
   },
+  methods: {
+    makePostShort(post: string): string {
+      if (post.length > 400) {
+        post = post.replace(/<\/?[^>]+(>|$)/g, "");
+        return post.substring(0, 400) + "...";
+      }
+      return post;
+    },
+    removeHtmlTags(post: string): string {
+      post = post.replace(/<\/?[^>]+(>|$)/g, "");
+      post = post.replace("Adresse", "");
+      post = post.replace("PLZ:", "");
+      post = post.replace("Straße:", "");
+      post = post.replace("Ort:", "");
+      post = post.replace("Internet:", "");
+      return post;
+    },
+  },
   computed: {
     query(): string {
       console.log(this.card.search);
@@ -77,11 +103,3 @@ export default Vue.extend({
   },
 });
 </script>
-
-<style scoped>
-.post-text {
-  display: -webkit-box !important;
-  max-height: 100px;
-  transition: all 0.4s 0.2s;
-}
-</style>
