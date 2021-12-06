@@ -237,9 +237,20 @@ export default Vue.extend({
         // update uri
         this.updateURIFromState();
         const item = document.getElementById(id ? id : "");
+        const header = document.getElementById("main_header");
 
-        if (item) {
-          item.scrollIntoView(true);
+        // scroll to the postItem, so the item is below our header
+        if (this.isSmartphone && item && header) {
+          const offset = header.scrollHeight;
+          const bodyRect = document.body.getBoundingClientRect().top;
+          const elementRect = item.getBoundingClientRect().top;
+          const elementPosition = elementRect - bodyRect;
+          const offsetPosition = elementPosition - offset;
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth",
+          });
         }
       });
     },
