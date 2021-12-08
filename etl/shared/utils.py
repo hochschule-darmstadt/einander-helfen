@@ -12,7 +12,7 @@ def write_data_to_json(path, data):
 
     dir_name = os.path.dirname(path)
     if not os.path.exists(dir_name):
-        os.makedirs(path)
+        os.makedirs(dir_name)
 
     with open(path, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=4)

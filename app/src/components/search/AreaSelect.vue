@@ -12,12 +12,12 @@
     @change="onInputChange"
   >
     <template v-slot:item="{ item }">
-      <img class="areaImage" :src="item.img" />
+      <img class="areaImage" :alt="item.alt" :src="item.img" />
       <v-spacer />
       <span>{{ item.text }}</span>
     </template>
     <template v-slot:selection="{ item }">
-      <img class="areaImageSelected" :src="item.img" />
+      <img class="areaImageSelected" :alt="item.alt" :src="item.img" />
     </template>
   </v-select>
 </template>
@@ -26,6 +26,7 @@
 import Vue from "vue";
 
 interface AreaItem {
+  alt: string;
   text: string;
   value: string;
   img: string;

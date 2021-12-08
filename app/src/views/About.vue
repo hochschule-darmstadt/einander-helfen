@@ -130,6 +130,14 @@ export default Vue.extend({
   components: {
     Header,
   },
+  watch: {
+    title: {
+      immediate: true,
+      handler() {
+        document.title = "Über uns - Einander Helfen";
+      },
+    },
+  },
 });
 </script>
 

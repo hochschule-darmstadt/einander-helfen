@@ -185,6 +185,14 @@ export default Vue.extend({
   components: {
     Header,
   },
+  watch: {
+    title: {
+      immediate: true,
+      handler() {
+        document.title = "Datenschutz - Einander Helfen";
+      },
+    },
+  },
 });
 </script>
 

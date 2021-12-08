@@ -35,7 +35,7 @@
               </span>
               {{ $t("home.header.description3") }}
             </span>
-          </p>
+          </span>
         </v-col>
         <v-col class="menuCol">
           <MenuButton />
@@ -76,7 +76,7 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 .header {
-  p {
+  span {
     margin-bottom: unset;
   }
   span {

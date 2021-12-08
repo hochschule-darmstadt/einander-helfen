@@ -40,6 +40,14 @@ export default Vue.extend({
   components: {
     Header,
   },
+  watch: {
+    title: {
+      immediate: true,
+      handler() {
+        document.title = "Anbieter - Einander Helfen";
+      },
+    },
+  },
   data() {
     return {
       alphabet: "ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜ".split(""),
