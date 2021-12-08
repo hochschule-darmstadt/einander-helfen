@@ -47,25 +47,25 @@ export default Vue.extend({
         {
           title: "FSJ",
           search: ["Freiwilliges Soziales Jahr", "Kinder"],
-          img: require("@/assets/images/macherIN.jpeg"),
+          img: require("../../public/images/categories/macherIN.jpeg"),
           post: undefined,
         },
         {
           title: "FÖJ",
           search: ["Freiwilliges Ökologisches Jahr", "Kinder"],
-          img: require("@/assets/images/denkerIN.jpeg"),
+          img: require("../../public/images/categories/denkerIN.jpeg"),
           post: undefined,
         },
         {
           title: "Ehrenamt",
           search: ["Ehrenamt", "Senioren"],
-          img: require("@/assets/images/sozial.jpeg"),
+          img: require("../../public/images/categories/sozial.jpeg"),
           post: undefined,
         },
         {
           title: "Freiwilligenarbeit",
           search: ["Freiwilligenarbeit", "Kinder"],
-          img: require("@/assets/images/jugend.jpeg"),
+          img: require("../../public/images/categories/jugend.jpeg"),
           post: undefined,
         },
       ] as Card[],
@@ -86,7 +86,11 @@ export default Vue.extend({
         international: false,
       };
       const PaginatedPosts = await PostService.findPosts(searchParams);
-      return PaginatedPosts.data[Math.floor(Math.random() * 10)];
+      let randomId = Math.random() * 10;
+      while (PaginatedPosts.data[Math.floor(randomId)].task == null) {
+        randomId = Math.random() * 10;
+      }
+      return PaginatedPosts.data[Math.floor(randomId)];
     },
     async loadPosts(): Promise<void> {
       this.postLoaded = false;

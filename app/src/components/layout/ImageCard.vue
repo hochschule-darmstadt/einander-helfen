@@ -4,6 +4,7 @@
       class="mx-auto"
       :elevation="hover ? 12 : 2"
       :class="{ 'on-hover': hover }"
+      style="display: block; overflow: auto; min-height: 100%"
     >
       <router-link
         style="text-decoration: none; color: inherit"
@@ -14,7 +15,7 @@
         }"
       >
         <v-img
-          class="white--text align-end mt-10"
+          class="white--text align-end"
           height="300px"
           :key="card.title"
           :src="card.img"
@@ -71,9 +72,9 @@ export default Vue.extend({
   },
   methods: {
     makePostShort(post: string): string {
-      if (post.length > 400) {
+      if (post.length > 140) {
         post = post.replace(/<\/?[^>]+(>|$)/g, "");
-        return post.substring(0, 400) + "...";
+        return post.substring(0, 140) + "...";
       }
       return post;
     },
