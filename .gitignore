@@ -2,7 +2,8 @@
 node_modules
 data
 __pycache__
-
+cron.log
+ETLlock
 
 # Editor directories and files
 .idea
