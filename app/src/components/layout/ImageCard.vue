@@ -89,7 +89,6 @@ export default Vue.extend({
   },
   computed: {
     query(): string {
-      console.log(this.card.search);
       if (this.card.search.length < 1) {
         return "";
       }

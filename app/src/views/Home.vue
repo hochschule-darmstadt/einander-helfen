@@ -85,7 +85,6 @@ export default Vue.extend({
       const postsWithIndexPromise = this.volunteerTags.map(
         async (volunteerTag, index) => {
           const post = await this.getPost(volunteerTag.search);
-          console.log(post);
           return {
             index,
             post,
