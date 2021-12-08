@@ -1,7 +1,7 @@
 <!-- The carousel contains images that are shown alternately every few seconds.-->
 
 <template>
-  <VueSlickCarousel
+  <VueSlickCarousel class="carousel"
     :dots="true"
     :infinite="true"
     :autoplay="true"
@@ -37,16 +37,14 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
+.carousel {
+  cursor: pointer;
+}
 img {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  cursor: pointer;
-  -webkit-user-drag: none;
-  user-select: none;
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
+  pointer-events: none;
 }
 .slick-arrow {
   display: none !important ;
