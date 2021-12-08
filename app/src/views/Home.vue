@@ -43,22 +43,22 @@ export default Vue.extend({
         {
           title: "Arbeit mit Kindern",
           to: "Kinder",
-          img: require("@/assets/images/macherIN.jpeg"),
+          imgBasePath: "/images/categories/macherIN",
         },
         {
           title: "Arbeit mit Jugendlichen",
           to: "Jugend",
-          img: require("@/assets/images/denkerIN.jpeg"),
+          imgBasePath: "/images/categories/denkerIN",
         },
         {
           title: "Arbeit mit Senioren",
           to: "Senioren",
-          img: require("@/assets/images/sozial.jpeg"),
+          imgBasePath: "/images/categories/sozial",
         },
         {
           title: "Betreuung",
           to: "Betreuung",
-          img: require("@/assets/images/jugend.jpeg"),
+          imgBasePath: "/images/categories/jugend",
         },
       ] as Card[],
     };
