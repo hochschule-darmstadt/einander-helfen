@@ -22,7 +22,7 @@
         :options="{ gestureHandling: useGestureHandling }"
       >
         <LTileLayer :url="map.url" :attribution="map.attribution" />
-        <LMarckerCluster>
+        <LMarckerCluster :options="{ maxClusterRadius: 50 }">
           <Lmarker
             v-for="post in postWithGeoLocation"
             :key="post.id"
@@ -127,7 +127,15 @@ export default Vue.extend({
     },
   },
   mounted(): void {
-    this.rerenderMap();
+    if (this.show) {
+      this.$nextTick(() => {
+        (this.$refs.map as LMap).mapObject.invalidateSize();
+        this.$nextTick(() => {
+          this.setMapLocation();
+          this.fitMapBounds();
+        });
+      });
+    }
   },
   methods: {
     rerenderMap(): void {
@@ -135,7 +143,6 @@ export default Vue.extend({
         this.$nextTick(() => {
           (this.$refs.map as LMap).mapObject.invalidateSize();
           this.$nextTick(() => {
-            this.fitMapBounds();
             this.setMapLocation();
           });
         });
@@ -150,7 +157,9 @@ export default Vue.extend({
           this.selectedPost.geo_location.lat,
           this.selectedPost.geo_location.lon,
         ] as LatLngTuple;
-        (this.$refs.map as LMap).setCenter(location);
+        (this.$refs.map as LMap).mapObject.panTo(location);
+      } else {
+        this.fitMapBounds();
       }
     },
     /**

@@ -10,7 +10,7 @@
       <v-flex class="map xs12 md6 order-md2">
         <!-- Map -->
         <MapCard
-          :show="!isSmartphone || showMap"
+          :show="showMap"
           :posts="posts"
           :selectedPost="selectedPost"
           @openPost="togglePostDetails"
