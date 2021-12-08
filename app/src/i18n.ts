@@ -13,8 +13,6 @@ export const getLocale = (): RegisteredLocales => {
   return GLOBALLOCALE;
 };
 
-console.log(process.env);
-
 function loadLocaleMessages(): LocaleMessages {
   const locales = require.context(
     "./locales",
