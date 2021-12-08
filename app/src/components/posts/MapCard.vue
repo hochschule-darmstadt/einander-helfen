@@ -22,7 +22,7 @@
         :options="{ gestureHandling: useGestureHandling }"
       >
         <LTileLayer :url="map.url" :attribution="map.attribution" />
-        <LMarckerCluster>
+        <LMarckerCluster :options="{ maxClusterRadius: 50 }">
           <Lmarker
             v-for="post in postWithGeoLocation"
             :key="post.id"
@@ -30,7 +30,11 @@
             :lat-lng="[post.geo_location.lat, post.geo_location.lon]"
             @click="openPost(post)"
           >
-            <LTooltip :content="post.title" />
+            <LTooltip>
+              <span :class="{ 'is-long': post.title.length >= 75 }">
+                {{ post.title }}
+              </span>
+            </LTooltip>
           </Lmarker>
         </LMarckerCluster>
       </LMap>
@@ -123,7 +127,15 @@ export default Vue.extend({
     },
   },
   mounted(): void {
-    this.rerenderMap();
+    if (this.show) {
+      this.$nextTick(() => {
+        (this.$refs.map as LMap).mapObject.invalidateSize();
+        this.$nextTick(() => {
+          this.setMapLocation();
+          this.fitMapBounds();
+        });
+      });
+    }
   },
   methods: {
     rerenderMap(): void {
@@ -131,7 +143,6 @@ export default Vue.extend({
         this.$nextTick(() => {
           (this.$refs.map as LMap).mapObject.invalidateSize();
           this.$nextTick(() => {
-            this.fitMapBounds();
             this.setMapLocation();
           });
         });
@@ -146,7 +157,9 @@ export default Vue.extend({
           this.selectedPost.geo_location.lat,
           this.selectedPost.geo_location.lon,
         ] as LatLngTuple;
-        (this.$refs.map as LMap).setCenter(location);
+        (this.$refs.map as LMap).mapObject.panTo(location);
+      } else {
+        this.fitMapBounds();
       }
     },
     /**
@@ -249,5 +262,11 @@ strong[class^="copy"] {
   clear: both;
   padding: 10px 0px;
   display: none;
+}
+.leaflet-tooltip .is-long {
+  display: block;
+  min-width: 13vw;
+  max-width: 20vw;
+  white-space: normal;
 }
 </style>

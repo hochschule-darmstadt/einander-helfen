@@ -32,6 +32,14 @@ export default Vue.extend({
     SearchComponent,
     ImageCards,
   },
+  watch: {
+    title: {
+      immediate: true,
+      handler() {
+        document.title = "Einander Helfen";
+      },
+    },
+  },
   data: function () {
     return {
       postLoaded: false,

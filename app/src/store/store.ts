@@ -118,9 +118,11 @@ const store: StoreOptions<RootState> = {
         area: state.searchModule.isInternational ? "international" : "national",
         location: getters["searchModule/getLocationText"],
         radius: state.searchModule.selectedRadius,
-        page: state.postsModule.selectedPage.toString(),
+        page:
+          state.postsModule.selectedPage > 1
+            ? state.postsModule.selectedPage.toString()
+            : undefined,
       };
-
       let path = "/posts";
       // is there a post currently open? => reflect it in the route
       if (state.postsModule.selectedPostId)

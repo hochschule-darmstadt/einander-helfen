@@ -10,7 +10,7 @@
       <v-flex class="map xs12 md6 order-md2">
         <!-- Map -->
         <MapCard
-          :show="!isSmartphone || showMap"
+          :show="showMap"
           :posts="posts"
           :selectedPost="selectedPost"
           @openPost="togglePostDetails"
@@ -136,6 +136,12 @@ export default Vue.extend({
     searchValues() {
       // recalc header space after search tags change
       this.$nextTick(() => this.calcHeaderSpace());
+    },
+    title: {
+      immediate: true,
+      handler() {
+        document.title = "Ergebnisse - Einander Helfen";
+      },
     },
   },
   mounted(): void {
