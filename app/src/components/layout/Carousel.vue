@@ -2,6 +2,7 @@
 
 <template>
   <VueSlickCarousel
+    class="carousel"
     :dots="true"
     :infinite="true"
     :autoplay="true"
@@ -55,10 +56,14 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
+.carousel {
+  cursor: pointer;
+}
 img {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  pointer-events: none;
 }
 .slick-arrow {
   display: none !important ;
