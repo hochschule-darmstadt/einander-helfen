@@ -17,10 +17,10 @@
           </p>
         </v-col>
         <v-col class="sloganCol">
-          <p class="title font-weight-bold font-weight-light white--text">
+          <span class="title font-weight-bold font-weight-light white--text">
             {{ $t("home.description") }}
-          </p>
-          <p class="subtitle font-weight-light white--text d-flex">
+          </span>
+          <span class="subtitle font-weight-light white--text d-flex">
             <span class="mr-1">
               {{ $t("home.header.description1") }} {{ nationalCount }}
               <span class="pl-1 pr-1">

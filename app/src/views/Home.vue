@@ -43,22 +43,22 @@ export default Vue.extend({
         {
           title: this.$t("home.cards.workWithKids"),
           to: this.$t("home.searchCategory.kids"),
-          img: require("@/assets/images/macherIN.jpeg"),
+          imgBasePath: "/images/categories/macherIN",
         },
         {
           title: this.$t("home.cards.workWithTeenagers"),
           to: this.$t("home.searchCategory.teenagers"),
-          img: require("@/assets/images/denkerIN.jpeg"),
+          imgBasePath: "/images/categories/denkerIN",
         },
         {
           title: this.$t("home.cards.workWithSeniors"),
           to: this.$t("home.searchCategory.seniors"),
-          img: require("@/assets/images/sozial.jpeg"),
+          imgBasePath: "/images/categories/sozial",
         },
         {
           title: this.$t("home.cards.care"),
           to: this.$t("home.searchCategory.care"),
-          img: require("@/assets/images/jugend.jpeg"),
+          imgBasePath: "/images/categories/jugend",
         },
       ] as Card[],
     };
