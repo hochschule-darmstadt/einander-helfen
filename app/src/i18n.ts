@@ -5,9 +5,15 @@ Vue.use(VueI18n);
 
 //GLOBALE LOCALE
 type RegisteredLocales = "de" | "en";
-const GLOBALLOCALE: RegisteredLocales = "de";
+const GLOBALLOCALE: RegisteredLocales = process.env.VUE_APP_I18N_EH_LOCALE;
+const FALLBACKLOCALE: RegisteredLocales = process.env.VUE_APP_I18N_EH_FALLBACK_LOCALE;
 //WILL BE USED THROUGHOUT THE APP
 
+export const getLocale = (): RegisteredLocales => {
+  return GLOBALLOCALE;
+};
+
+console.log(process.env);
 
 function loadLocaleMessages(): LocaleMessages {
   const locales = require.context(
@@ -28,11 +34,7 @@ function loadLocaleMessages(): LocaleMessages {
 
 export default new VueI18n({
   locale: GLOBALLOCALE,
-  fallbackLocale: "de",
+  fallbackLocale: FALLBACKLOCALE,
   silentFallbackWarn: true,
   messages: loadLocaleMessages(),
 });
-
-export const getLocale = (): RegisteredLocales => {
-  return GLOBALLOCALE;
-};
