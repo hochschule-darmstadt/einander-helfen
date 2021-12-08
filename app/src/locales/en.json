@@ -187,7 +187,8 @@
   },
   "areaSelect":{
     "local":"USA",
-    "international":"International"
+    "international":"International",
+    "altFlag": "Flag"
   },
   "radiusSelect":{
     "radius":"Perimeter",

@@ -201,7 +201,8 @@
   },
   "areaSelect":{
     "local":"Deutschland",
-    "international":"International"
+    "international":"International",
+    "altFlag": "Flagge"
   },
   "radiusSelect":{
     "radius":"Umkreis",
