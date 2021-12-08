@@ -1,7 +1,8 @@
 <!-- The carousel contains images that are shown alternately every few seconds.-->
 
 <template>
-  <VueSlickCarousel class="carousel"
+  <VueSlickCarousel
+    class="carousel"
     :dots="true"
     :infinite="true"
     :autoplay="true"
