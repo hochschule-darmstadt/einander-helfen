@@ -1,6 +1,5 @@
 <!-- Component to select the area of the search (national or international) -->
 
-
 <template>
   <v-select
     class="areaSelect"
@@ -62,7 +61,8 @@ export default Vue.extend({
       text: this.$t("areaSelect.local").toString(),
       value: this.$t("local").toString(),
       img: require(`@/assets/images/area/${this.$i18n.locale}-Flag.png`),
-      alt: this.$t("areaSelect.local").toString()+" " +this.$t("areaSelect.altFlag").toString()
+      // eslint-disable-next-line prettier/prettier
+      alt: `${this.$t("areaSelect.local").toString()} ${this.$t("areaSelect.altFlag").toString()}`
     });
 
     if (this.$i18n.locale === "de") {
@@ -70,7 +70,8 @@ export default Vue.extend({
         text: this.$t("areaSelect.international").toString(),
         value: "international",
         img: require("@/assets/images/area/240px-Earth_icon_2.png"),
-        alt: this.$t("areaSelect.international").toString()+" " +this.$t("areaSelect.altFlag").toString()
+        // eslint-disable-next-line prettier/prettier
+        alt: `${this.$t("areaSelect.international").toString()} ${this.$t("areaSelect.altFlag").toString()}`
       });
     }
 

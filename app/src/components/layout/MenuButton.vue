@@ -33,11 +33,27 @@ export default Vue.extend({
   data: function () {
     return {
       links: [
-        { text: this.$t("home.menu.home"), route: "/", icon: "home" },
-        { text: this.$t("home.menu.provider"), route: "/organizations", icon: "groups" },
-        { text: this.$t("home.menu.aboutUs"), route: "/about", icon: "group" },
-        { text: this.$t("home.menu.impressum"), route: "/imprint", icon: "gavel" },
-        { text: this.$t("home.menu.privacyPolicy"), route: "/privacy", icon: "privacy_tip" },
+        { 
+          text: this.$t("home.menu.home"),
+          route: "/",
+          icon: "home" 
+        },
+        { text: this.$t("home.menu.provider"),
+          route: "/organizations",
+          icon: "groups" 
+        },
+        { text: this.$t("home.menu.aboutUs"),
+          route: "/about",
+          icon: "group" 
+        },
+        { text: this.$t("home.menu.impressum"),
+          route: "/imprint",
+          icon: "gavel" 
+        },
+        { text: this.$t("home.menu.privacyPolicy"),
+          route: "/privacy",
+          icon: "privacy_tip" 
+        },
       ],
     };
   },

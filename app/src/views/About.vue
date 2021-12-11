@@ -12,13 +12,11 @@
       </div>
       <div>
         <h2>{{ $t("about.howItWorksHeadline") }}</h2>
-        <p>{{ $t("about.howItWorksDescription1") }}
-        </p>
-        <p>{{ $t("about.howItWorksDescription2") }}
-          
-        </p>
+        <p>{{ $t("about.howItWorksDescription1") }}</p>
+        <p>{{ $t("about.howItWorksDescription2") }}</p>
         <p>
-          <strong>{{ $t("home.title") }}</strong> {{ $t("about.providerDescription1") }}
+          <strong>{{ $t("home.title") }}</strong>
+          {{ $t("about.providerDescription1") }}
         </p>
         <ul>
           <li>

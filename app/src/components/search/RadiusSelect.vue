@@ -42,27 +42,27 @@ export default Vue.extend({
     return {
       radius: {} as Radius,
       radii: [
-          {
-            text: this.$t('radiusSelect.allOver'),
-            value: ""
-          },
-          {
-            text: "5 km",
-            value: "5km"
-          },
-          {
-            text: "10 km",
-            value: "10km"
-          },
-          {
-            text: "25 km",
-            value: "25km"
-          },
-          {
-            text: "50 km",
-            value: "50km"
-          }
-        ]
+        {
+          text: this.$t("radiusSelect.allOver"),
+          value: "",
+        },
+        {
+          text: "5 km",
+          value: "5km",
+        },
+        {
+          text: "10 km",
+          value: "10km",
+        },
+        {
+          text: "25 km",
+          value: "25km",
+        },
+        {
+          text: "50 km",
+          value: "50km",
+        },
+      ],
     };
   },
   watch: {

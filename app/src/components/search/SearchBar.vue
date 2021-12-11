@@ -21,7 +21,8 @@
           <v-list-item-content>
             <v-list-item-title>
               {{ $t("searchBar.searchBarText1") }}
-              <kbd>{{ $t("searchBar.searchBarEnter") }}</kbd> {{ $t("searchBar.searchBarText2") }}
+              <kbd>{{ $t("searchBar.searchBarEnter") }}</kbd>
+              {{ $t("searchBar.searchBarText2") }}
               <v-chip>"{{ searchValue }}"</v-chip>
             </v-list-item-title>
           </v-list-item-content>

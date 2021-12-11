@@ -46,11 +46,11 @@
                 {{ $t("posts.noMatchesWithRadius1") }}
                 {{ radiusExtendedFrom }} {{ $t("posts.noMatchesWithRadius2") }}
                 <template v-if="selectedRadius">
-                  {{ $t("posts.foundMatches1") }} 
-                  {{ selectedRadius }} {{ $t("posts.foundMatches2") }} 
+                  {{ $t("posts.foundMatches1") }}
+                  {{ selectedRadius }} {{ $t("posts.foundMatches2") }}
                 </template>
                 <template v-else>
-                  {{ $t("posts.foundMatchesBigRadius") }} 
+                  {{ $t("posts.foundMatchesBigRadius") }}
                 </template>
               </h3>
             </div>
@@ -70,8 +70,9 @@
           />
 
           <div class="text-center pt-12" v-if="!posts.length">
-            <h3 class="font-weight-bold">noMatchesFound
-              {{ $t("posts.noMatchesFound") }} 
+            <h3 class="font-weight-bold">
+              noMatchesFound
+              {{ $t("posts.noMatchesFound") }}
             </h3>
           </div>
         </template>

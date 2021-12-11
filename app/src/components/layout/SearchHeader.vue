@@ -48,7 +48,7 @@ export default Vue.extend({
   name: "SearchHeader",
   components: {
     SearchComponent,
-    MenuButton
+    MenuButton,
   },
   props: {
     fixed: {

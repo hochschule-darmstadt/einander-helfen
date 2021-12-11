@@ -61,7 +61,9 @@ export default Vue.extend({
         : LocationService.findLocationByPlzOrName(q);
     },
     hintText(): string {
-      return this.isInternational ? this.$t('locationSearchBar.country') as string : this.$t('locationSearchBar.location') as string;
+      return this.isInternational
+        ? `${this.$t("locationSearchBar.country")}`
+        : `${this.$t("locationSearchBar.location")}`;
     },
   },
   mounted(): void {
