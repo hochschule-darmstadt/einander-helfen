@@ -1,7 +1,11 @@
 <!-- This Header contains the logo, all components for searching and the burger menu. -->
 
 <template>
-  <header class="sticky_header" :class="{ expanded: expanded, fixed: fixed }">
+  <header
+    id="main_header"
+    class="sticky_header"
+    :class="{ expanded: expanded, fixed: fixed }"
+  >
     <div class="header_layout">
       <v-btn
         class="d-none d-sm-flex justify-center mr-4"
