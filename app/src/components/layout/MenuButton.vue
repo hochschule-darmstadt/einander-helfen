@@ -36,23 +36,23 @@ export default Vue.extend({
         { 
           text: this.$t("home.menu.home"),
           route: "/",
-          icon: "home" 
+          icon: "home",
         },
         { text: this.$t("home.menu.provider"),
           route: "/organizations",
-          icon: "groups" 
+          icon: "groups", 
         },
         { text: this.$t("home.menu.aboutUs"),
           route: "/about",
-          icon: "group" 
+          icon: "group", 
         },
         { text: this.$t("home.menu.impressum"),
           route: "/imprint",
-          icon: "gavel" 
+          icon: "gavel", 
         },
         { text: this.$t("home.menu.privacyPolicy"),
           route: "/privacy",
-          icon: "privacy_tip" 
+          icon: "privacy_tip", 
         },
       ],
     };

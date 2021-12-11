@@ -6,7 +6,8 @@ Vue.use(VueI18n);
 //GLOBALE LOCALE
 type RegisteredLocales = "de" | "en";
 const GLOBALLOCALE: RegisteredLocales = process.env.VUE_APP_I18N_EH_LOCALE;
-const FALLBACKLOCALE: RegisteredLocales = process.env.VUE_APP_I18N_EH_FALLBACK_LOCALE;
+const FALLBACKLOCALE: RegisteredLocales =
+  process.env.VUE_APP_I18N_EH_FALLBACK_LOCALE;
 //WILL BE USED THROUGHOUT THE APP
 
 export const getLocale = (): RegisteredLocales => {
