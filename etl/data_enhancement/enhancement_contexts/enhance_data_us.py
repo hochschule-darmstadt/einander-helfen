@@ -10,4 +10,12 @@ a function call instead of a reference to the function
 """
 def function_map():
     return {
+        'volunteermatch': _enhance_volunteermatch,
     }
+
+
+def _enhance_volunteermatch(self):
+    """ domain specific enhancement for volunteermatch """
+    self.logger.debug('_enhance_volunteermatch()')
+
+    e_tags.run(self._data, self._domain_name, self._context)

@@ -138,6 +138,13 @@ class Scraper:
         page = BeautifulSoup(res.text, 'html.parser')
         return page, session
 
+    def rest_post(self, url, json):
+        """Executes POST-request with the given url and json data, returns the response."""
+        self.logger.debug('rest_post()')
+
+        res = requests.post(url, data=json, headers={'Content-Type': 'application/json'})
+        return res
+    
     def parse(self, response, url):
         """Transforms the soupified response of a detail page in a predefined way and returns it."""
         self.logger.debug('parse()')
