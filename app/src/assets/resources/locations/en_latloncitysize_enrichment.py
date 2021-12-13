@@ -61,7 +61,6 @@ def calculate_area_form_osm_bounding_box(calculate_area_form_osm_boundingbox_arr
         dx = 111.3 * math.cos(lat) * (lon2 - lon1)
     else:
         dx = 111.3 * math.cos(lat) * (lon1 - lon2)
-    #print("BB = Height "+str(dx)+" * Width "+str(dy)+" = "+str(dx*dy))
     return dx*dy
 
 def write_file(fileName,placeNamePostcodeArray):

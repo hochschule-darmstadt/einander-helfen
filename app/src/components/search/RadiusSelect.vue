@@ -3,7 +3,7 @@
 <template>
   <v-select
     class="radius_select"
-    v-bind:label="this.$t('radiusSelect.radius')"
+    :label="this.$t('radiusSelect.radius')"
     :items="radii"
     :dark="dark"
     :disabled="disabled"

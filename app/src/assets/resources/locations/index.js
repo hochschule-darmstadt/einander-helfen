@@ -1,4 +1,4 @@
-import { getLocale } from "../../../i18n";
+import { getLocale } from "@/i18n";
 
 const locations =
   getLocale() === "de"

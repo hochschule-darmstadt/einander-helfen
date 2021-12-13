@@ -27,10 +27,10 @@ export default Vue.extend({
   data: function () {
     return {
       links: [
-        { text: this.$t("home.footer.providerCap"), route: "/organizations" },
-        { text: this.$t("home.footer.aboutUsCap"), route: "/about" },
-        { text: this.$t("home.footer.impressumCap"), route: "/imprint" },
-        { text: this.$t("home.footer.privacyPolicyCap"), route: "/privacy" },
+        { text: this.$t("home.menu.provider"), route: "/organizations" },
+        { text: this.$t("home.menu.aboutUs"), route: "/about" },
+        { text: this.$t("home.menu.impressum"), route: "/imprint" },
+        { text: this.$t("home.menu.privacyPolicy"), route: "/privacy" },
       ],
     };
   },

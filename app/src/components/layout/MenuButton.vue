@@ -27,7 +27,6 @@
 import Vue from "vue";
 
 // icons can be found here: https://fonts.google.com/icons
-//$t may look like an error, but it isn't
 export default Vue.extend({
   name: "MenuButton",
   data: function () {

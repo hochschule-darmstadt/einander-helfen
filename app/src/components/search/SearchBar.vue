@@ -6,7 +6,7 @@
       style="background: white"
       rounded
       color="black"
-      v-bind:placeholder="$t('searchBar.searchBarPlaceholder')"
+      :placeholder="$t('searchBar.searchBarPlaceholder')"
       item-text="tag"
       autocomplete="off"
       append-icon=""

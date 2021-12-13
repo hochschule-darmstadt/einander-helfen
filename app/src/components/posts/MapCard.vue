@@ -86,7 +86,7 @@ export default Vue.extend({
         url: "https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png",
         attribution:
           '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-        center: [51.5, 10.5], //geografische Mitte Deutschlands
+        center: [51.5, 10.5], // geographic center of germany
         zoom: 12,
         width: "100%",
         height: "100%",
