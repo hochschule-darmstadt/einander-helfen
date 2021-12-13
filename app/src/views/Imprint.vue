@@ -51,10 +51,7 @@
       <h1>{{ $t("imprint.sourceReference") }}</h1>
       <ul class="mt-2 mb-5">
         <li v-for="(item, index) in items" :key="index" class="mb-2">
-          -
-           <strong>{{ item.author }}</strong>
-           - 
-          <i>{{ item.position }}</i> - 
+          - <strong>{{ item.author }}</strong> - <i>{{ item.position }}</i> -
           <br />
           <p class="wordbreak">{{ item.license }}</p>
         </li>
