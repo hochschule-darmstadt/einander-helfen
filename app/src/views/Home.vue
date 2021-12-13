@@ -8,7 +8,7 @@
     <section class="container">
       <SearchComponent class="searchcomponent" />
 
-      <ImageCard :cards="volunteerTags" />
+      <ImageCards v-if="postLoaded" :cards="volunteerTags" />
     </section>
   </div>
 </template>
@@ -17,9 +17,12 @@
 import Vue from "vue";
 import Header from "@/components/layout/MainHeader.vue";
 import Carousel from "@/components/layout/Carousel.vue";
-import ImageCard, { Card } from "@/components/layout/ImageCards.vue";
 import SearchComponent from "@/components/search/SearchComponent.vue";
 import { mapActions } from "vuex";
+import PostService, { SearchParameters } from "@/services/PostService";
+import Post from "@/models/post";
+import ImageCards from "@/components/layout/ImageCards.vue";
+import { Card } from "@/components/layout/ImageCard.vue";
 
 export default Vue.extend({
   name: "HomeView",
@@ -27,7 +30,7 @@ export default Vue.extend({
     Carousel,
     Header,
     SearchComponent,
-    ImageCard,
+    ImageCards,
   },
   watch: {
     title: {
@@ -39,26 +42,31 @@ export default Vue.extend({
   },
   data: function () {
     return {
+      postLoaded: false,
       volunteerTags: [
         {
-          title: "Arbeit mit Kindern",
-          to: "Kinder",
-          img: require("@/assets/images/macherIN.jpeg"),
+          title: "FSJ",
+          search: ["Freiwilliges Soziales Jahr", "Kinder"],
+          img: require("../../public/images/categories/macherIN.jpeg"),
+          post: undefined,
         },
         {
-          title: "Arbeit mit Jugendlichen",
-          to: "Jugend",
-          img: require("@/assets/images/denkerIN.jpeg"),
+          title: "FÖJ",
+          search: ["Freiwilliges Ökologisches Jahr", "Kinder"],
+          img: require("../../public/images/categories/denkerIN.jpeg"),
+          post: undefined,
         },
         {
-          title: "Arbeit mit Senioren",
-          to: "Senioren",
-          img: require("@/assets/images/sozial.jpeg"),
+          title: "Ehrenamt",
+          search: ["Ehrenamt", "Senioren"],
+          img: require("../../public/images/categories/sozial.jpeg"),
+          post: undefined,
         },
         {
-          title: "Betreuung",
-          to: "Betreuung",
-          img: require("@/assets/images/jugend.jpeg"),
+          title: "Freiwilligenarbeit",
+          search: ["Freiwilligenarbeit", "Kinder"],
+          img: require("../../public/images/categories/jugend.jpeg"),
+          post: undefined,
         },
       ] as Card[],
     };
@@ -66,9 +74,42 @@ export default Vue.extend({
   created() {
     // clear search params on home load
     this.clearSearchParams();
+    this.loadPosts();
   },
   methods: {
     ...mapActions(["clearSearchParams"]),
+    async getPost(searchValue: string[]): Promise<Post> {
+      const searchParams: SearchParameters = {
+        searchValues: searchValue,
+        from: 1,
+        size: 10,
+        international: false,
+      };
+      const PaginatedPosts = await PostService.findPosts(searchParams);
+      let randomId = Math.random() * 10;
+      while (PaginatedPosts.data[Math.floor(randomId)].task == null) {
+        randomId = Math.random() * 10;
+      }
+      return PaginatedPosts.data[Math.floor(randomId)];
+    },
+    async loadPosts(): Promise<void> {
+      this.postLoaded = false;
+      const postsWithIndexPromise = this.volunteerTags.map(
+        async (volunteerTag, index) => {
+          const post = await this.getPost(volunteerTag.search);
+          return {
+            index,
+            post,
+          };
+        }
+      );
+      const postsWithIndex = await Promise.all(postsWithIndexPromise);
+
+      postsWithIndex.forEach((postWithIndex) => {
+        this.volunteerTags[postWithIndex.index].post = postWithIndex.post;
+      });
+      this.postLoaded = true;
+    },
   },
 });
 </script>

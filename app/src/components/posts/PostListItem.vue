@@ -55,13 +55,13 @@
       <v-card-text>
         <template v-for="column in columns">
           <div v-if="post[column.key]" :key="column.key">
-            <h3>{{ column.label }}</h3>
-            <p v-if="column.link">
+            <span>{{ column.label }}</span>
+            <span v-if="column.link">
               <a :href="post[column.link]" target="_blank">
                 {{ post[column.key] }}
               </a>
-            </p>
-            <p v-else v-html="post[column.key]" />
+            </span>
+            <span v-else v-html="post[column.key]" />
           </div>
         </template>
       </v-card-text>

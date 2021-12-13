@@ -10,7 +10,7 @@
       <v-flex class="map xs12 md6 order-md2">
         <!-- Map -->
         <MapCard
-          :show="!isSmartphone || showMap"
+          :show="showMap"
           :posts="posts"
           :selectedPost="selectedPost"
           @openPost="togglePostDetails"
@@ -61,6 +61,7 @@
           <PostListItem
             v-for="post in postsOnCurrentPage"
             :key="post.id"
+            :id="post.id"
             :post="post"
             :active="post.id == selectedPostId"
             :showDetail="isSmartphone"
@@ -232,10 +233,26 @@ export default Vue.extend({
       if (!post && !this.isSmartphone) this.showMap = true;
       // set selected post id or set undefined in store
       const id = post ? post.id : undefined;
-      this.setSelectedPostId(id).then(() =>
+      this.setSelectedPostId(id).then(() => {
         // update uri
-        this.updateURIFromState()
-      );
+        this.updateURIFromState();
+        const item = document.getElementById(id ? id : "");
+        const header = document.getElementById("main_header");
+
+        // scroll to the postItem, so the item is below our header
+        if (this.isSmartphone && item && header) {
+          const offset = header.scrollHeight;
+          const bodyRect = document.body.getBoundingClientRect().top;
+          const elementRect = item.getBoundingClientRect().top;
+          const elementPosition = elementRect - bodyRect;
+          const offsetPosition = elementPosition - offset;
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth",
+          });
+        }
+      });
     },
     /** Show the map  */
     openMap(): void {
