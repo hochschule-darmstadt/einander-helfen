@@ -18,7 +18,7 @@ jobs:
          - name: setup node
            uses: actions/setup-node@v1
            with:
-              node-version: 14.x
+              node-version: 16.x
 
          - name: Restore package cache
            uses: actions/cache@v2
@@ -44,7 +44,7 @@ jobs:
            with:
               switches: -avzr --delete
               path: app/dist/
-              remote_path: ${{ secrets.DEPLOYMENT_PATH }}
-              remote_host: ${{ secrets.DEPLOYMENT_SERVER_PRODUCTION }}
-              remote_user: ${{ secrets.DEPLOYMENT_USER }}
-              remote_key: ${{ secrets.DEPLOYMENT_KEY }}
+              remote_path: ${{ secrets.CLOUD_DEPLOYMENT_PATH }}
+              remote_host: ${{ secrets.CLOUD_DEPLOYMENT_SERVER_PRODUCTION }}
+              remote_user: ${{ secrets.CLOUD_DEPLOYMENT_USER }}
+              remote_key: ${{ secrets.CLOUD_DEPLOYMENT_KEY }}
