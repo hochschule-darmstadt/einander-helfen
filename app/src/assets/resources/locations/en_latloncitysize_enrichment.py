@@ -74,9 +74,6 @@ def write_file(fileName,placeNamePostcodeArray):
 
     for named_place in placeNameArray:
 
-        #if [named_place.place_name, named_place.state] in alreadySearchedPlaces:
-        #    continue
-
         places = search_all_places_for_place_name(placeNameArray, named_place.place_name, named_place.state)
 
         aggregatedPlace = PlaceNamePostcode(named_place.osmid,named_place.place_name, named_place.postcode, named_place.state)
