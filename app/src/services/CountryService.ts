@@ -36,23 +36,24 @@ class CountryService {
   /**
    * This method performs the elasticsearch query
    */
-  private findCountries(): Promise<any> {
+  private async findCountries(): Promise<any> {
     const query = this.createQuery();
-    return axios.post(this.baseUrl, query).then(({ data }) => {
-      data.aggregations.country.buckets.map((elem: any) => {
-        if (elem.key !== "Deutschland") {
-          this.countries.push({
-            name: "",
-            plz: "",
-            title: elem.key,
-            state: "",
-            lat: 0,
-            lon: 0,
-            rank: 0,
-            country: elem.key,
-          });
-        }
-      });
+
+    const { data } = await axios.post(this.baseUrl, query);
+
+    return data.aggregations.country.buckets.map((elem: any) => {
+      if (elem.key !== "Deutschland") {
+        this.countries.push({
+          name: "",
+          plz: "",
+          title: elem.key,
+          state: "",
+          lat: 0,
+          lon: 0,
+          rank: 0,
+          country: elem.key,
+        });
+      }
     });
   }
 }

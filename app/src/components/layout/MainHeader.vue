@@ -63,13 +63,10 @@ export default Vue.extend({
       internationalImg: require("@/assets/images/area/240px-Earth_icon_2.png"),
     };
   },
-  mounted() {
+  async mounted() {
     // load internationalCount
-    PostService.countPosts(true).then(
-      (count) => (this.internationalCount = count)
-    );
-    // load nationalCount
-    PostService.countPosts(false).then((count) => (this.nationalCount = count));
+    this.internationalCount = await PostService.countPosts(true);
+    this.nationalCount = await PostService.countPosts(false);
   },
 });
 </script>
