@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/vscode/devcontainers/javascript-node:0-14-bullseye
+FROM mcr.microsoft.com/vscode/devcontainers/javascript-node:0-16-bullseye
 
 RUN apt update
 
