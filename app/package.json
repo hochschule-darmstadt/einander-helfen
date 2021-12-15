@@ -10,6 +10,9 @@
     "lint:fix": "vue-cli-service lint --max-warnings 0",
     "test:unit": "vue-cli-service test:unit"
   },
+  "engines": {
+    "node": "^16"
+  },
   "dependencies": {
     "axios": "~0.21.1",
     "bodybuilder": "^2.4.0",
