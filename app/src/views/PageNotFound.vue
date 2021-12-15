@@ -28,6 +28,14 @@ export default Vue.extend({
   components: {
     Header,
   },
+  watch: {
+    title: {
+      immediate: true,
+      handler() {
+        document.title = "Seite nicht gefunden - Einander Helfen";
+      },
+    },
+  },
   computed: {
     width() {
       switch (this.$vuetify.breakpoint.name) {

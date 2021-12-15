@@ -197,9 +197,13 @@ class DataManager:
         DataManager.logger.info(f'Source for upload data: {upload_data_origin}')
 
     @staticmethod
-    def init():
+    def init(context):
         """Sets up the required folders and corrects set parameters if needed"""
         DataManager.logger.debug('init()')
+
+        DataManager.enhanced_data_location = DataManager.enhanced_data_location + f'/{context}'
+        DataManager.backup_directory = DataManager.backup_directory + f'/{context}'
+        DataManager.upload_directory = DataManager.upload_directory + f'/{context}'
 
         if not os.path.exists(DataManager.backup_directory):
             DataManager.logger.info('Creating backup directory')
@@ -215,18 +219,18 @@ class DataManager:
             DataManager.fallback_depth = DataManager.max_number_of_backups
 
     @staticmethod
-    def run_backup_process():
+    def run_backup_process(context):
         """Runs the datamangement process for creating backups"""
         DataManager.logger.debug('run_backup_process()')
 
-        DataManager.init()
+        DataManager.init(context)
         DataManager.backup_current_data()
         DataManager.remove_old_backups()
 
     @staticmethod
-    def run_compose_upload_process():
+    def run_compose_upload_process(context):
         """Runs the datamangement process for composing the upload"""
         DataManager.logger.debug('run_compose_upload_process()')
 
-        DataManager.init()
+        DataManager.init(context)
         DataManager.compose_upload()

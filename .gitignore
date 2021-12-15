@@ -2,7 +2,8 @@
 node_modules
 data
 __pycache__
-
+cron.log
+ETLlock
 
 # Editor directories and files
 .idea
@@ -13,8 +14,11 @@ __pycache__
 *.sln
 *.sw*
 etl/**/*.json
+!etl/.devcontainer/**/*.json
 etl/**/*.csv
+!etl/data_enhancement/*-Tags-einander-helfen.csv
 etl/**/*.log
+etl/**/*.tar.gz
 etl/logs
 etl/test/**/logs
 /etl/data_management/upload/

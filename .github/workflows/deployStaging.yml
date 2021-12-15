@@ -1,26 +1,50 @@
 name: DEPLOY_STAGING
+
 on:
-  push:
-    branches:
-      - staging
+   push:
+      branches:
+         - staging
+      paths:
+         - app/**
+         - '!app/README.md'
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: build
-        uses: actions/setup-node@v1
-        with:
-          node-version: 12.x
-      - run: ls -la
-      - run: cd app && npm install && npm run build:staging
-      - name: rsync deployments
-        uses: burnett01/rsync-deployments@4.1
-        with:
-          switches: -avzr --delete
-          path: app/dist/
-          remote_path: ${{ secrets.DEPLOYMENT_PATH }}
-          remote_host: ${{ secrets.DEPLOYMENT_SERVER_STAGING }}
-          remote_user: ${{ secrets.DEPLOYMENT_USER }}
-          remote_key: ${{ secrets.DEPLOYMENT_KEY }}
+   deploy:
+      runs-on: ubuntu-20.04
+      steps:
+         - name: checkout
+           uses: actions/checkout@v2
+
+         - name: setup node
+           uses: actions/setup-node@v1
+           with:
+              node-version: 16.x
+
+         - name: Restore package cache
+           uses: actions/cache@v2
+           id: cache
+           with:
+              path: |
+                 ./app/node_modules
+              key: ${{ runner.os }}-yarn-${{ hashFiles('./app/yarn.lock') }}
+              restore-keys: |
+                 ${{ runner.os }}-yarn-
+
+         - name: install dependencies
+           working-directory: ./app
+           if: steps.yarn-cache.outputs.cache-hit != 'true'
+           run: yarn --frozen-lockfile --non-interactive
+
+         - name: build Vue app
+           working-directory: ./app
+           run: yarn build:staging
+
+         - name: rsync deployments
+           uses: burnett01/rsync-deployments@4.1
+           with:
+              switches: -avzr --delete
+              path: app/dist/
+              remote_path: ${{ secrets.CLOUD_DEPLOYMENT_PATH }}
+              remote_host: ${{ secrets.CLOUD_DEPLOYMENT_SERVER_STAGING }}
+              remote_user: ${{ secrets.CLOUD_DEPLOYMENT_USER }}
+              remote_key: ${{ secrets.CLOUD_DEPLOYMENT_KEY }}

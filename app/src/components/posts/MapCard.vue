@@ -22,15 +22,29 @@
         :options="{ gestureHandling: useGestureHandling }"
       >
         <LTileLayer :url="map.url" :attribution="map.attribution" />
-        <LMarckerCluster>
+        <LMarckerCluster :options="{ maxClusterRadius: 50 }">
           <Lmarker
             v-for="post in postWithGeoLocation"
+            ref="markerRef"
             :key="post.id"
             :icon="getMarker(post)"
             :lat-lng="[post.geo_location.lat, post.geo_location.lon]"
-            @click="openPost(post)"
+            @click="onMarkerClick(post)"
           >
-            <LTooltip :content="post.title" />
+            <LTooltip
+              :options="{
+                interactive: true,
+                permanent: isSmartphone,
+              }"
+              @click="onToolTipClick(post)"
+            >
+              <span
+                @click="onToolTipClick(post)"
+                :class="{ 'is-long': post.title.length >= 75 }"
+              >
+                {{ post.title }}
+              </span>
+            </LTooltip>
           </Lmarker>
         </LMarckerCluster>
       </LMap>
@@ -95,6 +109,8 @@ export default Vue.extend({
           iconSize: [25, 41],
         }),
       },
+      selectedMarkerMobile: undefined as Post | undefined,
+      isSmartphone: false,
     };
   },
   computed: {
@@ -124,6 +140,9 @@ export default Vue.extend({
   },
   mounted(): void {
     this.rerenderMap();
+    if (window.matchMedia("(max-width: 959px)").matches) {
+      this.isSmartphone = true;
+    }
   },
   methods: {
     rerenderMap(): void {
@@ -131,7 +150,6 @@ export default Vue.extend({
         this.$nextTick(() => {
           (this.$refs.map as LMap).mapObject.invalidateSize();
           this.$nextTick(() => {
-            this.fitMapBounds();
             this.setMapLocation();
           });
         });
@@ -146,7 +164,9 @@ export default Vue.extend({
           this.selectedPost.geo_location.lat,
           this.selectedPost.geo_location.lon,
         ] as LatLngTuple;
-        (this.$refs.map as LMap).setCenter(location);
+        (this.$refs.map as LMap).mapObject.panTo(location);
+      } else {
+        this.fitMapBounds();
       }
     },
     /**
@@ -178,6 +198,17 @@ export default Vue.extend({
     },
     openPost(post: Post): void {
       this.$emit("openPost", post);
+    },
+    onMarkerClick(post: Post): void {
+      if (this.isSmartphone) {
+        this.selectedMarkerMobile = post;
+        return;
+      }
+      this.openPost(post);
+    },
+    onToolTipClick(post: Post): void {
+      this.selectedMarkerMobile = undefined;
+      this.openPost(post);
     },
     isMobile(): boolean {
       if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
@@ -249,5 +280,11 @@ strong[class^="copy"] {
   clear: both;
   padding: 10px 0px;
   display: none;
+}
+.leaflet-tooltip .is-long {
+  display: block;
+  min-width: 13vw;
+  max-width: 20vw;
+  white-space: normal;
 }
 </style>
