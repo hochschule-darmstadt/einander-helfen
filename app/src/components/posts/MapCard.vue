@@ -34,7 +34,7 @@
             <LTooltip
               :options="{
                 interactive: true,
-                permanent: true,
+                permanent: isSmartphone,
               }"
               @click="onToolTipClick(post)"
             >
