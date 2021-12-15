@@ -7,3 +7,6 @@ RUN apt install python -y
 
 # for webp generation
 RUN apt install imagemagick -y
+
+# install vue cli globally as recommended in docs
+RUN yarn global add @vue/cli
