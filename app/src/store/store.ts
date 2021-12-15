@@ -7,7 +7,7 @@ import Vuex, { StoreOptions } from "vuex";
 import router from "@/router";
 import { searchModule, SearchState } from "./Search";
 import { postsModule, PostsState } from "./Posts";
-import PostService, { PaginatedResponse } from "@/services/PostService";
+import PostService from "@/services/PostService";
 import Post from "@/models/post";
 import radii from "@/assets/resources/radii";
 
