@@ -14,33 +14,38 @@
           query: { q: query },
         }"
       >
-        <v-img
-          class="white--text align-end"
-          height="300px"
-          :key="card.title"
-          :src="card.img"
-        >
-          <v-card
-            class="no-radius"
-            style="border-bottom-right-radius: 0; border-bottom-left-radius: 0"
+        <article>
+          <v-img
+            class="white--text align-end"
+            height="300px"
+            :key="card.title"
+            :src="card.img"
           >
-            <v-card-title
-              style="padding-bottom: 0"
-              class="justify-center black--text"
+            <v-card
+              class="no-radius"
+              style="
+                border-bottom-right-radius: 0;
+                border-bottom-left-radius: 0;
+              "
             >
-              <h2 style="color: #2f3640" v-html="card.title"></h2>
-            </v-card-title>
-          </v-card>
-        </v-img>
-        <v-card-subtitle>
-          <h3
-            style="padding-bottom: 0.7rem; text-align: center"
-            v-html="card.post.title"
-          />
-          <strong v-html="removeHtmlTags(card.post.location)" />
-          <br />
-          <span class="text--primary" v-html="makePostShort(card.post.task)" />
-        </v-card-subtitle>
+              <v-card-title
+                style="padding-bottom: 0"
+                class="justify-center black--text"
+              >
+                <h2 style="color: #2f3640" v-html="card.title"></h2>
+              </v-card-title>
+            </v-card>
+          </v-img>
+          <v-card-subtitle>
+            <h3
+              style="padding-bottom: 0.7rem; text-align: center"
+              v-html="card.post.title"
+            />
+            <strong v-html="removeHtmlTags(card.post.location)" />
+            <br />
+            <p class="text--primary" v-html="makePostShort(card.post.task)" />
+          </v-card-subtitle>
+        </article>
       </router-link>
     </v-card>
   </v-hover>
