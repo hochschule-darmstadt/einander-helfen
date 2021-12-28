@@ -5,6 +5,7 @@ import store from "@/store/store";
 
 import Vuetify from "vuetify";
 import VueMatomo from "vue-matomo";
+import VueMeta from "vue-meta";
 
 // import vuetify css
 import "vuetify/dist/vuetify.min.css";
@@ -21,6 +22,7 @@ import de from "vuetify/es5/locale/de.js";
 Vue.config.productionTip = false;
 
 Vue.use(Vuetify);
+Vue.use(VueMeta);
 
 const vuetify = new Vuetify({
   lang: {

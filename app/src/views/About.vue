@@ -154,13 +154,9 @@ export default Vue.extend({
   components: {
     Header,
   },
-  watch: {
-    title: {
-      immediate: true,
-      handler() {
-        document.title = "Über uns - Einander Helfen";
-      },
-    },
+  metaInfo: {
+    title: "Über uns - Einander Helfen",
+    link: [{ rel: "canonical", href: "https://einander-helfen.org/about" }],
   },
 });
 </script>

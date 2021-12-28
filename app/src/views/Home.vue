@@ -32,13 +32,9 @@ export default Vue.extend({
     SearchComponent,
     ImageCards,
   },
-  watch: {
-    title: {
-      immediate: true,
-      handler() {
-        document.title = "Einander Helfen";
-      },
-    },
+  metaInfo: {
+    title: "Einander Helfen",
+    link: [{ rel: "canonical", href: "https://einander-helfen.org" }],
   },
   data: function () {
     return {

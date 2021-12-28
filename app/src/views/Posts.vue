@@ -107,6 +107,9 @@ export default Vue.extend({
     PostListItem,
     PostListItemSkeleton,
   },
+  metaInfo: {
+    title: "Ergebnisse - Einander Helfen",
+  },
   data: function () {
     return {
       showMap: true,
@@ -137,12 +140,6 @@ export default Vue.extend({
     searchValues() {
       // recalc header space after search tags change
       this.$nextTick(() => this.calcHeaderSpace());
-    },
-    title: {
-      immediate: true,
-      handler() {
-        document.title = "Ergebnisse - Einander Helfen";
-      },
     },
   },
   async mounted(): Promise<void> {
