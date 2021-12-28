@@ -22,14 +22,14 @@
           </span>
           <span class="subtitle font-weight-light white--text d-flex">
             <span class="mr-1">
-              Aktuell {{ nationalCount }}
+              Aktuell {{ nationalCount.toLocaleString("de-DE") }}
               <span class="pl-1 pr-1">
                 <img class="areImage" :src="nationalImg" />
               </span>
               nationale und
             </span>
             <span>
-              {{ internationalCount }}
+              {{ internationalCount.toLocaleString("de-DE") }}
               <span class="pl-1 pr-1">
                 <img class="areImage" :src="internationalImg" />
               </span>
