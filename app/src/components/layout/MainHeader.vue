@@ -24,14 +24,14 @@
             <span class="mr-1">
               Aktuell {{ nationalCount.toLocaleString("de-DE") }}
               <span class="pl-1 pr-1">
-                <img class="areImage" :src="nationalImg" />
+                <img class="areImage" alt="Nationalflagge" :src="nationalImg" />
               </span>
               nationale und
             </span>
             <span>
               {{ internationalCount.toLocaleString("de-DE") }}
               <span class="pl-1 pr-1">
-                <img class="areImage" :src="internationalImg" />
+                <img class="areImage" alt="Erdkugel" :src="internationalImg" />
               </span>
               internationale Stellenangebote zur Auswahl
             </span>
