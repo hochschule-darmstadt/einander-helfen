@@ -33,7 +33,7 @@ export default Vue.extend({
     ImageCards,
   },
   metaInfo: {
-    title: "Einander Helfen",
+    title: "Einander Helfen: Freiwilligenarbeit, Ehrenamt, FÖJ und FSJ",
     link: [{ rel: "canonical", href: "https://einander-helfen.org" }],
   },
   data: function () {
