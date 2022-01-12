@@ -1,7 +1,7 @@
 <template>
   <div>
-    <v-row justify="center">
-      <h1>Finde die Freiwilligenarbeit die zu dir passt!</h1>
+    <v-row justify="center" class="pb-5 pt-10 text-h1">
+      <h1 class="text-h3">Freiwilligenarbeit in vielen Bereichen!</h1>
     </v-row>
 
     <v-row justify="center">
