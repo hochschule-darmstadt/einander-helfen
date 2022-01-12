@@ -247,6 +247,8 @@ export default Vue.extend({
           top: offsetPosition,
           behavior: "smooth",
         });
+      } else if (item) {
+        item.scrollIntoView({ behavior: "smooth" });
       }
     },
     /** Show the map  */
