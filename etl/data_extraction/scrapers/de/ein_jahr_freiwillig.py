@@ -87,6 +87,7 @@ class EinJahrFreiwillig(Scraper):
                 'zipcode': self.clean_string(location_plz.decode_contents()) if location_plz is not None else None,
                 'city': self.clean_string(location_ort.decode_contents()) if location_ort is not None else None,
                 'street': self.clean_string(location_street.decode_contents()) if location_street is not None else None,
+                'continent': None,
             },
             'task': self.clean_string(parsed_object['task']) or None,
             'target_group': None,

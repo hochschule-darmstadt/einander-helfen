@@ -28,23 +28,22 @@ def geo_location_to_continent(geo_location, context):
 
     point = Point(float(geo_location['lat']), float(geo_location['lon']))
 
-    continent_index = 0
     if africa.contains(point):
-        continent_index = 1
+        return continents[context][1]
     elif australia.contains(point):
-        continent_index = 2
+        return continents[context][2]
     elif asia1.contains(point) or asia2.contains(point):
-        continent_index = 3
+        return continents[context][3]
     elif europe.contains(point):
-        continent_index = 4
+        return continents[context][4]
     elif north_america1.contains(point) or north_america2.contains(point):
-        continent_index = 5
+        return continents[context][5]
     elif south_america.contains(point):
-        continent_index = 6
+        return continents[context][6]
     elif antarctica.contains(point):
-        continent_index = 7 
+        return continents[context][7]
 
-    return continents[context][continent_index]
+    return continents[context][0]
 
 def add_continent(data, context):
     """Add the continent of the country to the data."""

@@ -65,6 +65,7 @@ Wenn Sie ehrenamtlich beim DKSB mitarbeiten, lernen Sie gleichgesinnte Menschen 
                 'zipcode': zipcode,
                 'city': None,
                 'street': None,
+                'continent': 'Europa',
             },
             'task': None,
             'target_group': None,
