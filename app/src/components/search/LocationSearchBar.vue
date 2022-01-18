@@ -1,4 +1,4 @@
-<!-- Component to select a location for the search. It's possible to select a city or postalcode for national searches or a county for international searchers -->
+<!-- Component to select a location for the search. It's possible to select a city or postalCode for national searches or a county for international searchers -->
 
 <template>
   <v-autocomplete
@@ -85,7 +85,7 @@ export default Vue.extend({
      * The postcode and location name are taken into account.
      *
      * @param {any} item: The current location item to check if it matches the user input.
-     * @param {string} querText: The user input.
+     * @param queryText
      * @param {string} itemText: The text value of the item.
      * @return {boolean}:  If the checked item should be display in the proposal list.
      */
@@ -114,15 +114,20 @@ export default Vue.extend({
     locationOnKeyUp(evt): void {
       const handleDesktop =
         evt.code.startsWith("Key") ||
-        evt.code.startsWith("Digit") ||
-        evt.code === "Backspace";
+        evt.code === "Backspace" ||
+        (evt.keyCode >= 48 && evt.keyCode <= 57) ||
+        (evt.keyCode >= 96 && evt.keyCode <= 105);
+      console.log(handleDesktop);
       const handleMobile =
         Number.isInteger(evt.key) ||
         evt.key.match(/[a-z]/i) ||
         evt.key === "Backspace";
       if (handleDesktop || handleMobile) {
+        console.log("ich wurde aufgerufen");
         const curValue = evt.target.value;
         const plz = curValue.match(/^\d+/);
+        console.log(curValue);
+        console.log(plz);
         if (plz) {
           this.searchValue = plz[0];
         } else {
@@ -178,7 +183,7 @@ export default Vue.extend({
     }
 
     .v-text-field {
-      padding-right: 0px !important;
+      padding-right: 0 !important;
     }
   }
 }
@@ -192,7 +197,7 @@ export default Vue.extend({
     }
 
     .v-text-field {
-      padding-right: 0px !important;
+      padding-right: 0 !important;
     }
   }
 }
@@ -243,7 +248,7 @@ export default Vue.extend({
     max-width: none;
 
     .v-text-field {
-      padding-right: 0px;
+      padding-right: 0;
     }
   }
 }
