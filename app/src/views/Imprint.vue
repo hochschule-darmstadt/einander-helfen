@@ -66,13 +66,9 @@ import Header from "@/components/layout/SearchHeader.vue";
 
 export default Vue.extend({
   components: { Header },
-  watch: {
-    title: {
-      immediate: true,
-      handler() {
-        document.title = "Impressum - Einander Helfen";
-      },
-    },
+  metaInfo: {
+    title: "Impressum - Einander Helfen",
+    link: [{ rel: "canonical", href: "https://einander-helfen.org/imprint" }],
   },
   data(): {
     items: any;

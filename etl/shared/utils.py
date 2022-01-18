@@ -22,11 +22,13 @@ def read_data_from_json(path):
     """Reads the given json file."""
     logger.debug(f'read_data_from_json({path})')
 
-    if not os.path.exists(path):
+    if not os.path.exists(path) or not os.path.isfile(path):
         print(f'Enhanced data file does not exist! [{path}]')
+        raise RuntimeException(f'Enhanced data file does not exist: {path}')
+
     with open(path, 'r', encoding='utf-8') as data_file:
         json_load = json.load(data_file)
-    return json_load
+        return json_load
 
 
 def append_data_to_json(path, data):

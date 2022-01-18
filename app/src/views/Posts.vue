@@ -60,6 +60,7 @@
           <PostListItem
             v-for="post in postsOnCurrentPage"
             :key="post.id"
+            :id="post.id"
             :post="post"
             :active="post.id == selectedPostId"
             :showDetail="isSmartphone"
@@ -106,6 +107,9 @@ export default Vue.extend({
     PostListItem,
     PostListItemSkeleton,
   },
+  metaInfo: {
+    title: "Ergebnisse - Einander Helfen",
+  },
   data: function () {
     return {
       showMap: true,
@@ -137,75 +141,67 @@ export default Vue.extend({
       // recalc header space after search tags change
       this.$nextTick(() => this.calcHeaderSpace());
     },
-    title: {
-      immediate: true,
-      handler() {
-        document.title = "Ergebnisse - Einander Helfen";
-      },
-    },
   },
-  mounted(): void {
+  async mounted(): Promise<void> {
     // get params from route
-    this.hydrateStateFromRoute()
-      .then(() => {
-        this.isInitialised = true;
+    await this.hydrateStateFromRoute();
+
+    this.isInitialised = true;
+    this.isLoading = true;
+    // load posts by updated state parameter
+    await this.loadPosts();
+    this.togglePostDetails(this.selectedPost);
+    this.isLoading = false;
+
+    // set properties
+
+    // check if device is isSmartphone view
+    if (window.matchMedia("(max-width: 959px)").matches) {
+      this.showMap = false;
+      this.isSmartphone = true;
+    }
+    // close map if a post is open
+    if (this.selectedPost) {
+      this.showMap = false;
+    }
+    // calc the header height to move the container down
+    this.calcHeaderSpace();
+    // set resize event handler
+    window.addEventListener("resize", this.onWindowResize);
+
+    // add watcher to fire load event if search parameter have changed
+    this.$watch(
+      // watch all parameters which are used to find posts
+      () => (
+        this.searchValues,
+        this.isInternational,
+        this.selectedLocation,
+        this.selectedRadius,
+        // and to be sure that a different value is returned every time
+        Date.now()
+      ),
+      () => {
         this.isLoading = true;
-        // load posts by updated state parameter
-        return this.loadPosts()
-          .then(() => this.togglePostDetails(this.selectedPost))
-          .finally(() => (this.isLoading = false));
-      })
-      // set properties
-      .then(() => {
-        // check if device is isSmartphone view
-        if (window.matchMedia("(max-width: 959px)").matches) {
-          this.showMap = false;
-          this.isSmartphone = true;
-        }
-        // close map if a post is open
-        if (this.selectedPost) {
-          this.showMap = false;
-        }
-        // calc the header height to move the container down
-        this.calcHeaderSpace();
-        // set resize event handler
-        window.addEventListener("resize", this.onWindowResize);
-      })
-      // add watcher after parameters are loaded from route
-      .then(() => {
-        // add watcher to fire load event if search parameter have changed
-        this.$watch(
-          // watch all parameters which are used to find posts
-          () => (
-            this.searchValues,
-            this.isInternational,
-            this.selectedLocation,
-            this.selectedRadius,
-            // and to be sure that a different value is returned every time
-            Date.now()
-          ),
-          () => {
-            this.isLoading = true;
-            // clear selected post
-            this.togglePostDetails();
-            // clear total result
-            this.resetTotalResults();
-            // and execute loadPosts
-            this.loadPosts().finally(() => (this.isLoading = false));
-          }
-        );
-        // results from is changes if the page is changed a new junk must be laoded
-        this.$watch(
-          () => (this.resultsFrom, Date.now()),
-          () => {
-            this.isLoading = true;
-            // clear selected post
-            this.togglePostDetails();
-            // and execute loadPosts
-            this.loadPosts().finally(() => (this.isLoading = false));
-          }
-        );
-      });
+        // clear selected post
+        this.togglePostDetails();
+        // clear total result
+        this.resetTotalResults();
+        // and execute loadPosts
+        this.loadPosts().finally(() => (this.isLoading = false));
+      }
+    );
+
+    // results from is changes if the page is changed a new junk must be laoded
+    this.$watch(
+      () => (this.resultsFrom, Date.now()),
+      () => {
+        this.isLoading = true;
+        // clear selected post
+        this.togglePostDetails();
+        // and execute loadPosts
+        this.loadPosts().finally(() => (this.isLoading = false));
+      }
+    );
   },
   beforeDestroy(): void {
     // remove event handler
@@ -225,17 +221,33 @@ export default Vue.extend({
      *
      * @param {Post} post: The currently selected post. Undefined if no post is selected.
      */
-    togglePostDetails(post: Post | undefined = undefined): void {
+    async togglePostDetails(post: Post | undefined = undefined): Promise<void> {
       // close map to show detail page if not isSmartphone
       if (post && !this.isSmartphone) this.showMap = false;
       // show map if not isSmartphone
       if (!post && !this.isSmartphone) this.showMap = true;
       // set selected post id or set undefined in store
       const id = post ? post.id : undefined;
-      this.setSelectedPostId(id).then(() =>
-        // update uri
-        this.updateURIFromState()
-      );
+      await this.setSelectedPostId(id);
+      // update uri
+      await this.updateURIFromState();
+
+      const item = document.getElementById(id ? id : "");
+      const header = document.getElementById("main_header");
+
+      // scroll to the postItem, so the item is below our header
+      if (this.isSmartphone && item && header) {
+        const offset = header.scrollHeight;
+        const bodyRect = document.body.getBoundingClientRect().top;
+        const elementRect = item.getBoundingClientRect().top;
+        const elementPosition = elementRect - bodyRect;
+        const offsetPosition = elementPosition - offset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth",
+        });
+      }
     },
     /** Show the map  */
     openMap(): void {

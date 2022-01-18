@@ -26,13 +26,8 @@ export default Vue.extend({
   components: {
     Header,
   },
-  watch: {
-    title: {
-      immediate: true,
-      handler() {
-        document.title = "Seite nicht gefunden - Einander Helfen";
-      },
-    },
+  metaInfo: {
+    title: "Seite nicht gefunden - Einander Helfen",
   },
   computed: {
     width() {

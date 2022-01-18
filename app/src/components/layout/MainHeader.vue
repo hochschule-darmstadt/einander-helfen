@@ -22,16 +22,16 @@
           </span>
           <span class="subtitle font-weight-light white--text d-flex">
             <span class="mr-1">
-              {{ $t("home.header.description1") }} {{ nationalCount }}
+              {{ $t("home.header.description1") }} {{ nationalCount.toLocaleString("de-DE") }}
               <span class="pl-1 pr-1">
-                <img class="areImage" :src="nationalImg" />
+                <img class="areImage" alt="Nationalflagge" :src="nationalImg" />
               </span>
               {{ $t("home.header.description2") }}
             </span>
             <span>
-              {{ internationalCount }}
+              {{ internationalCount.toLocaleString("de-DE") }}
               <span class="pl-1 pr-1">
-                <img class="areImage" :src="internationalImg" />
+                <img class="areImage" alt="Erdkugel" :src="internationalImg" />
               </span>
               {{ $t("home.header.description3") }}
             </span>
@@ -63,13 +63,10 @@ export default Vue.extend({
       internationalImg: require("@/assets/images/area/240px-Earth_icon_2.png"),
     };
   },
-  mounted() {
+  async mounted() {
     // load internationalCount
-    PostService.countPosts(true).then(
-      (count) => (this.internationalCount = count)
-    );
-    // load nationalCount
-    PostService.countPosts(false).then((count) => (this.nationalCount = count));
+    this.internationalCount = await PostService.countPosts(true);
+    this.nationalCount = await PostService.countPosts(false);
   },
 });
 </script>

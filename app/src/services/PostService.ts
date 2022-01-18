@@ -62,17 +62,17 @@ class PostService {
    * @param {string} id: The ID of the post to find.
    * @return {Promise<Post | undefined>}: The matching Post or undefined if no Post was found.
    */
-  public findById(id: string): Promise<Post | undefined> {
+  public async findById(id: string): Promise<Post | undefined> {
     const builder = BuilderFactory().query("term", "_id", id);
 
-    return axios.post(this.baseUrl, builder.build()).then(({ data }) => {
-      if (!data.hits.hits.length) return undefined;
-      const entity = data.hits.hits.pop();
-      return {
-        id: entity._id,
-        ...entity._source,
-      } as Post;
-    });
+    const { data } = await axios.post(this.baseUrl, builder.build());
+
+    if (!data.hits.hits.length) return undefined;
+    const entity = data.hits.hits.pop();
+    return {
+      id: entity._id,
+      ...entity._source,
+    } as Post;
   }
 
   /**
@@ -165,35 +165,36 @@ class PostService {
     return builder;
   }
 
-  private performPostsQuery<T>(
+  private async performPostsQuery<T>(
     query: Bodybuilder
   ): Promise<PaginatedResponse<T>> {
-    return axios.post(this.baseUrl, query.build()).then(({ data }) => {
-      const entities: T[] = data.hits.hits.map((elem: any) => {
-        return {
-          id: elem._id,
-          ...elem._source,
-        };
-      });
+    const { data } = await axios.post(this.baseUrl, query.build());
 
-      const response: PaginatedResponse<T> = {
-        data: entities,
-        meta: {
-          total: data.hits.total.value,
-          size: entities.length,
-        },
+    const entities: T[] = data.hits.hits.map((elem: any) => {
+      return {
+        id: elem._id,
+        ...elem._source,
       };
-      return response;
     });
+
+    const response: PaginatedResponse<T> = {
+      data: entities,
+      meta: {
+        total: data.hits.total.value,
+        size: entities.length,
+      },
+    };
+    return response;
   }
 
-  private performCountQuery(query: Bodybuilder): Promise<number> {
-    return axios
-      .post(this.baseUrl + "posts/?filter_path=hits.total", query.build())
-      .then(({ data }) => {
-        const count: number = data.hits.total.value;
-        return count;
-      });
+  private async performCountQuery(query: Bodybuilder): Promise<number> {
+    const { data } = await axios.post(
+      this.baseUrl + "posts/?filter_path=hits.total",
+      query.build()
+    );
+
+    const count: number = data.hits.total.value;
+    return count;
   }
 }
 

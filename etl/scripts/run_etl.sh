@@ -1,5 +1,5 @@
 #!/bin/bash
-lockfile=./ETLlock
+lockfile=/home/einander-helfen/ETLlock
 
 if ( set -o noclobber; echo "$$" > "$lockfile") 2> /dev/null; then
 
@@ -17,7 +17,7 @@ if ( set -o noclobber; echo "$$" > "$lockfile") 2> /dev/null; then
         done
 
         #changing working dir
-        cd /home/etl/einander-helfen/etl/scripts
+        cd /home/einander-helfen/etl/scripts
 
         # Installing required python packages
         pip3 install -r ../requirements.txt
@@ -25,11 +25,12 @@ if ( set -o noclobber; echo "$$" > "$lockfile") 2> /dev/null; then
         # executing crawl and enhancement
         python3 ../main.py -c "$context"
 
+        # - deprecated -
         # package enhanced data for prod
-        tar cfvz enhanced_output.tar.gz ../data_enhancement/data ../data_enhancement/output
+        # tar cfvz enhanced_output.tar.gz ../data_enhancement/data ../data_enhancement/output
 
         # copy packaged data to make it available for nginx endpoint
-        cp enhanced_output.tar.gz /var/www/html
+        # cp enhanced_output.tar.gz /var/www/html
 
         # execute elastic upload
         python3 ../execute_elastic_upload.py -c "$context"

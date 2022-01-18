@@ -8,7 +8,7 @@
     <section class="container">
       <SearchComponent class="searchcomponent" />
 
-      <ImageCard :cards="volunteerTags" />
+      <ImageCards v-if="postLoaded" :cards="volunteerTags" />
     </section>
   </div>
 </template>
@@ -17,9 +17,12 @@
 import Vue from "vue";
 import Header from "@/components/layout/MainHeader.vue";
 import Carousel from "@/components/layout/Carousel.vue";
-import ImageCard, { Card } from "@/components/layout/ImageCards.vue";
 import SearchComponent from "@/components/search/SearchComponent.vue";
 import { mapActions } from "vuex";
+import PostService, { SearchParameters } from "@/services/PostService";
+import Post from "@/models/post";
+import ImageCards from "@/components/layout/ImageCards.vue";
+import { Card } from "@/components/layout/ImageCard.vue";
 
 export default Vue.extend({
   name: "HomeView",
@@ -27,20 +30,18 @@ export default Vue.extend({
     Carousel,
     Header,
     SearchComponent,
-    ImageCard,
+    ImageCards,
   },
-  watch: {
-    title: {
-      immediate: true,
-      handler() {
-        document.title = "Einander Helfen";
-      },
-    },
+  metaInfo: {
+    title:
+      "Einander Helfen: das Suchportal für Freiwilligenarbeit und Ehrenamt",
+    link: [{ rel: "canonical", href: "https://einander-helfen.org" }],
   },
   data: function () {
     return {
+      postLoaded: false,
       volunteerTags: [
-        {
+        /*{
           title: this.$t("home.cards.workWithKids"),
           to: this.$t("home.searchCategory.kids"),
           imgBasePath: "/images/categories/macherIN",
@@ -58,7 +59,33 @@ export default Vue.extend({
         {
           title: this.$t("home.cards.care"),
           to: this.$t("home.searchCategory.care"),
-          imgBasePath: "/images/categories/jugend",
+          imgBasePath: "/images/categories/jugend",*/
+        {
+          title: this.$t("home.cards.fsjShort"),
+          search: [this.$t("home.cards.fsj"), this.$t("home.cards.kids")],
+          img: require("../../public/images/categories/macherIN.jpeg"),
+          post: undefined,
+        },
+        {
+          title: this.$t("home.cards.föjShort"),
+          search: [this.$t("home.cards.föj"), this.$t("home.cards.kids")],
+          img: require("../../public/images/categories/denkerIN.jpeg"),
+          post: undefined,
+        },
+        {
+          title: this.$t("home.cards.honorary"),
+          search: [
+            this.$t("home.cards.honorary"),
+            this.$t("home.cards.seniors"),
+          ],
+          img: require("../../public/images/categories/sozial.jpeg"),
+          post: undefined,
+        },
+        {
+          title: this.$t("home.cards.volunteering"),
+          search: [this.$t("home.cards.volunteering"), this.$t("home.cards.kids")],
+          img: require("../../public/images/categories/jugend.jpeg"),
+          post: undefined,
         },
       ] as Card[],
     };
@@ -66,9 +93,42 @@ export default Vue.extend({
   created() {
     // clear search params on home load
     this.clearSearchParams();
+    this.loadPosts();
   },
   methods: {
     ...mapActions(["clearSearchParams"]),
+    async getPost(searchValue: string[]): Promise<Post> {
+      const searchParams: SearchParameters = {
+        searchValues: searchValue,
+        from: 1,
+        size: 10,
+        international: false,
+      };
+      const PaginatedPosts = await PostService.findPosts(searchParams);
+      let randomId = Math.random() * 10;
+      while (PaginatedPosts.data[Math.floor(randomId)].task == null) {
+        randomId = Math.random() * 10;
+      }
+      return PaginatedPosts.data[Math.floor(randomId)];
+    },
+    async loadPosts(): Promise<void> {
+      this.postLoaded = false;
+      const postsWithIndexPromise = this.volunteerTags.map(
+        async (volunteerTag, index) => {
+          const post = await this.getPost(volunteerTag.search);
+          return {
+            index,
+            post,
+          };
+        }
+      );
+      const postsWithIndex = await Promise.all(postsWithIndexPromise);
+
+      postsWithIndex.forEach((postWithIndex) => {
+        this.volunteerTags[postWithIndex.index].post = postWithIndex.post;
+      });
+      this.postLoaded = true;
+    },
   },
 });
 </script>

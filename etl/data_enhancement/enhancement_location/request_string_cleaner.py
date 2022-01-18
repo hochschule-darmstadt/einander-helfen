@@ -41,7 +41,8 @@ class RequestStringCleaner:
         """Determines whether the given field should be removed"""
         is_po = RequestStringCleaner._is_post_office_substring(field)
         is_district = RequestStringCleaner._is_district_substring(field)
-        return is_po or is_district
+        is_apartment = RequestStringCleaner._is_apartment_substring(field)
+        return is_po or is_district or is_apartment
 
     @staticmethod
     def _handle_multi_field_rules(input_string):
@@ -66,4 +67,9 @@ class RequestStringCleaner:
     def _is_district_substring(input_string):
         """Determines whether the given input string is a district address field"""
         return len(re.findall(r'[Dd]istrict', string=input_string)) > 0
+
+    @staticmethod
+    def _is_apartment_substring(input_string):
+        """Determines whether the given input string matches the apartment pattern (e.g. P.O. Apt. <number>)"""
+        return len(re.findall(r'(Apt|apt|Apt|APT)\.? [0-9]+.*', string=input_string)) > 0
 

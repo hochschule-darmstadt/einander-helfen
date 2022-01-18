@@ -32,12 +32,10 @@ export default Vue.extend({
   },
   watch: {
     // update page in store if this page change
-    page(page: number): void {
+    async page(page: number): Promise<void> {
       if (page != this.selectedPage) {
-        this.setSelectedPage(page).then(() =>
-          // update uri with new page
-          this.updateURIFromState()
-        );
+        await this.setSelectedPage(page);
+        this.updateURIFromState();
       }
     },
     // update this page if page in store change

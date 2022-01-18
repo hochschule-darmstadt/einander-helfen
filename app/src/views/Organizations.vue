@@ -40,13 +40,11 @@ export default Vue.extend({
   components: {
     Header,
   },
-  watch: {
-    title: {
-      immediate: true,
-      handler() {
-        document.title = "Anbieter - Einander Helfen";
-      },
-    },
+  metaInfo: {
+    title: "Anbieter - Einander Helfen",
+    link: [
+      { rel: "canonical", href: "https://einander-helfen.org/organizations" },
+    ],
   },
   data() {
     return {

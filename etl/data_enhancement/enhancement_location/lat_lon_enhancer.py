@@ -144,8 +144,8 @@ class LatLonEnhancer:
         """Build a prioritized list of API request string"""
 
         prioritized_request_list = []
-
-        if LatLonEnhancer.has_insufficient_information(post):
+        
+        if LatLonEnhancer.has_insufficient_information(post) and post['location'] is not None:
             prioritized_request_list.append(RequestStringCleaner.clean_request_string(post['location']))
 
         struct_data = post['post_struct']
@@ -162,11 +162,16 @@ class LatLonEnhancer:
                                                                           struct_data[field]['zipcode'] else ''
                 request_string += struct_data[field]['city'] + ', ' if 'city' in struct_data[field] and \
                                                                        struct_data[field]['city'] else ''
+                request_string += struct_data[field]['region'] + ', ' if 'region' in struct_data[field] and \
+                                                                          struct_data[field]['region'] else ''
                 request_string += struct_data[field]['country'] + ', ' if 'country' in struct_data[field] and \
                                                                           struct_data[field]['country'] else ''
                 request_string = request_string.strip()
 
         prioritized_request_list.append(RequestStringCleaner.clean_request_string(request_string))
+
+        if post['contact'] is not None:
+            prioritized_request_list.append(RequestStringCleaner.clean_request_string(post['contact']))
 
         return prioritized_request_list
 
