@@ -117,17 +117,13 @@ export default Vue.extend({
         evt.code === "Backspace" ||
         (evt.keyCode >= 48 && evt.keyCode <= 57) ||
         (evt.keyCode >= 96 && evt.keyCode <= 105);
-      console.log(handleDesktop);
       const handleMobile =
         Number.isInteger(evt.key) ||
         evt.key.match(/[a-z]/i) ||
         evt.key === "Backspace";
       if (handleDesktop || handleMobile) {
-        console.log("ich wurde aufgerufen");
         const curValue = evt.target.value;
         const plz = curValue.match(/^\d+/);
-        console.log(curValue);
-        console.log(plz);
         if (plz) {
           this.searchValue = plz[0];
         } else {
