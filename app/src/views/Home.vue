@@ -41,25 +41,6 @@ export default Vue.extend({
     return {
       postLoaded: false,
       volunteerTags: [
-        /*{
-          title: this.$t("home.cards.workWithKids"),
-          to: this.$t("home.searchCategory.kids"),
-          imgBasePath: "/images/categories/macherIN",
-        },
-        {
-          title: this.$t("home.cards.workWithTeenagers"),
-          to: this.$t("home.searchCategory.teenagers"),
-          imgBasePath: "/images/categories/denkerIN",
-        },
-        {
-          title: this.$t("home.cards.workWithSeniors"),
-          to: this.$t("home.searchCategory.seniors"),
-          imgBasePath: "/images/categories/sozial",
-        },
-        {
-          title: this.$t("home.cards.care"),
-          to: this.$t("home.searchCategory.care"),
-          imgBasePath: "/images/categories/jugend",*/
         {
           title: this.$t("home.cards.fsjShort"),
           search: [this.$t("home.cards.fsj"), this.$t("home.cards.kids")],
