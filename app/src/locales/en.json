@@ -22,11 +22,15 @@
       "privacyPolicy": "Privacy policy"
     },
     "cards": {
-       "workWithKids": "Work with kids",
-       "workWithTeenagers": "Work with teenagers",
-       "workWithSeniors": "Work with serniors",
-       "care": "Care"
-    }
+      "fsj": "Voluntary social year",
+      "fsjShort": "VSY",
+      "föj": "Voluntary ecological year",
+      "föjShort": "VEY",
+      "honorary": "Honorary",
+      "volunteering": "Volunteering",
+      "kids": "kids",
+      "seniors": "Seniors"
+   }
   },
   "about":{
     "description1":"is the fast search portal for volunteering and voluntary activities: With a wealth of different opportunities around the world.",

@@ -22,10 +22,14 @@
       "privacyPolicy": "Datenschutzerklärung"
     },
     "cards": {
-       "workWithKids": "Arbeit mit Kindern",
-       "workWithTeenagers": "Arbeit mit Jugendlichen",
-       "workWithSeniors": "Arbeit mit Senioren",
-       "care": "Betreuung"
+       "fsj": "Freiwilliges soziales Jahr",
+       "fsjShort": "FSJ",
+       "föj": "Freiwilliges ökologisches Jahr",
+       "föjShort": "FÖJ",
+       "honorary": "Ehrenamt",
+       "volunteering": "Freiwilligenarbeit",
+       "kids": "Kinder",
+       "seniors": "Seniors"
     }
   },
   "about":{
