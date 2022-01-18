@@ -83,7 +83,10 @@ export default Vue.extend({
         },
         {
           title: this.$t("home.cards.volunteering"),
-          search: [this.$t("home.cards.volunteering"), this.$t("home.cards.kids")],
+          search: [
+            this.$t("home.cards.volunteering"),
+            this.$t("home.cards.kids"),
+          ],
           img: require("../../public/images/categories/jugend.jpeg"),
           post: undefined,
         },

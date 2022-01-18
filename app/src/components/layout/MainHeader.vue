@@ -22,7 +22,8 @@
           </span>
           <span class="subtitle font-weight-light white--text d-flex">
             <span class="mr-1">
-              {{ $t("home.header.description1") }} {{ nationalCount.toLocaleString("de-DE") }}
+              {{ $t("home.header.description1") }}
+              {{ nationalCount.toLocaleString("de-DE") }}
               <span class="pl-1 pr-1">
                 <img class="areImage" alt="Nationalflagge" :src="nationalImg" />
               </span>
