@@ -39,14 +39,14 @@ def search_all_places_for_place_name(place_array, place_name, state):
     return all_places
 
 
-def calculate_area_form_osm_bounding_box(calculate_area_form_osm_boundingbox_array):
+def calculate_area_from_osm_bounding_box(calculate_area_from_osm_boundingbox_array):
     """Calculate area with bounding box values.
         https://www.kompf.de/gps/distcalc.html
     """
-    lat1=float(calculate_area_form_osm_boundingbox_array[0])
-    lat2=float(calculate_area_form_osm_boundingbox_array[1])
-    lon1=float(calculate_area_form_osm_boundingbox_array[2])
-    lon2=float(calculate_area_form_osm_boundingbox_array[3])
+    lat1=float(calculate_area_from_osm_boundingbox_array[0])
+    lat2=float(calculate_area_from_osm_boundingbox_array[1])
+    lon1=float(calculate_area_from_osm_boundingbox_array[2])
+    lon2=float(calculate_area_from_osm_boundingbox_array[3])
 
     lat = (lat1 + lat2) / 2 * 0.01745
     dx = 111.3 * math.cos(lat) * (lon1 - lon2)
@@ -156,7 +156,7 @@ def write_osm_file():
                 new_place = PlaceNamePostcode(respJson[0]['osm_id'], row[3], row[0], row[5])
                 new_place.lon = respJson[0]['lon']
                 new_place.lat = respJson[0]['lat']
-                new_place.area = calculate_area_form_osm_bounding_box(respJson[0]['boundingbox'])
+                new_place.area = calculate_area_from_osm_bounding_box(respJson[0]['boundingbox'])
             else:
                 new_place = PlaceNamePostcode(0, row[3], row[0], row[5])
                 # row[1]: lon, row[2]: lat
