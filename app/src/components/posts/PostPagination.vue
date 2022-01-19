@@ -9,7 +9,7 @@
       color="#054C66"
     />
     <span class="pl-2 mt-2 d-inline-block font-italic">
-      {{ totalResultSize }} Ergebnisse
+      {{ totalResultSize }} {{ $t("postPagination.results") }}
     </span>
   </div>
 </template>

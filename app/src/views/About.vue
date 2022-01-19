@@ -5,41 +5,18 @@
     <Header />
     <section class="container pt-6">
       <div>
-        <h1>einander-helfen.org</h1>
+        <h1>{{ $t("home.title") }}</h1>
         <p>
-          <strong>einander-helfen.org</strong> ist das schnelle Suchportal für
-          Freiwilligenarbeit und ehrenamtliche Tätigkeiten: Mit einer Fülle von
-          unterschiedlichen Angeboten auf der ganzen Welt.
+          <strong>{{ $t("home.title") }}</strong> {{ $t("about.description1") }}
         </p>
       </div>
       <div>
-        <h2>Und so funktioniert's:</h2>
+        <h2>{{ $t("about.howItWorksHeadline") }}</h2>
+        <p>{{ $t("about.howItWorksDescription1") }}</p>
+        <p>{{ $t("about.howItWorksDescription2") }}</p>
         <p>
-          Sie suchen ein Stellenangebot für Freiwilligenarbeit oder Ehrenamt
-          innerhalb Deutschlands? Dann tragen Sie ein Stichwort im Suchen-Feld
-          ein und geben die Postleitzahl oder den Ortsnamen des eigenen
-          Standorts an. Vergessen Sie dabei nicht den Umkreis einzuschränken!
-          Sofort werden alle Angebote in der Karte und in der Liste angezeigt.
-          Ein Angebot auswählen (in der Liste oder auf der Karte) und schon
-          werden die dazugehörigen Details angezeigt. Mit einem weiteren Klick
-          ist man auf der Seite des Anbieters - mit weiteren Informationen. Sie
-          können die Suche auch durch mehrere Stichworte einschränken.
-        </p>
-        <p>
-          Sie suchen ein Stellenangebot für internationalen Freiwilligendienst?
-          Dann klicken Sie auf die Deutschlandflagge und wählen stattdessen
-          "International" aus. Geben Sie nun Ihr gewünschtes Land an und tragen
-          ein Stichwort im Suchen-Feld ein. Sofort werden alle Angebote in der
-          Karte und in der Liste angezeigt. Ein Angebot auswählen (in der Liste
-          oder auf der Karte) und schon werden die dazugehörigen Details
-          angezeigt. Mit einem weiteren Klick ist man auf der Seite des
-          Anbieters - mit weiteren Informationen. Sie können die Suche auch
-          durch mehrere Stichworte einschränken.
-        </p>
-        <p>
-          <strong>einander-helfen.org</strong> fasst Angebote von mehreren
-          Anbietern auf der ganzen Welt zusammen und erlaubt es, bequem über
-          alle zu suchen. Aktuell werden folgende Anbieter abgedeckt:
+          <strong>{{ $t("home.title") }}</strong>
+          {{ $t("about.providerDescription1") }}
         </p>
         <ul>
           <li>
@@ -115,27 +92,24 @@
         </ul>
         <p>
           <br />
-          Weitere Anbieter folgen. <br />
-          Haben Sie Verbesserungsvorschläge oder fehlt Ihnen etwas? Dann
-          kontaktieren Sie uns gerne unter
+          {{ $t("about.moreProvidersFollow") }} <br />
+          {{ $t("about.suggestionsForImprovement") }}
           <a href="mailto:info@einander-helfen.org">
             info@einander-helfen.org </a
           >.
         </p>
       </div>
       <div>
-        <h2>Wer wir sind:</h2>
+        <h2>{{ $t("about.whoWeAre") }}</h2>
         <p>
-          Wir sind ein ehrenamtliches Team und haben die Seite mit viel
-          Initiative und Eigenarbeit entwickelt. Die Software ist Open Source
+          {{ $t("about.whoWeAreDescription1") }}
           <a
             href="https://github.com/hochschule-darmstadt/einander-helfen"
             target="_blank"
           >
             https://github.com/hochschule-darmstadt/einander-helfen
           </a>
-          und wurde initial von einem Team von Studierenden programmiert. Wir
-          freuen uns auf Anregungen und Verbesserungsvorschläge unter
+          {{ $t("about.whoWeAreDescription2") }}
           <a href="mailto:info@einander-helfen.org">
             info@einander-helfen.org
           </a>

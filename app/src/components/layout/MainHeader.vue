@@ -12,28 +12,29 @@
               src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Heart-hand-shake.svg/256px-Heart-hand-shake.svg.png"
             />
           </v-app-bar-nav-icon>
-          <span class="headline pl-5 font-weight-light white--text">
-            einander-helfen.org
-          </span>
+          <p class="headline pl-5 font-weight-light white--text">
+            {{ $t("home.title") }}
+          </p>
         </v-col>
         <v-col class="sloganCol">
           <span class="title font-weight-bold font-weight-light white--text">
-            Das Portal für Freiwilligenarbeit
+            {{ $t("home.description") }}
           </span>
           <span class="subtitle font-weight-light white--text d-flex">
             <span class="mr-1">
-              Aktuell {{ nationalCount.toLocaleString("de-DE") }}
+              {{ $t("home.header.description1") }}
+              {{ nationalCount.toLocaleString("de-DE") }}
               <span class="pl-1 pr-1">
                 <img class="areImage" alt="Nationalflagge" :src="nationalImg" />
               </span>
-              nationale und
+              {{ $t("home.header.description2") }}
             </span>
             <span>
               {{ internationalCount.toLocaleString("de-DE") }}
               <span class="pl-1 pr-1">
                 <img class="areImage" alt="Erdkugel" :src="internationalImg" />
               </span>
-              internationale Stellenangebote zur Auswahl
+              {{ $t("home.header.description3") }}
             </span>
           </span>
         </v-col>
@@ -45,7 +46,7 @@
   </v-app-bar>
 </template>
 
-<script>
+<script lang="ts">
 import Vue from "vue";
 import MenuButton from "@/components/layout/MenuButton.vue";
 import PostService from "@/services/PostService";
@@ -58,7 +59,7 @@ export default Vue.extend({
   data: function () {
     return {
       nationalCount: 0,
-      nationalImg: require("@/assets/images/area/240px-Flag_of_Germany.png"),
+      nationalImg: require(`@/assets/images/area/${this.$i18n.locale}-Flag.png`),
       internationalCount: 0,
       internationalImg: require("@/assets/images/area/240px-Earth_icon_2.png"),
     };
@@ -75,6 +76,11 @@ export default Vue.extend({
 .header {
   span {
     margin-bottom: unset;
+  }
+  span {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
   }
 
   .logoCol {

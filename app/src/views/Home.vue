@@ -42,26 +42,32 @@ export default Vue.extend({
       postLoaded: false,
       volunteerTags: [
         {
-          title: "FSJ",
-          search: ["Freiwilliges Soziales Jahr", "Kinder"],
+          title: this.$t("home.cards.fsjShort"),
+          search: [this.$t("home.cards.fsj"), this.$t("home.cards.kids")],
           img: require("../../public/images/categories/macherIN.jpeg"),
           post: undefined,
         },
         {
-          title: "FÖJ",
-          search: ["Freiwilliges Ökologisches Jahr", "Kinder"],
+          title: this.$t("home.cards.föjShort"),
+          search: [this.$t("home.cards.föj"), this.$t("home.cards.kids")],
           img: require("../../public/images/categories/denkerIN.jpeg"),
           post: undefined,
         },
         {
-          title: "Ehrenamt",
-          search: ["Ehrenamt", "Senioren"],
+          title: this.$t("home.cards.honorary"),
+          search: [
+            this.$t("home.cards.honorary"),
+            this.$t("home.cards.seniors"),
+          ],
           img: require("../../public/images/categories/sozial.jpeg"),
           post: undefined,
         },
         {
-          title: "Freiwilligenarbeit",
-          search: ["Freiwilligenarbeit", "Kinder"],
+          title: this.$t("home.cards.volunteering"),
+          search: [
+            this.$t("home.cards.volunteering"),
+            this.$t("home.cards.kids"),
+          ],
           img: require("../../public/images/categories/jugend.jpeg"),
           post: undefined,
         },
