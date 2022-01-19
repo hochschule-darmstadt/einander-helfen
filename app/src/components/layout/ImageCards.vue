@@ -2,7 +2,7 @@
   <div>
     <v-row justify="center" style="text-align: center" class="pb-5 pt-10">
       <h1 style="font-size: 2.5em; color: rgb(47, 54, 64)">
-        Freiwilligenarbeit in vielen Bereichen!
+        {{ $t("home.cards.title") }}
       </h1>
     </v-row>
 
