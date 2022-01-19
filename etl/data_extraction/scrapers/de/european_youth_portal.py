@@ -62,6 +62,7 @@ class EuropeanYouthPortalScraper(Scraper):
                 'zipcode': None,
                 'city': None,
                 'street': None,
+                'continent': None,
             },
             'task': parsed_object['task'],
             'target_group': parsed_object['target_group'],

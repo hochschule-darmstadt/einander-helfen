@@ -43,15 +43,14 @@
           <template v-if="radiusExtended">
             <div class="text-center pt-12 pb-12">
               <h3 class="font-weight-bold">
-                Zu Ihrer Suchanfrage mit einem Radius von
-                {{ radiusExtendedFrom }} haben wir keine Treffer gefunden.
+                {{ $t("posts.noMatchesWithRadius1") }}
+                {{ radiusExtendedFrom }} {{ $t("posts.noMatchesWithRadius2") }}
                 <template v-if="selectedRadius">
-                  Folgende Ergebnisse werden in einem Umkreis von
-                  {{ selectedRadius }} gefunden.
+                  {{ $t("posts.foundMatches1") }}
+                  {{ selectedRadius }} {{ $t("posts.foundMatches2") }}
                 </template>
                 <template v-else>
-                  Folgende Ergebnisse werden in einem Umkreis von mehr als 50 km
-                  gefunden.
+                  {{ $t("posts.foundMatchesBigRadius") }}
                 </template>
               </h3>
             </div>
@@ -73,7 +72,8 @@
 
           <div class="text-center pt-12" v-if="!posts.length">
             <h3 class="font-weight-bold">
-              Es wurden keine Suchergebnisse zu Ihrer Suchanfrage gefunden.
+              noMatchesFound
+              {{ $t("posts.noMatchesFound") }}
             </h3>
           </div>
         </template>
@@ -107,6 +107,9 @@ export default Vue.extend({
     PostListItem,
     PostListItemSkeleton,
   },
+  metaInfo: {
+    title: "Ergebnisse - Einander Helfen",
+  },
   data: function () {
     return {
       showMap: true,
@@ -137,12 +140,6 @@ export default Vue.extend({
     searchValues() {
       // recalc header space after search tags change
       this.$nextTick(() => this.calcHeaderSpace());
-    },
-    title: {
-      immediate: true,
-      handler() {
-        document.title = "Ergebnisse - Einander Helfen";
-      },
     },
   },
   async mounted(): Promise<void> {
@@ -250,6 +247,8 @@ export default Vue.extend({
           top: offsetPosition,
           behavior: "smooth",
         });
+      } else if (item) {
+        item.scrollIntoView({ behavior: "smooth" });
       }
     },
     /** Show the map  */

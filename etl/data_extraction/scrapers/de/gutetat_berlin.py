@@ -73,6 +73,7 @@ class GuteTatBerlinScraper(Scraper):
                 'zipcode': self.clean_string(location_plzort[0]) or None,
                 'city': self.clean_string(location_plzort[1]) or None,
                 'street': self.clean_string(location_street) or None,
+                'continent': 'Europa',
             },
             'task': self.clean_string(parsed_object['task']) or None,
             'target_group': None,

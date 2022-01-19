@@ -4,11 +4,8 @@
   <div class="organizations">
     <Header />
     <section class="container pt-6">
-      <h1>Anbieter</h1>
-      Sie haben nicht das gefunden, wonach Sie gesucht haben? Kein Problem! Die
-      untenstehende Liste enthält weiterführende Links zu anderen Anbietern, die
-      ebenfalls nationale und internationale ehrenamtliche Tätigkeiten zur
-      Verfügung stellen.
+      <h1>{{ $t("organizations.organizationsHeadline") }}</h1>
+      {{ $t("organizations.organizationsDescription1") }}
       <div class="organizationList mt-4">
         <div
           class="letterBox mb-4"
@@ -43,13 +40,11 @@ export default Vue.extend({
   components: {
     Header,
   },
-  watch: {
-    title: {
-      immediate: true,
-      handler() {
-        document.title = "Anbieter - Einander Helfen";
-      },
-    },
+  metaInfo: {
+    title: "Anbieter - Einander Helfen",
+    link: [
+      { rel: "canonical", href: "https://einander-helfen.org/organizations" },
+    ],
   },
   data() {
     return {

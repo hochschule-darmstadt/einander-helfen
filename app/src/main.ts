@@ -5,6 +5,7 @@ import store from "@/store/store";
 
 import Vuetify from "vuetify";
 import VueMatomo from "vue-matomo";
+import VueMeta from "vue-meta";
 
 // import vuetify css
 import "vuetify/dist/vuetify.min.css";
@@ -18,9 +19,12 @@ import "@/assets/styles/style.scss";
 // @ts-ignore
 import de from "vuetify/es5/locale/de.js";
 
+import i18n from "./i18n";
+
 Vue.config.productionTip = false;
 
 Vue.use(Vuetify);
+Vue.use(VueMeta);
 
 const vuetify = new Vuetify({
   lang: {
@@ -64,5 +68,6 @@ new Vue({
   router,
   store,
   vuetify,
+  i18n,
   render: (h) => h(App),
 }).$mount("#app");

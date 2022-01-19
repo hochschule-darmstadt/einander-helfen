@@ -35,7 +35,6 @@
         small
         :expanded="expanded"
       />
-
       <MenuButton />
     </div>
     <div class="expantion_area d-sm-none" @click="expanded = !expanded">

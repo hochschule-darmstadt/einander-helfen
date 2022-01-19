@@ -7,3 +7,4 @@ tqdm~=4.50.2
 pycountry~=20.7.3
 pandas==1.1.5
 matplotlib==3.2.2
+Shapely==1.8.0

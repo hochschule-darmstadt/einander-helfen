@@ -67,6 +67,7 @@ class WeltwaertsScraper(Scraper):
                 'zipcode': None,
                 'city': None,
                 'street': None,
+                'continent': None,
             },
             'task': re.sub(r'</?p>', '', parsed_object['task']).strip(),
             'target_group': None,

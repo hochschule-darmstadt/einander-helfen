@@ -5,15 +5,13 @@
     <Header />
     <section class="container pt-6 text-center fill-height">
       <img src="/images/robot.png" class="mb-6" :width="width" />
-      <h1>Seite konnte nicht gefunden werden</h1>
+      <h1>{{ $t("pageNotFound.pageNotFoundHeadline") }}</h1>
       <p class="mt-3 mb-8">
-        Es tut uns Leid. Die von Ihnen gesuchte Seite existiert nicht (mehr).
-        Bitte stellen Sie sicher, dass die URL korrekt ist oder kehren Sie zur
-        Startseite zurück.
+        {{ $t("pageNotFound.pageNotFoundDescription1") }}
       </p>
       <v-btn href="/" class="btn-dark" dark>
         <v-icon class="mr-3">home</v-icon>
-        Zurück zur Startseite
+        {{ $t("pageNotFound.backButton") }}
       </v-btn>
     </section>
   </div>
@@ -28,13 +26,8 @@ export default Vue.extend({
   components: {
     Header,
   },
-  watch: {
-    title: {
-      immediate: true,
-      handler() {
-        document.title = "Seite nicht gefunden - Einander Helfen";
-      },
-    },
+  metaInfo: {
+    title: "Seite nicht gefunden - Einander Helfen",
   },
   computed: {
     width() {
