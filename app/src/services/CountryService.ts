@@ -2,9 +2,9 @@
  * This service provides the countries of the database with Elastic Search queries.
  */
 
-import axios from "axios";
 import Location from "@/models/location";
 import Bodybuilder from "bodybuilder";
+import axiosInstance from "@/util/axios-instance";
 
 class CountryService {
   public countries: Location[] = [];
@@ -39,7 +39,7 @@ class CountryService {
   private async findCountries(): Promise<any> {
     const query = this.createQuery();
 
-    const { data } = await axios.post(this.baseUrl, query);
+    const { data } = await axiosInstance.post("", query);
 
     return data.aggregations.country.buckets.map((elem: any) => {
       if (elem.key !== "Deutschland") {

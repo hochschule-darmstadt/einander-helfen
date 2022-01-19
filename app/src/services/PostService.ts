@@ -2,7 +2,7 @@
  * This service provides the methods to find posts in the database.
  */
 
-import axios from "axios";
+import axiosInstance from "@/util/axios-instance";
 import Location from "@/models/location";
 import Post from "@/models/post";
 import BuilderFactory, { Bodybuilder } from "bodybuilder";
@@ -65,7 +65,7 @@ class PostService {
   public async findById(id: string): Promise<Post | undefined> {
     const builder = BuilderFactory().query("term", "_id", id);
 
-    const { data } = await axios.post(this.baseUrl, builder.build());
+    const { data } = await axiosInstance.post("", builder.build());
 
     if (!data.hits.hits.length) return undefined;
     const entity = data.hits.hits.pop();
@@ -168,7 +168,7 @@ class PostService {
   private async performPostsQuery<T>(
     query: Bodybuilder
   ): Promise<PaginatedResponse<T>> {
-    const { data } = await axios.post(this.baseUrl, query.build());
+    const { data } = await axiosInstance.post("", query.build());
 
     const entities: T[] = data.hits.hits.map((elem: any) => {
       return {
@@ -188,8 +188,8 @@ class PostService {
   }
 
   private async performCountQuery(query: Bodybuilder): Promise<number> {
-    const { data } = await axios.post(
-      this.baseUrl + "posts/?filter_path=hits.total",
+    const { data } = await axiosInstance.post(
+      "posts/?filter_path=hits.total",
       query.build()
     );
 
