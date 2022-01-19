@@ -1,5 +1,6 @@
 from data_enhancement.enhancement_duplicates import enhancement_exact_duplicates as e_exact_duplicates
 from data_enhancement.enhancement_location.lat_lon_enhancer import add_lat_lon
+from data_enhancement.enhancement_continents.enhancement_continents import add_continent
 from data_enhancement.enhancement_contexts.enhance_data_de import function_map as de_map
 from data_enhancement.enhancement_contexts.enhance_data_us import function_map as us_map
 from shared.logger_factory import LoggerFactory
@@ -28,6 +29,7 @@ class Enhancer:
 
         e_exact_duplicates.remove_duplicates(self._data, self._domain_name)
         add_lat_lon(self._data, self._domain_name)
+        add_continent(self._data, self._context)
         self._run_for_domain(self._domain_name)
         return self._data
 
