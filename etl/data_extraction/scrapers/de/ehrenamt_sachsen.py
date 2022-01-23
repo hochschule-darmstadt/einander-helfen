@@ -71,6 +71,7 @@ class EhrenamtSachsenScraper(Scraper):
                 'zipcode': None,
                 'city': city.decode_contents().strip() if city is not None else None,
                 'street': None,
+                'continent': 'Europa',
             },
             'task': None,
             'target_group': None,

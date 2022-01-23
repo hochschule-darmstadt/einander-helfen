@@ -75,6 +75,7 @@ class BetterplaceScraper(Scraper):
                 'zipcode': None,
                 'city': None,
                 'street': None,
+                'continent': None,
             },
             'task': None,
             'target_group': None,

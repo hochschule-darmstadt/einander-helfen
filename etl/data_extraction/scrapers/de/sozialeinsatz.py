@@ -71,6 +71,7 @@ class SozialeinsatzScraper(Scraper):
                 'zipcode': zipcode,
                 'city': None,
                 'street': None,
+                'continent': 'Europa',
             },
             'task': None,
             'target_group': None,

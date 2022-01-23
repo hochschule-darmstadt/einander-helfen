@@ -1,9 +1,24 @@
 <template>
-  <v-row justify="center">
-    <v-col xs="12" sm="6" md="6" lg="3" v-for="card in cards" :key="card.title">
-      <ImageCard :card="card"></ImageCard>
-    </v-col>
-  </v-row>
+  <div>
+    <v-row justify="center" style="text-align: center" class="pb-5 pt-10">
+      <h1 style="font-size: 2.5em; color: rgb(47, 54, 64)">
+        {{ $t("home.cards.title") }}
+      </h1>
+    </v-row>
+
+    <v-row justify="center">
+      <v-col
+        xs="12"
+        sm="6"
+        md="6"
+        lg="3"
+        v-for="card in cards"
+        :key="card.title"
+      >
+        <ImageCard :card="card"></ImageCard>
+      </v-col>
+    </v-row>
+  </div>
 </template>
 
 <script lang="ts">
