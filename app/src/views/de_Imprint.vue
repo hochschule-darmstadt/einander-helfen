@@ -8,7 +8,6 @@
         Impressum
         <span v-if="getLocale() === 'en'"> (legal notice, in German) </span>
       </h1>
-
       <h2>Angaben gemäß § 5 TMG</h2>
       Roland Humm <br />
       Pragelatostr. 113 <br />
