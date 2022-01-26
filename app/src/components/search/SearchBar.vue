@@ -92,7 +92,7 @@ export default Vue.extend({
   },
   computed: {
     /**
-     * Gets all porposed tags (ranked) that match the user input.
+     * Gets all proposed tags (ranked) that match the user input.
      *
      * @return {string[]}: An array of all tags that are suitable for the user input.
      */
@@ -104,12 +104,7 @@ export default Vue.extend({
         this.allSearchProposals.filter((el) => "label" in el),
         this.searchValue
       );
-      const rankedListOfOrderedTerms = this.rankTags(
-        listOfMatchingTerms,
-        this.searchValue
-      );
-
-      return rankedListOfOrderedTerms;
+      return this.rankTags(listOfMatchingTerms, this.searchValue);
     },
     /** Don't show a list of proposals for tags based on the given user input. */
     showNoData(): boolean {
@@ -124,7 +119,7 @@ export default Vue.extend({
     /**
      * Filters Tags by searchTerm.
      *
-     * @param {Tag[]} proposals: An array of all existing tags.
+     * @param tags
      * @param {string} searchTerm: The searchTerm used to filter the proposals to be suitable to the user input.
      * @return {string[]}: An array of all suitable proposals.
      */
@@ -150,7 +145,7 @@ export default Vue.extend({
       return stringArray;
     },
     /**
-     * Rank tags based on how they match searchTerm. Tags that start with serachTerm get rank 2. Tags that end with searchTerm get rank 1.
+     * Rank tags based on how they match searchTerm. Tags that start with searchTerm get rank 2. Tags that end with searchTerm get rank 1.
      * All other Tags (with the searchTerm in the middle) get rank 0.5.
      *
      * @param {string[]} tags: Tags that had a match with the searchTerm.

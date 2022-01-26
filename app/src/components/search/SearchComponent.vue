@@ -89,7 +89,7 @@ export default Vue.extend({
       default: false,
     },
     /**
-     * If false some elements are hiden
+     * If false some elements are hidden
      */
     expanded: {
       type: Boolean,
@@ -162,7 +162,7 @@ export default Vue.extend({
       this.setSelectedLocation();
       // update search parameter in store
       this.setInternational(this.internationalValue);
-      // execute serach if directsearch is enabled
+      // execute search if directsearch is enabled
       if (this.directsearch) {
         this.executeSearch();
       }
@@ -205,7 +205,7 @@ export default Vue.extend({
       }
       // update state search parameter in store
       this.setSelectedRadius(this.radius);
-      // execute serach if directsearch is enabled
+      // execute search if directsearch is enabled
       if (this.directsearch) {
         this.executeSearch();
       }
@@ -286,10 +286,10 @@ export default Vue.extend({
 
 @media (max-width: 959px) {
   .locationDiv {
-    padding-bottom: 0px;
+    padding-bottom: 0;
   }
   .searchCol {
-    padding-top: 0px;
+    padding-top: 0;
   }
 }
 
@@ -305,8 +305,7 @@ export default Vue.extend({
   @media (min-width: 960px) {
     .locationDiv,
     .searchCol {
-      padding: 0px 12px;
-      padding-top: 6px;
+      padding: 6px 12px 0;
     }
   }
 }
