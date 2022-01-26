@@ -5,7 +5,10 @@
     <Header />
     <section class="container pt-6">
       <h1 class="wordbreak">
-        Datenschutzerklärung (Data protection declaration, in German)
+        Datenschutzerklärung
+        <span v-if="getLocale() === 'en'">
+          (Data protection declaration, in German)
+        </span>
       </h1>
 
       <h2>1. Datenschutz auf einen Blick</h2>
@@ -317,6 +320,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Header from "@/components/layout/SearchHeader.vue";
+import { getLocale } from "@/i18n";
 
 export default Vue.extend({
   name: "Privacy",
@@ -326,6 +330,9 @@ export default Vue.extend({
   metaInfo: {
     title: "Datenschutz - Einander Helfen",
     link: [{ rel: "canonical", href: "https://einander-helfen.org/privacy" }],
+  },
+  methods: {
+    getLocale: getLocale,
   },
 });
 </script>

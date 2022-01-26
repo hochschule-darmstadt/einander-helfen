@@ -41,72 +41,10 @@
         <ul>
           <li>
             <a
-              href="https://www.ehrenamtssuche-hessen.de/"
+              href="https://www.volunteermatch.org/"
               target="_blank"
               rel="noopener"
-              >www.ehrenamtssuche-hessen.de</a
-            >
-          </li>
-          <li>
-            <a href="https://www.gute-tat.de/" target="_blank" rel="noopener"
-              >www.gute-tat.de</a
-            >
-          </li>
-          <li>
-            <a href="https://www.weltwaerts.de" target="_blank" rel="noopener"
-              >www.weltwaerts.de</a
-            >
-          </li>
-          <li>
-            <a
-              href="https://ein-jahr-freiwillig.de"
-              target="_blank"
-              rel="noopener"
-              >www.ein-jahr-freiwillig.de</a
-            >
-          </li>
-          <li>
-            <a
-              href="https://www.bundesfreiwilligendienst.de"
-              target="_blank"
-              rel="noopener"
-            >
-              www.bundesfreiwilligendienst.de
-            </a>
-          </li>
-          <li>
-            <a
-              href="https://www.europa.eu/youth/home_de"
-              target="_blank"
-              rel="noopener"
-            >
-              www.europa.eu/youth
-            </a>
-          </li>
-          <li>
-            <a href="https://www.betterplace.org" target="_blank" rel="noopener"
-              >www.betterplace.org</a
-            >
-          </li>
-          <li>
-            <a
-              href="https://www.ehrenamt.sachsen.de"
-              target="_blank"
-              rel="noopener"
-              >www.ehrenamt.sachsen.de</a
-            >
-          </li>
-          <li>
-            <a href="https://www.dksb.de" target="_blank" rel="noopener"
-              >www.dksb.de</a
-            >
-          </li>
-          <li>
-            <a
-              href="https://www.sozialeinsatz.de"
-              target="_blank"
-              rel="noopener"
-              >www.sozialeinsatz.de</a
+              >https://www.volunteermatch.org/</a
             >
           </li>
         </ul>
