@@ -76,5 +76,29 @@
     "german":"German",
     "english":"English",
     "languageChoice":"Language of Choice"
+  },
+  "postCard":{
+    "map":"Map",
+    "pinText":"The pin for this offer cannot be displayed on the map because no geodata is stored.",
+    "toOffer": "To the offer",
+    "location":"Location",
+    "task":  "Task",
+    "contact":  "Contact" ,
+    "organization": "Organization" ,
+    "target_group": "Target group" ,
+    "timing": "Entry date / Start" ,
+    "effort": "Time required" ,
+    "opportunities": "Possibilities" ,
+    "prerequisites": "Requirements" ,
+    "language_skills": "Languages" ,
+    "source": "Source", 
+    "link": "Link" 
+  },
+  "mapButton":{
+    "hideMap": "Hide map",
+    "showMap": "Show map"
+  },
+  "postListItem":{
+    "toOffer": "To the offer"
   }
 }

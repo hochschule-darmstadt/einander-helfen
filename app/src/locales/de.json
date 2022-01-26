@@ -76,5 +76,29 @@
     "german":"Deutsch",
     "english":"Englisch",
     "languageChoice":"Sprache"
+  },
+  "postCard":{
+    "map":"Karte",
+    "pinText":"Der Pin für dieses Angebot kann auf der Karte nicht angezeigt werden, da keine Geodaten hinterlegt sind.",
+    "toOffer": "Zum Angebot",
+    "location":"Einsatzort",
+    "task":  "Aufgabe",
+    "contact":  "Ansprechpartner" ,
+    "organization": "Organisation" ,
+    "target_group": "Zielgruppe" ,
+    "timing": "Einstiegsdatum / Beginn" ,
+    "effort": "Zeitaufwand" ,
+    "opportunities": "Möglichkeiten" ,
+    "prerequisites": "Anforderungen" ,
+    "language_skills": "Sprachen" ,
+    "source": "Quelle", 
+    "link": "link" 
+  },
+  "mapButton":{
+    "hideMap": "Karte ausblenden",
+    "showMap": "Karte anzeigen"
+  },
+  "postListItem":{
+
   }
 }

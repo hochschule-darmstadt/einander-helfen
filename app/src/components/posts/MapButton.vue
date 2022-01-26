@@ -4,7 +4,7 @@
   <div class="mb-2 btn-container">
     <v-btn class="btn-dark" dark block @click="open = !open">
       <v-icon>map</v-icon>
-      {{ open ? "Karte ausblenden" : "Karte anzeigen" }}
+      {{ open ? $t("mapButton.hideMap") : $t("mapButton.showMap") }}
     </v-btn>
   </div>
 </template>
