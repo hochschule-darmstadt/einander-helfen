@@ -90,11 +90,12 @@ class BundesFreiwilligendienst(Scraper):
             'title': self.clean_string(parsed_object['title']) or None,
             'categories': parsed_object['categories'],
             'location': {
-                'country': None,
+                'country': 'Deutschland',
                 'zipcode': self.clean_string(
                     location_zipcode.decode_contents()) if location_zipcode is not None else None,
                 'city': self.clean_string(location_city.decode_contents()) if location_city is not None else None,
                 'street': self.clean_string(location_street.decode_contents()) if location_street is not None else None,
+                'continent': 'Europa',
             },
             'task': self.clean_string(self.clean_html_tags(parsed_object['task'])) or None,
             'target_group': None,
