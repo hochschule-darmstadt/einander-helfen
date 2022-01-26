@@ -55,7 +55,7 @@
       <v-spacer />
       <div class="my-2 mt-6">
         <v-btn dark large color="#054C66" :href="post.link" target="_blank">
-           {{ $t("postCard.toOffer") }}
+          {{ $t("postCard.toOffer") }}
         </v-btn>
       </div>
     </v-card-actions>
@@ -85,16 +85,20 @@ export default Vue.extend({
     return {
       columns: [
         { key: "location", label: this.$t("postCard.location") },
-        { key: "task", label: this.$t("postCard.task")   },
-        { key: "contact", label: this.$t("postCard.contact")   },
+        { key: "task", label: this.$t("postCard.task") },
+        { key: "contact", label: this.$t("postCard.contact") },
         { key: "organization", label: this.$t("postCard.organization") },
         { key: "target_group", label: this.$t("postCard.target_group") },
-        { key: "timing", label: this.$t("postCard.timing")  },
-        { key: "effort", label: this.$t("postCard.effort")  },
-        { key: "opportunities", label: this.$t("postCard.opportunities")   },
-        { key: "prerequisites", label: this.$t("postCard.prerequisites")  },
+        { key: "timing", label: this.$t("postCard.timing") },
+        { key: "effort", label: this.$t("postCard.effort") },
+        { key: "opportunities", label: this.$t("postCard.opportunities") },
+        { key: "prerequisites", label: this.$t("postCard.prerequisites") },
         { key: "language_skills", label: this.$t("postCard.language_skills") },
-        { key: "source", label: this.$t("postCard.source") , link: this.$t("postCard.link") },
+        {
+          key: "source",
+          label: this.$t("postCard.source"),
+          link: this.$t("postCard.link"),
+        },
       ],
     };
   },
