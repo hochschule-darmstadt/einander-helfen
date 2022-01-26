@@ -3,7 +3,7 @@
  */
 import Vue from "vue";
 import Router from "vue-router";
-import { getLocale } from "@/i18n"; 
+import { getLocale } from "@/i18n";
 
 Vue.use(Router);
 
@@ -31,7 +31,7 @@ const routes = [
   {
     path: "/about",
     name: "about",
-    component: () => import("@/views/"+getLocale()+"_About.vue"),
+    component: () => import("@/views/" + getLocale() + "_About.vue"),
   },
   {
     path: "/organizations",

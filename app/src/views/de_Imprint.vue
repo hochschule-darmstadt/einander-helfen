@@ -183,12 +183,13 @@ export default Vue.extend({
           source: "https://www.flaticon.com/free-icon/robot_3398613",
           license: "https://www.freepikcompany.com/legal",
         },
-        { 
-          position: "Im Dropdownmenü links neben \"Englisch\" (USA Flagge)",
+        {
+          position: 'Im Dropdownmenü links neben "Englisch" (USA Flagge)',
           author: "Dbenbenn, Zscout370, Jacobolus, Indolences, Technion.",
           source:
             "https://commons.wikimedia.org/wiki/File:Flag_of_the_United_States.svg",
-          license: "This image is ineligible for copyright and therefore is in the public domain, because it consists entirely of information that is common property and contains no original authorship.",
+          license:
+            "This image is ineligible for copyright and therefore is in the public domain, because it consists entirely of information that is common property and contains no original authorship.",
         },
       ],
     };
