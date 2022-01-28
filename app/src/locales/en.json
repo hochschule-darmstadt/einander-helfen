@@ -33,63 +33,6 @@
       "title": "Volunteer in many fields!"
     }
   },
-  "about":{
-    "description1":"is the fast search portal for volunteering and voluntary activities: With a wealth of different opportunities around the world.",
-    "howItWorksHeadline":"And this is how it works:",
-    "howItWorksDescription1":"Are you looking for a job offer for volunteering or honorary work within Germany? Then enter a keyword on the search. Don't forget to limit the radius! All offers are immediately displayed on the map and in the list. Select an offer (in the list or on the map) and the corresponding details are displayed. Another click takes you to the provider's page - with further information. You can also limit the search by several keywords",
-    "howItWorksDescription2":"Are you looking for a job offer for international voluntary service? Then click on the Germany flag and select \"International\" instead. Now enter your desired country and a keyword in the search field. All offers are immediately displayed on the map and in the list. Select an offer (in the list or on the map) and the corresponding details are displayed. Another click takes you to the provider's page - with further information. You can also narrow down the search by using several keywords.",
-    "providerDescription1":"brings together offers from multiple providers around the world and allows you to conveniently search across all of them. Currently the following providers are covered:",
-    "moreProvidersFollow":"More providers will follow",
-    "suggestionsForImprovement":"Do you have any suggestions for improvement or is something missing? Then please contact us at",
-    "whoWeAre":"Who we are:",
-    "whoWeAreDescription1":"We are a team of volunteers and have developed the site with a lot of initiative and passion. The software is open source",
-    "whoWeAreDescription2":"and was originally programmed by a team of students. We look forward to your suggestions and ideas for improvement at"
-  },
-  "imprint":{
-    "sourceReferenceItems":{
-      "iitBombay":{
-        "position": "Logo from einander-helfen.org",
-        "license":"The copyright owner of this file, IIT Bombay, permits its use for any purpose provided the copyright owner is properly credited. Redistribution, adaptation, commercial use and any other use is permitted."
-      },
-      "sKopp":{
-        "position": "In the drop-down menu to the left of \"Germany\" (German flag) and in the drop-down menu language to the left of \"Germany\" (Germany flag)",
-        "author":"SKopp, Madden and other users",
-        "license":"This image of a simple geometry is not copyrightable and therefore in the public domain because it consists solely of information that is in the public domain and does not contain any original authorship."
-      },
-      "tommasoSansone":{
-        "position": "In the drop-down menu to the left of \"International\" (Globe)",
-        "license":"This file is made available under the Creative Commons CC0 1.0 Universal Public Domain Dedication. The person who has associated a work with this deed has dedicated the work to the public domain by waiving all rights in the work worldwide under copyright law, including all related and neighboring rights to the extent permitted by law. You may reproduce, modify, distribute and perform the Work, including for commercial purposes, without asking permission."
-      },
-      "truthseeker":{
-        "position": "On the home page first picture in the carousel"
-      },
-      "timkraaijvanger":{
-        "position": "On the home page second picture in the carousel"
-      },
-      "anemone":{
-        "position": "On the home page third picture in the carousel"
-      },
-      "cottonbro":{
-        "position": "On the start page at the bottom the picture on the first tile"
-      },
-      "andreaPiacquadio":{
-        "position": "On the home page at the bottom, the image on the second tile"
-      },
-      "fauxels":{
-        "position": "On the home page at the bottom, the picture on the fourth tile"
-      },
-      "andreaPiacquadio2":{
-        "position": "On the home page at the bottom, the picture on the third tile"
-      },
-      "freepik":{
-        "position": "Icon on the PageNotFound page"
-      },
-      "dbenbenn":{
-        "position": "In the drop-down menu language to the left of \"English\" (USA flag)",
-        "license":"This image is ineligible for copyright and therefore is in the public domain, because it consists entirely of information that is common property and contains no original authorship."
-      }
-    }
-  },
   "organizations":{
     "organizationsHeadline":"Provider",
     "organizationsDescription1":"You haven't found what you were looking for? No problem! The list below contains further links to other providers who also provide national and international voluntary activities."
@@ -106,73 +49,6 @@
     "foundMatches2":".",
     "foundMatchesBigRadius":"The following results are found within a radius of more than 50 km.",
     "noMatchesFound":"No search results were found for your search query."
-  },
-  "privacy":{
-    "privacyHeadline":"Data protection declaration (in German: Datenschutzerklärung)",
-    "dataProtection":{
-      "dataProtectionHeadline":"1. Data protection at a glance",
-      "generalNotesHeadline":"General information",
-      "generalNotesDiscription1":"The following information provides a simple overview of what happens to your personal data when you visit our website. Personal data is any data by which you can be personally identified. For detailed information on the subject of data protection, please refer to our data protection declaration listed below this text.",
-      "dataCollectionWebsiteHeadline":"Data collection on our website",
-      "dataCollectionWebsiteQuestion1":"Who is responsible for the data collection on this website?",
-      "dataCollectionWebsiteAnswer1":"Data processing on this website is carried out by the website operator. You can find his contact details in the imprint of this website.",
-      "dataCollectionWebsiteQuestion2":"How do we collect your data?",
-      "dataCollectionWebsiteAnswer2Part1":"On the one hand, your data is collected by you providing it to us.",
-      "dataCollectionWebsiteAnswer2Part2":"Other data is automatically collected by our IT systems when you visit the website. This is mainly technical data (e.g. internet browser, operating system or time of page view). This data is collected automatically as soon as you enter our website.",
-      "dataCollectionWebsiteQuestion3":"What do we use your data for?",
-      "dataCollectionWebsiteAnswer3":"Part of the data is collected to ensure error-free provision of the website. Other data may be used to analyse your user behaviour.",
-      "dataCollectionWebsiteQuestion4":"What rights do you have regarding your data?",
-      "dataCollectionWebsiteAnswer4Part1":"You have the right to receive information about the origin, recipient and purpose of your stored personal data free of charge at any time. You also have the right to request the correction, blocking or deletion of this data. You can contact us at any time at the address given in the imprint for this purpose and for further questions on the subject of data protection. Furthermore, you have the right to lodge a complaint with the competent supervisory authority.",
-      "dataCollectionWebsiteAnswer4Part2":"You also have the right to request the restriction of the processing of your personal data under certain circumstances. For details, please refer to the privacy policy under \"Right to restriction of processing\"."
-    },
-    "mandatoryInformation":{
-      "mandatoryInformationHeadline":"2.General notes and mandatory information",
-      "privacyHeadline":"Data privacy",
-      "privacyDescription1":"The operators of these pages take the protection of your personal data very seriously. We treat your personal data confidentially and in accordance with the statutory data protection regulations and this data protection declaration.",
-      "privacyDescription2":"When you use this website, various personal data are collected. Personal data is data that can be used to identify you personally. This privacy policy explains what data we collect and what we use it for. It also explains how and for what purpose this is done.",
-      "privacyDescription3":"We would like to point out that data transmission on the Internet (e.g. communication by e-mail) can have security gaps. Complete protection of data against access by third parties is not possible.",
-      "noteResponsibleBodyHeadline":"Note on the responsible body",
-      "responsibleBodyDataProcessing":"The responsible body for data processing on this website is:",
-      "noteResponsibleBodyDescription1":"The controller is the natural or legal person who alone or jointly with others determines the purposes and means of the processing of personal data (e.g. names, e-mail addresses, etc.).",
-      "revocationConsentDataProcessingHeadline":"Revocation of your consent to data processing",
-      "revocationConsentDataProcessingDescription1":"Many data processing operations are only possible with your express consent. You can revoke consent you have already given at any time. For this purpose, an informal communication by e-mail to us is sufficient. The legality of the data processing carried out until the revocation remains unaffected by the revocation.",
-      "rightToObjectDataCollectionHeadline":"Right to object to the collection of data in specific cases and to direct marketing (Art. 21 GDPR)",
-      "rightToObjectDataCollectionDescription1":"If the data processing is based on Art. 6 (1) e or f GDPR, you have the right to object to the processing of your personal data at any time for reasons arising from your particular situation; this also applies to profiling based on these provisions. The respective legal basis on which processing is based can be found in this data protection declaration. If you object, we will no longer process your personal data concerned unless we can demonstrate compelling legitimate grounds for the processing which override your interests, rights and freedoms, or the processing serves the purpose of asserting, exercising or defending legal claims (objection under Article 21(1) of the GDPR).",
-      "rightToObjectDataCollectionDescription2":"If your personal data is processed for the purpose of direct marketing, you have the right to object at any time to the processing of personal data concerning you for the purpose of such marketing; this also applies to profiling as far as it is related to such direct marketing. If you object, your personal data will subsequently no longer be used for the purpose of direct advertising (objection pursuant to Art. 21 (2) GDPR).",
-      "rightOfComplaintSupervisoryAuthorityHeadline":"Right of appeal to the competent supervisory authority",
-      "rightOfComplaintSupervisoryAuthorityDescription1":"In the event of breaches of the GDPR, data subjects shall have a right of appeal to a supervisory authority, in particular in the Member State of their habitual residence, their place of work or the place of the alleged breach. The right of appeal is without prejudice to other administrative or judicial remedies.",
-      "rightDataPortabilityHeadline":"Right to data portability",
-      "rightDataPortabilityDescription1":"You have the right to have data that we process automatically on the basis of your consent or in fulfilment of a contract be handed over to you or to a third party in a common, machine-readable format. If you request the direct transfer of the data to another person responsible, this will only be done as far as it is technically feasible.",
-      "informationBlockingDeletionCorrectionHeadline":"Information, blocking, deletion and correction",
-      "informationBlockingDeletionCorrectionDescription1":"Within the framework of the applicable legal provisions, you have the right at any time to free information about your stored personal data, its origin and recipient and the purpose of the data processing and, if applicable, a right to correction, blocking or deletion of this data. For this purpose as well as for further questions on the subject of personal data, you can contact us at any time at the address given in the imprint.",
-      "rightRestrictionProcessingHeadline":"Right to restrict processing",
-      "rightRestrictionProcessingDescription1":"You have the right to request the restriction of the processing of your personal data. To do this, you can contact us at any time at the address given in the imprint. The right to restriction of processing exists in the following cases:",
-      "rightRestrictionProcessingDescription1Part1":"If you dispute the accuracy of your personal data stored by us, we usually need time to check this. For the duration of the verification, you have the right to request the restriction of the processing of your personal data.",
-      "rightRestrictionProcessingDescription1Part2":"If the processing of your personal data was/is unlawful, you may request the restriction of data processing instead of erasure.",
-      "rightRestrictionProcessingDescription1Part3":"If we no longer need your personal data, but you need it to execute, defend or enforce legal claims, you have the right to request restriction of the processing of your personal data instead of deletion.",
-      "rightRestrictionProcessingDescription1Part4":"If you have lodged an objection pursuant to Art. 21 (1) GDPR, a balancing of your interests and ours must be carried out. As long as it has not yet been determined whose interests prevail, you have the right to demand the restriction of the processing of your personal data.",
-      "rightRestrictionProcessingDescription2":"If you have restricted the processing of your personal data, such data may - apart from being stored - only be processed with your consent or for the assertion, exercise or defense of legal claims or for the protection of the rights of another natural or legal person or for reasons of important public interest of the European Union or a Member State.",
-      "oppositionAdvertisingMailsHeadline":"Objection to advertising e-mails",
-      "oppositionAdvertisingMailsDescription1":"The use of contact data published within the scope of the imprint obligation to send advertising and information material that has not been expressly requested is hereby prohibited. The operators of the pages expressly reserve the right to take legal action in the event of the unsolicited sending of advertising information, such as spam e-mails.",
-      "usageStatisticsHeadline":"Usage statistics",
-      "usageStatisticsDescription1Part1":"This website uses",
-      "usageStatisticsDescription1Part2":"to analyse anonymous usage data of website visitors. Matomo is self-hosted and configured in a data protection-friendly way, which deactivates the use of cookies. Furthermore, no anonymous usage data is transmitted to third parties. Further information on data protection under Matomo can be found under",
-      "serverLogFileHeadline":"Server log files",
-      "serverLogFileDescription1":"The provider of the pages automatically collects and stores information in so-called server log files, which your browser automatically transmits to us. These are:",
-      "serverLogFileDescription1Part1":"Browser type and version",
-      "serverLogFileDescription1Part2":"Operating system used",
-      "serverLogFileDescription1Part3":"Referrer URL",
-      "serverLogFileDescription1Part4":"Host name of the accessing computer",
-      "serverLogFileDescription1Part5":"Time of the server request",
-      "serverLogFileDescription1Part6":"IP address",
-      "serverLogFileDescription2":"This data is not merged with other data sources.",
-      "serverLogFileDescription3":"The collection of this data is based on Art. 6 para. 1 lit. f GDPR. The website operator has a legitimate interest in the technically error-free presentation and optimisation of its website - for this purpose, the server log files must be collected..",
-      "requestByHeadline":"Request by e-mail, telephone or fax",
-      "requestByDescription1":"If you contact us by e-mail, telephone or fax, your enquiry including all resulting personal data (name, enquiry) will be stored and processed by us for the purpose of processing your request. We do not pass on this data without your consent.",
-      "requestByDescription2":"The processing of this data is based on Art. 6 (1) lit. b GDPR if your request is related to the performance of a contract or is necessary for the implementation of pre-contractual measures. In all other cases, the processing is based on your consent (Art. 6 para. 1 lit. a GDPR) and/or on our legitimate interests (Art. 6 para. 1 lit. f GDPR), as we have a legitimate interest in the effective processing of requests addressed to us.",
-      "requestByDescription3":"The data you send to us via contact requests will remain with us until you request us to delete it, revoke your consent to store it or the purpose for storing the data no longer applies (e.g. after we have completed processing your request). Mandatory statutory provisions - in particular statutory retention periods - remain unaffected.",
-      "source":"Source:"
-    }
   },
   "searchBar":{
     "searchBarText1":"Press",
@@ -200,5 +76,29 @@
     "german":"German",
     "english":"English",
     "languageChoice":"Language of Choice"
+  },
+  "postCard":{
+    "map":"Map",
+    "pinText":"The pin for this offer cannot be displayed on the map because no geodata is stored.",
+    "toOffer": "To the offer",
+    "location":"Location",
+    "task":  "Task",
+    "contact":  "Contact" ,
+    "organization": "Organization" ,
+    "target_group": "Target group" ,
+    "timing": "Entry date / Start" ,
+    "effort": "Time required" ,
+    "opportunities": "Possibilities" ,
+    "prerequisites": "Requirements" ,
+    "language_skills": "Languages" ,
+    "source": "Source", 
+    "link": "Link" 
+  },
+  "mapButton":{
+    "hideMap": "Hide map",
+    "showMap": "Show map"
+  },
+  "postListItem":{
+    "toOffer": "To the offer"
   }
 }

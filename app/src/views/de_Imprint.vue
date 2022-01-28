@@ -4,8 +4,10 @@
   <div class="imprint">
     <Header />
     <section class="container pt-6">
-      <h1>Impressum (legal notice, in German)</h1>
-
+      <h1>
+        Impressum
+        <span v-if="getLocale() === 'en'"> (legal notice, in German) </span>
+      </h1>
       <h2>Angaben gemäß § 5 TMG</h2>
       Roland Humm <br />
       Pragelatostr. 113 <br />
@@ -94,6 +96,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Header from "@/components/layout/SearchHeader.vue";
+import { getLocale } from "@/i18n";
 export default Vue.extend({
   components: { Header },
   metaInfo: {
@@ -193,6 +196,9 @@ export default Vue.extend({
         },
       ],
     };
+  },
+  methods: {
+    getLocale: getLocale,
   },
 });
 </script>

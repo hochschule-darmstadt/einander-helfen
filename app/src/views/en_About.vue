@@ -91,7 +91,7 @@ export default Vue.extend({
     Header,
   },
   metaInfo: {
-    title: "Über uns - Einander Helfen",
+    title: "About us - Einander Helfen",
     link: [{ rel: "canonical", href: "https://einander-helfen.org/about" }],
   },
 });
