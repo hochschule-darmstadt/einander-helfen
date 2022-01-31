@@ -5,7 +5,6 @@ from data_enhancement.enhancement_contexts.enhance_data_de import function_map a
 from data_enhancement.enhancement_contexts.enhance_data_us import function_map as us_map
 from shared.logger_factory import LoggerFactory
 
-
 class Enhancer:
     """ Class handling the enhancement steps for crawled data based on its origin """
 
