@@ -1,0 +1,104 @@
+{
+  "local":"germany",
+  "home": {
+    "title": "einander-helfen.org",
+    "description": "Das Portal für Freiwilligenarbeit",
+    "searchCategory": {
+      "kids": "Kinder",
+      "teenagers": "Jugend",
+      "seniors": "Senioren",
+      "care": "Betreuung"
+    },
+    "header" : {
+      "description1": "Aktuell",
+      "description2": "nationale und",
+      "description3": "internationale Stellenangebote zur Auswahl"
+    },
+    "menu": {
+      "home": "Home",
+      "provider": "Anbieter",
+      "aboutUs": "Über uns",
+      "impressum": "Impressum",
+      "privacyPolicy": "Datenschutzerklärung"
+    },
+    "cards": {
+       "fsj": "Freiwilliges soziales Jahr",
+       "fsjShort": "FSJ",
+       "föj": "Freiwilliges ökologisches Jahr",
+       "föjShort": "FÖJ",
+       "honorary": "Ehrenamt",
+       "volunteering": "Freiwilligenarbeit",
+       "kids": "Kinder",
+       "seniors": "Seniors",
+       "title": "Freiwilligenarbeit in vielen Bereichen!"
+    }
+  },
+  "organizations":{
+    "organizationsHeadline":"Anbieter",
+    "organizationsDescription1":"Sie haben nicht das gefunden, wonach Sie gesucht haben? Kein Problem! Die untenstehende Liste enthält weiterführende Links zu anderen Anbietern, die ebenfalls nationale und internationale ehrenamtliche Tätigkeiten zur Verfügung stellen."
+  },
+  "pageNotFound":{
+    "pageNotFoundHeadline": "Seite konnte nicht gefunden werden",
+    "pageNotFoundDescription1":"Es tut uns Leid. Die von Ihnen gesuchte Seite existiert nicht (mehr). Bitte stellen Sie sicher, dass die URL korrekt ist oder kehren Sie zur Startseite zurück.",
+    "backButton":"Zurück zur Startseite"
+  },
+  "posts":{
+    "noMatchesWithRadius1":"Zu Ihrer Suchanfrage mit einem Radius von",
+    "noMatchesWithRadius2":"haben wir keine Treffer gefunden.",
+    "foundMatches1":"Folgende Ergebnisse werden in einem Umkreis von",
+    "foundMatches2":"gefunden.",
+    "foundMatchesBigRadius":"Folgende Ergebnisse werden in einem Umkreis von mehr als 50 km gefunden.",
+    "noMatchesFound":"Es wurden keine Suchergebnisse zu Ihrer Suchanfrage gefunden."
+  },
+  "searchBar":{
+    "searchBarText1":"Drücken Sie",
+    "searchBarEnter":"Enter",
+    "searchBarText2":"für eine Freitextsuche mit Ihrer Eingabe",
+    "searchBarPlaceholder":"z.B. Jugendarbeit"
+  },
+  "locationSearchBar":{
+    "country":"Land",
+    "location":"Ort oder PLZ"
+  },
+  "areaSelect":{
+    "local":"Deutschland",
+    "international":"International",
+    "altFlag": "Flagge"
+  },
+  "radiusSelect":{
+    "radius":"Umkreis",
+    "allOver":"Überall"
+  },
+  "postPagination":{
+    "results":"Ergebnisse"
+  },
+  "languageSelection":{
+    "german":"Deutsch",
+    "english":"Englisch",
+    "languageChoice":"Sprache"
+  },
+  "postCard":{
+    "map":"Karte",
+    "pinText":"Der Pin für dieses Angebot kann auf der Karte nicht angezeigt werden, da keine Geodaten hinterlegt sind.",
+    "toOffer": "Zum Angebot",
+    "location":"Einsatzort",
+    "task":  "Aufgabe",
+    "contact":  "Ansprechpartner" ,
+    "organization": "Organisation" ,
+    "target_group": "Zielgruppe" ,
+    "timing": "Einstiegsdatum / Beginn" ,
+    "effort": "Zeitaufwand" ,
+    "opportunities": "Möglichkeiten" ,
+    "prerequisites": "Anforderungen" ,
+    "language_skills": "Sprachen" ,
+    "source": "Quelle", 
+    "link": "link" 
+  },
+  "mapButton":{
+    "hideMap": "Karte ausblenden",
+    "showMap": "Karte anzeigen"
+  },
+  "postListItem":{
+
+  }
+}

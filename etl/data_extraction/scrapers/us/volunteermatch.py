@@ -130,6 +130,7 @@ class VolunteermatchScraper(Scraper):
                 'zipcode': zipcode,
                 'city': city,
                 'street': street,
+                'continent': 'North America',
             },
             'task': self.clean_html_tags(description),
             'target_group': target_groups,

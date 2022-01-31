@@ -55,21 +55,28 @@ export default Vue.extend({
     },
   },
   data: function () {
+    let items: AreaItem[] = [];
+
+    items.push({
+      text: this.$t("areaSelect.local").toString(),
+      value: this.$t("local").toString(),
+      img: require(`@/assets/images/area/${this.$i18n.locale}-Flag.png`),
+      // eslint-disable-next-line prettier/prettier
+      alt: `${this.$t("areaSelect.local").toString()} ${this.$t("areaSelect.altFlag").toString()}`
+    });
+
+    if (this.$i18n.locale === "de") {
+      items.push({
+        text: this.$t("areaSelect.international").toString(),
+        value: "international",
+        img: require("@/assets/images/area/240px-Earth_icon_2.png"),
+        // eslint-disable-next-line prettier/prettier
+        alt: `${this.$t("areaSelect.international").toString()} ${this.$t("areaSelect.altFlag").toString()}`
+      });
+    }
+
     return {
-      items: [
-        {
-          alt: "Flagge-Deutschland",
-          text: "Deutschland",
-          value: "germany",
-          img: require("@/assets/images/area/240px-Flag_of_Germany.png"),
-        },
-        {
-          alt: "Flagge-International",
-          text: "International",
-          value: "international",
-          img: require("@/assets/images/area/240px-Earth_icon_2.png"),
-        },
-      ] as AreaItem[],
+      items,
       selection: "",
     };
   },
@@ -84,12 +91,17 @@ export default Vue.extend({
   },
   computed: {
     isInternational(): boolean {
-      return this.selection == this.items[1].value;
+      return this.items.length > 1
+        ? this.selection == this.items[1].value
+        : this.selection == this.items[0].value;
     },
   },
   methods: {
     setSelection(): void {
-      this.selection = this.value ? this.items[1].value : this.items[0].value;
+      this.selection =
+        this.value && this.items.length > 1
+          ? this.items[1].value
+          : this.items[0].value;
       this.$emit("input", this.isInternational);
     },
     onInputChange() {

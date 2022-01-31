@@ -3,6 +3,7 @@
  */
 import Vue from "vue";
 import Router from "vue-router";
+import { getLocale } from "@/i18n";
 
 Vue.use(Router);
 
@@ -20,17 +21,17 @@ const routes = [
   {
     path: "/imprint",
     name: "imprint",
-    component: () => import("@/views/Imprint.vue"),
+    component: () => import("@/views/de_Imprint.vue"),
   },
   {
     path: "/privacy",
     name: "privacy",
-    component: () => import("@/views/Privacy.vue"),
+    component: () => import("@/views/de_Privacy.vue"),
   },
   {
     path: "/about",
     name: "about",
-    component: () => import("@/views/About.vue"),
+    component: () => import("@/views/" + getLocale() + "_About.vue"),
   },
   {
     path: "/organizations",

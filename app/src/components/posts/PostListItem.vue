@@ -74,7 +74,7 @@
         <v-spacer></v-spacer>
         <div class="my-2 mt-6">
           <v-btn dark large color="#054C66" :href="post.link" target="_blank">
-            Zum Angebot
+            {{ $t("postListItem.toOffer") }}
           </v-btn>
         </div>
       </v-card-actions>

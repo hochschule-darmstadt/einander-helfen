@@ -3,8 +3,8 @@
 <template>
   <v-select
     class="radius_select"
-    label="Umkreis"
-    :items="radiiArray"
+    :label="this.$t('radiusSelect.radius')"
+    :items="radii"
     :dark="dark"
     :disabled="disabled"
     :attach="attachTo"
@@ -41,6 +41,28 @@ export default Vue.extend({
   data() {
     return {
       radius: {} as Radius,
+      radii: [
+        {
+          text: this.$t("radiusSelect.allOver"),
+          value: "",
+        },
+        {
+          text: "5 km",
+          value: "5km",
+        },
+        {
+          text: "10 km",
+          value: "10km",
+        },
+        {
+          text: "25 km",
+          value: "25km",
+        },
+        {
+          text: "50 km",
+          value: "50km",
+        },
+      ],
     };
   },
   watch: {

@@ -1,0 +1,104 @@
+{
+  "local":"usa",
+  "home": {
+    "title": "einander-helfen.org",
+    "description": "The portal for volunteering",
+    "searchCategory": {
+      "kids": "Kids",
+      "teenagers": "Teenagers",
+      "seniors": "Seniors",
+      "care": "Care"
+    },
+    "header" : {
+      "description1": "There are",
+      "description2": "national and",
+      "description3": "international job offers to choose from"
+    },
+    "menu": {
+      "home": "Home",
+      "provider": "Providers",
+      "aboutUs": "About us",
+      "impressum": "Imprint",
+      "privacyPolicy": "Privacy policy"
+    },
+    "cards": {
+      "fsj": "Voluntary social year",
+      "fsjShort": "VSY",
+      "föj": "Voluntary ecological year",
+      "föjShort": "VEY",
+      "honorary": "Honorary",
+      "volunteering": "Volunteering",
+      "kids": "kids",
+      "seniors": "Seniors",
+      "title": "Volunteer in many fields!"
+    }
+  },
+  "organizations":{
+    "organizationsHeadline":"Provider",
+    "organizationsDescription1":"You haven't found what you were looking for? No problem! The list below contains further links to other providers who also provide national and international voluntary activities."
+  },
+  "pageNotFound":{
+    "pageNotFoundHeadline": "Page could not be found",
+    "pageNotFoundDescription1":"We are sorry. The page you are looking for does not exist (anymore). Please make sure the URL is correct or return to the homepage.",
+    "backButton":"Return to the homepage"
+  },
+  "posts":{
+    "noMatchesWithRadius1":"To your search query with a radius of",
+    "noMatchesWithRadius2":"we have not found any matches.",
+    "foundMatches1":"The following results are found within a radius of",
+    "foundMatches2":".",
+    "foundMatchesBigRadius":"The following results are found within a radius of more than 50 km.",
+    "noMatchesFound":"No search results were found for your search query."
+  },
+  "searchBar":{
+    "searchBarText1":"Press",
+    "searchBarEnter":"Enter",
+    "searchBarText2":"for a free text search with your input",
+    "searchBarPlaceholder":"z.B. work with teenagers"
+  },
+  "locationSearchBar":{
+    "country":"Country",
+    "location":"City or postcode"
+  },
+  "areaSelect":{
+    "local":"USA",
+    "international":"International",
+    "altFlag": "Flag"
+  },
+  "radiusSelect":{
+    "radius":"Perimeter",
+    "allOver":"All over"
+  },
+  "postPagination":{
+    "results":"Results"
+  },
+  "languageSelection":{
+    "german":"German",
+    "english":"English",
+    "languageChoice":"Language of Choice"
+  },
+  "postCard":{
+    "map":"Map",
+    "pinText":"The pin for this offer cannot be displayed on the map because no geodata is stored.",
+    "toOffer": "To the offer",
+    "location":"Location",
+    "task":  "Task",
+    "contact":  "Contact" ,
+    "organization": "Organization" ,
+    "target_group": "Target group" ,
+    "timing": "Entry date / Start" ,
+    "effort": "Time required" ,
+    "opportunities": "Possibilities" ,
+    "prerequisites": "Requirements" ,
+    "language_skills": "Languages" ,
+    "source": "Source", 
+    "link": "Link" 
+  },
+  "mapButton":{
+    "hideMap": "Hide map",
+    "showMap": "Show map"
+  },
+  "postListItem":{
+    "toOffer": "To the offer"
+  }
+}
